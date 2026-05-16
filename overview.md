@@ -40,7 +40,7 @@ Problemas:
 #### Modelo do sistema uplink
 
 * y é o sinal recebido pela $BS$ (dimensão $M$)
-* H é a matriz do canal ($M \times N$) 
+* H é a matriz do canal ($M \times K$) 
 * s é o que os usuários transmitiram (dimensão $K$)
 * n é o ruído (dimenão $M$) 
 
