@@ -17,7 +17,7 @@ H_bar ∈ C^{M×r}   channel of r non-target (interfering) UEs
 s_bar ∈ S^{r×1}   interfering symbols
 n_bar ~ CN(0, σ²I) background AWGN
 R = β*H_bar*H_bar^H + σ²*I
-β = power of interference signals
+β = (IoT_lin - 1) * σ² / r   (interference scaling factor)
 ```
 
 ---
@@ -40,9 +40,9 @@ R = β*H_bar*H_bar^H + σ²*I
 | SNR range | −10 to +10 dB (step 2 dB) |
 | Default IoT | 10 dB |
 | High IoT (Fig. 8f) | 20 dB |
-| IoT definition | IoT = 10·log10((β + N₀)/σ²) |
+| IoT definition | IoT = 10·log10((β·r + σ²)/σ²) |
 
-**Note on IoT:** N₀ in the IoT formula is the background noise power, which equals σ². So β = (10^(IoT/10) − 1)·σ².
+**Note on IoT:** The per-antenna interference power is `β·trace(H̄H̄ᴴ)/M ≈ β·r` (since each column of H̄ is normalized to `||h̄_k||²/M = 1`). So the IoT formula gives `β = (IoT_lin − 1)·σ²/r`. The original code was missing the `/r` factor, causing the actual IoT to be r×(IoT-1)+1 ≈ 18.6 dB instead of 10 dB.
 
 ---
 
@@ -52,6 +52,7 @@ R = β*H_bar*H_bar^H + σ²*I
 - **Scenario:** 3GPP UMa (Urban Macro), considers both large-scale and small-scale fading
 - **UE placement:** Uniformly distributed in a 120° sector, radius 50–100 m, centred at BS
 - **Both target and interfering UEs** are modelled similarly via QuaDRiGa
+- **Channel normalization:** **Per-column** — each UE's channel vector is independently normalized so `||h_k||²/M = 1`. This is equivalent to perfect uplink power control. Without this, QuaDRiGa produces up to 4590× power imbalance between near-LOS and far-NLOS UEs, making weak UEs undetectable.
 - **Noise covariance** estimated from samples: R̂ = (1/N)·∑ nⁱ(nⁱ)^H (Eq. 6)
 - **Channel assumed perfectly known** at receiver (ideal CSI)
 
@@ -83,7 +84,8 @@ Rmn (m≠n)                      ← NOT available locally (requires data exchan
 ```
 W_MMSE = (H^H * R^{-1} * H + (1/Es)*I)^{-1} * H^H * R^{-1}
 Complexity: O(M³ + N·M²)
-Requires: full H (M×K) and R (M×M) at one location
+Requires: full H (M×K) and TRUE R (M×M) at one location
+Note: Uses R_true (not the estimated R_est) — this is a perfect-CSI benchmark.
 ```
 
 ### Algorithm 0b: Centralised ZF — Baseline
@@ -291,10 +293,14 @@ Data transfer per iteration: K×K (A) + K×r (B) — independent of N
 
 **B. r is always 8**, even for Fig. 8(e) where K=12. The number of non-target interferers does not change with the number of target UEs.
 
-**C. The noise covariance R is never directly available.** It is always estimated from samples via Eq. (6). The algorithms work with R̂, not the true R.
+**C. The centralized LMMSE uses the TRUE covariance R**, not the estimated R̂. It serves as a gold-standard benchmark with perfect CSI. All *decentralized* methods use the estimated R̂ from N=192 noise samples. With N/M = 1.5, the sample covariance is poorly conditioned — using R̂ for LMMSE makes it worse than decentralized methods, violating the expected ordering.
 
 **D. The BCD ring initialisation** (Algorithm 3 lines 3–8): A⁰₀ and b⁰_{0,i} are initialised to zero, then accumulated over all C clusters using W⁰ (BDAC result). This means at iteration l=1, the "previous DU's" variables passed to DU 1 are A⁰_C and b⁰_{C,i} — the full sum over all clusters from the BDAC initialisation.
 
 **E. For BCD-MMSE (LRD)**, the LRD algorithm (Algorithm 5) must be run once before the BCD iterations begin. The resulting Gc matrices are then used in place of Nc throughout all BCD-LRD iterations.
 
 **F. SNR is defined using background AWGN only** (σ²), not total noise power. The interference adds on top of this through R.
+
+**G. Channel normalization must be per-column.** Each UE's channel vector is independently scaled so `||h_k||²/M = 1`. Global normalization (same scale for all UEs) preserves path loss differences that can reach 4590× between near-LOS and far-NLOS UEs, making the SNR definition meaningless for weak UEs.
+
+**H. β must include the `/r` factor.** Since per-column normalization gives `trace(H̄H̄ᴴ)/M ≈ r`, the per-antenna interference power is `β·r`. The correct formula is `β = (IoT_lin − 1)·σ²/r`, not `β = (IoT_lin − 1)·σ²`.

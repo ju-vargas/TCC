@@ -70,15 +70,19 @@ for mc = 1:p.N_mc
     for isnr = 1:nSNR
         SNR    = 10^(p.SNR_dB(isnr)/10);
         sigma2 = p.Es / SNR;
-        IoT    = 10^(p.IoT_dB/10);
-        beta   = max((IoT - 1) * sigma2, 0);
+        IoT_lin = 10^(p.IoT_dB/10);
+
+        % Interference scaling (Eq. 5): R = beta * H_itf * H_itf' + sigma2 * I
+        %   Per-antenna interference power = beta * trace(H_itf*H_itf')/M ≈ beta * r
+        %   IoT = (beta*r + sigma2) / sigma2  =>  beta = (IoT_lin - 1)*sigma2 / r
+        beta = (IoT_lin - 1) * sigma2 / p.r;
 
         % True covariance and Cholesky factor
         R_true = beta * (H_itf * H_itf') + sigma2 * eye(p.M);
         R_reg  = R_true + 1e-12 * trace(R_true) / p.M * eye(p.M);
         Lc     = chol(R_reg, 'lower');
 
-        % N noise samples for covariance estimation
+        % N noise samples for covariance estimation (Gaussian, Eq. 6)
         N_mat = Lc * (randn(p.M, p.N_samples) + ...
                       1j*randn(p.M, p.N_samples)) / sqrt(2);
 
@@ -100,7 +104,7 @@ for mc = 1:p.N_mc
 
         %------------------------------------------------------------------
         if run_LMMSE
-            W     = lmmse_centralised(H_tgt, R_est, p.Es);
+            W     = lmmse_centralised(H_tgt, R_true, p.Es);
             S_det = detect(W * Y_rx, p.const);
             [e,t] = count_errors(S_det, S_tx, p.bpS);
             err.LMMSE(isnr)   = err.LMMSE(isnr)   + e;

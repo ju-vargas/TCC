@@ -156,16 +156,20 @@ end
 ### Step 9 — Normalisation
 
 ```matlab
-% Scale H so that average power per receive antenna = 1.
-% This makes SNR = Es/sigma2 the effective operating SNR,
-% consistent with the paper's definition.
-avg_power = mean(sum(abs(H_full).^2, 1)) / M;
-if avg_power > 0
-    H_full = H_full / sqrt(avg_power);
+% Per-column normalisation: scale each UE so ||h_k||²/M = 1.
+% This ensures SNR = Es/sigma2 is the per-UE operating point,
+% equivalent to perfect uplink power control.
+for k = 1:n_UE_total
+    col_pow = sum(abs(H_full(:,k)).^2) / M;
+    if col_pow > 0
+        H_full(:,k) = H_full(:,k) / sqrt(col_pow);
+    end
 end
 ```
 
-**Why this is needed:** QuaDRiGa includes physical path loss (~95 dB at 2 GHz, 75 m). Without normalisation the channel vectors have magnitude ~10⁻⁵, making the received signal negligible compared to any noise level. Per-column unit-norm is wrong because it destroys inter-UE power differences and the massive MIMO array gain.
+**Why per-column (not global):** QuaDRiGa includes physical path loss (~95 dB at 2 GHz, 75 m). Without normalization, channel vectors have magnitude ~10⁻⁵. More importantly, UEs at different distances have vastly different received powers (up to 4590× ratio). Global normalization (same scale for all UEs) preserves these imbalances, making weak UEs undetectable. Per-column normalization ensures every UE has equal received power per antenna, which is required for the paper's SNR definition `SNR = Es/σ²` to apply uniformly to all UEs.
+
+**⚠️ Previous version of this code used global normalization** (`avg_power = mean(sum(abs(H_full).^2, 1)) / M; H_full = H_full / sqrt(avg_power)`), which caused SER floors because weak UEs could never be detected regardless of SNR.
 
 ---
 

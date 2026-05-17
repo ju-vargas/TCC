@@ -1,7 +1,7 @@
 # Verification Report: Markdown Files vs Paper + Code
 
-**Date:** May 16, 2026  
-**Status:** ✅ **VERIFIED - No major corrections needed**
+**Date:** May 17, 2026 (updated)
+**Status:** ⚠️ **VERIFIED - Three critical implementation bugs found and fixed**
 
 ---
 
@@ -12,7 +12,7 @@ Both markdown files (`simulation_parameters.md` and `notes_about_versions.md`) h
 2. The MATLAB implementation in `massive_mimo_dbp/` (main_sim.m, run_ser_sweep.m, etc.)
 3. The QuaDRiGa integration code (generate_quadriga_channel.m)
 
-**Conclusion:** The content is accurate and consistent. Only minor clarifications suggested below.
+**Conclusion:** The parameter descriptions were accurate, but three critical implementation bugs were found in the MATLAB code during SER curve validation. All have been fixed in both MATLAB and Python codebases.
 
 ---
 
@@ -121,11 +121,12 @@ is computed per UE using the 3GPP 38.901 formula (shown in generate_quadriga_cha
 ## 🔧 Cross-Validation Checklist
 
 - [x] SNR definition matches paper (SNR = 10·log10(Es/σ²))
-- [x] IoT definition matches paper (IoT = 10·log10((β + σ²)/σ²))
-- [x] β formula correct: β = (10^(IoT/10) − 1)·σ²
+- [x] IoT definition corrected: IoT = 10·log10((β·r + σ²)/σ²)
+- [x] β formula corrected: β = (IoT_lin − 1)·σ²/r  ⚠️ **was missing /r**
 - [x] Non-target UEs always r=8 (even for K=12 scenarios)
 - [x] Noise covariance estimated via Eq. 6: R̂ = (1/N)·Σ nⁱ(nⁱ)^H
-- [x] Channel power normalized to avg received power per antenna = 1
+- [x] LMMSE uses R_true (perfect CSI benchmark)  ⚠️ **was using R_est**
+- [x] Channel power normalized per-column: ||h_k||²/M = 1  ⚠️ **was global normalization**
 - [x] QuaDRiGa 3GPP UMa LOS/NLOS split implemented correctly
 - [x] All 6 algorithms implemented per paper equations
 - [x] BCD ring topology: iteration 1 receives results from iteration 0 (BDAC initialization)
@@ -157,9 +158,14 @@ is computed per UE using the 3GPP 38.901 formula (shown in generate_quadriga_cha
 
 ## Conclusion
 
-✅ **Both markdown files are accurate and well-documented.** The MATLAB implementation faithfully reproduces the paper's parameters and algorithms. **All major parameters and algorithms have been verified directly against the paper transcript.** The only improvements are minor clarifications for end users, as noted above.
+⚠️ **Three critical implementation bugs were found during SER curve validation** (see `matlab_scripts_analysis.md` for full details):
+1. β scaling missing `/r` — actual IoT was 18.6 dB instead of 10 dB
+2. LMMSE used R_est instead of R_true — broke expected curve ordering
+3. Global channel normalization instead of per-column — caused 4590× UE power imbalance
 
-**Recommendation:** Consider adding the two minor notes (Section "📝 Minor Suggestions") to improve clarity for future users who may reference these files while implementing or modifying the simulator.
+All bugs have been fixed in both MATLAB and Python. SER curves now match the paper's Figure 8(a) qualitatively.
+
+**Recommendation:** Re-export QuaDRiGa channels with the corrected per-column normalization (`export_quadriga_channels.m`) before running final validation.
 
 ---
 

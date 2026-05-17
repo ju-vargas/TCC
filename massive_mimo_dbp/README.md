@@ -4,7 +4,7 @@
 ---
 
 ## Requirements
-- MATLAB R2020b or later
+- MATLAB R2014a or later
 - No external toolboxes required  
   *(Signal Processing Toolbox optional; not used by core code)*
 - QuaDRiGa channel model is used for physical channel generation.

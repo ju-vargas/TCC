@@ -60,13 +60,15 @@ if ~isempty(idx_NLOS)
         h_BS, h_UE, fc, lambda, p.M, '3GPP_38.901_UMa_NLOS');
 end
 
-%% 4. Global normalisation
-%    Scale H so that average power per receive antenna = 1.
-%    Preserves inter-UE power differences (near/far) while making
-%    SNR = Es/sigma2 the effective operating point.
-avg_power = mean(sum(abs(H_full).^2, 1)) / p.M;
-if avg_power > 0
-    H_full = H_full / sqrt(avg_power);
+%% 4. Per-column normalisation
+%    Scale each UE column so that ||h_k||^2 / M = 1, i.e.,
+%    every UE has unit received power per BS antenna.
+%    This ensures SNR = Es/sigma2 is the per-UE operating point.
+for k = 1:n_UE_total
+    col_pow = sum(abs(H_full(:,k)).^2) / p.M;
+    if col_pow > 0
+        H_full(:,k) = H_full(:,k) / sqrt(col_pow);
+    end
 end
 
 H_tgt = H_full(:, 1:p.K);
