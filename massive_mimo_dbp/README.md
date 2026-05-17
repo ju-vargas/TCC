@@ -7,9 +7,8 @@
 - MATLAB R2020b or later
 - No external toolboxes required  
   *(Signal Processing Toolbox optional; not used by core code)*
-- QuaDRiGa channel model is **NOT** used here — i.i.d. Rayleigh fading
-  is used instead for reproducibility without external dependencies.
-  Qualitative behaviour matches the paper's results.
+- QuaDRiGa channel model is used for physical channel generation.
+  The implementation relies on QuaDRiGa v2.2.0 to reproduce 3GPP UMa fading.
 
 ---
 

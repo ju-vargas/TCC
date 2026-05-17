@@ -1,5 +1,5 @@
 function [H_tgt, H_itf] = generate_quadriga_channel(p)
-%GENERATE_QUADRIGA_CHANNEL  One i.i.d. channel drop using QuaDRiGa v2.2.0.
+%GENERATE_QUADRIGA_CHANNEL  One QuaDRiGa channel realization using v2.2.0.
 %
 %  Implements Section VI-A of Zhao et al. (2025):
 %    - 3GPP 38.901 UMa scenario

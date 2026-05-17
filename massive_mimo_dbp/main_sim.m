@@ -5,7 +5,7 @@
 %  Zhao et al., IEEE JSAC, Vol. 43, No. 3, March 2025
 %
 %  Replicates Figures 6, 7, and 8 (SER vs SNR).
-%  Uses i.i.d. Rayleigh fading instead of QuaDRiGa.
+%  Uses QuaDRiGa v2.2.0 channel generation for large- and small-scale fading.
 % =========================================================================
 clear; clc; close all;
 rng(42);  % reproducibility
