@@ -1,7 +1,3 @@
-Here is a complete and detailed extraction of every parameter and algorithm from the paper.
-
----
-
 ## 1. System Model
 
 **Uplink signal model (Eq. 1):**
