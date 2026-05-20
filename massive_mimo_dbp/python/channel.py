@@ -30,11 +30,11 @@ def generate_channel_rayleigh(cfg: SimConfig):
     H_full = (np.random.randn(cfg.M, n_UE)
               + 1j * np.random.randn(cfg.M, n_UE)) / np.sqrt(2)
 
-    # Global normalisation: avg power per receive antenna per UE = 1
-    col_powers = np.sum(np.abs(H_full) ** 2, axis=0)  # (n_UE,)
-    avg_power = np.mean(col_powers) / cfg.M
-    if avg_power > 0:
-        H_full = H_full / np.sqrt(avg_power)
+    # Per-column normalisation: ||h_k||^2 / M = 1
+    for k in range(n_UE):
+        col_pow = np.sum(np.abs(H_full[:, k]) ** 2) / cfg.M
+        if col_pow > 0:
+            H_full[:, k] /= np.sqrt(col_pow)
 
     H_tgt = H_full[:, :cfg.K]
     H_itf = H_full[:, cfg.K:]

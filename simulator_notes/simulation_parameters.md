@@ -36,7 +36,7 @@ R = β*H_bar*H_bar^H + σ²*I
 | Symbols per realisation | 480 |
 | Monte Carlo realisations | 100 |
 | Symbol energy Es | 1 (normalised) |
-| SNR definition | SNR = 10·log10(Es/σ²) |
+| SNR definition | SNR = 10·log10(Es/(σ²·bpS)) = Eb/N0 |
 | SNR range | −10 to +10 dB (step 2 dB) |
 | Default IoT | 10 dB |
 | High IoT (Fig. 8f) | 20 dB |
@@ -53,6 +53,7 @@ R = β*H_bar*H_bar^H + σ²*I
 - **UE placement:** Uniformly distributed in a 120° sector, radius 50–100 m, centred at BS
 - **Both target and interfering UEs** are modelled similarly via QuaDRiGa
 - **Channel normalization:** **Per-column** — each UE's channel vector is independently normalized so `||h_k||²/M = 1`. This is equivalent to perfect uplink power control. Without this, QuaDRiGa produces up to 4590× power imbalance between near-LOS and far-NLOS UEs, making weak UEs undetectable.
+- **Antenna clustering:** **Interleaved** — cluster c gets antennas {c, c+C, c+2C, ...} instead of contiguous blocks. With a vertical ULA, contiguous clusters have strong inter-cluster spatial correlation that degrades the block-diagonal covariance approximation. Interleaved assignment provides spatial diversity within each cluster, matching the paper's results.
 - **Noise covariance** estimated from samples: R̂ = (1/N)·∑ nⁱ(nⁱ)^H (Eq. 6)
 - **Channel assumed perfectly known** at receiver (ideal CSI)
 

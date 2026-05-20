@@ -69,7 +69,7 @@ for mc = 1:p.N_mc
 
     for isnr = 1:nSNR
         SNR    = 10^(p.SNR_dB(isnr)/10);
-        sigma2 = p.Es / SNR;
+        sigma2 = p.Es / (SNR * p.bpS);
         IoT_lin = 10^(p.IoT_dB/10);
 
         % Interference scaling (Eq. 5): R = beta * H_itf * H_itf' + sigma2 * I

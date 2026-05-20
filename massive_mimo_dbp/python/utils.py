@@ -15,8 +15,23 @@ def inv_stable(A: np.ndarray) -> np.ndarray:
     return np.linalg.solve(A + reg * np.eye(n), np.eye(n))
 
 
+def cluster_indices(c: int, cfg: SimConfig) -> np.ndarray:
+    """Return the antenna indices belonging to cluster c.
+
+    In 'contiguous' mode:   [c*Mc, c*Mc+1, ..., (c+1)*Mc-1]
+    In 'interleaved' mode:  [c, c+C, c+2C, ..., c+(Mc-1)*C]
+    """
+    if cfg.cluster_mode == 'interleaved':
+        return np.arange(c, cfg.M, cfg.C)
+    else:
+        return np.arange(c * cfg.Mc, (c + 1) * cfg.Mc)
+
+
 def partition_clusters(H, Y, N_mat, cfg: SimConfig):
     """Split M-dimensional arrays into C antenna clusters.
+
+    Supports both contiguous and interleaved antenna-to-cluster mapping,
+    controlled by cfg.cluster_mode.
 
     Parameters
     ----------
@@ -34,7 +49,7 @@ def partition_clusters(H, Y, N_mat, cfg: SimConfig):
     Yc = []
     Nc = []
     for c in range(cfg.C):
-        idx = slice(c * cfg.Mc, (c + 1) * cfg.Mc)
+        idx = cluster_indices(c, cfg)
         Hc.append(H[idx, :])
         Nc.append(N_mat[idx, :])
         if Y is not None:

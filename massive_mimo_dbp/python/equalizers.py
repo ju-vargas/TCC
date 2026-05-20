@@ -14,7 +14,7 @@ All algorithms from Zhao et al. (2025):
 import numpy as np
 from scipy.sparse.linalg import svds
 from config import SimConfig
-from utils import inv_stable
+from utils import inv_stable, cluster_indices
 
 
 # ============================================================================
@@ -236,7 +236,7 @@ def lrd_algorithm(Nc: list, r_rank: int, cfg: SimConfig) -> np.ndarray:
     # Each DU computes Gc = (scale * Nc{c}) * V_prev
     G = np.zeros((cfg.M, r_rank), dtype=complex)
     for c in range(cfg.C):
-        idx = slice(c * cfg.Mc, (c + 1) * cfg.Mc)
+        idx = cluster_indices(c, cfg)
         G[idx, :] = (scale * Nc[c]) @ V_prev
 
     return G

@@ -1,0 +1,11 @@
+addpath(genpath('/tmp/QuaDRiGa/quadriga_src'));
+s = qd_simulation_parameters;
+l = qd_layout(s);
+l.tx_position = [0;0;25];
+l.rx_position = [50;50;1.5];
+l.set_scenario('3GPP_38.901_UMa_NLOS');
+b = l.init_builder;
+b.gen_parameters;
+c = b.get_channels;
+disp(size(c(1).coeff));
+exit;

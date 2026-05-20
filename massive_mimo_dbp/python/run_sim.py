@@ -4,7 +4,7 @@ import numpy as np
 from config import SimConfig
 from constellation import get_constellation, draw_symbols
 from channel import generate_channel_rayleigh, generate_channel_from_mat
-from utils import partition_clusters, compute_local_cov, apply_equalizer, detect, count_errors
+from utils import partition_clusters, cluster_indices, compute_local_cov, apply_equalizer, detect, count_errors
 from equalizers import (lmmse_centralised, zf_centralised, bdac_mmse,
                         sdr_mmse, cdr_mmse, bcd_mmse_update,
                         lrd_algorithm, bcd_mmse_lrd_update)
@@ -56,7 +56,8 @@ def run_ser_sweep(cfg: SimConfig, fig_select: str) -> dict:
 
     print(f"=== Simulation: {fig_select} | M={cfg.M} C={cfg.C} K={cfg.K} "
           f"r={cfg.r} IoT={cfg.IoT_dB}dB mod={cfg.mod} ===")
-    print(f"    N_mc={cfg.N_mc}, N_sym={cfg.N_sym}, N_samples={cfg.N_samples}")
+    print(f"    N_mc={cfg.N_mc}, N_sym={cfg.N_sym}, N_samples={cfg.N_samples}"
+          f", cluster_mode={cfg.cluster_mode}")
     print(f"    Algorithms: {algs}")
     print("Progress: ", end='', flush=True)
 
@@ -72,7 +73,7 @@ def run_ser_sweep(cfg: SimConfig, fig_select: str) -> dict:
 
         for isnr in range(nSNR):
             SNR = 10 ** (cfg.SNR_dB[isnr] / 10)
-            sigma2 = cfg.Es / SNR
+            sigma2 = cfg.Es / (SNR * bpS)
             IoT_lin = 10 ** (cfg.IoT_dB / 10)
 
             # Interference scaling (Eq. 5): R = beta * H_itf @ H_itf^H + sigma2 * I
@@ -104,7 +105,7 @@ def run_ser_sweep(cfg: SimConfig, fig_select: str) -> dict:
             Y_rx = H_tgt @ S_tx + noise_rx
 
             # Partition received signal
-            Yc = [Y_rx[c * cfg.Mc:(c + 1) * cfg.Mc, :] for c in range(cfg.C)]
+            Yc = [Y_rx[cluster_indices(c, cfg), :] for c in range(cfg.C)]
 
             # Estimated covariance for centralised methods
             R_est = (N_mat @ N_mat.conj().T) / cfg.N_samples
@@ -156,7 +157,7 @@ def run_ser_sweep(cfg: SimConfig, fig_select: str) -> dict:
             # BCD-MMSE (LRD) iterations
             if run_LRD:
                 G = lrd_algorithm(Nc, cfg.r, cfg)
-                Gc = [G[c * cfg.Mc:(c + 1) * cfg.Mc, :] for c in range(cfg.C)]
+                Gc = [G[cluster_indices(c, cfg), :] for c in range(cfg.C)]
                 W_lrd = list(W_bdac)
                 for it in range(1, 5):
                     W_lrd = bcd_mmse_lrd_update(W_lrd, Hc, Gc, Rcc, cfg)

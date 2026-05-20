@@ -23,6 +23,7 @@ class SimConfig:
     Es: float = 1.0         # symbol energy (normalised)
     channel_mode: str = 'rayleigh'  # 'rayleigh' or 'mat_file'
     mat_file: str = ''      # path to .mat file (when channel_mode='mat_file')
+    cluster_mode: str = 'interleaved'  # 'contiguous' or 'interleaved'
 
     def __post_init__(self):
         self.Mc = self.M // self.C

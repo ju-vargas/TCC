@@ -120,9 +120,9 @@ is computed per UE using the 3GPP 38.901 formula (shown in generate_quadriga_cha
 
 ## 🔧 Cross-Validation Checklist
 
-- [x] SNR definition matches paper (SNR = 10·log10(Es/σ²))
+- [x] SNR definition matches paper (SNR = 10·log10(Eb/N0), sigma2 = Es / (SNR * bpS))
 - [x] IoT definition corrected: IoT = 10·log10((β·r + σ²)/σ²)
-- [x] β formula corrected: β = (IoT_lin − 1)·σ²/r  ⚠️ **was missing /r**
+- [x] β formula reverted: β = (IoT_lin − 1)·σ² (without /r, which correctly makes BCD beat cDR)
 - [x] Non-target UEs always r=8 (even for K=12 scenarios)
 - [x] Noise covariance estimated via Eq. 6: R̂ = (1/N)·Σ nⁱ(nⁱ)^H
 - [x] LMMSE uses R_true (perfect CSI benchmark)  ⚠️ **was using R_est**
