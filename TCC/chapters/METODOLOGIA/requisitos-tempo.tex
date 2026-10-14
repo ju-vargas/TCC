@@ -1,0 +1,72 @@
+% ---------------------------------------------------------------------
+\subsection{Inversões por bloco de coerência}\label{subsec:inversoes-por-tc}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Modelo B: uma estimativa R_cc por PRB, com as N amostras do próprio PRB.
+%           Por DU e por T_c: N_PRB inversões de R_cc e N_PRB inversões de G_c.
+%           G_c = E_s H_c H_c^H + R_cc não depende da iteração l: inverte uma vez
+%           por PRB e é reaproveitada nas T iterações (não multiplicar por T).
+%           N_PRB = 275 é o pior caso do artigo; pela norma, 273 (FR1, 30 kHz,
+%           100 MHz) e 264 (FR2, 120 kHz, 400 MHz).
+% FONTE     paper.md:577 (N = 192 por realização); :504 (G_c); :614 (refazer por T_c);
+%           :640 (N_PRB = 275, "worst case in 5G NR"); TS 38.104 Tab. 5.3.2-1 e 5.3.2-2.
+%           Planilha: tabela "Número de operações por PRB".
+% ESTADO    a escrever
+
+% ---------------------------------------------------------------------
+\subsection{Módulos de inversão}\label{subsec:modulos-inversao}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Três módulos separados, por simplificação: (1) R_cc, (2) G_c,
+%           (3) K x K, só na DU C. Módulos 1 e 3 ficam no caminho do PRB; o
+%           módulo 2 fica fora se terminar antes da iteração 1.
+%           Ligar à coluna "Onde roda" da Tabela tab:bcd-complexidade.
+% FONTE     paper.md:136-142 (Eq. 7, inversa K x K); :504 (G_c); decisão da autora.
+% ESTADO    a escrever
+
+% ---------------------------------------------------------------------
+\subsection{Coleta das amostras e processamento}\label{subsec:pipeline}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Pipeline: junta as N amostras (t_coleta), processa (t_proc) e
+%           equaliza os dados guardados. Remeter à Tabela tab:n-maximo para N.
+%           t_coleta = min(T_c, ceil(N/48) slots): 2 ms (FR1) e 0,5 ms (FR2) nos
+%           cenários lentos com N = 192; T_c nos rápidos.
+% FONTE     slot: TS 38.211 Tab. 4.3.2-1; DM-RS: TS 38.211 Tab. 6.4.1.1.3-3 e -4;
+%           planilha: tabela "Coleta de amostras e orçamento por inversão"
+%           (corrigir o arredondamento: usar T_c exato em T_c/N_PRB).
+% ESTADO    a escrever
+
+% ---------------------------------------------------------------------
+\subsection{Restrição de vazão}\label{subsec:restricao-vazao}
+% ---------------------------------------------------------------------
+% CONTEÚDO  t_proc <= T_c. Como os módulos são separados, cada um precisa de
+%           II_inv <= T_c / N_PRB, sem depender de M_c nem de T.
+%           Tabela por condição de teste: T_c/N_PRB em µs e em ciclos (clock pendente).
+%           Valores (N_PRB = 275): 90,9091; 45,4545; 6,0606; 1,5152; 4,5455;
+%           1,1364; 0,1947; 0,1363 µs.
+%           É uma restrição de intervalo (vazão), não de latência.
+% FONTE     T_c: Tabela tab:tempo-coerencia; N_PRB: paper.md:640;
+%           planilha: tabela "Tempo para operações por PRB".
+% ESTADO    a escrever
+
+% ---------------------------------------------------------------------
+\subsection{Restrição de latência}\label{subsec:restricao-latencia}
+% ---------------------------------------------------------------------
+% CONTEÚDO  t_coleta + t_proc <= D, com D só como fórmula (sem fonte; 4 ms do
+%           eMBB [R7] é limite de fora). Se D for fixado, a restrição aperta nos
+%           cenários lentos: II <= (D - t_coleta - L_PRB) / N_PRB.
+%           O módulo de G_c tem uma condição de latência própria: terminar antes
+%           de A e b chegarem para a iteração 1 (sem número).
+%           Latência por salto entre DUs fica de fora.
+% FONTE     decisão da autora (2026-10-12); [R7] para o valor de eMBB, se citado.
+% ESTADO    a escrever
+
+% ---------------------------------------------------------------------
+\subsection{Escopo e pior caso}\label{subsec:escopo-tempo}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Pior caso: condições HST, um limite que o NR não alcança.
+%           Fora do escopo: escalonador trocando usuários por slot; latência por
+%           salto. A simulação não tem eixo de tempo: as curvas de SER valem para
+%           cada N (testes com N = 12, 48, 144 e 192 via --conditions).
+%           HST: velocidade nominal da norma; pela fórmula, 2334 Hz a 3,5 GHz
+%           daria ~720 km/h (nota em modelo-de-canal.tex).
+% FONTE     TS 38.104 Sec. G.3; dbp_sim/m1_driver.py (sem eixo de tempo).
+% ESTADO    a escrever

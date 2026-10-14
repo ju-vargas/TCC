@@ -1,0 +1,161 @@
+
+\section[\texorpdfstring{\textcolor{red}{Equalização}}{Equalização}]{\textcolor{red}{Equalização}}
+\label{sec:equalization}
+% CONTEÚDO  Detector ML e por que é inviável; separação entre equalização e
+%           detecção; filtros lineares; detecção pelo ponto mais próximo; SER.
+% TEXTO     1-noise-and-constraints.tex, "Equalização" e "Filtros Lineares".
+% ESTADO    parcial (ZF, Wiener e LMMSE escritos; SER não definida)
+
+\subsection{Detector de máxima verossimilhança}
+\textcolor{red}{O método ótimo para recuperar os símbolos transmitidos em sistemas MIMO é o detector de máxima verossimilhança (\textit{Maximum Likelihood}, ML). O algoritmo estima os símbolos transmitidos encontrando o candidato que minimiza a distância euclidiana entre o sinal recebido $\mathbf{y}$ e $\mathbf{H}\mathbf{s}$:}
+
+\begin{equation}
+\hat{\textcolor{red}{\mathbf{s}}} = \underset{\textcolor{red}{\mathbf{s}} \in \mathcal{S}^{K}}{\arg\min}
+\left\|\mathbf{y} - \mathbf{H}\textcolor{red}{\mathbf{s}}\right\|_2^2
+\label{eq:ml}
+\end{equation}
+\textcolor{red}{em que $\mathcal{S}^{K}$ é o conjunto de todas as combinações possíveis de símbolos da constelação transmitidos pelos $K$ usuários, e $\left\|\cdot\right\|_2^2$ denota a soma dos quadrados das magnitudes de todos os elementos de um vetor (norma euclidiana ao quadrado). Como opera diretamente no espaço de busca discreto $\mathcal{S}^{K}$, o detector ML produz a decisão final dos símbolos em uma única etapa, sem separar as etapas de equalização e detecção definidas na Seção~\ref{sec:sysmodel}.}
+
+\textcolor{red}{Esse método atinge a menor taxa de erro de bit (\textit{Bit Error Rate}, BER) possível na ausência de codificação de canal, isto é, quando nenhum código de correção de erros é aplicado aos bits transmitidos antes da modulação. Porém, a detecção MIMO é um problema NP-difícil~\cite{zero-forcing}. Isso significa que não se conhece um algoritmo de tempo polinomial que a resolva de forma exata. A busca exaustiva em $\mathcal{S}^{K}$ é a única abordagem exata conhecida, e tem complexidade exponencial $\mathcal{O}(|\mathcal{S}|^K)$ em $K$. Assim, o detector ML se torna impraticável para sistemas com muitos usuários ou com modulações de ordem alta~\cite{bello2022algorithms}.}
+
+
+\subsection{Filtros Lineares}
+
+\textcolor{red}{Como o detector ML se torna impraticável com muitos usuários, este trabalho considera equalizadores lineares.}
+
+\subsection{\texorpdfstring{\textcolor{red}{Zero-Forcing}}{Zero-Forcing}}
+
+\textcolor{red}{O equalizador \textit{Zero-Forcing} (ZF) suprime a interferência entre usuários invertendo o canal, mas considera nula a componente de ruído do vetor de sinal recebido. Como consequência, o ZF amplifica o ruído presente no receptor, principalmente em canais mal condicionados. O equalizador ZF é dado por~\cite{zero-forcing}:}
+
+\begin{equation}
+\tilde{\textcolor{red}{\mathbf{s}}}_\text{ZF} =
+\mathbf{W}_\text{ZF}\mathbf{y}
+\label{eq:zf_estimate}
+\end{equation}
+\textcolor{red}{em que}
+
+\begin{equation}
+\mathbf{W}_\text{ZF}=
+\left(\mathbf{H}^H\mathbf{H}\right)^{-1}\mathbf{H}^H
+\label{eq:zf_filter}
+\end{equation}
+\textcolor{red}{e $\mathbf{H}^H$ denota a transposta conjugada de $\mathbf{H}$: cada elemento complexo $h_{mk}$ é substituído pelo seu complexo conjugado $h_{mk}^*$, e a matriz é transposta.}
+
+
+\textcolor{red}{Na etapa de detecção, $\mathcal{Q}$ é a função de quantização da modulação utilizada, que produz uma saída de decisão rígida (\textit{hard output}):}
+
+\begin{equation}
+\hat{\textcolor{red}{\mathbf{s}}}_\text{ZF}=
+\mathcal{Q}\left(\tilde{\textcolor{red}{\mathbf{s}}}_\text{ZF}\right)
+\label{eq:zf_detection}
+\end{equation}
+
+
+\subsection{\texorpdfstring{\textcolor{red}{Covariância}}{Covariância}}
+
+Covariância é uma medida estatística que descreve como duas variáveis aleatórias variam conjuntamente, permitindo identificar a relação entre suas variações em torno dos respectivos valores médios. Para um vetor aleatório, essas relações são organizadas em uma matriz de covariância, na qual os elementos da diagonal representam as variâncias de cada componente, enquanto os elementos fora da diagonal representam as covariâncias entre pares de componentes. A esperança matemática, denotada por $\mathbb{E}[\cdot]$, corresponde ao valor médio de uma variável aleatória considerando sua distribuição de probabilidade. Assim, para um vetor aleatório $\mathbf{x}$ de média zero, sua matriz de covariância pode ser expressa como
+
+
+\begin{equation}
+\operatorname{Cov}(\mathbf{x})=\mathbb{E}[\mathbf{x}\mathbf{x}^H].
+\label{eq:cov_definition}
+\end{equation}
+
+
+\subsection{Filtro de Wiener}
+
+Em processamento de sinais, filtro de Wiener é um método estatístico usado para obter, a partir de observações contaminadas por ruído, a melhor estimativa linear possível de um sinal de interesse segundo o critério de Erro Quadrático Médio (MSE). Dado um sinal desejado $\mathbf{x}$ e uma observação $\mathbf{y}$, busca-se um estimador linear $\hat{\mathbf{x}}=\mathbf{W}\mathbf{y}$ que minimize o MSE:
+
+\begin{equation}
+\mathbf{W}_{\text{opt}} = \underset{\mathbf{W}}{\arg\min}\;
+\mathbb{E}\left[\|\mathbf{x}-\mathbf{W}\mathbf{y}\|_2^2\right].
+\label{eq:wiener_opt}
+\end{equation}
+
+Para chegar ao resultado ótimo, o erro de estimação $\mathbf{e}=\mathbf{x}-\mathbf{W}_{\text{opt}}\mathbf{y}$ deve ser não correlacionado com a observação $\mathbf{y}$. Isto, é $\mathbb{E}[\mathbf{e}\mathbf{y}^H]=\mathbf{0}$. Isso significa que não é mais possível melhorar o estimador a partir dos dados observados e já se chegou na melhor solução. Com a expansão dessa solução [citar o livro que faz essa expansão] chega-se à equação de Wiener-Hopf
+
+
+\begin{equation}
+\mathbf{W}_{\text{opt}}\mathbf{R}_{yy} = \mathbf{R}_{xy}
+\quad\Rightarrow\quad
+\mathbf{W}_{\text{opt}} = \mathbf{R}_{xy}\mathbf{R}_{yy}^{-1},
+\label{eq:wiener_hopf}
+\end{equation}
+
+em que $\mathbf{R}_{xy}=\mathbb{E}[\mathbf{x}\mathbf{y}^H]$ é a correlação
+cruzada entre o sinal desejado e a observação, e
+$\mathbf{R}_{yy}=\mathbb{E}[\mathbf{y}\mathbf{y}^H]$ é a matriz de
+autocorrelação da observação. Para sinais de média zero, a correlação
+cruzada coincide com a covariância cruzada entre $\mathbf{x}$ e $\mathbf{y}$,
+isto é, $\mathbf{R}_{xy}=\operatorname{Cov}(\mathbf{x},\mathbf{y})$. Por
+minimizar o MSE por meio de um estimador linear, essa solução é chamada de
+Linear Minimum Mean-Square Error (LMMSE).
+
+\subsection{\texorpdfstring{\textcolor{red}{Equalizador LMMSE}}{Equalizador LMMSE}}
+
+\textcolor{red}{O equalizador de mínimo erro quadrático médio linear (\textit{Linear Minimum Mean Square Error}, LMMSE) contorna a limitação do ZF ao considerar explicitamente as estatísticas do ruído no projeto do equalizador. A estimativa $\tilde{\mathbf{s}}_\text{LMMSE}$ é obtida aplicando a matriz de equalização ao sinal recebido:}
+
+\begin{equation}
+\tilde{\textcolor{red}{\mathbf{s}}}_\text{LMMSE}=
+\mathbf{W}_\text{LMMSE}\mathbf{y}
+\label{eq:lmmse_estimate}
+\end{equation}
+
+
+\textcolor{red}{A sua matriz de filtro é obtida minimizando o erro quadrático esperado entre a saída do equalizador e o vetor de símbolos verdadeiro, isto é, a média de $\left\|\mathbf{W}\mathbf{y}-\mathbf{s}\right\|_2^2$ sobre todas as transmissões e realizações de ruído possíveis, denotada por $\mathbb{E}\left[\cdot\right]$:}
+
+\begin{equation}
+\min_{\mathbf{W}}
+\mathbb{E}
+\left[
+\left\|\mathbf{W}\mathbf{y}-\textcolor{red}{\mathbf{s}}\right\|_2^2
+\right]
+\label{eq:lmmse_opt}
+\end{equation}
+
+\textcolor{red}{Esse é o mesmo problema da Equação~{\hypersetup{linkcolor=red}\eqref{eq:wiener_opt}}, em que o sinal desejado é o vetor de símbolos transmitidos.}
+
+
+\textcolor{red}{Assumindo que a matriz de canal $\mathbf{H}$ é perfeitamente conhecida, a solução correspondente do equalizador LMMSE em um sistema MIMO centralizado é dada por~\cite{zhao2025jsac}:}
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(
+\mathbf{H}^H\mathbf{R}_n^{-1}\mathbf{H}
++
+\frac{1}{E_s}\mathbf{I}
+\right)^{-1}
+\mathbf{H}^H\mathbf{R}_n^{-1}
+\label{eq:lmmse_solution}
+\end{equation}
+\textcolor{red}{em que $\mathbf{n}$ é modelado como um vetor aleatório de média zero com matriz de covariância $\mathbf{R}_n = \mathbb{E}[\mathbf{n}\mathbf{n}^H]$, e $E_s$ denota a energia média por símbolo transmitido. Entre os detectores lineares, o LMMSE geralmente atinge a maior razão sinal-interferência-mais-ruído (\textit{Signal-to-Interference-plus-Noise Ratio}, SINR), superando o ZF no regime de sistemas de grande dimensão~\cite{jeon2019}.}
+
+
+\textcolor{red}{Essa solução pode ser obtida a partir do filtro de Wiener.}
+
+Para o modelo de recepção MIMO $\mathbf{y}=\mathbf{H}\mathbf{s}+\mathbf{n}$, com símbolos e ruído
+descorrelacionados e $\mathbb{E}[\mathbf{s}\mathbf{s}^H]=E_s\mathbf{I}$, em
+que $E_s$ denota a energia média por símbolo transmitido, as matrizes
+$\mathbf{R}_{sy}$ e $\mathbf{R}_{yy}$ tornam-se
+
+\begin{equation}
+\mathbf{R}_{sy}=E_s\mathbf{H}^H,
+\qquad
+\mathbf{R}_{yy}=E_s\mathbf{H}\mathbf{H}^H+\mathbf{R}_n,
+\label{eq:mimo_correlations}
+\end{equation}
+em que $\mathbf{R}_n=\mathbb{E}[\mathbf{n}\mathbf{n}^H]$ é a matriz de
+covariância do ruído. \textcolor{red}{Essa matriz é construída para o cenário com interferência na Seção~{\hypersetup{linkcolor=red}\ref{subsec:construcao-R}}.}
+Substituindo a Equação~\eqref{eq:mimo_correlations} na
+Equação~\eqref{eq:wiener_hopf} e aplicando a propriedade matemática do lema de inversão de matrizes,
+obtém-se a forma fechada do equalizador LMMSE para um sistema MIMO
+centralizado, assumindo conhecimento perfeito da matriz de canal $\mathbf{H}$:
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(\mathbf{H}^H\mathbf{R}_n^{-1}\mathbf{H}+\frac{1}{E_s}\mathbf{I}\right)^{-1}
+\mathbf{H}^H\mathbf{R}_n^{-1}.
+\label{eq:lmmse_from_wiener}
+\end{equation}
+
+\textcolor{red}{A Equação~{\hypersetup{linkcolo=red}\eqref{eq:lmmse_from_wiener}} é a mesma solução da Equação~{\hypersetup{linkcolor=red}\eqref{eq:lmmse_solution}}.}

@@ -1,0 +1,51 @@
+% ---------------------------------------------------------------------
+\subsection{Equalizador BCD-MMSE}\label{subsec:bcd}
+% ---------------------------------------------------------------------
+
+
+
+O equalizador BCD-MMSE \textcolor{red}{(\textit{Block Coordinate Descent}--\textit{Minimum Mean Square Error}) \cite{zhao2025jsac}}, por sua vez, emprega atualizações distribuídas para tratar o acoplamento entre os blocos do sistema, mantendo a necessidade de definir quais informações devem ser compartilhadas entre as unidades.
+
+No BCD-MMSE considerado neste trabalho, a estimativa local $\hat{\mathbf R}_{cc}$ participa da inicialização do equalizador e da construção da matriz utilizada nas atualizações da DU. Em particular, a matriz local a ser invertida é definida por:
+
+\[
+\mathbf G_c=
+E_s\mathbf H_c\mathbf H_c^H+
+\hat{\mathbf R}_{cc},
+\]
+
+em que $\mathbf H_c$ representa a parcela da matriz de canal associada ao cluster $c$. Dessa forma, a estimação e o condicionamento da covariância local afetam diretamente a viabilidade das operações matriciais necessárias à equalização.
+
+
+\subsubsection{Complexidade}\label{subsubsec:bcd-complexidade}
+\textcolor{red}{No artigo base, o pré-processamento de cada DU tem complexidade $\mathcal{O}(M_c^3 + N M_c^2)$, e cada iteração do BCD-MMSE tem complexidade $\mathcal{O}(NMK + M M_c K)$ no total \cite{zhao2025jsac}. A Tabela~\ref{tab:bcd-complexidade} detalha o número de multiplicações complexas de cada parte do algoritmo em uma DU, por PRB e por $T_c$, para $K = 8$ e \sout{$N = 192$}.} \textcolor{red}{Como $N$ muda com a condição de teste (Tabela~\ref{tab:n-maximo}), a tabela mostra o maior e o menor valor usados, $N = 192$ e $N = 12$. As linhas que não dependem de $N$ têm um só valor.}
+
+\begin{table}[htbp]
+\caption{\textcolor{red}{Multiplicações complexas por PRB e por $T_c$ em cada DU.}}
+\label{tab:bcd-complexidade}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{3.6cm}|l|r|r|r|r|l|}
+\hline
+\raggedright Parte & Conta & \multicolumn{2}{c|}{$M_c = 16$} & \multicolumn{2}{c|}{$M_c = 8$} & Onde roda \tabularnewline
+\cline{3-6}
+ & & \textcolor{red}{$N = 192$} & \textcolor{red}{$N = 12$} & \textcolor{red}{$N = 192$} & \textcolor{red}{$N = 12$} & \tabularnewline
+\hline
+\raggedright Estimar $\hat{\mathbf R}_{cc}$ e aplicar Ledoit-Wolf & $N M_c^2 + N M_c + M_c^2$ & 52480 & \textcolor{red}{3520} & 13888 & \textcolor{red}{928} & unidade de cálculo \tabularnewline
+\raggedright Inicialização & $M_c^2 K + M_c K^2 + 2K^2 M_c + N K M_c$ & 29696 & \textcolor{red}{6656} & 14336 & \textcolor{red}{2816} & unidade de cálculo \tabularnewline
+\raggedright Formar $\mathbf G_c$ & $M_c^2 K$ & \multicolumn{2}{c|}{2048} & \multicolumn{2}{c|}{512} & unidade de cálculo \tabularnewline
+\raggedright Cada iteração & $2NKM_c + 3K^2 M_c + K M_c^2$ & 54272 & \textcolor{red}{8192} & 26624 & \textcolor{red}{3584} & unidade de cálculo \tabularnewline
+\raggedright Inverter $\hat{\mathbf R}_{cc}$ & $M_c^3$ & \multicolumn{2}{c|}{4096} & \multicolumn{2}{c|}{512} & módulo 1 \tabularnewline
+\raggedright Inverter $\mathbf G_c$ & $M_c^3$ & \multicolumn{2}{c|}{4096} & \multicolumn{2}{c|}{512} & módulo 2 \tabularnewline
+\raggedright Inverter matriz $K \times K$ (só na DU $C$) & $K^3$ & \multicolumn{2}{c|}{512} & \multicolumn{2}{c|}{512} & módulo 3 \tabularnewline
+\raggedright Filtro, por símbolo de dados & $12 K M_c$ & \multicolumn{2}{c|}{1536} & \multicolumn{2}{c|}{768} & unidade de cálculo \tabularnewline
+\hline
+\end{tabular}
+\end{table}
+% FONTE: software/Restrições - Parâmetros.csv, linhas 56-65 (modelo B). K = 8, N = 192: paper.md:577.
+%        Colunas N = 12: mesmas fórmulas com N = 12 (menor N da Tabela tab:n-maximo, condições HST).
+%        Estimar R_cc: paper.md:554 (O(M_c^3 + N M_c^2) por DU). Inicialização (X_c, H_c^H X_c, W_c^0,
+%        A^0, b^0): paper.md:136-142 (Eq. 7) e :410-418. G_c: paper.md:504. Iteração (Eqs. 28-30):
+%        paper.md:556 (O(NMK + M M_c K) no total), :443-449, :504. Filtro: paper.md:430-434.
+% A EXPANDIR: explicar cada linha, o papel dos módulos 1-3 e o orçamento de tempo por PRB.

@@ -1,0 +1,185 @@
+% =====================================================================
+% RASCUNHO -- esqueleto (backbone) da fundamentação teórica
+% ---------------------------------------------------------------------
+% Dois capítulos:
+%   1. MIMO massivo e equalização
+%   2. Equalização descentralizada sob ruído colorido
+% Os outros capítulos (introdução, resultados etc.) ficam como estão.
+% Nenhum texto de corpo novo foi escrito aqui: só a estrutura e, em
+% comentário, o que cada seção deve conter e de onde vem o texto existente.
+%
+% Base:
+%   - capítulos atuais: 1-noise-and-constraints.tex ("coisas") e
+%     0.channel-modelling.tex;
+%   - roteiro T1-T6 de constraints/notas_redacao.md (ruído colorido até G_c);
+%   - proposta do TG1 (TG1_Português_ECP_UFRGS/.../sbc-template.tex),
+%     "Matrix Inversion Techniques".
+%
+% Legenda dos comentários de cada seção:
+%   CONTEÚDO  o que a seção precisa dizer
+%   TEXTO     de onde vem o texto já escrito (arquivo e seção atual)
+%   ESTADO    escrito / parcial / vazio / a escrever
+%
+% Rótulos: os que já existem nos capítulos atuais foram mantidos
+% (sec:equalization, subsec:bloco-coerencia, subsec:construcao-R,
+% subsec:o-que-R-representa) e sec:sysmodel foi criado (hoje é citado e não
+% existe). Por isso este arquivo substitui 1-noise-and-constraints.tex e
+% 0.channel-modelling.tex; não incluir os três juntos.
+% =====================================================================
+
+
+% =====================================================================
+\chapter{MIMO massivo e equalização}\label{chap:mimo-equalizacao}
+% =====================================================================
+% Base geral, válida para qualquer receptor MIMO: o modelo do sistema, o canal
+% e os equalizadores lineares. Termina no LMMSE e na SER, que o capítulo
+% seguinte usa.
+% Ordem: cada seção usa só o que veio antes.
+
+% ---------------------------------------------------------------------
+\section{Modelo de sistema}\label{sec:sysmodel}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Uplink multiusuário: y = Hs + n; dimensões M, K; símbolos de uma
+%           constelação (16-QAM, QPSK); E_s; SNR = 10 log10(E_s / sigma^2).
+% TEXTO     1-noise-and-constraints.tex, "Uplink/Downlink" (11 linhas).
+% ESTADO    parcial. "SNR" não aparece hoje no capítulo.
+
+\subsection{Enlace de subida}
+\subsection{Símbolos e constelação}
+\subsection{Relação sinal-ruído}
+
+% ---------------------------------------------------------------------
+\section{Modelo de canal}\label{sec:modelo-canal}
+% ---------------------------------------------------------------------
+% CONTEÚDO  O que o canal representa; modelos determinísticos e
+%           estocásticos; desvanecimento; bloco de coerência; arranjos de
+%           antenas; modelo 3GPP, QuaDRiGa e cenários.
+% TEXTO     0.channel-modelling.tex (inteiro);
+%           1-noise-and-constraints.tex, "Multipath, desvanecimento..." e
+%           "Bloco de Coerência" (vazias);
+%           constraints/rascunho_bloco_canal.tex (partes 1 e 2; ajustar o tom).
+% ESTADO    parcial
+
+\subsection{Tipos de modelo de canal}
+\subsection{Desvanecimento}
+\subsection{Bloco de coerência}\label{subsec:bloco-coerencia}
+% O setup de simulação se apoia aqui: W é reaproveitado para vários símbolos.
+\subsection{Arranjos de antenas}
+\subsection{Modelo 3GPP e simulador QuaDRiGa}
+\subsection{Cenários de propagação}
+% A frase "este trabalho usa o cenário UMa NLOS" vai para o setup.
+
+% ---------------------------------------------------------------------
+\section{Equalização e detecção}\label{sec:equalization}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Detector ML e por que é inviável; separação entre equalização e
+%           detecção; filtros lineares; detecção pelo ponto mais próximo; SER.
+% TEXTO     1-noise-and-constraints.tex, "Equalização" e "Filtros Lineares".
+% ESTADO    parcial (ZF, Wiener e LMMSE escritos; SER não definida)
+
+\subsection{Detector de máxima verossimilhança}
+\subsection{Zero-forcing}
+\subsection{Covariância}
+\subsection{Filtro de Wiener}
+\subsection{Equalizador LMMSE}
+\subsection{Detecção e taxa de erro de símbolo}
+% Novo: decisão pelo ponto mais próximo da constelação; definição de SER.
+
+% =====================================================================
+\chapter{Equalização descentralizada sob ruído colorido}\label{chap:dbp-ruido}
+% =====================================================================
+% Núcleo do trabalho: o ruído colorido, a estimação da sua covariância, a
+% arquitetura descentralizada, o BCD-MMSE e a matriz G_c que cada DU inverte,
+% e as técnicas para inverter essa matriz.
+% Roteiro T1-T6 de constraints/notas_redacao.md.
+
+
+% ---------------------------------------------------------------------
+\section{Ruído colorido}\label{sec:ruido-colorido}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Do AWGN ao ruído colorido: interferentes + ruído térmico;
+%           construção de R = beta Hbar Hbar^H + sigma^2 I; IoT; leitura de R.
+% TEXTO     1-noise-and-constraints.tex, "Modelo AWGN" e "Modelo do ruído
+%           colorido" (assinatura espacial, hipóteses, construção de R_n).
+% ESTADO    escrito até a construção de R; falta a IoT
+
+\subsection{Ruído branco (AWGN)}
+\subsection{Assinatura espacial e interferência}
+\subsection{Hipóteses do modelo}
+\subsection{Construção da matriz de covariância}\label{subsec:construcao-R}
+\subsection{Interferência sobre ruído térmico (IoT)}
+% Novo: definição da IoT; papel de beta.
+\subsection{O que a matriz de covariância representa}\label{subsec:o-que-R-representa}
+
+% ---------------------------------------------------------------------
+\section{Estimação da matriz de covariância}\label{sec:estimacao-R}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Roteiro T1: R não pode ser calculada; estimativa amostral com N
+%           amostras de piloto; posto de R-chapéu; quantidade e custo de N.
+% TEXTO     1-noise-and-constraints.tex, "Estimação de R_n" (subseções
+%           parciais); constraints/rascunho_filtros_covariancia.tex.
+% ESTADO    parcial
+
+\subsection{Por que estimar}
+\subsection{Amostras de piloto}
+% Absorve a seção "Pilotos" (vazia) do capítulo atual.
+\subsection{Intervalo das amostras}
+\subsection{O que cada amostra contribui}
+\subsection{Quantidade de amostras}
+% Posto de R-chapéu <= N: motiva o condicionamento (subseção seguinte).
+\subsection{Condicionamento da estimativa}\label{subsec:condicionamento-R}
+% CONTEÚDO  Quando N < M, o posto de R-chapéu é no máximo N e a matriz não
+%           tem inversa (M = 256, N = 192). O LMMSE precisa dessa inversa.
+%           Shrinkage de Ledoit-Wolf: R-chapéu vira (1 - rho) R-chapéu +
+%           rho (tr R-chapéu / M) I, com rho calculado a partir das próprias
+%           amostras (sem constante a escolher). Alternativa: carga diagonal
+%           fixa, que depende de um epsilon.
+% TEXTO     nenhum na fundamentação; parágrafo sobre Ledoit-Wolf em
+%           rascunho_setup_simulacao.tex (subseção Receptor);
+%           dbp_sim/params.py, M6_Covariance.shrinkage.
+% FONTE     Ledoit e Wolf (2004), J. Multivariate Analysis 88(2) -- falta
+%           no .bib; posto <= N: livro-texto de álgebra linear.
+% MÓDULO    M6 (Conditioner em dbp_sim/m5_noise.py)
+% ESTADO    a escrever
+\subsection{Custo das amostras}
+
+% ---------------------------------------------------------------------
+\section{Processamento descentralizado}\label{sec:dbp}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Arquitetura DBP: clusters, DUs, CU; estrela e daisy chain;
+%           roteiro T2 (o que cada DU alcança) e T3 (a bifurcação: descartar
+%           os blocos cruzados -> BDAC; mantê-los comprimidos -> BCD).
+% TEXTO     1-noise-and-constraints.tex, "Definição Decentralizada" (vazia)
+%           e "Estimação nas DUs" (2 linhas).
+% ESTADO    vazio
+
+\subsection{Arquitetura e particionamento das antenas}
+\subsection{Estimação da covariância nas DUs}
+\subsection{Aproximação bloco-diagonal (BDAC-MMSE)}
+
+% ---------------------------------------------------------------------
+\section{Equalizador BCD-MMSE}\label{sec:bcd}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Roteiro T4 (formulação BCD), T5 (da eq. 26 à eq. 30) e T6 (o
+%           fator a inverter, G_c = E_s H_c H_c^H + R_cc, e suas
+%           propriedades: hermitiana, definida positiva).
+% TEXTO     constraints/notas_redacao.md (T4-T6);
+%           constraints/modelo_ruido_e_hipoteses.md, seção 10.
+% ESTADO    a escrever
+
+\subsection{Formulação por blocos}
+\subsection{Atualização de cada DU}
+\subsection{A matriz invertida em cada DU}\label{subsec:Gc}
+
+% ---------------------------------------------------------------------
+\section{Inversão de matrizes}\label{sec:inversao}
+% ---------------------------------------------------------------------
+% CONTEÚDO  Custo O(M_c^3); decomposição de Cholesky para matrizes
+%           hermitianas definidas positivas; substituições direta e reversa;
+%           série de Neumann e outras alternativas; por que Cholesky para G_c.
+% TEXTO     Proposta do TG1, "Matrix Inversion Techniques".
+% ESTADO    a escrever (traduzir e adaptar)
+
+\subsection{Decomposição de Cholesky}
+\subsection{Série de Neumann}
+\subsection{Comparação}

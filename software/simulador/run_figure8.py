@@ -10,6 +10,10 @@ Usage
     python run_figure8.py --bcd-iterations 1,2,3,4
                                                 BCD-MMSE iteration study: LMMSE, ZF and
                                                 one BCD-MMSE curve per iteration count
+    python run_figure8.py --n-noise-samples 12,48,192
+                                                one run per number of noise samples N
+    python run_figure8.py --conditions all      one run per 3GPP test condition, each
+                                                with its N (TDLA30-5 ... HST500)
 
 Every number this produces depends on decisions the article does not state.  Run
 ``--provenance`` and read ``simulation_parameters.md`` before quoting any result.
@@ -28,7 +32,10 @@ from dbp_sim import hw_inverse
 from dbp_sim.m1_driver import SimConfig, curve_names, run_panel
 from dbp_sim.plotting import BCD_ITERATION_RAMP
 from dbp_sim.params import (FIG8A_TARGETS_AT_MINUS4DB, FIGURE8_PANELS, M2_Channel,
-                            M6_Covariance, M7_Equalizers, assumptions, provenance_table)
+                            M5_Noise, M6_Covariance, M7_Equalizers, assumptions,
+                            provenance_table)
+
+N_BY_CONDITION = M5_Noise.n_noise_samples_by_condition.value
 
 
 def _banner(cfg: SimConfig, panel_label: str) -> None:
@@ -80,6 +87,13 @@ def main() -> None:
                     help="comma-separated BCD-MMSE iteration counts, e.g. 1,2,3,4 (at "
                          f"most {len(BCD_ITERATION_RAMP)}); computes only LMMSE, ZF and "
                          "one BCD-MMSE curve per count")
+    ap.add_argument("--n-noise-samples", default=None,
+                    help="comma-separated numbers of noise samples N, e.g. 12,48,192; one "
+                         "run (and one output folder) per value (default: 192)")
+    ap.add_argument("--conditions", default=None,
+                    help="comma-separated 3GPP test conditions, or 'all'; each runs with "
+                         "its N from params.M5_Noise.n_noise_samples_by_condition ("
+                         + ", ".join(c for c, _ in N_BY_CONDITION) + ")")
     ap.add_argument("--bcd-inverse", default=None, choices=["float", "cholesky_hw"],
                     help="M_c x M_c inversion of the BCD-MMSE update: float (default) or "
                          "cholesky_hw, the bit-exact model of the fixed-point Cholesky "
@@ -176,7 +190,56 @@ def main() -> None:
         overrides.update(n_realizations=3, n_symbols=200,
                          snr_db_grid=(-10, -6, -4, -2, 0))
 
-    if args.figdir is None:
+    # Each run is (condition label or None, N or None); None keeps the default N.
+    runs: list[tuple[str | None, int | None]] = [(None, None)]
+    if args.n_noise_samples and args.conditions:
+        raise SystemExit("use --n-noise-samples or --conditions, not both")
+    if args.n_noise_samples:
+        try:
+            ns = sorted({int(x) for x in args.n_noise_samples.split(",") if x.strip()})
+        except ValueError:
+            raise SystemExit("--n-noise-samples takes integers, e.g. 12,48,192")
+        if not ns or ns[0] < 1:
+            raise SystemExit("--n-noise-samples: every N must be >= 1")
+        runs = [(None, n) for n in ns]
+    if args.conditions:
+        table = dict(N_BY_CONDITION)
+        names = (list(table) if args.conditions.strip() == "all"
+                 else [c.strip() for c in args.conditions.split(",") if c.strip()])
+        unknown = [c for c in names if c not in table]
+        if unknown:
+            raise SystemExit(f"unknown condition(s) {unknown}; known: {', '.join(table)}")
+        runs = [(c, table[c]) for c in names]
+
+    wanted = [p.strip() for p in args.panels.split(",") if p.strip()]
+    panels = [p for p in FIGURE8_PANELS if p.label in wanted]
+    missing = set(wanted) - {p.label for p in panels}
+    if missing:
+        extra = " (panel (d) is unrecoverable from the article and is not implemented)" \
+                if "d" in missing else ""
+        raise SystemExit(f"unknown panel(s): {sorted(missing)}{extra}")
+
+    for cond, n in runs:
+        run_overrides = dict(overrides)
+        suffix = ""
+        if n is not None:
+            run_overrides["n_noise_samples"] = n
+            suffix = f"_{cond}_N{n}" if cond else f"_N{n}"
+        if len(runs) > 1:
+            print(f"\n{'#' * 78}\n# {cond + ': ' if cond else ''}N = {n}\n{'#' * 78}")
+        figdir = args.figdir
+        if figdir is not None and len(runs) > 1:
+            figdir = str(Path(figdir) / suffix.lstrip("_"))
+        out = args.out
+        if out and len(runs) > 1:
+            out = str(Path(out).with_name(f"{Path(out).stem}{suffix}{Path(out).suffix}"))
+        _run(args, panels, run_overrides, bcd_its, stem, figdir, out, suffix, cond)
+
+
+def _run(args, panels, overrides: dict, bcd_its: tuple, stem: str,
+         figdir: str | None, out: str | None, suffix: str, cond: str | None) -> None:
+    """Run every panel with one set of overrides and write its JSON and figure."""
+    if figdir is None:
         stamp = time.strftime("%Y%m%d-%H%M%S", time.gmtime())
         chan = args.channel or M2_Channel.backend.value
         norm = args.normalization or M2_Channel.normalization.value
@@ -190,15 +253,8 @@ def main() -> None:
                     f"_{overrides.get('hw_overflow', M7_Equalizers.hw_overflow.value)}")
             for name, (ib, fb, _q, _o) in overrides.get("hw_intermediates", ()):
                 tag += f"_{name}{'' if ib is None else ib}-{'' if fb is None else fb}"
-        args.figdir = str(Path(__file__).resolve().parent / "results" / f"{stamp}_{chan}_{tag}")
-
-    wanted = [p.strip() for p in args.panels.split(",") if p.strip()]
-    panels = [p for p in FIGURE8_PANELS if p.label in wanted]
-    missing = set(wanted) - {p.label for p in panels}
-    if missing:
-        extra = " (panel (d) is unrecoverable from the article and is not implemented)" \
-                if "d" in missing else ""
-        raise SystemExit(f"unknown panel(s): {sorted(missing)}{extra}")
+        tag += suffix
+        figdir = str(Path(__file__).resolve().parent / "results" / f"{stamp}_{chan}_{tag}")
 
     shr = overrides.get("shrinkage", M6_Covariance.shrinkage.value)
     print(f"conditioning = {shr}  [Tier 2A - the article does not specify how R_hat is "
@@ -236,13 +292,13 @@ def main() -> None:
                 print(f"    {curve:24s} got {got:8.4f}   target {target:6.3f}   "
                       f"ratio {ratio:5.2f}x")
 
-    if args.out is None:
-        args.out = str(Path(args.figdir) / f"{stem}_results.json")
-    if args.out:
-        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-        with open(args.out, "w") as fh:
+    if out is None:
+        out = str(Path(figdir) / f"{stem}_results.json")
+    if out:
+        Path(out).parent.mkdir(parents=True, exist_ok=True)
+        with open(out, "w") as fh:
             json.dump(all_results, fh, indent=2)
-        print(f"\nwrote {args.out}")
+        print(f"\nwrote {out}")
 
     if not args.no_plot and all_results:
         from dbp_sim.plotting import save_figure8
@@ -255,9 +311,11 @@ def main() -> None:
                f"channel: {chan}"
                + ("  (STAND-IN, not QuaDriGa)" if chan == "standin_ula" else "")
                + f"  |  conditioning: {eps} (rule not specified by the article)"
+               + (f"  |  {cond}" if cond else "")
+               + f"  |  N = {cfg0.n_noise_samples}"
                + f"  |  {cfg0.n_realizations} realizations x {cfg0.n_symbols} symbols")
         png, csvp = save_figure8(all_results, panels, cfg0.snr_db_grid,
-                                 args.figdir, subtitle=sub, curves=curve_names(cfg0),
+                                 figdir, subtitle=sub, curves=curve_names(cfg0),
                                  bcd_iterations=bcd_its, stem=stem)
         print(f"\nwrote {png}\nwrote {csvp}")
 

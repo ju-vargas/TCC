@@ -1,0 +1,124 @@
+\subsection{Modelo de canal}
+\label{sec:modelo-canal}
+% CONTEÚDO  O que o canal representa; modelos determinísticos e
+%           estocásticos; desvanecimento; bloco de coerência; arranjos de
+%           antenas; modelo 3GPP, QuaDRiGa e cenários.
+% TEXTO     0.channel-modelling.tex (inteiro);
+%           1-noise-and-constraints.tex, "Multipath, desvanecimento..." e
+%           "Bloco de Coerência" (vazias);
+%           constraints/rascunho_bloco_canal.tex (partes 1 e 2; ajustar o tom).
+% ESTADO    parcial
+A avaliação de um sistema de MIMO massivo precisa de um modelo que represente o canal com as principais características de um arranjo com muitas antenas. Esse modelo deve considerar a geometria do arranjo de antenas, a correlação espacial entre as respostas de canal de diferentes antenas e as características físicas do ambiente, como a localização e orientação das \sout{Estações Base (BSs) e dos Equipamentos de Usuário (UEs.)} \textcolor{red}{BSs e dos UEs}. 
+
+\subsubsection{Tipos de modelo de canal}
+Existem dois tipos principais de modelo de canal: determinísticos ou estocásticos. O modelo determinístico produz sempre o mesmo resultado sob as mesmas condições, pois depende de um ambiente específico com parâmetros fixos, como a localização dos transmissores, receptores, espalhadores e refletores de sinal. Exemplos desse modelo são o ray–tracing e medições reais de canal em campo. Nesse modelo há desvantagem para a reprodução de resultados, que exige o acesso aos dados de medição específicos do canal ou modelos 3D de prédios, que nem sempre estão disponíveis. 
+
+Modelos estocásticos são independentes de um ambiente em particular e generalizam o comportamento do canal a partir de propriedades estatísticas selecionadas. Eles podem ser divididos em três categorias:
+
+\begin{itemize}
+  \item Baseados em correlação: Nos modelos baseados em correlação as respostas do canal seguem uma distribuição gaussiana com média zero, definidas por meio de matrizes de correlação. Um exemplo é o correlated Rayleigh fading model, que considera um desvanecimento plano em frequência, ou seja, que todos os componentes multi-path chegam à antena com o mesmo delay. Esse modelo é suficiente para uma análise dentro de um bloco de coerência \sout{(PRB)} \textcolor{red}{(um PRB, na frequência, durante $T_c$, no tempo)}, em que o canal é considerado constante.
+  \item Paramétricos: Esses modelos definem distribuições estatísticas para o número de espalhadores,  atrasos, potências e ângulos de chegada e saída (AoA/AoD). Eles não consideram a geometria do ambiente, por isso não abrangem a análise da evolução temporal do canal que acontece com a movimentação dos \sout{Equipamentos de Usuário} \textcolor{red}{UEs}.
+  \item Baseados em geometria: Esses modelos equilibram as características dos modelos estocásticos e determinísticos. Eles definem uma distribuição da localização física dos espalhadores de sinal ao redor dos transmissores e receptores. Os caminhos de propagação do canal são modelados a partir da localização dos espalhadores de uma maneira quase-determinística (quasi-deterministic). Um modelo quase-determinístico define um processo regido por leis fixas mas com uma margem de aleatoriedade dada por ruído e/ou variabilidade. 
+\end{itemize} 
+
+\subsubsection{Multipath, desvanecimento...}
+\subsubsection{Bloco de Coerência}\label{subsec:bloco-coerencia}
+% O setup de simulação se apoia aqui: W é reaproveitado para vários símbolos.
+O tempo de coerência \(T_c\) corresponde ao intervalo durante o qual o canal pode ser considerado aproximadamente constante. Seu valor é calculado a partir do deslocamento Doppler máximo \(f_D\), pela expressão \(T_c=1/(8f_D)\) \cite{tse-viswanath}. Durante cada bloco de coerência, o canal e a matriz de covariância do ruído são considerados constantes, permitindo reutilizar a matriz de equalização \(\mathbf W\) ao longo desse intervalo \cite{zhao2025jsac}.
+
+As condições de teste seguem os cenários de propagação definidos no Anexo G da norma 3GPP TS 38.104 \cite{3gpp-ts38104}. Para os cálculos, são adotados \sout{espaçamentos entre subportadoras (SCS)} \textcolor{red}{SCS} de 30 kHz em FR1 e 120 kHz em FR2 \cite[Tabs.~5.3.5-1 e 5.3.5-2]{3gpp-ts38104}. Considerando os 14 símbolos OFDM por slot \cite[Tab.~4.3.2-1]{3gpp-ts38211}, a Tabela~\ref{tab:tempo-coerencia} apresenta o tempo de coerência e o número de símbolos OFDM completos contidos nesse intervalo para cada condição de teste. A classificação de mobilidade típica baseia-se nos cenários de uso do 5G descritos pela ITU \cite[pp.~11, 14]{itu-m2083}.
+
+
+
+\begin{table}[htbp]
+\caption{\textcolor{red}{Tempo de coerência de cada condição de teste.}}
+\label{tab:tempo-coerencia}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|p{4.2cm}|r|r|r|r|r|}
+\hline
+Condição de teste & \raggedright Mobilidade típica & $f_D$ (Hz) & $v$ (km/h) & SCS (kHz) & $T_c$ (ms) & Símb. OFDM \tabularnewline
+\hline
+TDLA30-5 (FR1) & \raggedright Baixa: \textit{hotspot}, \textit{indoor} & 5 & 1,5 & 30 & 25,0000 & 700 \tabularnewline
+TDLA30-10 (FR1) & \raggedright Baixa: \textit{hotspot}, \textit{indoor} & 10 & 3,1 & 30 & 12,5000 & 350 \tabularnewline
+TDLA30-75 (FR2) & \raggedright Baixa: \textit{hotspot}, \textit{indoor} & 75 & 2,9 & 120 & 1,6667 & 186 \tabularnewline
+TDLA30-300 (FR2) & \raggedright Média a alta: área ampla, carros & 300 & 11,6 & 120 & 0,4167 & 46 \tabularnewline
+TDLC300-100 (FR1) & \raggedright Média a alta: área ampla, carros & 100 & 30,8 & 30 & 1,2500 & 35 \tabularnewline
+TDLB100-400 (FR1) & \raggedright Média a alta: área ampla, carros & 400 & 123,3 & 30 & 0,3125 & 8 \tabularnewline
+HST350 (FR1) & \raggedright Alta: trem de alta velocidade & 2334 & 350 & 30 & 0,0536 & 1 \tabularnewline
+HST500 (FR1) & \raggedright Alta: trem de alta velocidade & 3334 & 500 & 30 & 0,0375 & 1 \tabularnewline
+\hline
+\end{tabular}
+\end{table}
+% FONTE: f_D: TS 38.104 v16.4.0, Tab. G.2.2-1 e G.2.2-2 (p. 241), G.3-1 e G.3-2 (p. 252, SCS 30 kHz);
+%        T_c = 1/(4 D_s): Tse e Viswanath, Eq. (2.44), p. 31; D_s = 2 f_c v/c e T_c = c/(8 f_c v): p. 70;
+%        SCS: TS 38.104 Tab. 5.3.5-1 (n78) e 5.3.5-2 (n257); 14 símbolos/slot: TS 38.211 Tab. 4.3.2-1.
+%        v (TDL): v = f_D c / f_c, Tse e Viswanath p. 70; f_c: TS 38.104 Tab. 5.2-1 (n78) e 5.2-2 (n257).
+%        v (HST): TS 38.104 Tab. G.3-1 e G.3-2. NOTA: pela fórmula, 2334 Hz a 3,5 GHz daria ~720 km/h;
+%        a norma deriva o f_d de HST para outras bandas e avisa que, em frequências menores, a velocidade
+%        suportada é maior (Sec. G.3, p. 250).
+%        Mobilidade: ITU-R M.2083-0, p. 4 (carros e trens), p. 11 (hotspot: baixa; área ampla: média a alta), p. 14 (até 500 km/h,
+%        trens), p. 15. A associação condição -> categoria é deste trabalho (coluna do CSV).
+%        Valores: software/Restrições - Parâmetros.csv, linhas 15-24.
+
+\subsubsection{Arranjo de canal} 
+
+A escolha dos arranjos de antena (ou seja, suas distribuições no espaço) dependem do caso de uso, da frequência dos portadores e da área de cobertura. Os arranjos podem ser organizados em geometrias lineares (Uniform Linear Array - ULA), planares (Uniform Planar Array - UPA) ou em geometrias cilíndricas. Modelos lineares e planares separam os UEs baseados na elevação ou posição azimutal, enquanto os cilíndricos conseguem trabalhar nos dois domínios ao mesmo tempo. Para cenários urbanos, o arranjo cilíndrico é mais adequado, pois permite a representação dos UEs em diferentes localizações e andares de prédios. 
+
+\subsubsection{Modelo 3GPP e Simulador QuaDRiGa}
+
+Linha de Visada (Line of Sight - LoS) é o trajeto livre de obstáculos que permite a visão direta entre dois pontos. Não é realista representar os caminhos de propagação apenas como linha de visada. A 3GPP definiu para sistemas MIMO um modelo estocástico baseado em geometria que representa um misto de caminhos de propagação NLos e LoS. Esse modelo une um layout determinístico do sistema MIMO (ocalização das BS e UE, orientação das antenas, dependência angular da intensidade das ondas de rádio transmitidas ou recebidas, frequência de subportadoras) e um conjunto de parâmetros aleatórios de larga escala gerados por distribuições estatísticas obtidas a partir de medições de canal. O simulador de canal de código aberto QuaDRiGa (Quasi-Deterministic Radio Channel Generator) implementa o modelo 3GPP 3D MIMO, e é o simulador utilizado neste trabalho. 
+
+
+
+\subsubsection{Cenário de propagação}
+% A frase "este trabalho usa o cenário UMa NLOS" vai para o setup.
+Um cenário de propagação descreve um conjunto de parâmetros estatísticos para um tipo de ambiente. Dentre os modelos de cenário, o trabalho utiliza o 3GPP NR (\sout{TR 39.901} \textcolor{red}{TR 38.901}), \textcolor{red}{[que modela os parâmetros para o New Radio, que é uma frequencia maior, pior caso]}. Os ambientes do modelo \sout{3G-- 38.901} \textcolor{red}{3GPP TR 38.901} podem ter as seguintes características: 
+
+\begin{itemize}
+  \item \sout{Uma} \textcolor{red}{UMa} (\textit{Urban Macro-cell}): cidade densa, com antenas acima dos telhados. 
+  \item \sout{Umi} \textcolor{red}{UMi} (\textit{Urban Micro-cell}): cidade densa, com uma antena pequena abaixo dos telhados, no nível da rua. 
+  \item RMa (\textit{Rural Macro-cell}): área rural, com células grandes. 
+  \item InH (\sout{\textit{Indoor Office}} \textcolor{red}{\textit{Indoor Hotspot}}): dentro de prédios, como escritórios.
+  \item InF (\textit{Indoor Factory}): dentro de galpões de fábrica. 
+\end{itemize}
+
+
+Além disso, cada ambiente pode ter variações: 
+
+\begin{itemize}
+  \item LOS/NLOS: com ou sem visada direta entre antena e usuário. 
+  \item O2I (\textit{Outdoor-to-Indoor}): antena do lado de fora e usuário dentro de prédio.         
+\end{itemize}
+
+
+Cada cenário do modelo é definido por um arquivo de configuração. A tabela \ref{tab:cenarios_38901} resume os cenários do modelo. Este trabalho usa o cenário \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMa\_\allowbreak{}NLOS}, que representa uma macrocélula urbana (\textit{Urban Macro} - UMa) sem linha de visada (NLos) entre a BS e os UEs. 
+
+
+\begin{table}[htbp]
+\caption{Cenários do modelo 3GPP 38.901 no QuaDRiGa.}
+\label{tab:cenarios_38901}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{3.6cm}|p{4.4cm}|p{5.2cm}|}
+\hline
+\raggedright Cenário & \raggedright Lugar & \raggedright Dados do manual \tabularnewline
+\hline
+\raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMa} & \raggedright Cidade densa, antena no alto do prédio & \raggedright Célula de até $\sim$1 km, BS a 25 m, usuário de 1,5 a 22,5 m \tabularnewline
+\hline
+\raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMi} & \raggedright Cidade densa, antena na rua, abaixo dos telhados & \raggedright Célula de até $\sim$200 m, BS a 10 m \tabularnewline
+\hline
+\raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}RMa} & \raggedright Área rural & \raggedright Célula de até $\sim$10 km, BS de 10 a 150 m \tabularnewline
+\hline
+\raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}Indoor} & \raggedright Escritório, como Wi-Fi ou femtocélula & \raggedright BS a 3 m, usuário a 1 m. Tem dois tipos, \textit{mixed office} e \textit{open office}, que só mudam a probabilidade de LOS. \tabularnewline
+\hline
+\raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}InF} & \raggedright Galpão de fábrica com máquinas, linhas de montagem e prateleiras & \raggedright Versões NLOS por densidade de obstáculos (D: denso, S: esparso) e altura da BS (H: alta, L: baixa): DH, DL, SH e SL \tabularnewline
+\hline
+\end{tabular}
+\legend{Fonte: manual do QuaDRiGa.} % TODO citar QuaDRiGa (Seção 2.5, Tabela 21, p. 108)
+\end{table}
+
+\subsubsection{Parâmetros do simulador}
+Para além dos parâmetros fixos pelo cenário de simulação, uma série de parâmetros deve ser definida. Este trabalho utiliza os parâmetros definidos em \cite{zhao2025jsac}.  

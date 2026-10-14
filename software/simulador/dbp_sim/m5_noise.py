@@ -140,6 +140,8 @@ class Conditioner:
     """How a sample covariance is made invertible before it is inverted.
 
     mode='ledoit_wolf'  intensity computed per covariance from its own samples; no knob.
+                        Holds for N < dim as well, so a DU block never borrows the
+                        intensity of the global matrix (N = 12 < M_c in the HST conditions).
     mode='fixed'        diagonal loading A -> A + eps*(tr A/dim)*I  (not adopted; see above).
     mode='none'         raw R_hat; pinv is used where it is singular.
     """
@@ -149,7 +151,7 @@ class Conditioner:
             raise ValueError(f"unknown conditioner mode {mode!r}")
         self.mode = mode
         self.epsilon = epsilon
-        self._fallback_rho = 0.0     # used when a block has too few columns for LW
+        self._fallback_rho = 0.0     # for covariances formed without samples (LRD path)
 
     def prime(self, S: np.ndarray) -> None:
         """Record a fallback intensity from the full sample matrix (for the LRD path)."""
@@ -163,9 +165,7 @@ class Conditioner:
             return R
         if self.mode == "fixed":
             return load_diagonal(R, self.epsilon)
-        rho = (ledoit_wolf_rho(S_block) if S_block.shape[1] >= S_block.shape[0]
-               else self._fallback_rho)
-        return shrink(R, rho)
+        return shrink(R, ledoit_wolf_rho(S_block))
 
     def condition(self, A: np.ndarray) -> np.ndarray:
         """Condition an already-formed covariance (used where samples are unavailable)."""

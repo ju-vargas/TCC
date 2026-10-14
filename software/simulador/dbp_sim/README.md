@@ -29,6 +29,8 @@ python run_figure8.py --provenance      # parameter table + every non-stated dec
 python run_figure8.py --quick --panels a
 python run_figure8.py                   # all panels, article settings (slow)
 python run_figure8.py --bcd-iterations 1,2,3,4   # LMMSE, ZF and BCD-MMSE per iteration count
+python run_figure8.py --n-noise-samples 12,48,144,192   # one run per number of noise samples N
+python run_figure8.py --conditions all  # one run per 3GPP test condition, with its N
 python test_dbp_sim.py                  # correctness checks
 ```
 

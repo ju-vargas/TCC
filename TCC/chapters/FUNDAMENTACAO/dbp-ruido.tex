@@ -1,0 +1,301 @@
+% ---------------------------------------------------------------------
+% Destaque colorido de um elemento de matriz: \destaque{cor}{conteúdo}
+\providecommand{\destaque}[2]{{\setlength{\fboxsep}{1.5pt}\colorbox{#1}{$#2$}}}
+\subsection{Ruído}\label{subsec:ruido-colorido}
+% ---------------------------------------------------------------------
+O equalizador LMMSE \textcolor{red}{(\textit{Linear Minimum Mean Square Error}) \cite{zhao2025jsac}} [] depende da matriz de covariância do ruído, que descreve suas características estatísticas e a relação entre os sinais observados nas diferentes antenas da \sout{estação base} \textcolor{red}{BS}. Quando o ruído é apenas térmico (AWGN) e por consequência, espacialmente branco, essa matriz é proporcional à identidade. Entretanto, a presença da interferência de usuários não-alvo adiciona correlação espacial do ruído entre as antenas. Esta seção apresenta o modelo de ruído considerado neste trabalho e deriva sua matriz de covariância.
+
+\subsubsection{Ruído branco (AWGN)}
+No modelo AWGN (Additive White Gaussian Noise), considera-se que o ruído é gaussiano, aditivo e espacialmente branco. Sua matriz de covariância é dada por:
+
+\[
+\mathbf R_n=\sigma^2\mathbf I_M,
+\]
+
+em que $\sigma^2$ representa a potência do ruído térmico por antena e $\mathbf I_M$ é a matriz identidade de dimensão $M\times M$. Como a matriz possui apenas elementos não nulos na diagonal, assume-se que os ruídos térmicos observados nas diferentes antenas são independentes. Nesse cenário, o equalizador LMMSE pode ser escrito como \cite{jeon2019}:
+
+\[
+\mathbf W_{\mathrm{LMMSE}}=
+\left(
+\mathbf H^H\mathbf H+
+\rho\mathbf I_K
+\right)^{-1}\mathbf H^H,
+\]
+
+em que  $\rho =  \dfrac{\sigma^2}{E_s}$, $E_s$ representa a energia média dos símbolos transmitidos e $K$ é o número de usuários alvo.
+
+Entretanto, em cenários com interferência, o ruído térmico não é a única contribuição presente no sinal recebido. Os sinais transmitidos por usuários que não são alvos da detecção também chegam às antenas da \sout{estação base} \textcolor{red}{BS}. Como essas contribuições podem apresentar correção espacial, o ruído resultante deixa de ser branco. Neste trabalho, a combinação de interferência e ruído térmico é denominada ruído colorido.
+
+
+\subsubsection{Assinatura espacial e Interferência}
+O sinal transmitido por um \sout{equipamento de usuário} \textcolor{red}{UE} chega as M antenas da \sout{estação base} \textcolor{red}{BS}, multiplicado em cada antena pelo ganho do canal de propagação. Para um únco transmissor, o sinal recebido é:
+
+\[
+\mathbf y=\mathbf h s+\mathbf n,
+\]
+
+em que em que $\mathbf h\in\mathbb C^{M\times1}$ reúne os ganhos do canal entre o transmissor e as antenas da \sout{estação base} \textcolor{red}{BS}. Esse vetor é denomidado assinatura espacial do sinal, porque descreve como o sinal de um usuário se distribui pelo conjunto de antenas.
+
+Os UEs não-alvo da \sout{estação base} \textcolor{red}{BS} também tem a sua assinatura espacial e o sinal de cada $r$ usuário interferente chega a todas as antenas, com ganhos distintos entre elas. Assim, a mesma interferência ocorre simultaneamente em todas as antenas, o que a torna correlacionada entre elas. O ruído térmico, por outro lado, é gerado de forma independente em cada antena.
+
+Pode-se definir o modelo de sinal recebido no cenário de interferência como:
+
+\[
+\mathbf y=
+\mathbf H\mathbf s+\mathbf n=
+\mathbf H\mathbf s+
+\overline{\mathbf H}\,\overline{\mathbf s}
++\overline{\mathbf n},
+\]
+
+em que $\mathbf H\in\mathbb C^{M\times K}$ é a matriz de canal dos $K$ usuários-alvo, $\mathbf s\in\mathbb C^{K\times1}$ é o vetor de símbolos transmitidos por esses usuários, $\overline{\mathbf H}\in\mathbb C^{M\times r}$ representa os canais dos usuários interferentes e $\overline{\mathbf s}\in\mathbb C^{r\times1}$ reúne seus símbolos transmitidos. O vetor $\overline{\mathbf n}\in\mathbb C^{M\times1}$ representa o ruído térmico nas antenas receptoras.
+
+\[
+\overline{\mathbf H}=
+\underbrace{\begin{bmatrix}
+\bar h_{11} & \cdots & \bar h_{1r}\\
+\vdots & \ddots & \vdots\\
+\bar h_{M1} & \cdots & \bar h_{Mr}
+\end{bmatrix}}_{M\times r},
+\qquad
+\overline{\mathbf s}=
+\underbrace{\begin{bmatrix}\bar s_1\\ \vdots\\ \bar s_r\end{bmatrix}}_{r\times 1},
+\qquad
+\overline{\mathbf n}=
+\underbrace{\begin{bmatrix}\bar n_1\\ \vdots\\ \bar n_M\end{bmatrix}}_{M\times 1}.
+\]
+
+Para construir o modelo do ruído colorido, considera-se que os usuários interferentes transmitem de forma independente com potência média $\beta$, de modo que:
+
+\[
+\mathbb E[\overline{\mathbf s}\,\overline{\mathbf s}^{H}]
+=\beta\mathbf I_r=
+\underbrace{\begin{bmatrix}
+\destaque{orange!40}{\beta} & \cdots & 0\\
+\vdots & \ddots & \vdots\\
+0 & \cdots & \destaque{orange!40}{\beta}
+\end{bmatrix}}_{r\times r}.
+\]
+
+Os elementos em destaque na diagonal são a potência $\beta$ de cada interferente. Os zeros fora da diagonal indicam que os interferentes são independentes entre si.
+
+
+Assume-se também que o ruído térmico é espacialmente branco, com média nula e matriz de covariância:
+
+\[
+\mathbb E[\overline{\mathbf n}\,\overline{\mathbf n}^{H}]
+=\sigma^2\mathbf I_M=
+\underbrace{\begin{bmatrix}
+\destaque{yellow!40}{\sigma^2} & \cdots & 0\\
+\vdots & \ddots & \vdots\\
+0 & \cdots & \destaque{yellow!40}{\sigma^2}
+\end{bmatrix}}_{M\times M}.
+\]
+
+Os elementos em destaque na diagonal são a potência $\sigma^2$ do ruído térmico em cada antena. Os zeros fora da diagonal indicam que o ruído de uma antena não depende do ruído das outras.
+
+Além disso, os símbolos dos interferentes e o ruído térmico são considerados mutuamente independentes e de média nula. A matriz de canal $\overline{\mathbf H}$ é tratada como constante durante o intervalo de coerência considerado.
+
+
+\subsubsection{Matriz de covariância do ruído}
+O ruído colorido é definido pela soma das contribuições dos usuários interferentes e do ruído térmico:
+
+\[
+\mathbf n=
+\overline{\mathbf H}\,\overline{\mathbf s}
++\overline{\mathbf n}.
+\]
+
+Sua matriz de covariância é dada por:
+
+\[
+\mathbf R_n
+\triangleq
+\mathbb E[\mathbf n\mathbf n^H].
+\]
+
+Como as duas parcelas são independentes e possuem média nula, a covariância da soma é igual à soma de suas covariâncias. Portanto,
+
+\[
+\mathbf R_n=
+\operatorname{Cov}
+\left(\overline{\mathbf H}\,\overline{\mathbf s}\right)
++
+\operatorname{Cov}(\overline{\mathbf n}).
+\]
+
+A primeira parcela pode ser obtida pela propriedade da covariância sob uma transformação linear. Para uma matriz determinística $\mathbf A$ e um vetor aleatório $\mathbf z$, vale:
+
+\[
+\operatorname{Cov}(\mathbf A\mathbf z)=
+\mathbf A\operatorname{Cov}(\mathbf z)\mathbf A^H.
+\]
+
+Aplicando essa propriedade à contribuição dos interferentes, obtém-se:
+
+\[
+\begin{aligned}
+\operatorname{Cov}
+\left(\overline{\mathbf H}\,\overline{\mathbf s}\right)
+&=
+\overline{\mathbf H}
+\mathbb E[\overline{\mathbf s}\,\overline{\mathbf s}^H]
+\overline{\mathbf H}^H\\
+&=
+\beta\overline{\mathbf H}\,\overline{\mathbf H}^H.
+\end{aligned}
+\]
+
+Como a covariância do ruído térmico é $\sigma^2\mathbf I_M$, a matriz de covariância do ruído colorido resulta em:
+
+\[
+\boxed{
+\mathbf R_n=
+\beta\overline{\mathbf H}\,\overline{\mathbf H}^H
++\sigma^2\mathbf I_M
+}
+\]
+
+\[
+\underbrace{\overline{\mathbf H}}_{M\times r}\,
+\underbrace{\beta\mathbf I_r}_{r\times r}\,
+\underbrace{\overline{\mathbf H}^H}_{r\times M}
++
+\underbrace{\sigma^2\mathbf I_M}_{M\times M}
+=
+\underbrace{\begin{bmatrix}
+r_{11} & \destaque{green!30}{r_{12}} & \cdots & \destaque{green!30}{r_{1M}}\\
+\destaque{green!30}{r_{21}} & r_{22} & \cdots & \destaque{green!30}{r_{2M}}\\
+\vdots & \vdots & \ddots & \vdots\\
+\destaque{green!30}{r_{M1}} & \destaque{green!30}{r_{M2}} & \cdots & r_{MM}
+\end{bmatrix}}_{\mathbf R_n\ (M\times M)}
+\]
+
+A matriz $\mathbf R_n$ possui dimensão $M\times M$ e reúne duas contribuições distintas. O termo $\sigma^2\mathbf I_M$ representa o ruído térmico, cuja covariância é nula entre antenas distintas. Já o termo $\beta\overline{\mathbf H}\,\overline{\mathbf H}^H$ representa a covariância da interferência recebida. Como cada sinal interferente pode ser observado simultaneamente por várias antenas, essa parcela pode apresentar elementos não nulos fora da diagonal, indicando correlação espacial. Na matriz acima, esses são os elementos em destaque: cada um indica o quanto o ruído de duas antenas distintas está correlacionado. Os elementos da diagonal, sem destaque, são a potência do ruído em cada antena.
+
+Assim, a matriz $\mathbf R_n$ descreve tanto a potência do ruído em cada antena quanto as relações estatísticas entre as diferentes componentes do vetor de ruído. Essa informação é necessária para modelar adequadamente a interferência no equalizador LMMSE. Sob a hipótese de símbolos-alvo independentes, com covariância $E_s\mathbf I_K$ e independentes do ruído, a matriz de covariância do sinal recebido fica:
+
+\[
+\mathbf R_y=
+E_s\mathbf H\mathbf H^H+\mathbf R_n,
+\]
+
+ou, equivalentemente,
+
+\[
+\mathbf R_y=
+E_s\mathbf H\mathbf H^H+
+\beta\overline{\mathbf H}\,\overline{\mathbf H}^H
++\sigma^2\mathbf I_M.
+\]
+
+
+
+\subsubsection{Interferência sobre ruído térmico (IoT)}
+A IoT mede a intensidade da interferência em relação ao ruído térmico. Ela é definida como \cite{zhao2025jsac}:
+
+\begin{equation}
+\mathrm{IoT}=10\log_{10}\left(\frac{\beta+N_0}{\sigma^2}\right),
+\end{equation}
+
+em que $N_0$ é a potência do ruído térmico, ou seja, $N_0=\sigma^2$, assim como na SNR medida por $E_s/N_0$ em \cite{zhao2021-globecom}.
+
+A potência $\beta$ dos UEs não-alvo controla a intensidade da interferência. Quando a IoT é baixa, $\mathbf R_n$ se aproxima de $\sigma^2\mathbf I_M$ e o ruído é praticamente branco. À medida que a IoT cresce, a parcela $\beta\overline{\mathbf H}\,\overline{\mathbf H}^H$ domina e a correlação entre as antenas se torna mais forte.
+
+\subsubsection{Estimação da matriz de covariância}
+% aqui eh o lugar para explicar RCC
+% explicar tambem a quantidade de pilotos e etc
+A matriz $\mathbf R_n$ é uma grandeza teórica, definida por uma esperança, o que exigiria infinitas realizações do ruído, além de depender dos canais $\overline{\mathbf H}$ dos usuários interferentes e de sua potência de transmissão $\beta$ que o receptor não conhece. Por isso, $\mathbf R_n$ precisa ser estimada a partir de observações de amostras do ruído observadas pelo receptor.
+
+A estimativa amostral é dada por:
+
+\[
+\widehat{\mathbf R}_n=
+\frac{1}{N}
+\sum_{i=1}^{N}
+\mathbf n^i(\mathbf n^i)^H,
+\]
+
+em que $N$ é o número de amostras disponíveis e $\mathbf n^i\in\mathbb C^{M\times1}$ representa a $i$-ésima amostra de ruído colorido. Cada amostra corresponde a uma observação do ruído nas $M$ antenas da \sout{estação base} \textcolor{red}{BS}.
+
+
+As amostras de ruído são obtidas durante a transmissão de símbolos piloto. Como o sinal transmitido pelos usuários-alvo é conhecido pelo receptor nessa etapa, sua contribuíção pode ser removida do sinal recebido. O resíduo contém a interferência dos usuários não-alvo somada ao ruído térmico, constituindo a amostra de ruído colorido utilizada na estimação.
+
+O produto externo de uma amostra por sua transposta conjugada, $\mathbf n^i(\mathbf n^i)^H$, produz uma matriz de dimensão $M\times M$. Cada elemento dessa matriz corresponde ao produto entre o ruído observado em duas antenas na mesma amostra:
+
+\[
+\left[\mathbf n^i(\mathbf n^i)^H\right]_{ab}=
+n_a^i(n_b^i)^*.
+\]
+
+\[
+\underbrace{\begin{bmatrix} n_1^i\\ n_2^i\\ \vdots\\ n_M^i\end{bmatrix}}_{M\times 1}
+\underbrace{\begin{bmatrix} (n_1^i)^* & (n_2^i)^* & \cdots & (n_M^i)^*\end{bmatrix}}_{1\times M}
+=
+\underbrace{\begin{bmatrix}
+\destaque{yellow!40}{n_1^i(n_1^i)^*} & n_1^i(n_2^i)^* & \cdots & n_1^i(n_M^i)^*\\
+n_2^i(n_1^i)^* & \destaque{yellow!40}{n_2^i(n_2^i)^*} & \cdots & n_2^i(n_M^i)^*\\
+\vdots & \vdots & \ddots & \vdots\\
+n_M^i(n_1^i)^* & n_M^i(n_2^i)^* & \cdots & \destaque{yellow!40}{n_M^i(n_M^i)^*}
+\end{bmatrix}}_{M\times M}
+\]
+
+Quando $a=b$, o produto corresponde à potência observada na antena considerada. Esses são os elementos em destaque na diagonal da matriz acima. Quando $a\neq b$, o produto relaciona os sinais de ruído observados em duas antenas distintas.
+
+A média desses produtos ao longo das $N$ amostras fornece uma estimativa dos elementos correspondentes de $\mathbf R_n$. Dessa forma, cada amostra contribui para a estimação da potência do ruído em cada antena e das relações estatísticas entre pares de antenas. Uma única observação não é suficiente para caracterizar essas propriedades estatísticas; a estimativa torna-se mais representativa à medida que são incorporadas novas amostras. Ou seja, a qualidade da estimativa depende do número de amostras utilizadas.
+
+A quantidade de amostras, no entanto, é limitada pelos recursos disponíveis para a coleta. No sistema considerado, as amostras são obtidas a partir de elementos de recurso de pilotos, cuja disponibilidade depende da configuração do sinal e do intervalo durante o qual a covariância pode ser considerada constante.
+
+
+\subsubsection{Disponibilidade das amostras no bloco de coerência}
+Todas as amostras utilizadas na estimação de ruído devem representar a mesma matriz de covariância. Por isso, o intervalo da amostragem é limitado pela variação no tempo e na frequência dos canais que determinam a interferência. 
+
+A variação no tempo é definida pelo tempo de coerência. Já a variação na frequência é definida pelo \sout{Physical Resource Block (PRB)} \textcolor{red}{PRB}. Considera-se que os canais dos usuários interferentes permanecem constantes dentro do PRB. A estima $R_{cc}$, portanto, é única por PRB dentro de cada tempo de coerência. 
+
+O valor de $T_c$ determina quantas amostras estão disponíveis no período constante de canal. O número máximo de amostras utilizáveis depende da configuração dos pilotos e da duração do intervalo considerado. 
+
+\sout{Resource Element (RE) é a menor unidade básica de transmissão, correspondendo a uma subportadora no domínio da frequência e um símbolo OFDM no domínio do tempo.  Slot é a unidade básica de tempo para o agendamento de transmissões na rede, representando um bloco temporal contínuo. No padrão 5G NR, cada PRB possui 12 subportadores consecutivas na frequência, e cada slot possui 14 símbolos.} \textcolor{red}{Como apresentado na Seção~\ref{subsec:simbolos}, cada PRB tem 12 subportadoras consecutivas na frequência, e cada slot tem 14 símbolos OFDM.} 
+
+No \sout{5G} \textcolor{red}{5G NR}, Demodulation Reference Signal (DM-RS) é o nome do sinal de referência transmitido pelo UE para que o receptor estime as condições do canal. As amostras de ruído são obtidas a partir dos RE ocupados pelo DM-RS. O número máximo de símbolos de DM-RS por slot é 4. Por PRB, no máximo 4 símbolos * 12 subportadoras = 48 REs de pilotos por slot estão disponíveis. Assim, a quantidade de amostras coletada dentro de um \sout{Tc} \textcolor{red}{$T_c$} depende do número de símbolos OFDM contidos nesse intervalo. A Tabela~\ref{tab:n-maximo} indica a quantidade de amostras em cada cenário de teste.
+
+\begin{table}[htbp]
+\caption{Número máximo de REs de DM-RS por PRB dentro de $T_c$.}
+\label{tab:n-maximo}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Condição de teste & $T_c$ (ms) & Símbolos OFDM em $T_c$ & REs de DM-RS (máx.) & $N$ usado \\
+\hline
+TDLA30-5 (FR1)    & 25,0000 & 700 & 2400 & 192 \\
+TDLA30-10 (FR1)   & 12,5000 & 350 & 1200 & 192 \\
+TDLA30-75 (FR2)   & 1,6667  & 186 & 672  & 192 \\
+TDLA30-300 (FR2)  & 0,4167  & 46  & 192  & 192 \\
+TDLC300-100 (FR1) & 1,2500  & 35  & 144  & 144 \\
+TDLB100-400 (FR1) & 0,3125  & 8   & 48   & 48 \\
+HST350 (FR1)      & 0,0536  & 1   & 12   & 12 \\
+HST500 (FR1)      & 0,0375  & 1   & 12   & 12 \\
+\hline
+\end{tabular}
+\end{table}
+% FONTE da tabela: f_D e condições: [R5] TS 38.104, Anexo G; T_c: Tse e Viswanath, Eq. (2.44);
+%        símbolo OFDM: 1/28 ms (30 kHz) e 1/112 ms (120 kHz), [R2] Tab. 4.3.2-1, p. 14.
+%        Valores: software/Restrições - Parâmetros.csv, linhas 44-53.
+
+
+\subsubsection{Condicionamento da estimativa}
+O posto de uma matriz é o número máximo de linhas ou colunas linearmente independentes que essa matriz possui.  Cada parcela $\mathbf{n}^i(\mathbf{n}^i)^H$ é uma matriz de posto unitário, uma vez que todas as suas colunas são múltiplas do mesmo vetor $\mathbf{n}^i$. Consequentemente, o posto da soma de (N) desses produtos é limitado por (N):
+
+\[
+\operatorname{rank}(\widehat{\mathbf R}_n) \leq \min(M,N)
+\]
+
+Assim, quando (N<M), a estimativa amostral da matriz completa $(M\times M)$ é necessariamente singular. Uma matriz singular não é inversível. Essa propriedade precisa ser considerada em operações que exigem a inversão da matriz de covariância.
+
+\cite{zhao2025jsac} adota a condição $N\gg K$, para obter uma estimativa suficientemente precisa. Em suas simulações, utiliza (N=192) amostras por realização do canal. Um trabalho anterior dos mesmos autores também apresenta 96 e 192 como valores típicos para essa quantidade de amostras (Zhao et al., 2021).
+
+
+
+
+

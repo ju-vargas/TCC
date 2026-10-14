@@ -76,7 +76,7 @@ ordering* — without it centralized LMMSE stops being the best curve.
 | `M_c` | Antennas per cluster | `M/C`, equal | S | L577, L85 | `M3_Clustering.equal_cluster_size` |
 | `K` | Target UEs (single-antenna) | 8; **12** in Fig. 8(e) | S | L577; L593 | `Panel.K` |
 | `r` | Interfering UEs | 8 — "both set to K = 8" | S | L577 | `Panel.r` |
-| `N` | Noise samples for covariance | 192 | S | L577, L640 | `M5_Noise.n_noise_samples` |
+| `N` | Noise samples for covariance | 192 (default); 12, 48, 144 or 192 per 3GPP test condition | S; X for the per-condition values | L577, L640; `Restrições - Parâmetros.csv` L44-53 | `M5_Noise.n_noise_samples`, `n_noise_samples_by_condition` |
 | `IoT` | Interference over thermal | 10 dB; **20 dB** in Fig. 8(f) | S | L577; L593 | `Panel.iot_db` |
 | `SNR` | Definition | `10·log10(E_s/σ²)` | S | L577 | `M5_Noise.snr_definition` |
 | `E_s`, `σ²` | — | `E_s = 1`, `σ² = 10^(−SNR/10)` (only ratios enter (3),(7),(15),(22),(26),(30)) | D | L577, L79 | `M4_Source.Es` |
@@ -232,6 +232,8 @@ literally would realise ≈ 18.6 dB at IoT = 10 dB, r = 8 (convention `literal_f
 **Note E — conditioning of `R̂`.** Some conditioning is *forced* by the article's own equations:
 Eq. (3) requires `R⁻¹`; fn 5 (L822) directs that `R̂` be used as `R`; and
 `rank(R̂) ≤ N = 192 < 256 = M`. The `M = 256` panels cannot be computed without it.
+With the per-condition N (down to 12, `--conditions`), `rank(R̂) ≤ N < M` also for `M = 128`, and
+`rank(R̂_cc) ≤ N < M_c` in every DU block; each block is conditioned with its own samples.
 
 *Which rule is not stated.* A search of `paper.md` for `regulari*`, `diagonal load*`, `epsilon`,
 `ill-condition*`, `condition number`, `pseudo-inverse`, `Moore`, `Penrose`, `pinv`,
@@ -283,7 +285,7 @@ overlap — so no single constant serves both. Fixed loading stays selectable (`
 | 2B.6 | `r` in Fig. 8(e) when `K = 12` | **8** | L577 ties `r` to `K`; panel (e) raises only `K`. `r = 12` is equally defensible. Also sets the LRD rank | `FIGURE8_PANELS` |
 | 2B.7 | `σ_0²` in MMSE(AWGN) | **open** — not needed for Fig. 8 | Background `σ²` only, or total noise power? | — |
 | 2B.8 | ZF form; constellation energy | **`W = (HᴴH)⁻¹Hᴴ`; unit average energy** | `[DBP] :94` derives `E_s` from integer symbols — equivalent, only ratios enter | `M7_Equalizers.zf_form`, `M4_Source.unit_energy_constellation` |
-| 2B.9 | Noise-sample policy | **data noise independent of the 192 estimation samples; samples redrawn per realization** | The physically honest reading; requires the conditioning of 2A.6 | `M5_Noise.data_noise_independent`, `resample_noise_per_realization` |
+| 2B.9 | Noise-sample policy | **data noise independent of the N estimation samples; samples redrawn per realization** | The physically honest reading; requires the conditioning of 2A.6 | `M5_Noise.data_noise_independent`, `resample_noise_per_realization` |
 | 2B.10 | RNG seed | **0**, shared by the QuaDriGa export and the Python driver | Reproducibility only | `M1_Driver.rng_seed` |
 | 2B.11 | Scaling / bias removal before slicing | **none** | The article says only "quantize … to the nearest neighbour point" (L79). MMSE estimates are biased; removing the bias would change SER | `M8_Metric.bias_removal` |
 | 2B.12 | "Interferers modeled similarly to the target UEs" (L577) | **same sector and radius, same placement rule, drawn independently** | An interferer may coincide in angle with a target UE; that interference is essentially un-nullable | `M2_Channel.interferers_like_targets` |
@@ -394,6 +396,14 @@ curve per iteration count (at most four), all from the same BDAC-MMSE start. One
 every count (`m7_equalizers.bcd_mmse_path`). Output: `bcd_iterations.png/.pdf`,
 `bcd_iterations_data.csv` and `bcd_iterations_results.json` in
 `results/<stamp>_<channel>_<tag>_bcdit1-2-3-4/`.
+
+`--n-noise-samples 12,48,144,192` runs once per number of noise samples N, and
+`--conditions all` (or a list such as `TDLA30-5,HST350`) runs once per 3GPP test condition with
+its N from `params.M5_Noise.n_noise_samples_by_condition` (CSV `Restrições - Parâmetros.csv`,
+L44-53). Each run gets its own folder, suffixed `_N<N>` or `_<condition>_N<N>`. Only N changes:
+the simulation has no time axis, so Doppler is not modelled. Conditions that share an N give the
+same curves. When N < M_c (N = 12), each DU block still computes its own Ledoit-Wolf intensity
+from its own samples; no DU uses the full sample matrix.
 
 **Verification.** `test_dbp_sim.py` checks properties the article *proves* rather than numbers it
 reports: Theorem 2 (objective (24) monotonically decreasing), Proposition 1 (`MSE(sDR) ≥ MSE(cDR)`),

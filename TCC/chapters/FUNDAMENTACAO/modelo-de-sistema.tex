@@ -1,0 +1,15 @@
+\subsection{Uplink}\label{subsec:uplink}
+\textcolor{red}{Este trabalho considera o \textit{uplink} de um sistema MIMO (\textit{Multiple-Input Multiple-Output}) massivo, em que $K$ Equipamentos de Usuário (UEs, \textit{User Equipments}) alvo, cada um com uma antena, transmitem dados para uma Estação Base (BS, \textit{Base Station}) com $M$ antenas, sendo $M \gg K$ \cite{zhao2025jsac}. Os UEs são atendidos ao mesmo tempo, nos mesmos recursos de tempo e frequência \cite{zhao2025jsac}.}
+
+\textcolor{red}{O sistema segue o 5G NR (\textit{New Radio}), a tecnologia de acesso sem fio da quinta geração de redes móveis (5G) \cite[p.~2]{lin-lee-5g}. O NR é especificado pelo 3GPP (\textit{3rd Generation Partnership Project}) em um conjunto de normas técnicas, como a TS 38.211, que define os canais físicos e a modulação \cite{3gpp-ts38211}, e a TS 38.104, que define a transmissão e a recepção da BS \cite{3gpp-ts38104}. O NR divide o espectro em duas faixas de frequência: FR1 (\textit{Frequency Range} 1), de 410 MHz a 7125 MHz, e FR2, de 24250 MHz a 52600 MHz \cite[Tab.~5.1-1]{3gpp-ts38104}.}
+
+\subsection{Símbolos e constelação}\label{subsec:simbolos}
+\textcolor{red}{Cada UE transmite símbolos de uma constelação de modulação, como a 16-QAM (\textit{Quadrature Amplitude Modulation}) \cite{zhao2025jsac}. A energia média por símbolo é $E_s$ \cite{zhao2025jsac}.}
+
+\textcolor{red}{No NR, esses símbolos são transmitidos com OFDM (\textit{Orthogonal Frequency Division Multiplexing}). O espaçamento entre subportadoras (SCS, \textit{Subcarrier Spacing}) depende da numerologia $\mu$, com $\Delta f = 2^{\mu}\cdot 15$ kHz \cite[Tab.~4.2-1]{3gpp-ts38211}. Por exemplo, $\mu=1$ corresponde a 30 kHz, e $\mu=3$ corresponde a 120 kHz.}
+
+\textcolor{red}{No tempo, as transmissões são organizadas em quadros de 10 ms, e cada quadro tem dez subquadros de 1 ms \cite[Sec.~4.3.1]{3gpp-ts38211}. O slot é a divisão do subquadro usada na transmissão. Com prefixo cíclico normal, cada slot tem 14 símbolos OFDM, e cada subquadro tem $2^{\mu}$ slots \cite[Tab.~4.3.2-1]{3gpp-ts38211}. Assim, um slot dura 0,5 ms com $\mu=1$ e 0,125 ms com $\mu=3$.}
+
+\textcolor{red}{A grade de recursos combina subportadoras, na frequência, e símbolos OFDM, no tempo. Cada elemento dessa grade é um elemento de recurso (RE, \textit{Resource Element}), que corresponde a uma subportadora em um símbolo OFDM \cite[Sec.~4.4.3]{3gpp-ts38211}. Um bloco de recursos (RB, \textit{Resource Block}) tem 12 subportadoras consecutivas na frequência \cite[Sec.~4.4.4.1]{3gpp-ts38211}. Os blocos de recursos físicos (PRBs, \textit{Physical Resource Blocks}) são os RBs usados dentro da parte da banda configurada para a transmissão \cite[Sec.~4.4.4.4]{3gpp-ts38211}.}
+
+\subsection{Relação sinal-ruído}

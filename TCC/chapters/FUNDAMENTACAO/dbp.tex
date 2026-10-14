@@ -1,0 +1,30 @@
+% ---------------------------------------------------------------------
+\subsection{Processamento descentralizado}\label{subsec:dbp}
+% ---------------------------------------------------------------------
+
+Na arquitetura descentralizada, as $M$ antenas da \sout{estação base} \textcolor{red}{BS} são particionadas em $C$ clusters, cada um associado a uma DU \textcolor{red}{(\textit{Distributed Unit}), uma unidade de processamento local \cite{zhao2025jsac}}. O vetor de ruído pode, então, ser organizado em componentes locais:
+
+\[
+\mathbf n=
+\begin{bmatrix}
+\mathbf n_1\\
+\mathbf n_2\\
+\vdots\\
+\mathbf n_C
+\end{bmatrix}.
+\]
+
+Essa partição induz uma estrutura em blocos na matriz de covariância $\mathbf R_n$. Os blocos diagonais $\mathbf R_{cc}$ descrevem a covariância do ruído observado pelas antenas do cluster $c$, enquanto os blocos fora da diagonal, $\mathbf R_{mn}$, representam as correlações entre antenas pertencentes a clusters distintos.
+
+Cada DU dispõe localmente das amostras de ruído de suas próprias antenas. Assim, a DU $c$ pode estimar seu bloco diagonal sem trocar dados com as demais unidades:
+
+\[
+\hat{\mathbf R}_{cc}=
+\frac{1}{N}
+\sum_{i=1}^{N}
+\mathbf n_c^i(\mathbf n_c^i)^H.
+\]
+
+Os blocos fora da diagonal, por outro lado, dependem de amostras provenientes de duas ou mais DUs. Sua estimação direta exige a troca de informações entre as unidades, aumentando o tráfego de comunicação.
+
+Essa limitação estabelece uma relação entre as propriedades estatísticas do ruído e a estratégia de equalização descentralizada. 

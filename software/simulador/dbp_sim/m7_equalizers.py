@@ -199,7 +199,11 @@ def bcd_mmse_path(H: np.ndarray, S: np.ndarray, clusters: list[np.ndarray],
             B_rest = B - Wc @ Sc
 
             num = Es * (np.eye(K) - A_rest) @ Hc.conj().T - B_rest @ Sc.conj().T
-            den = Es * (Hc @ Hc.conj().T) + cond.covariance(Sc)   # M_c x M_c
+            # LRD passes the rank-r factor G, not samples: its columns cannot feed
+            # Ledoit-Wolf, so G_c G_c^H takes the primed intensity instead.
+            Rcc = (cond.covariance(Sc) if S_full is None
+                   else cond.condition(Sc @ Sc.conj().T))
+            den = Es * (Hc @ Hc.conj().T) + Rcc                 # M_c x M_c
 
             # W_new = num @ den^-1, with den Hermitian
             if inverse is None:

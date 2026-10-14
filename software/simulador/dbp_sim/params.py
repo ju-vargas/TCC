@@ -301,12 +301,25 @@ class M5_Noise:
 
     n_noise_samples = Param(
         192, "S", "1", "L577, L640",
-        "N = 192 pilot REs used to estimate the covariance. [P] L54 notes N is 'typically "
-        "96 or 192'.")
+        "Default N = 192 pilot REs used to estimate the covariance, as in the article. "
+        "[P] L54 notes N is 'typically 96 or 192'. Runs per 3GPP test condition override "
+        "it with n_noise_samples_by_condition (N = 12 to 192).")
+
+    n_noise_samples_by_condition = Param(
+        (("TDLA30-5", 192), ("TDLA30-10", 192), ("TDLA30-75", 192), ("TDLA30-300", 192),
+         ("TDLC300-100", 144), ("TDLB100-400", 48), ("HST350", 12), ("HST500", 12)),
+        "X", "3", "software/Restrições - Parâmetros.csv L44-53",
+        "N used per 3GPP test condition: min(192, DM-RS REs of one PRB inside T_c). "
+        "T_c = 1/(8 f_D) with f_D from TS 38.104 Annex G; at most 4 DM-RS symbols x 12 "
+        "subcarriers per slot (TS 38.211). A partial slot is counted as if its first "
+        "symbols carried DM-RS (e.g. 46 symbols = 3 slots + 4 symbols -> 192); counting "
+        "full slots only would lower N for TDLA30-300, TDLC300-100, TDLB100-400 and HST. "
+        "The simulation has no time axis, so only N changes between conditions; Doppler "
+        "is not modelled in the channel.")
 
     data_noise_independent = Param(
         True, "A", "2B", "-",
-        "Are the 480 data-symbol noise draws independent of the N = 192 estimation "
+        "Are the 480 data-symbol noise draws independent of the N estimation "
         "samples? Never stated, and it DECIDES THE CURVE ORDERING: with independent draws "
         "and no regularisation, extra BCD iterations make SER worse and BDAC becomes the "
         "best equaliser - the opposite of Fig. 6. True (independent) is the physically "
@@ -314,7 +327,7 @@ class M5_Noise:
 
     resample_noise_per_realization = Param(
         True, "A", "2B", "-",
-        "Are the 192 estimation samples redrawn for each channel realization? Implied yes "
+        "Are the N estimation samples redrawn for each channel realization? Implied yes "
         "since Hbar changes, but never stated. Spec item 2B.9.")
 
 
