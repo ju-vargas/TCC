@@ -89,6 +89,13 @@ def make_inverter(name: str, int_bits: int = 8, frac_bits: int = 8,
     """
     if name == "float":
         return None
+    if name == "hls":
+        # The HLS hardware itself (C-simulation server); only the data format and its
+        # modes are parameters, the rest follows cholesky.h's defaults
+        if (acc_int_bits, acc_frac_bits, acc_quant, acc_overflow) != (None,) * 4 or intermediates:
+            raise ValueError("'hls' takes only int/frac bits, quant and overflow")
+        from dbp_sim.hls_inverse import make_hls_inverter
+        return make_hls_inverter(int_bits, frac_bits, quant, overflow)
     if name == "cholesky_hw":
         model = _load()
         fix = model.fixed_type(int_bits, frac_bits, quant, overflow)
@@ -102,5 +109,9 @@ def make_inverter(name: str, int_bits: int = 8, frac_bits: int = 8,
         fmt = model.make_formats(fix, acc, **chosen)
         # Fails here, not mid-run, if the format is outside what the model reproduces
         model.check_formats(fmt)
-        return lambda A: cholesky_hw_inverse(A, fmt)
+
+        def inverse(A):
+            return cholesky_hw_inverse(A, fmt)
+        inverse.fmt = fmt        # the format actually built, for checks against the hardware
+        return inverse
     raise ValueError(f"unknown inverse {name!r}")

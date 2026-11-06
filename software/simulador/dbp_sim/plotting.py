@@ -71,37 +71,49 @@ SERIES_STYLE: dict[str, tuple[str, str]] = {
 }
 
 
-#: BCD-MMSE iteration study (--bcd-iterations): the iteration count is ordinal, so the
-#: curves take one-hue light->dark steps (fewer iterations = lighter) plus distinct
-#: markers.  Teal, not the green above: every green and blue step tested fell below the
-#: CVD floor against LMMSE red or ZF magenta.  Validated:
-#:   node scripts/validate_palette.js "#4fc7a0,#22ad82,#15906a,#0e7655" --ordinal
-#:   -> ALL CHECKS PASS; each step vs LMMSE red and ZF magenta (--pairs all): worst CVD
-#:   dE 8.3 (protan).  The light end is 2.04:1 on the surface, below 3:1, so the CSV
-#:   table view is the required relief.  At most four iteration curves per figure.
-BCD_ITERATION_RAMP: tuple[str, ...] = ("#4fc7a0", "#22ad82", "#15906a", "#0e7655")
+#: BCD-MMSE iteration study (--bcd-iterations): each iteration count is its own identity,
+#: with a hue clearly apart from LMMSE, from ZF and from the other counts.  ZF moves from
+#: magenta to pink here, because every blue step fell to protan dE 2.2 against magenta.
+#: Chosen by exhaustive search over the reference palette steps, LMMSE red fixed:
+#:   node scripts/validate_palette.js \
+#:     "#d62828,#e87ba4,#eda100,#35bcd9,#2a78d6,#4a3aa7" --mode light --pairs all
+#:   -> ALL CHECKS PASS (CVD worst 8.3 deutan; normal-vision worst 16.3)
+#: Three hues sit below 3:1 on the surface, so every curve keeps a distinct marker and
+#: `save_figure8` writes the CSV table view.  Iteration k always takes colour k (1-4).
+ITERATION_ZF_COLOR = "#e87ba4"
+BCD_ITERATION_RAMP: tuple[str, ...] = ("#eda100", "#35bcd9", "#2a78d6", "#4a3aa7")
 BCD_ITERATION_MARKERS: tuple[str, ...] = ("v", "^", "D", "<")
 
 
 def series_styles(curves, bcd_iterations=()) -> dict[str, tuple[str, str]]:
-    """(colour, marker) for each curve.  In the iteration study the BCD curves take the
-    ordinal ramp, spread over its four steps; LMMSE and ZF keep their colours."""
+    """(colour, marker) for each curve.  In the iteration study each BCD iteration count
+    keeps its own colour (iteration k -> colour k), so a figure with fewer counts never
+    repaints the others; LMMSE stays red and ZF turns pink."""
     if not bcd_iterations:
         return {c: SERIES_STYLE[c] for c in curves}
     order = sorted(bcd_iterations)
-    n = len(order)
-    if n > len(BCD_ITERATION_RAMP):
+    if len(order) > len(BCD_ITERATION_RAMP):
         raise ValueError(f"at most {len(BCD_ITERATION_RAMP)} BCD iteration curves per figure")
-    steps = ([2] if n == 1 else
-             [round(i * (len(BCD_ITERATION_RAMP) - 1) / (n - 1)) for i in range(n)])
-    out = {c: SERIES_STYLE[c] for c in curves if c in ("LMMSE", "ZF")}
-    for i, it in enumerate(order):
-        out[f"BCD-MMSE (iter {it})"] = (BCD_ITERATION_RAMP[steps[i]],
-                                        BCD_ITERATION_MARKERS[steps[i]])
+    slots = ([it - 1 for it in order] if order[-1] <= len(BCD_ITERATION_RAMP)
+             else list(range(len(order))))
+    out = {"LMMSE": SERIES_STYLE["LMMSE"], "ZF": (ITERATION_ZF_COLOR, SERIES_STYLE["ZF"][1])}
+    for it, k in zip(order, slots):
+        out[f"BCD-MMSE (iter {it})"] = (BCD_ITERATION_RAMP[k], BCD_ITERATION_MARKERS[k])
     return {c: out[c] for c in curves}
 
 
 SER_FLOOR = 1e-4          # the article's y-axis floor
+
+MODULATION_LABEL = {"16QAM": "16-QAM", "QPSK": "QPSK"}
+
+
+def configuration_title(panel) -> str:
+    """Panel title with the TCC numbering (Table tab:paineis): M, C, K, the IoT and
+    the modulation. The IoT is shown because configuration 2 differs from 1 only in it."""
+    from dbp_sim.params import TCC_CONFIGURATION
+    mod = MODULATION_LABEL.get(panel.modulation, panel.modulation)
+    return (f"Configuração {TCC_CONFIGURATION[panel.label]}\n$M$ = {panel.M}, "
+            f"$C$ = {panel.C}, $K$ = {panel.K}, IoT = {panel.iot_db:g} dB, {mod}")
 
 
 def _style_axes(ax) -> None:
@@ -160,15 +172,7 @@ def save_figure8(results: dict[str, dict[str, list[float]]],
                     linewidth=1.8, markeredgecolor=SURFACE, markeredgewidth=0.6,
                     label=curve, zorder=3, clip_on=True)
 
-        bits = [f"$M$ = {panel.M}", f"$C$ = {panel.C}"]
-        if panel.K != 8:
-            bits.append(f"$K$ = {panel.K}")
-        if panel.iot_db != 10.0:
-            bits.append(f"IoT = {panel.iot_db:g} dB")
-        if panel.modulation != "16QAM":
-            bits.append(panel.modulation)
-        ax.set_title(f"({panel.label})  " + ",  ".join(bits),
-                     fontsize=10, color=INK_PRIMARY, pad=8)
+        ax.set_title(configuration_title(panel), fontsize=9, color=INK_PRIMARY, pad=8)
 
         if i % ncols == 0:
             ax.set_ylabel("SER", fontsize=10, color=INK_SECONDARY)
@@ -185,7 +189,7 @@ def save_figure8(results: dict[str, dict[str, list[float]]],
 
     if subtitle:
         fig.text(0.5, 0.985, subtitle, ha="center", va="top",
-                 fontsize=8.5, color=INK_MUTED)
+                 fontsize=9.5, color=INK_SECONDARY)
 
     fig.tight_layout(rect=(0, 0.055, 1, 0.965 if subtitle else 1.0))
     png = outdir / f"{stem}.png"
@@ -203,10 +207,11 @@ def _write_table(results, panels, snr, outdir: Path, curves, stem: str) -> Path:
     path = outdir / f"{stem}_data.csv"
     with path.open("w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["panel", "snr_db", *curves])
+        w.writerow(["panel", "configuracao", "snr_db", *curves])
+        from dbp_sim.params import TCC_CONFIGURATION
         for panel in panels:
             for i, s in enumerate(snr):
-                w.writerow([panel.label, f"{s:g}"] +
+                w.writerow([panel.label, TCC_CONFIGURATION[panel.label], f"{s:g}"] +
                            [f"{results[panel.label][c][i]:.6g}"
                             if c in results[panel.label] else ""
                             for c in curves])

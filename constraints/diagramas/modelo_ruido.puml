@@ -1,0 +1,186 @@
+@startuml modelo_ruido
+' =====================================================================
+'  DO MODELO ESTATÍSTICO AO SILÍCIO
+'  Grafo de derivação: como as hipóteses do artigo produzem a matriz
+'  que o módulo de inversão fatora.
+'
+'  Corresponde à secao 10 de ../modelo_ruido_e_hipoteses.md
+'  Fonte da verdade: ../Efficient_LMMSE_..._Archit.md/paper.md
+'
+'  AVISO: fórmulas transliteradas de LaTeX para ASCII. Conteúdo fiel;
+'  confira pelos números de linha.
+'  Convenção: [ARTIGO :NNN] = do paper  |  [NOSSO] = derivação nossa
+'             [H1]..[H9] = hipóteses, detalhadas no .md secao 5
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam ArrowColor #333333
+skinparam ArrowFontSize 11
+skinparam ArrowFontColor #555555
+skinparam rectangle {
+  BorderColor #666666
+  FontStyle bold
+}
+skinparam card {
+  BorderColor #3A5673
+  BackgroundColor #F5F7FA
+}
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FAFAFA
+skinparam legendBorderColor #999999
+
+title Do modelo estatístico ao silício\ncomo as hipóteses do artigo produzem a matriz que o nosso módulo fatora
+
+' ============ os dois ramos ============
+rectangle "RAMO DO SINAL\n(K UEs alvo)" as RS #F4F8FC {
+  card "**s**   símbolos dos K UEs alvo\nE[s s^H] = E_s I_K       [H9]\n//hipótese IMPLÍCITA: o artigo só define//\n//E_s em :79 e usa a forma na eq. 3, :75//" as S
+  card "**H s**\nCov = E_s H H^H" as HS
+}
+
+rectangle "RAMO DO RUÍDO\n(r interferentes + térmico)" as RR #FCF5F5 {
+  card "**s̄**   símbolos dos r não-alvo\nE[s̄ s̄^H] = β I_r        [H3]\n//hipótese IMPLÍCITA em :113//\n//(potências iguais, sem coordenação)//" as SB
+  card "**n̄**   ruído térmico de fundo\nE[n̄ n̄^H] = σ² I        [H4]\n//branco e uniforme//" as NB
+  card "**H̄ s̄**   a interferência nas antenas\nCov = β H̄ H̄^H\n//cheia, posto r//" as INT
+  card "**n = H̄ s̄ + n̄**\nruído colorido total\n[ARTIGO :109]   eq. (5)" as N
+  card "**R = β H̄ H̄^H + σ² I**\na covariância do ruído\n[ARTIGO :113]\n//CHEIA -- não bloco-diagonal//" as R #FFEBEE
+}
+
+' ============ o sinal recebido ============
+card "**y = H s + n**\nsinal recebido pela BS\n[ARTIGO :56]   eq. (1)" as Y
+card "**y_c = H_c s + n_c**\no que o DU c enxerga\n[ARTIGO :96, :104]" as YC
+
+' ============ a fronteira ============
+card "  F R O N T E I R A\nACIMA: teoria e motivação -- explica POR QUE o problema é difícil\nABAIXO: o que vira silício\n \nAtravessam apenas H_c e {n_c^i}, mais o escalar E_s." as FRONT #EEEEEE
+
+' ============ o hardware ============
+card "**H_c**   canal local,  Mc x K\nENTRADA vinda da estimação de canal,\nsuposta pronta   [H6]\n[ARTIGO :104, :817]" as HC #E3F2FD
+card "**{n_c^i}**   N = 192 amostras locais\nENTRADA colhida em REs de PILOTO   [H8]\ninclusive ao longo da FREQUÊNCIA   [H7]\n[ARTIGO :123, :125, :821]" as NCI #E3F2FD
+card "**E_s H_c H_c^H**\nMc x Mc, mas nasce de Mc x K\nposto <= K:  SINGULAR sozinha" as ESHH
+card "**R̂_cc = (1/N) Σ_i n_c^i (n_c^i)^H**\nMc x Mc,  posto Mc\nDEFINIDA POSITIVA\n[ARTIGO :119] eq. (6), no bloco local" as RCC
+card "**G_c = E_s H_c H_c^H + R̂_cc**\n**= R̂_{y_c y_c}**\na covariância do sinal recebido local\nMc x Mc, hermitiana definida positiva" as GC #E8F5E9
+card "**MÓDULO DE INVERSÃO**\nCholesky G_c = L_c L_c^H  + substituição\n[ARTIGO :504]   fator direito da eq. (30)" as MOD #FFF3CD
+
+' ============ arestas ============
+S   --> HS  : canal H  [H6]\nIdentidade 1
+SB  --> INT : canal H̄  [H6]\nIdentidade 1
+INT --> N   : Identidade 2\n(independentes  [H5])
+NB  --> N   : Identidade 2
+N   --> R   : R := E[n n^H]\nDEFINIÇÃO  [ARTIGO :60]
+HS  --> Y   : eq. (1)
+N   --> Y   : eq. (1)
+Y   --> YC  : particiona por clusters\nde antenas  [ARTIGO :96]
+
+YC   --> FRONT
+FRONT --> HC  : o fator de canal de y_c
+FRONT --> NCI : amostras de n_c em REs de piloto
+
+HC   --> ESHH : produto local\n(H9 + Identidade 1)
+NCI  --> RCC  : média amostral\n(1/N) Σ_i
+ESHH --> GC   : soma
+RCC  --> GC   : soma
+GC   --> MOD
+
+' ============ notas ============
+note right of R
+  **POR QUE ISTO QUEBRA A DBP**   [H1]
+  ....
+  R cheia  ->  R^-1 não se fatora por cluster.
+  ....
+  Nota de rodapé 3 [ARTIGO :819]: se o ruído fosse
+  branco, a eq. (3) degeneraria e "H^H H can be
+  computed as SOMA_c H_c^H H_c by aggregating the
+  low-dimensional local information from each DU".
+  Bastaria UMA inversão K x K -- e não haveria
+  inversor Mc x Mc para projetar.
+  ....
+  R é o objeto TEÓRICO. Ele não desce para o
+  hardware: quem desce é a estimativa do seu bloco
+  diagonal, R̂_cc.
+end note
+
+note right of RCC
+  **POR QUE SÓ O BLOCO DIAGONAL**
+  ....
+  R̂_cc estima R_cc, o bloco (c,c) de R.
+  A eq. (6) [ARTIGO :119] define R̂ inteira (M x M),
+  mas ela NUNCA é materializada na DBP: os blocos
+  cruzados R̂_mn exigiriam que o DU m visse as
+  amostras do DU n -- tráfego M x N, proibido
+  [ARTIGO :130]. Cada DU calcula apenas o seu R̂_cc.
+  ....
+  Os cruzados não somem do problema: reaparecem
+  comprimidos em A_c e b_{c,i}, que circulam no anel
+  com dimensão K. Ver anel_formulacao.puml.
+  ....
+  **Nota de rodapé 5** [ARTIGO :821]: a partir de :123
+  o artigo **abandona o chapéu** -- "we make no
+  distinction between R_hat and R in the rest of this
+  paper". Aqui mantemos a distinção.
+end note
+
+note right of GC
+  **[NOSSO]  O QUE ESSA MATRIZ É**   (NOTA 25)
+  ....
+  y_c = H_c s + n_c, logo
+    E[y_c y_c^H] = H_c E[s s^H] H_c^H + E[n_c n_c^H]
+                 = E_s H_c H_c^H + R_cc      = G_c
+  ....
+  G_c é a COVARIÂNCIA DO SINAL RECEBIDO no cluster c.
+  Daí vêm, de graça:
+    -- hermitiana         (toda covariância é)
+    -- semidef. positiva  (x^H R_yy x = E[|y_c^H x|^2] >= 0)
+    -- def. positiva      (R̂_cc é PD porque N >> Mc,  [H8])
+  ....
+  E os autovalores são POTÊNCIAS recebidas por direção
+  espacial: o maior ~ potência total, o menor ~ sigma^2.
+  A razão entre eles é o número de condição, governado
+  pelo IoT e não pela SNR  (NOTA 23). Permite dimensionar
+  a faixa dinâmica do ponto fixo analiticamente.
+  ....
+  A eq. (30) é, nessa linguagem, a equação normal de
+  Wiener por bloco:
+    W_c = ( R_{s,yc} - SOMA_{j!=c} W_j R_{yj,yc} ) R_{yc,yc}^-1
+  e R_{yc,yc} não depende de W -- daí o fator invertido
+  não carregar índice l  (NOTA 2). Ver secao 10.3 do .md.
+end note
+
+legend right
+  == O QUE ATRAVESSA A FRONTEIRA ==
+  Dos objetos do modelo estatístico, apenas DOIS --
+  H_c e R̂_cc -- mais o escalar E_s.
+
+  NÃO chegam ao hardware: beta, H̄, sigma^2, s̄, nem o
+  próprio s. Eles explicam POR QUE G_c é cheia e mal
+  condicionada; o datapath recebe uma matriz hermitiana
+  definida positiva e a fatora, sem saber de onde veio.
+
+  **As hipóteses justificam o projeto;**
+  **não parametrizam a implementação.**
+
+  == CAMADAS DO ARGUMENTO ==
+  DEFINIÇÃO     R := E[n n^H]                     (:60)
+  IDENTIDADE 1  Cov(Az) = A Cov(z) A^H      (teorema geral)
+  IDENTIDADE 2  Cov(u+v) = Cov(u) + Cov(v)  (se independentes)
+  HIPÓTESES     [H3] [H4] [H5] [H6] [H9]
+  RESULTADO     R = beta H̄H̄^H + sigma^2 I        (:113)
+
+  R = beta H̄H̄^H + sigma^2 I NÃO é definição nem teorema:
+  é o que se obtém aplicando as duas identidades às
+  hipóteses. Detalhe em ../modelo_ruido_e_hipoteses.md
+  secoes 4 e 5.
+
+  == HIPÓTESES CITADAS ==
+  [H1] ruído é colorido, não branco            :105, :819
+  [H3] E[s̄ s̄^H] = beta I_r      (implícita)     :113
+  [H4] E[n̄ n̄^H] = sigma^2 I                     :113
+  [H5] s̄ independente de n̄                     --
+  [H6] H e H̄ determinísticas e conhecidas      :63, :817
+  [H7] R estimável por média em FREQUÊNCIA     :821
+  [H8] N >> K   (aqui N=192 >> Mc)             :123
+  [H9] E[s s^H] = E_s I_K       (implícita)     :79, :75
+endlegend
+
+@enduml

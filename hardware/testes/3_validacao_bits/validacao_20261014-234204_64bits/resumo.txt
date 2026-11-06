@@ -1,0 +1,41 @@
+Formato (parametros.env):
+TIPO fix ap_fixed<64,32,AP_TRN,AP_SAT>
+TIPO acc ap_fixed<128,64,AP_TRN,AP_SAT>
+TIPO prod ap_fixed<256,128,AP_TRN,AP_SAT>
+TIPO cmul ap_fixed<257,129,AP_TRN,AP_SAT>
+TIPO num ap_fixed<128,64,AP_TRN,AP_SAT>
+TIPO norm ap_fixed<128,64,AP_TRN,AP_SAT>
+TIPO quot ap_fixed<128,64,AP_TRN,AP_SAT>
+TIPO sum ap_fixed<128,64,AP_TRN,AP_SAT>
+TIPO sqrt ap_fixed<64,32,AP_TRN,AP_WRAP>
+
+par                      tam     total  igual  ambos_div0  divergente
+amostras132_fc3.5GHz     16x16      68     68           0           0
+amostras132_fc3.5GHz     32x32      44     44           0           0
+amostras168_fc28GHz      16x16      68     68           0           0
+amostras168_fc28GHz      32x32      44     44           0           0
+amostras192_fc28GHz      16x16      68     68           0           0
+amostras192_fc28GHz      32x32      44     44           0           0
+amostras192_fc3.5GHz     16x16      67     67           0           0
+amostras192_fc3.5GHz     32x32      44     44           0           0
+amostras24_fc3.5GHz      16x16      65     65           0           0
+amostras24_fc3.5GHz      32x32      42     42           0           0
+total                              554    554           0           0
+
+igual: hardware = golden_cholesky.py nas 8 etapas e simulador = hardware na inversa (bits)
+ambos_div0: hardware, golden e simulador dividem por zero (alguma parte acima da faixa do tipo); não testa bits
+divergente: qualquer outro caso (ver relatorio.csv)
+
+Hardware contra a inversão em float64 das curvas (matrizes 'igual'; LSB = 2^-32):
+par                      tam     erro rel. mediano  erro rel. máx.  erro máx. (LSB)  partes = arredondado
+amostras132_fc3.5GHz     16x16            9.52e-09         9.7e-08              214                 33.6%
+amostras132_fc3.5GHz     32x32            4.18e-08        1.09e-07         1.06e+03                 22.4%
+amostras168_fc28GHz      16x16            8.04e-09         9.1e-08              155                 33.4%
+amostras168_fc28GHz      32x32            3.68e-08        9.14e-08         1.02e+03                 22.3%
+amostras192_fc28GHz      16x16            9.25e-09        7.27e-08              282                 33.2%
+amostras192_fc28GHz      32x32            4.02e-08        8.54e-08         1.76e+03                 22.1%
+amostras192_fc3.5GHz     16x16            9.62e-09        7.79e-08              267                 33.2%
+amostras192_fc3.5GHz     32x32            4.36e-08        9.29e-08         1.86e+03                 21.7%
+amostras24_fc3.5GHz      16x16            9.92e-09        3.18e-07             59.7                 37.3%
+amostras24_fc3.5GHz      32x32            2.87e-08        4.59e-07              336                 28.3%
+

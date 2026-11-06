@@ -1,0 +1,171 @@
+
+
+================================================================
+== Vitis HLS Report for 'LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2'
+================================================================
+* Date:           Thu Nov  5 17:12:10 2026
+
+* Version:        2026.1 (Build 6493734 on Jun 16 2026)
+* Project:        cholesky_hardware
+* Solution:       hls
+* Product family: virtexuplusHBM
+* Target device:  xcu50-fsvh2104-2-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  3.192 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+-------------------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval |      Pipeline     |
+    |   min   |   max   |    min   |    max   | min | max |        Type       |
+    +---------+---------+----------+----------+-----+-----+-------------------+
+    |       66|       66|  0.660 us|  0.660 us|    0|    0|  loop pipeline stp|
+    +---------+---------+----------+----------+-----+-----+-------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-----------------------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                                   |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |             Loop Name             |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-----------------------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_11_1_VITIS_LOOP_12_2  |       64|       64|         2|          1|        N/A|    64|       yes|
+        +-----------------------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+--------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT  | URAM|
++---------------------+---------+------+---------+--------+-----+
+|DSP                  |        -|     -|        -|       -|    -|
+|Expression           |        -|     -|        0|      86|    -|
+|FIFO                 |        -|     -|        -|       -|    -|
+|Instance             |        -|     -|        -|       -|    -|
+|Memory               |        -|     -|        -|       -|    -|
+|Multiplexer          |        -|     -|        0|      72|    -|
+|Register             |        -|     -|       24|       -|    -|
++---------------------+---------+------+---------+--------+-----+
+|Total                |        0|     0|       24|     158|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available SLR        |     1344|  2976|   871680|  435840|  320|
++---------------------+---------+------+---------+--------+-----+
+|Utilization SLR (%)  |        0|     0|       ~0|      ~0|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available            |     2688|  5952|  1743360|  871680|  640|
++---------------------+---------+------+---------+--------+-----+
+|Utilization (%)      |        0|     0|       ~0|      ~0|    0|
++---------------------+---------+------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name     | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-----------------------+----------+----+---+----+------------+------------+
+    |add_ln11_1_fu_161_p2   |         +|   0|  0|  14|           7|           1|
+    |add_ln11_fu_195_p2     |         +|   0|  0|  12|           4|           4|
+    |add_ln12_fu_230_p2     |         +|   0|  0|  12|           4|           1|
+    |add_ln15_fu_217_p2     |         +|   0|  0|  13|           6|           6|
+    |icmp_ln11_fu_155_p2    |      icmp|   0|  0|  15|           7|           8|
+    |icmp_ln12_fu_173_p2    |      icmp|   0|  0|  12|           4|           5|
+    |empty_fu_187_p3        |    select|   0|  0|   2|           1|           1|
+    |select_ln11_fu_179_p3  |    select|   0|  0|   4|           1|           1|
+    |ap_enable_pp0          |       xor|   0|  0|   2|           1|           2|
+    +-----------------------+----------+----+---+----+------------+------------+
+    |Total                  |          |   0|  0|  86|          35|          29|
+    +-----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +--------------------------------------+----+-----------+-----+-----------+
+    |                 Name                 | LUT| Input Size| Bits| Total Bits|
+    +--------------------------------------+----+-----------+-----+-----------+
+    |ap_done_int                           |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1               |   9|          2|    1|          2|
+    |ap_sig_allocacmp_column_load          |   9|          2|    4|          8|
+    |ap_sig_allocacmp_indvar_flatten_load  |   9|          2|    7|         14|
+    |ap_sig_allocacmp_line_load            |   9|          2|    4|          8|
+    |column_fu_58                          |   9|          2|    4|          8|
+    |indvar_flatten_fu_66                  |   9|          2|    7|         14|
+    |line_fu_62                            |   9|          2|    4|          8|
+    +--------------------------------------+----+-----------+-----+-----------+
+    |Total                                 |  72|         16|   32|         64|
+    +--------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------+---+----+-----+-----------+
+    |           Name          | FF| LUT| Bits| Const Bits|
+    +-------------------------+---+----+-----+-----------+
+    |ap_CS_fsm                |  1|   0|    1|          0|
+    |ap_done_reg              |  1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1  |  1|   0|    1|          0|
+    |column_fu_58             |  4|   0|    4|          0|
+    |indvar_flatten_fu_66     |  7|   0|    7|          0|
+    |line_fu_62               |  4|   0|    4|          0|
+    |zext_ln15_1_reg_291      |  6|   0|   64|         58|
+    +-------------------------+---+----+-----+-----------+
+    |Total                    | 24|   0|   82|         58|
+    +-------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------+-----+-----+------------+-----------------------------------------------------------+--------------+
+|     RTL Ports     | Dir | Bits|  Protocol  |                       Source Object                       |    C Type    |
++-------------------+-----+-----+------------+-----------------------------------------------------------+--------------+
+|ap_clk             |   in|    1|  ap_ctrl_hs|  LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2|  return value|
+|ap_rst             |   in|    1|  ap_ctrl_hs|  LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2|  return value|
+|ap_start           |   in|    1|  ap_ctrl_hs|  LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2|  return value|
+|ap_done            |  out|    1|  ap_ctrl_hs|  LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2|  return value|
+|ap_idle            |  out|    1|  ap_ctrl_hs|  LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2|  return value|
+|ap_ready           |  out|    1|  ap_ctrl_hs|  LU_decomposition_Pipeline_VITIS_LOOP_11_1_VITIS_LOOP_12_2|  return value|
+|A_matrix_address0  |  out|    6|   ap_memory|                                                   A_matrix|         array|
+|A_matrix_ce0       |  out|    1|   ap_memory|                                                   A_matrix|         array|
+|A_matrix_q0        |   in|   32|   ap_memory|                                                   A_matrix|         array|
+|L_M_real_address0  |  out|    6|   ap_memory|                                                   L_M_real|         array|
+|L_M_real_ce0       |  out|    1|   ap_memory|                                                   L_M_real|         array|
+|L_M_real_we0       |  out|    1|   ap_memory|                                                   L_M_real|         array|
+|L_M_real_d0        |  out|   16|   ap_memory|                                                   L_M_real|         array|
+|L_M_imag_address0  |  out|    6|   ap_memory|                                                   L_M_imag|         array|
+|L_M_imag_ce0       |  out|    1|   ap_memory|                                                   L_M_imag|         array|
+|L_M_imag_we0       |  out|    1|   ap_memory|                                                   L_M_imag|         array|
+|L_M_imag_d0        |  out|   16|   ap_memory|                                                   L_M_imag|         array|
+|U_M_real_address0  |  out|    6|   ap_memory|                                                   U_M_real|         array|
+|U_M_real_ce0       |  out|    1|   ap_memory|                                                   U_M_real|         array|
+|U_M_real_we0       |  out|    1|   ap_memory|                                                   U_M_real|         array|
+|U_M_real_d0        |  out|   16|   ap_memory|                                                   U_M_real|         array|
+|U_M_imag_address0  |  out|    6|   ap_memory|                                                   U_M_imag|         array|
+|U_M_imag_ce0       |  out|    1|   ap_memory|                                                   U_M_imag|         array|
+|U_M_imag_we0       |  out|    1|   ap_memory|                                                   U_M_imag|         array|
+|U_M_imag_d0        |  out|   16|   ap_memory|                                                   U_M_imag|         array|
++-------------------+-----+-----+------------+-----------------------------------------------------------+--------------+
+

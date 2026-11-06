@@ -1,0 +1,21 @@
+
+=== Verificacao (tipo 64 bits, 32 inteiros) ===
+Estrutura (esperado ~0):
+  max |L| acima da diagonal      : 0.0000e+00
+  max |U| abaixo da diagonal     : 1.2019e-07   (residuo de truncamento da etapa LU)
+  max |V| abaixo da diagonal     : 0.0000e+00
+  max |D| fora da diagonal       : 0.0000e+00
+  max |Im(S)|                    : 0.0000e+00
+  max |S[i]^2 - D[i][i]|         : 2.4614e-09   (erro de quantizacao da raiz)
+  max |G| acima da diagonal      : 0.0000e+00
+  max |G_inv| acima da diagonal  : 0.0000e+00
+Faixa (fixed_t vai ate 2.1475e+09):
+  max |L[i][j]*S[j]| na etapa G  : 1.9977e+01
+Reconstrucao (esperado ~0):
+  max |L*U - A|                  : 1.2757e-07
+  max |V - L^H|  (A hermitiana)  : 2.7152e-09
+  max |G*G^H - A|                : 2.0195e-07
+  max |G*G_inv - I|              : 5.6157e-09
+  max |A*A^-1 - I|               : 5.8312e-07
+Referencia: G[0][0] deve ser ~sqrt(A[0][0]) = 16.024867, obtido 16.024867
+Referencia: S[0] deve ser ~sqrt(D[0][0]) = 16.024867, obtido 16.024867

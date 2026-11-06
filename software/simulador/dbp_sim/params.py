@@ -56,6 +56,37 @@ class M1_Driver:
         "The same seed is used by quadriga/export_quadriga_channels.m (rng(seed + realization)). "
         "Spec item 2B.10.")
 
+    test_conditions = Param(
+        (("TDLA30-5", 192, 192, 3.5e9), ("TDLA30-10", 192, 192, 3.5e9),
+         ("TDLA30-75", 192, 192, 28e9), ("TDLA30-300", 168, 168, 28e9),
+         ("TDLC300-100", 132, 132, 3.5e9), ("TDLB100-400", 24, 39, 3.5e9),
+         ("HST350", 0, 3, 3.5e9), ("HST500", 0, 3, 3.5e9)),
+        "X", "3", "TCC Table tab:n-condicao (setup_simulacao.tex); TS 38.211 v18.6.0 "
+        "Tabs. 6.4.1.1.3-4/-5; software/Restrições - Parâmetros.csv L12-13",
+        "3GPP test conditions as (name, N worst case, N mean, carrier in Hz).\n"
+        "N = noise samples per PRB inside T_c, capped at 192. K = 8 (type 1) and "
+        "K = 12 (type 2) orthogonal DM-RS ports need double-symbol DM-RS (Tab. "
+        "6.4.1.1.3-5); with PUSCH mapping type A over 14 symbols, l0 = 2 and "
+        "dmrs-AdditionalPosition = pos1, the DM-RS symbols are 2, 3, 10, 11 (Tab. "
+        "6.4.1.1.3-4), 12 REs each. For every data symbol, N is the largest number of DM-RS "
+        "REs in a window of T_c symbols containing it. Worst case: the smallest value over "
+        "the 14 data symbols of the slot (every symbol has at least that many). Mean: the "
+        "average over the 14 symbols, rounded to the nearest integer (what a typical "
+        "symbol has). Only TDLB100-400 (24 / 39) and HST (0 / 3) differ. "
+        "Uplink is taken as continuous (every slot PUSCH); n78/n257 are TDD, so a real TDD "
+        "pattern would lower N where T_c spans more than one slot. Best case (not run): "
+        "TDLB100-400 48, HST 12. HST350/HST500 (T_c = 1 symbol): worst case N = 0, so "
+        "per-T_c estimation is infeasible and they are skipped. Only the worst case is "
+        "realisable by a receiver (every symbol has at least that many samples); the mean "
+        "matches no symbol and is kept for reference only (--n-case mean).\n"
+        "Carrier: FR1 conditions at 3.5 GHz (n78), FR2 conditions at 28 GHz (n257). The "
+        "carrier matters because the UMa NLOS angular spreads depend on it (*_gamma in "
+        "the .conf, log10(f_GHz) with no clamp; median ASA ~86 deg at 3.5 GHz, ~49 deg at "
+        "28 GHz), which changes the spatial correlation of H and Hbar.\n"
+        "Velocity enters only through T_c, hence N: the channel is block fading and flat "
+        "per PRB, so Doppler and the TDL delay profiles are not modelled. Conditions with "
+        "the same (N, carrier) give the same curves and are run once.")
+
 
 # --------------------------------------------------------------------------------------
 # M2 - Channel generation
@@ -303,19 +334,7 @@ class M5_Noise:
         192, "S", "1", "L577, L640",
         "Default N = 192 pilot REs used to estimate the covariance, as in the article. "
         "[P] L54 notes N is 'typically 96 or 192'. Runs per 3GPP test condition override "
-        "it with n_noise_samples_by_condition (N = 12 to 192).")
-
-    n_noise_samples_by_condition = Param(
-        (("TDLA30-5", 192), ("TDLA30-10", 192), ("TDLA30-75", 192), ("TDLA30-300", 192),
-         ("TDLC300-100", 144), ("TDLB100-400", 48), ("HST350", 12), ("HST500", 12)),
-        "X", "3", "software/Restrições - Parâmetros.csv L44-53",
-        "N used per 3GPP test condition: min(192, DM-RS REs of one PRB inside T_c). "
-        "T_c = 1/(8 f_D) with f_D from TS 38.104 Annex G; at most 4 DM-RS symbols x 12 "
-        "subcarriers per slot (TS 38.211). A partial slot is counted as if its first "
-        "symbols carried DM-RS (e.g. 46 symbols = 3 slots + 4 symbols -> 192); counting "
-        "full slots only would lower N for TDLA30-300, TDLC300-100, TDLB100-400 and HST. "
-        "The simulation has no time axis, so only N changes between conditions; Doppler "
-        "is not modelled in the channel.")
+        "it with M1_Driver.test_conditions (N = 12 to 192).")
 
     data_noise_independent = Param(
         True, "A", "2B", "-",
@@ -544,6 +563,55 @@ FIGURE8_PANELS: tuple[Panel, ...] = (
     Panel("f", M=128, C=8,  K=8,  r=8,  iot_db=20.0, modulation="16QAM"),
     Panel("g", M=128, C=8,  K=8,  r=8,  iot_db=10.0, modulation="QPSK"),
 )
+
+#: Panel label -> configuration number in the TCC text (Table tab:paineis in
+#: TCC/chapters/RESULTADOS/setup_simulacao.tex). The figures use these numbers.
+#: Ordered by (M, C), then modulation (M = 128 only), then K, then IoT. The labels are only
+#: stable names for files and results: "a"-"g" are the Fig. 8 panels and "7"-"16" are the
+#: extra configurations in the order they were created, NOT their TCC numbers.
+TCC_CONFIGURATION: dict[str, int] = {
+    "a": 1, "f": 2, "e": 3, "7": 4,             # M = 128, C = 8, 16-QAM
+    "g": 5, "15": 6, "14": 7, "16": 8,          # M = 128, C = 8, QPSK
+    "b": 9, "9": 10, "8": 11, "10": 12,         # M = 256, C = 8
+    "c": 13, "12": 14, "11": 15, "13": 16,      # M = 256, C = 16
+    "17": 17, "18": 18, "19": 19, "20": 20,     # M = 256, C = 8, QPSK (QPSK_256_PANELS)
+    "21": 21, "22": 22, "23": 23, "24": 24,     # M = 256, C = 16, QPSK (QPSK_256_PANELS)
+}
+
+#: Extra configurations of the TCC (Table tab:paineis): the four (M, C, modulation) bases
+#: of panels a, b, c and g, crossed with K = 8 or 12 and IoT = 10 or 20 dB, minus the
+#: combinations already in Figure 8. Not in the article. K = 8 and 12 are the maximum
+#: orthogonal DM-RS ports of types 1 and 2 (TS 38.211 Tab. 6.4.1.1.3-5); IoT = 20 dB is
+#: the article's Fig. 8(f) value. r = 8 throughout, as in panel e. Labels are not the TCC
+#: numbers (see TCC_CONFIGURATION).
+EXTRA_PANELS: tuple[Panel, ...] = (
+    Panel("7",  M=128, C=8,  K=12, r=8, iot_db=20.0, modulation="16QAM"),
+    Panel("8",  M=256, C=8,  K=12, r=8, iot_db=10.0, modulation="16QAM"),
+    Panel("9",  M=256, C=8,  K=8,  r=8, iot_db=20.0, modulation="16QAM"),
+    Panel("10", M=256, C=8,  K=12, r=8, iot_db=20.0, modulation="16QAM"),
+    Panel("11", M=256, C=16, K=12, r=8, iot_db=10.0, modulation="16QAM"),
+    Panel("12", M=256, C=16, K=8,  r=8, iot_db=20.0, modulation="16QAM"),
+    Panel("13", M=256, C=16, K=12, r=8, iot_db=20.0, modulation="16QAM"),
+    Panel("14", M=128, C=8,  K=12, r=8, iot_db=10.0, modulation="QPSK"),
+    Panel("15", M=128, C=8,  K=8,  r=8, iot_db=20.0, modulation="QPSK"),
+    Panel("16", M=128, C=8,  K=12, r=8, iot_db=20.0, modulation="QPSK"),
+)
+
+#: Every configuration of the TCC, in its numbering order.
+ALL_PANELS: tuple[Panel, ...] = tuple(sorted(FIGURE8_PANELS + EXTRA_PANELS,
+                                             key=lambda p: TCC_CONFIGURATION[p.label]))
+
+#: QPSK in the two M = 256 bases (configurations 17 to 24), so that every (M, C) group has
+#: both modulations: same K, IoT and r as configurations 9 to 16, in the same order. Only
+#: for the format sweep [4] (software/testes/varredura4_v5_qpsk.sh); kept out of ALL_PANELS
+#: so that the 16 configurations of the text, their tables and figures stay as they are.
+QPSK_256_PANELS: tuple[Panel, ...] = tuple(
+    Panel(str(17 + i + 4 * g), M=256, C=C, K=K, r=8, iot_db=iot, modulation="QPSK")
+    for g, C in enumerate((8, 16)) for i, (K, iot) in enumerate(
+        ((8, 10.0), (8, 20.0), (12, 10.0), (12, 20.0))))
+
+#: Every panel by label, the 16 configurations and QPSK_256_PANELS.
+PANELS_BY_LABEL: dict[str, Panel] = {p.label: p for p in ALL_PANELS + QPSK_256_PANELS}
 
 
 #: Read from Fig. 8(a) at SNR = -4 dB (status F, +-30% - see spec 1.5).  Used only as an

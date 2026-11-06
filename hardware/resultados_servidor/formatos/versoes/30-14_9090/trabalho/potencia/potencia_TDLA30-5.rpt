@@ -1,0 +1,196 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
+| Date             : Sun Nov  1 02:14:45 2026
+| Host             : cadmicro-el8-04.inf.ufrgs.br running 64-bit Rocky Linux release 8.10 (Green Obsidian)
+| Command          : report_power -file /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos/versoes/30-14_9090/trabalho/potencia/potencia_TDLA30-5.rpt
+| Design           : cholesky_inverse
+| Device           : xcu50-fsvh2104-2-e
+| Design State     : routed
+| Grade            : extended
+| Process          : typical
+| Characterization : Production
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Power Report
+
+Table of Contents
+-----------------
+1. Summary
+1.1 On-Chip Components
+1.2 Power Supply Summary
+1.3 Confidence Level
+2. Settings
+2.1 Environment
+2.2 Clock Constraints
+3. Detailed Reports
+3.1 By Hierarchy
+
+1. Summary
+----------
+
++--------------------------+-------------------------------------------------------------------------------------------------------------------------+
+| Total On-Chip Power (W)  | 2.595                                                                                                                   |
+|   FPGA Power (W)         | 2.355                                                                                                                   |
+|   HBM Power (W)          | 0.241                                                                                                                   |
+| Design Power Budget (W)  | Unspecified*                                                                                                            |
+| Power Budget Margin (W)  | NA                                                                                                                      |
+| Dynamic (W)              | 0.377                                                                                                                   |
+| Device Static (W)        | 2.219                                                                                                                   |
+| Effective TJA (C/W)      | 0.5                                                                                                                     |
+| Max Ambient (C)          | 98.6                                                                                                                    |
+| Junction Temperature (C) | 26.4                                                                                                                    |
+| Confidence Level         | High                                                                                                                    |
+| Setting File             | ---                                                                                                                     |
+| Simulation Activity File | /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos/versoes/30-14_9090/trabalho/potencia/atividade_TDLA30-5.saif |
+| Design Nets Matched      | 100%   (182448/182448)                                                                                                  |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------+
+* Specify Design Power Budget using, set_operating_conditions -design_power_budget <value in Watts>
+
+
+1.1 On-Chip Components
+----------------------
+
++--------------------------+-----------+----------+-----------+-----------------+
+| On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
++--------------------------+-----------+----------+-----------+-----------------+
+| Clocks                   |     0.256 |        3 |       --- |             --- |
+| CLB Logic                |     0.034 |   136024 |       --- |             --- |
+|   LUT as Logic           |     0.026 |    56099 |    871680 |            6.44 |
+|   CARRY8                 |     0.004 |     5033 |    108960 |            4.62 |
+|   LUT as Shift Register  |     0.003 |     1114 |    403200 |            0.28 |
+|   Register               |     0.001 |    56508 |   1743360 |            3.24 |
+|   LUT as Distributed RAM |    <0.001 |       72 |    403200 |            0.02 |
+|   Others                 |     0.000 |      181 |       --- |             --- |
+|   F7/F8 Muxes            |     0.000 |        3 |    871680 |           <0.01 |
+| Signals                  |     0.034 |   110554 |       --- |             --- |
+| Block RAM                |     0.006 |      7.5 |      1344 |            0.56 |
+| DSPs                     |     0.047 |      220 |      5952 |            3.70 |
+| Static Power             |     2.219 |          |           |                 |
+| Total                    |     2.595 |          |           |                 |
++--------------------------+-----------+----------+-----------+-----------------+
+
+
+1.2 Power Supply Summary
+------------------------
+
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+| Source     | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+| Vccint     |       0.850 |     1.297 |       0.443 |      0.855 |       NA    | Unspecified | NA         |
+| Vccint_io  |       0.850 |     0.202 |       0.000 |      0.202 |       NA    | Unspecified | NA         |
+| Vccbram    |       0.850 |     0.021 |       0.001 |      0.020 |       NA    | Unspecified | NA         |
+| Vccaux     |       1.800 |     0.549 |       0.000 |      0.549 |       NA    | Unspecified | NA         |
+| Vccaux_io  |       1.800 |     0.024 |       0.000 |      0.024 |       NA    | Unspecified | NA         |
+| Vcco33     |       3.300 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco25     |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco18     |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco15     |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco135    |       1.350 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco12     |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco10     |       1.000 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vccadc     |       1.800 |     0.016 |       0.000 |      0.016 |       NA    | Unspecified | NA         |
+| VCC_IO_HBM |       1.200 |     0.082 |       0.000 |      0.082 |       NA    | Unspecified | NA         |
+| VCC_HBM    |       1.200 |     0.076 |       0.000 |      0.076 |       NA    | Unspecified | NA         |
+| VCCAUX_HBM |       2.500 |     0.022 |       0.000 |      0.022 |       NA    | Unspecified | NA         |
+| MGTYAVcc   |       0.900 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| MGTYAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| MGTYVccaux |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+
+
+1.3 Confidence Level
+--------------------
+
++-----------------------------+------------+------------------------------------------------+--------+
+| User Input Data             | Confidence | Details                                        | Action |
++-----------------------------+------------+------------------------------------------------+--------+
+| Design implementation state | High       | Design is routed                               |        |
+| Clock nodes activity        | High       | User specified more than 95% of clocks         |        |
+| I/O nodes activity          | High       | User specified more than 95% of inputs         |        |
+| Internal nodes activity     | High       | User specified more than 25% of internal nodes |        |
+| Device models               | High       | Device models are Production                   |        |
+|                             |            |                                                |        |
+| Overall confidence level    | High       |                                                |        |
++-----------------------------+------------+------------------------------------------------+--------+
+
+
+2. Settings
+-----------
+
+2.1 Environment
+---------------
+
++-----------------------+--------------------------+
+| Ambient Temp (C)      | 25.0                     |
+| ThetaJA (C/W)         | 0.5                      |
+| Airflow (LFM)         | 250                      |
+| Heat Sink             | medium (Medium Profile)  |
+| ThetaSA (C/W)         | 0.7                      |
+| Board Selection       | medium (10"x10")         |
+| # of Board Layers     | 12to15 (12 to 15 Layers) |
+| Board Temperature (C) | 25.0                     |
++-----------------------+--------------------------+
+
+
+2.2 Clock Constraints
+---------------------
+
++--------+--------+-----------------+
+| Clock  | Domain | Constraint (ns) |
++--------+--------+-----------------+
+| ap_clk | ap_clk |            10.0 |
++--------+--------+-----------------+
+
+
+3. Detailed Reports
+-------------------
+
+3.1 By Hierarchy
+----------------
+
++--------------------------------------------------------------------------+-----------+
+| Name                                                                     | Power (W) |
++--------------------------------------------------------------------------+-----------+
+| cholesky_inverse                                                         |     0.377 |
+|   G_inv_M_imag_U                                                         |     0.002 |
+|   G_inv_M_real_U                                                         |     0.002 |
+|   U_M_real_U                                                             |     0.002 |
+|   grp_LU_decomposition_fu_78                                             |     0.191 |
+|     U_M_imag_U                                                           |     0.002 |
+|     grp_LU_decomposition_Pipeline_VITIS_LOOP_27_5_fu_185                 |     0.172 |
+|       mul_46s_46s_92_1_1_U6                                              |     0.002 |
+|       mul_46s_46s_92_1_1_U7                                              |     0.003 |
+|       mul_46s_46s_92_1_1_U8                                              |     0.004 |
+|       mul_46s_46s_92_1_1_U9                                              |     0.002 |
+|       sdiv_92ns_60s_92_96_1_U10                                          |     0.080 |
+|       sdiv_92ns_60s_92_96_1_U11                                          |     0.081 |
+|     grp_LU_decomposition_Pipeline_VITIS_LOOP_34_6_VITIS_LOOP_35_7_fu_201 |     0.011 |
+|       mul_46s_46s_92_1_1_U23                                             |     0.002 |
+|       mul_46s_46s_92_1_1_U24                                             |     0.001 |
+|       mul_46s_46s_92_1_1_U25                                             |     0.002 |
+|       mul_46s_46s_92_1_1_U26                                             |     0.001 |
+|     mul_46s_46s_92_1_1_U36                                               |     0.002 |
+|     mul_46s_46s_92_1_1_U37                                               |     0.002 |
+|   grp_cholesky_inverse_Pipeline_VITIS_LOOP_17_2_fu_110                   |     0.002 |
+|   grp_forward_substitution_fu_127                                        |     0.156 |
+|     grp_forward_substitution_Pipeline_VITIS_LOOP_34_5_fu_162             |     0.017 |
+|       mul_46s_46s_92_1_1_U73                                             |     0.004 |
+|       mul_46s_46s_92_1_1_U74                                             |     0.003 |
+|       mul_46s_46s_92_1_1_U75                                             |     0.004 |
+|       mul_46s_46s_92_1_1_U76                                             |     0.003 |
+|     grp_forward_substitution_Pipeline_VITIS_LOOP_47_6_fu_182             |     0.134 |
+|       mul_46s_60s_106_1_1_U87                                            |     0.001 |
+|       mul_60s_46s_106_1_1_U89                                            |     0.001 |
+|       sdiv_92ns_60s_92_96_1_U91                                          |     0.064 |
+|       sdiv_92ns_60s_92_96_1_U92                                          |     0.063 |
+|     mul_46s_46s_92_1_1_U105                                              |     0.002 |
+|     mul_46s_46s_92_1_1_U106                                              |     0.002 |
+|   grp_inversion_fu_135                                                   |     0.018 |
+|     mul_46s_46s_92_1_1_U112                                              |     0.003 |
+|     mul_46s_46s_92_1_1_U113                                              |     0.003 |
+|     mul_46s_46s_92_1_1_U114                                              |     0.004 |
+|     mul_46s_46s_92_1_1_U115                                              |     0.003 |
++--------------------------------------------------------------------------+-----------+
+
+

@@ -1,0 +1,1830 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Wed Nov  4 02:33:51 2026
+# Process ID: 1006135
+# Current directory: /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/trabalho/vivado
+# Command line: vivado -mode batch -nojournal -log log.txt -source /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/vivado.tcl -tclargs /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/trabalho/vivado
+# Log file: /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/trabalho/vivado/log.txt
+# Journal file: 
+# Running On: cadmicro-el8-04.inf.ufrgs.br, OS: Linux, CPU Frequency: 2600.000 MHz, CPU Physical cores: 32, Host memory: 338051 MB
+#-----------------------------------------------------------
+source /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/vivado.tcl
+# set rtl [file normalize [lindex $argv 0]]
+# set saida [file normalize [lindex $argv 1]]
+# set parte xcu50-fsvh2104-2-e
+# cd $saida
+# read_verilog [glob $rtl/*.v]
+read_verilog: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 1580.836 ; gain = 4.984 ; free physical = 110891 ; free virtual = 194744
+# read_xdc $rtl/cholesky_inverse.xdc
+# synth_design -top cholesky_inverse -part $parte -include_dirs $rtl \
+#     -directive sdx_optimization_effort_high -mode out_of_context
+Command: synth_design -top cholesky_inverse -part xcu50-fsvh2104-2-e -include_dirs /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl -directive sdx_optimization_effort_high -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xcu50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xcu50'
+INFO: [Device 21-403] Loading part xcu50-fsvh2104-2-e
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 1006541
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 3272.434 ; gain = 393.746 ; free physical = 104788 ; free virtual = 188643
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_L_M_real_RAM_AUTO_1R1W' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_L_M_real_RAM_AUTO_1R1W.v:7]
+	Parameter DataWidth bound to: 18 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_L_M_real_RAM_AUTO_1R1W' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_L_M_real_RAM_AUTO_1R1W.v:7]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W.v:7]
+	Parameter DataWidth bound to: 18 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W.v:7]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_S_M_real_RAM_AUTO_1R1W' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_S_M_real_RAM_AUTO_1R1W.v:7]
+	Parameter DataWidth bound to: 14 - type: integer 
+	Parameter AddressWidth bound to: 5 - type: integer 
+	Parameter AddressRange bound to: 32 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_S_M_real_RAM_AUTO_1R1W' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_S_M_real_RAM_AUTO_1R1W.v:7]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_S_M_imag_RAM_AUTO_1R1W' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_S_M_imag_RAM_AUTO_1R1W.v:7]
+	Parameter DataWidth bound to: 1 - type: integer 
+	Parameter AddressWidth bound to: 5 - type: integer 
+	Parameter AddressRange bound to: 32 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_S_M_imag_RAM_AUTO_1R1W' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_S_M_imag_RAM_AUTO_1R1W.v:7]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_G_inv_M_real_RAM_AUTO_1R1W' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_G_inv_M_real_RAM_AUTO_1R1W.v:7]
+	Parameter DataWidth bound to: 18 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_G_inv_M_real_RAM_AUTO_1R1W' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_G_inv_M_real_RAM_AUTO_1R1W.v:7]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_LU_decomposition' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_LU_decomposition.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_mul_28s_28s_56_1_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_28s_28s_56_1_1.v:5]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 28 - type: integer 
+	Parameter din1_WIDTH bound to: 28 - type: integer 
+	Parameter dout_WIDTH bound to: 56 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_mul_28s_28s_56_1_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_28s_28s_56_1_1.v:5]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_sdiv_56ns_36s_56_60_seq_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1.v:88]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 60 - type: integer 
+	Parameter din0_WIDTH bound to: 56 - type: integer 
+	Parameter din1_WIDTH bound to: 36 - type: integer 
+	Parameter dout_WIDTH bound to: 56 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_sdiv_56ns_36s_56_60_seq_1_divseq' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1.v:8]
+	Parameter in0_WIDTH bound to: 56 - type: integer 
+	Parameter in1_WIDTH bound to: 36 - type: integer 
+	Parameter out_WIDTH bound to: 56 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_sdiv_56ns_36s_56_60_seq_1_divseq' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1.v:8]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_sdiv_56ns_36s_56_60_seq_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1.v:88]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_LU_decomposition' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_LU_decomposition.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_1.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_1.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_15' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_15.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_15' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_12_15.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_19_3' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_19_3.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_19_3' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cholesky_inverse_Outline_VITIS_LOOP_19_3.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_G_decomposition' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_G_decomposition.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_mul_14ns_18s_32_1_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_14ns_18s_32_1_1.v:5]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 14 - type: integer 
+	Parameter din1_WIDTH bound to: 18 - type: integer 
+	Parameter dout_WIDTH bound to: 32 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_mul_14ns_18s_32_1_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_14ns_18s_32_1_1.v:5]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_mul_18s_14ns_32_1_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_18s_14ns_32_1_1.v:5]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 18 - type: integer 
+	Parameter din1_WIDTH bound to: 14 - type: integer 
+	Parameter dout_WIDTH bound to: 32 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_mul_18s_14ns_32_1_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_18s_14ns_32_1_1.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_G_decomposition' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_G_decomposition.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_sqrt_fixed_18_8_s' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sqrt_fixed_18_8_s.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_sqrt_fixed_18_8_s' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sqrt_fixed_18_8_s.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_forward_substitution' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_forward_substitution.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_mul_28s_36s_64_1_1' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_28s_36s_64_1_1.v:5]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 28 - type: integer 
+	Parameter din1_WIDTH bound to: 36 - type: integer 
+	Parameter dout_WIDTH bound to: 64 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_mul_28s_36s_64_1_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_mul_28s_36s_64_1_1.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_forward_substitution' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_forward_substitution.v:9]
+INFO: [Synth 8-6157] synthesizing module 'cholesky_inverse_inversion' [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_inversion.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse_inversion' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_inversion.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'cholesky_inverse' (0#1) [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.v:9]
+WARNING: [Synth 8-6014] Unused sequential element remd_reg was removed.  [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1.v:172]
+WARNING: [Synth 8-7129] Port ap_rst in module cholesky_inverse_sqrt_fixed_18_8_s is either unconnected or has no load
+WARNING: [Synth 8-7129] Port reset in module cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W is either unconnected or has no load
+WARNING: [Synth 8-7129] Port reset in module cholesky_inverse_G_inv_M_real_RAM_AUTO_1R1W is either unconnected or has no load
+WARNING: [Synth 8-7129] Port reset in module cholesky_inverse_L_M_real_RAM_AUTO_1R1W is either unconnected or has no load
+WARNING: [Synth 8-7129] Port reset in module cholesky_inverse_S_M_imag_RAM_AUTO_1R1W is either unconnected or has no load
+WARNING: [Synth 8-7129] Port reset in module cholesky_inverse_S_M_real_RAM_AUTO_1R1W is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 3371.371 ; gain = 492.684 ; free physical = 104692 ; free virtual = 188549
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 3386.215 ; gain = 507.527 ; free physical = 104681 ; free virtual = 188537
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 3386.215 ; gain = 507.527 ; free physical = 104681 ; free virtual = 188537
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.06 . Memory (MB): peak = 3386.215 ; gain = 0.000 ; free physical = 104678 ; free virtual = 188535
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.xdc]
+Finished Parsing XDC File [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 3537.871 ; gain = 0.000 ; free physical = 104500 ; free virtual = 188356
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.12 ; elapsed = 00:00:00.04 . Memory (MB): peak = 3537.906 ; gain = 0.000 ; free physical = 104500 ; free virtual = 188355
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 3537.906 ; gain = 659.219 ; free physical = 104360 ; free virtual = 188209
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xcu50-fsvh2104-2-e
+INFO: [Synth 8-6742] Reading net delay rules and data
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 3537.906 ; gain = 659.219 ; free physical = 104360 ; free virtual = 188210
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 3537.906 ; gain = 659.219 ; free physical = 104359 ; free virtual = 188208
+---------------------------------------------------------------------------------
+INFO: [Synth 8-3936] Found unconnected internal register 'sext_ln30_reg_2119_reg' and it is trimmed from '46' to '18' bits. [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_LU_decomposition.v:786]
+INFO: [Synth 8-3936] Found unconnected internal register 'sext_ln32_6_reg_2113_reg' and it is trimmed from '46' to '18' bits. [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_LU_decomposition.v:787]
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-3936] Found unconnected internal register 'zext_ln17_reg_297_reg' and it is trimmed from '6' to '5' bits. [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.v:712]
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse_L_M_real_RAM_AUTO_1R1W:/ram_reg"
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W:/ram_reg"
+INFO: [Synth 8-3971] The signal "cholesky_inverse_LU_decomposition_U_M_imag_RAM_AUTO_1R1W:/ram_reg" was recognized as a true dual port RAM template.
+INFO: [Synth 8-6904] The RAM "cholesky_inverse_S_M_real_RAM_AUTO_1R1W:/ram_reg" of size (depth=32 x width=14) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "cholesky_inverse_S_M_imag_RAM_AUTO_1R1W:/ram_reg" of size (depth=32 x width=1) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse_G_inv_M_real_RAM_AUTO_1R1W:/ram_reg"
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 3537.906 ; gain = 659.219 ; free physical = 104311 ; free virtual = 188162
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   65 Bit       Adders := 1     
+	   3 Input   64 Bit       Adders := 1     
+	   3 Input   57 Bit       Adders := 4     
+	   2 Input   57 Bit       Adders := 5     
+	   2 Input   56 Bit       Adders := 30    
+	   3 Input   56 Bit       Adders := 5     
+	   3 Input   52 Bit       Adders := 1     
+	   2 Input   37 Bit       Adders := 4     
+	   2 Input   36 Bit       Adders := 8     
+	   2 Input   32 Bit       Adders := 1     
+	   2 Input   28 Bit       Adders := 1     
+	   3 Input   19 Bit       Adders := 2     
+	   2 Input   12 Bit       Adders := 1     
+	   2 Input   11 Bit       Adders := 11    
+	   4 Input   11 Bit       Adders := 4     
+	   3 Input   11 Bit       Adders := 8     
+	   2 Input   10 Bit       Adders := 17    
+	   3 Input   10 Bit       Adders := 1     
+	   3 Input    9 Bit       Adders := 1     
+	   3 Input    8 Bit       Adders := 1     
+	   3 Input    7 Bit       Adders := 1     
+	   2 Input    6 Bit       Adders := 24    
+	   3 Input    6 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 2     
+	   3 Input    5 Bit       Adders := 1     
+	   3 Input    4 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 1     
++---XORs : 
+	   2 Input     11 Bit         XORs := 1     
+	   2 Input      1 Bit         XORs := 77    
++---Registers : 
+	               70 Bit    Registers := 1     
+	               60 Bit    Registers := 1     
+	               57 Bit    Registers := 4     
+	               56 Bit    Registers := 20    
+	               36 Bit    Registers := 16    
+	               18 Bit    Registers := 25    
+	               17 Bit    Registers := 1     
+	               16 Bit    Registers := 1     
+	               15 Bit    Registers := 1     
+	               14 Bit    Registers := 1     
+	               11 Bit    Registers := 6     
+	               10 Bit    Registers := 16    
+	                6 Bit    Registers := 42    
+	                5 Bit    Registers := 25    
+	                4 Bit    Registers := 4     
+	                3 Bit    Registers := 2     
+	                2 Bit    Registers := 6     
+	                1 Bit    Registers := 24    
++---Multipliers : 
+	              28x36  Multipliers := 4     
++---RAMs : 
+	              18K Bit	(1024 X 18 bit)          RAMs := 9     
+	              448 Bit	(32 X 14 bit)          RAMs := 1     
+	               32 Bit	(32 X 1 bit)          RAMs := 1     
++---Muxes : 
+	  71 Input   70 Bit        Muxes := 1     
+	   2 Input   69 Bit        Muxes := 1     
+	  61 Input   60 Bit        Muxes := 1     
+	   2 Input   56 Bit        Muxes := 16    
+	   2 Input   55 Bit        Muxes := 4     
+	   2 Input   36 Bit        Muxes := 16    
+	   3 Input   36 Bit        Muxes := 19    
+	   2 Input   28 Bit        Muxes := 8     
+	   3 Input   18 Bit        Muxes := 10    
+	   2 Input   18 Bit        Muxes := 11    
+	   2 Input   16 Bit        Muxes := 1     
+	   2 Input   15 Bit        Muxes := 1     
+	   2 Input   14 Bit        Muxes := 3     
+	   2 Input   13 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 1     
+	   2 Input   11 Bit        Muxes := 38    
+	   2 Input   10 Bit        Muxes := 20    
+	   2 Input    8 Bit        Muxes := 2     
+	   2 Input    7 Bit        Muxes := 2     
+	   2 Input    6 Bit        Muxes := 7     
+	   3 Input    6 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 9     
+	   2 Input    4 Bit        Muxes := 8     
+	   6 Input    3 Bit        Muxes := 1     
+	   5 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 4     
+	   2 Input    2 Bit        Muxes := 8     
+	   5 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 54    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 5952 (col length:93)
+BRAMs: 2688 (col length: RAMB18 192 RAMB36 96)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+INFO: [Synth 8-3936] Found unconnected internal register 'cholesky_inverse_sdiv_56ns_36s_56_60_seq_1_divseq_u/remd_tmp_reg' and it is trimmed from '56' to '55' bits. [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1.v:44]
+DSP Debug: swapped A/B pins for adder 0x3b0d15c0
+DSP Debug: swapped A/B pins for adder 0x3b16c540
+DSP Report: Generating DSP mul_14ns_18s_32_1_1_U22/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_14ns_18s_32_1_1_U22/tmp_product is absorbed into DSP mul_14ns_18s_32_1_1_U22/tmp_product.
+DSP Report: Generating DSP add_ln36_3_fu_463_p2, operation Mode is: C+A*B.
+DSP Report: operator add_ln36_3_fu_463_p2 is absorbed into DSP add_ln36_3_fu_463_p2.
+DSP Report: operator mul_18s_14ns_32_1_1_U23/tmp_product is absorbed into DSP add_ln36_3_fu_463_p2.
+DSP Report: Generating DSP add_ln36_fu_457_p2, operation Mode is: C+A*B.
+DSP Report: operator add_ln36_fu_457_p2 is absorbed into DSP add_ln36_fu_457_p2.
+DSP Report: operator mul_18s_14ns_32_1_1_U23/tmp_product is absorbed into DSP add_ln36_fu_457_p2.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: operator tmp_product is absorbed into DSP tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U37/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U37/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U37/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U37/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U37/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U37/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U36/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U36/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U36/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U36/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U36/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U36/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U34/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U34/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U34/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U34/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U34/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U34/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U35/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U35/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U35/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: Generating DSP mul_28s_36s_64_1_1_U35/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: operator mul_28s_36s_64_1_1_U35/tmp_product is absorbed into DSP mul_28s_36s_64_1_1_U35/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U45/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U45/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U45/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U45/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U45/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U45/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U46/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U46/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U46/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U46/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U46/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U46/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U48/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U48/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U48/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U48/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U48/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U48/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U47/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U47/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U47/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U47/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U47/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U47/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U56/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U56/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U56/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U56/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U56/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U56/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U55/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U55/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U55/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U55/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U55/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U55/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U53/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U53/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U53/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U53/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U53/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U53/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U54/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U54/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U54/tmp_product, operation Mode is: A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: Generating DSP mul_28s_28s_56_1_1_U54/tmp_product, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+DSP Report: operator mul_28s_28s_56_1_1_U54/tmp_product is absorbed into DSP mul_28s_28s_56_1_1_U54/tmp_product.
+INFO: [Synth 8-6904] The RAM "cholesky_inverse/S_M_real_U/ram_reg" of size (depth=32 x width=14) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "cholesky_inverse/S_M_imag_U/ram_reg" of size (depth=32 x width=1) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+WARNING: [Synth 8-7129] Port ap_rst in module cholesky_inverse_sqrt_fixed_18_8_s is either unconnected or has no load
+RAM ("cholesky_inverse/L_M_real_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/L_M_real_U/ram_reg"
+RAM ("cholesky_inverse/L_M_imag_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/L_M_imag_U/ram_reg"
+RAM ("cholesky_inverse/U_M_real_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/U_M_real_U/ram_reg"
+INFO: [Synth 8-3971] The signal "cholesky_inverse/U_M_real_U/ram_reg" was recognized as a true dual port RAM template.
+RAM ("cholesky_inverse/D_M_real_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/D_M_real_U/ram_reg"
+RAM ("cholesky_inverse/G_M_real_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/G_M_real_U/ram_reg"
+RAM ("cholesky_inverse/G_M_imag_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/G_M_imag_U/ram_reg"
+RAM ("cholesky_inverse/G_inv_M_real_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/G_inv_M_real_U/ram_reg"
+RAM ("cholesky_inverse/G_inv_M_imag_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "cholesky_inverse/G_inv_M_imag_U/ram_reg"
+RAM ("grp_LU_decomposition_fu_145/U_M_imag_U/ram_reg") is too shallow (depth = 1024) to use URAM. Choosing BRAM instead of URAM 
+INFO: [Synth 8-7030] Implemented Non-Cascaded Block Ram (cascade_height = 1) of width 18 for RAM "grp_LU_decomposition_fu_145/U_M_imag_U/ram_reg"
+INFO: [Synth 8-3971] The signal "grp_LU_decomposition_fu_145/U_M_imag_U/ram_reg" was recognized as a true dual port RAM template.
+INFO: [Synth 8-6904] The RAM "cholesky_inverse/S_M_real_U/ram_reg" of size (depth=32 x width=14) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "cholesky_inverse/S_M_imag_U/ram_reg" of size (depth=32 x width=1) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:29 ; elapsed = 00:00:30 . Memory (MB): peak = 3537.906 ; gain = 659.219 ; free physical = 103828 ; free virtual = 187683
+---------------------------------------------------------------------------------
+ Sort Area is  mul_28s_36s_64_1_1_U34/tmp_product_21 : 0 0 : 2701 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U34/tmp_product_21 : 0 1 : 2779 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U35/tmp_product_1f : 0 0 : 2701 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U35/tmp_product_1f : 0 1 : 2779 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U36/tmp_product_19 : 0 0 : 2701 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U36/tmp_product_19 : 0 1 : 2779 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U37/tmp_product_1d : 0 0 : 2701 5480 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U37/tmp_product_1d : 0 1 : 2779 5480 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U45/tmp_product_25 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U45/tmp_product_25 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U46/tmp_product_23 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U46/tmp_product_23 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U47/tmp_product_27 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U47/tmp_product_27 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U48/tmp_product_29 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U48/tmp_product_29 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U53/tmp_product_31 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U53/tmp_product_31 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U54/tmp_product_2f : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U54/tmp_product_2f : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U55/tmp_product_2b : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U55/tmp_product_2b : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U56/tmp_product_2d : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U56/tmp_product_2d : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_0 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_0 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_15 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_15 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_17 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_17 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_6 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_6 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_8 : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_8 : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_a : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_a : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_c : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_c : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  tmp_product_e : 0 0 : 2701 4207 : Used 1 time 0
+ Sort Area is  tmp_product_e : 0 1 : 1506 4207 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U34/tmp_product_22 : 0 0 : 1531 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U34/tmp_product_22 : 0 1 : 1572 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U35/tmp_product_20 : 0 0 : 1531 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U35/tmp_product_20 : 0 1 : 1572 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U36/tmp_product_1b : 0 0 : 1531 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U36/tmp_product_1b : 0 1 : 1572 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U37/tmp_product_1e : 0 0 : 1531 3103 : Used 1 time 0
+ Sort Area is  mul_28s_36s_64_1_1_U37/tmp_product_1e : 0 1 : 1572 3103 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U45/tmp_product_26 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U45/tmp_product_26 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U46/tmp_product_24 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U46/tmp_product_24 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U47/tmp_product_28 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U47/tmp_product_28 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U48/tmp_product_2a : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U48/tmp_product_2a : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U53/tmp_product_32 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U53/tmp_product_32 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U54/tmp_product_30 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U54/tmp_product_30 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U55/tmp_product_2c : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U55/tmp_product_2c : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U56/tmp_product_2e : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  mul_28s_28s_56_1_1_U56/tmp_product_2e : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_16 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_16 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_18 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_18 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_3 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_3 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_7 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_7 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_9 : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_9 : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_b : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_b : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_d : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_d : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  tmp_product_f : 0 0 : 1531 2508 : Used 1 time 0
+ Sort Area is  tmp_product_f : 0 1 : 977 2508 : Used 1 time 0
+ Sort Area is  add_ln36_3_fu_463_p2_12 : 0 0 : 2091 2091 : Used 1 time 0
+ Sort Area is  add_ln36_fu_457_p2_14 : 0 0 : 2091 2091 : Used 1 time 0
+ Sort Area is  mul_14ns_18s_32_1_1_U22/tmp_product_10 : 0 0 : 1981 1981 : Used 1 time 0
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping Report (see note below)
++----------------------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+-----------------+
+|Module Name                 | RTL Object             | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | Cascade Heights | 
++----------------------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+-----------------+
+|cholesky_inverse            | L_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | L_M_imag_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | U_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(READ_FIRST)   | W | R | Port A and B     | 1      | 0      | 1               | 
+|cholesky_inverse            | D_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | G_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | G_M_imag_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | G_inv_M_real_U/ram_reg | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 1               | 
+|cholesky_inverse            | G_inv_M_imag_U/ram_reg | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 1               | 
+|grp_LU_decomposition_fu_145 | U_M_imag_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(READ_FIRST)   | W | R | Port A and B     | 1      | 0      | 1               | 
++----------------------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+-----------------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+
+Distributed RAM: Preliminary Mapping Report (see note below)
++-----------------+--------------------+-----------+----------------------+----------------+
+|Module Name      | RTL Object         | Inference | Size (Depth x Width) | Primitives     | 
++-----------------+--------------------+-----------+----------------------+----------------+
+|cholesky_inverse | S_M_real_U/ram_reg | Implied   | 32 x 14              | RAM32X1S x 14  | 
++-----------------+--------------------+-----------+----------------------+----------------+
+
+Note: The table above is a preliminary report that shows the Distributed RAMs at the current stage of the synthesis flow. Some Distributed RAMs may be reimplemented as non Distributed RAM primitives later in the synthesis flow. Multiple instantiated RAMs are reported only once.
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++---------------------------------------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name                                  | DSP Mapping    | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++---------------------------------------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_14ns_18s_32_1_1         | A*B            | 18     | 15     | -      | -      | 33     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_18s_14ns_32_1_1         | C+A*B          | 18     | 15     | 18     | -      | 32     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_18s_14ns_32_1_1         | C+A*B          | 18     | 15     | 18     | -      | 28     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | (PCIN>>17)+A*B | 19     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 11     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 11     | 11     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | (PCIN>>17)+A*B | 18     | 11     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
++---------------------------------------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:36 ; elapsed = 00:00:38 . Memory (MB): peak = 3830.387 ; gain = 951.699 ; free physical = 103165 ; free virtual = 187022
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:40 ; elapsed = 00:00:42 . Memory (MB): peak = 3893.980 ; gain = 1015.293 ; free physical = 102965 ; free virtual = 186816
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++----------------------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+-----------------+
+|Module Name                 | RTL Object             | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | Cascade Heights | 
++----------------------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+-----------------+
+|cholesky_inverse            | L_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | L_M_imag_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | U_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(READ_FIRST)   | W | R | Port A and B     | 1      | 0      | 1               | 
+|cholesky_inverse            | D_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | G_M_real_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | G_M_imag_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R |                        |   |   | Port A           | 1      | 0      | 1               | 
+|cholesky_inverse            | G_inv_M_real_U/ram_reg | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 1               | 
+|cholesky_inverse            | G_inv_M_imag_U/ram_reg | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 1               | 
+|grp_LU_decomposition_fu_145 | U_M_imag_U/ram_reg     | 1 K x 18(READ_FIRST)   | W | R | 1 K x 18(READ_FIRST)   | W | R | Port A and B     | 1      | 0      | 1               | 
++----------------------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+-----------------+
+
+
+Distributed RAM: Final Mapping Report
++-----------------+--------------------+-----------+----------------------+----------------+
+|Module Name      | RTL Object         | Inference | Size (Depth x Width) | Primitives     | 
++-----------------+--------------------+-----------+----------------------+----------------+
+|cholesky_inverse | S_M_real_U/ram_reg | Implied   | 32 x 14              | RAM32X1S x 14  | 
++-----------------+--------------------+-----------+----------------------+----------------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance L_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance L_M_imag_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance U_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance U_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance D_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance G_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance G_M_imag_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance G_inv_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance G_inv_M_real_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance G_inv_M_imag_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance G_inv_M_imag_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance grp_LU_decomposition_fu_145/U_M_imag_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance grp_LU_decomposition_fu_145/U_M_imag_U/ram_reg_bram_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 3926.004 ; gain = 1047.316 ; free physical = 102815 ; free virtual = 186666
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102681 ; free virtual = 186532
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102680 ; free virtual = 186531
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:47 ; elapsed = 00:00:49 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102666 ; free virtual = 186517
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:47 ; elapsed = 00:00:49 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102664 ; free virtual = 186515
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:47 ; elapsed = 00:00:49 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102658 ; free virtual = 186508
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:47 ; elapsed = 00:00:49 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102656 ; free virtual = 186507
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name      | RTL Name                                                                                                                                                                 | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|cholesky_inverse | grp_sqrt_fixed_18_8_s_fu_187/x_l_FH_25_reg_2160_reg[1]                                                                                                                   | 3      | 1     | NO           | NO                 | YES               | 1      | 0       | 
+|cholesky_inverse | grp_LU_decomposition_fu_145/ap_CS_fsm_reg[66]                                                                                                                            | 59     | 1     | YES          | NO                 | YES               | 0      | 2       | 
+|cholesky_inverse | grp_LU_decomposition_fu_145/sdiv_56ns_36s_56_60_seq_1_U8/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1_divseq_u/r_stage_reg[56]                                             | 56     | 1     | YES          | NO                 | YES               | 0      | 2       | 
+|cholesky_inverse | grp_forward_substitution_fu_193/grp_cdiv_ap_fixed_36_16_5_0_0_1_fu_332/sdiv_56ns_36s_56_60_seq_1_U38/cholesky_inverse_sdiv_56ns_36s_56_60_seq_1_divseq_u/r_stage_reg[56] | 56     | 1     | YES          | NO                 | YES               | 0      | 2       | 
++-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++---------------------------------------------+--------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name                                  | DSP Mapping  | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++---------------------------------------------+--------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|cholesky_inverse_mul_18s_14ns_32_1_1         | C+A*B'       | 30     | 14     | 0      | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_18s_14ns_32_1_1         | C+A*B'       | 30     | 14     | 0      | -      | 28     | 0    | 1    | 1    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_14ns_18s_32_1_1         | A*B'         | 30     | 14     | -      | -      | 33     | 0    | 1    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_cdiv_ap_fixed_36_16_5_0_0_1 | PCIN>>17+A*B | 30     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 30     | 18     | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | A*B          | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|cholesky_inverse_mul_28s_28s_56_1_1          | PCIN>>17+A*B | 17     | 18     | -      | -      | 39     | 0    | 0    | -    | -    | -     | 0    | 0    | 
++---------------------------------------------+--------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+----------------+------+
+|      |Cell            |Count |
++------+----------------+------+
+|1     |CARRY8          |   441|
+|2     |DSP_ALU         |    83|
+|3     |DSP_A_B_DATA    |    83|
+|5     |DSP_C_DATA      |    83|
+|7     |DSP_MULTIPLIER  |    83|
+|8     |DSP_M_DATA      |    83|
+|9     |DSP_OUTPUT      |    83|
+|10    |DSP_PREADD      |    83|
+|11    |DSP_PREADD_DATA |    83|
+|12    |LUT1            |   435|
+|13    |LUT2            |  2908|
+|14    |LUT3            |  1229|
+|15    |LUT4            |   687|
+|16    |LUT5            |   332|
+|17    |LUT6            |   482|
+|18    |RAM32X1S        |    14|
+|19    |RAMB18E2        |     9|
+|22    |SRL16E          |     1|
+|23    |SRLC32E         |     6|
+|24    |FDRE            |  2108|
+|25    |FDSE            |   220|
++------+----------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:47 ; elapsed = 00:00:49 . Memory (MB): peak = 3928.973 ; gain = 1050.285 ; free physical = 102656 ; free virtual = 186506
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:00:44 . Memory (MB): peak = 3928.973 ; gain = 898.594 ; free physical = 102654 ; free virtual = 186505
+Synthesis Optimization Complete : Time (s): cpu = 00:00:47 ; elapsed = 00:00:50 . Memory (MB): peak = 3928.980 ; gain = 1050.285 ; free physical = 102654 ; free virtual = 186505
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00.08 ; elapsed = 00:00:00.08 . Memory (MB): peak = 3936.973 ; gain = 0.000 ; free physical = 102911 ; free virtual = 186769
+INFO: [Netlist 29-17] Analyzing 538 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.xdc]
+Finished Parsing XDC File [/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/rtl/cholesky_inverse.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4047.270 ; gain = 0.000 ; free physical = 102612 ; free virtual = 186467
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 97 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 83 instances
+  RAM32X1S => RAM32X1S (RAMS32): 14 instances
+
+Synth Design complete | Checksum: c4c8434d
+INFO: [Common 17-83] Releasing license: Synthesis
+105 Infos, 9 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:01 ; elapsed = 00:01:05 . Memory (MB): peak = 4047.305 ; gain = 2466.469 ; free physical = 102612 ; free virtual = 186476
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 3070.204; main = 2879.677; forked = 319.530
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 5508.523; main = 4047.273; forked = 1626.539
+# report_utilization -file utilizacao_sintese.rpt
+# opt_design
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xcu50'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xcu50'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 4111.301 ; gain = 63.996 ; free physical = 102333 ; free virtual = 186277
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:02 . Memory (MB): peak = 4133.113 ; gain = 21.812 ; free physical = 102028 ; free virtual = 185974
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+Phase 1.1 Core Generation And Design Setup | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101805 ; free virtual = 185817
+
+Phase 1.2 Setup Constraints And Sort Netlist
+Phase 1.2 Setup Constraints And Sort Netlist | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101804 ; free virtual = 185816
+Phase 1 Initialization | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101804 ; free virtual = 185816
+
+Phase 2 Timer Update And Timing Data Collection
+
+Phase 2.1 Timer Update
+Phase 2.1 Timer Update | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.47 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101735 ; free virtual = 185759
+
+Phase 2.2 Timing Data Collection
+Phase 2.2 Timing Data Collection | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.51 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101735 ; free virtual = 185762
+Phase 2 Timer Update And Timing Data Collection | Checksum: 109b09b95
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.51 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101735 ; free virtual = 185762
+
+Phase 3 Retarget
+INFO: [Opt 31-1566] Pulled 7 inverters resulting in an inversion of 188 pins
+INFO: [Opt 31-138] Pushed 1 inverter(s) to 7 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 3 Retarget | Checksum: f6d1d8b5
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.71 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101708 ; free virtual = 185744
+Retarget | Checksum: f6d1d8b5
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 12 cells
+
+Phase 4 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 4 Constant propagation | Checksum: 47516d8e
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.79 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101687 ; free virtual = 185724
+Constant propagation | Checksum: 47516d8e
+INFO: [Opt 31-389] Phase Constant propagation created 0 cells and removed 0 cells
+
+Phase 5 Sweep
+Phase 5 Sweep | Checksum: 3d3a7e81
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 4253.098 ; gain = 0.000 ; free physical = 101645 ; free virtual = 185682
+Sweep | Checksum: 3d3a7e81
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 0 cells
+
+Phase 6 BUFG optimization
+INFO: [Opt 31-1077] Phase BUFG optimization inserted 0 global clock buffer(s) for CLOCK_LOW_FANOUT.
+Phase 6 BUFG optimization | Checksum: 3d3a7e81
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101617 ; free virtual = 185657
+BUFG optimization | Checksum: 3d3a7e81
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 7 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 7 Shift Register Optimization | Checksum: 3d3a7e81
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101608 ; free virtual = 185649
+Shift Register Optimization | Checksum: 3d3a7e81
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 8 Post Processing Netlist
+Phase 8 Post Processing Netlist | Checksum: 3d3a7e81
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101623 ; free virtual = 185664
+Post Processing Netlist | Checksum: 3d3a7e81
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+
+Phase 9 Finalization
+
+Phase 9.1 Finalizing Design Cores and Updating Shapes
+Phase 9.1 Finalizing Design Cores and Updating Shapes | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101611 ; free virtual = 185663
+
+Phase 9.2 Verifying Netlist Connectivity
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.02 . Memory (MB): peak = 4285.113 ; gain = 0.000 ; free physical = 101611 ; free virtual = 185663
+Phase 9.2 Verifying Netlist Connectivity | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101611 ; free virtual = 185663
+Phase 9 Finalization | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101611 ; free virtual = 185663
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |              12  |                                              0  |
+|  Constant propagation         |               0  |               0  |                                              0  |
+|  Sweep                        |               0  |               0  |                                              0  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                              0  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+Ending Logic Optimization Task | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 4285.113 ; gain = 32.016 ; free physical = 101611 ; free virtual = 185663
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 4285.113 ; gain = 0.000 ; free physical = 101606 ; free virtual = 185658
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 9 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 0 WE to EN ports
+Number of BRAM Ports augmented: 0 newly gated: 0 Total Ports: 18
+Ending PowerOpt Patch Enables Task | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:00.07 ; elapsed = 00:00:00.08 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101419 ; free virtual = 185485
+Ending Power Optimization Task | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:04 . Memory (MB): peak = 4476.391 ; gain = 191.277 ; free physical = 101414 ; free virtual = 185482
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101413 ; free virtual = 185482
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101414 ; free virtual = 185482
+Ending Netlist Obfuscation Task | Checksum: 4ac8338b
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101413 ; free virtual = 185481
+INFO: [Common 17-83] Releasing license: Implementation
+25 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:27 ; elapsed = 00:00:11 . Memory (MB): peak = 4476.391 ; gain = 429.086 ; free physical = 101412 ; free virtual = 185481
+# place_design
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xcu50'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xcu50'
+INFO: [Common 17-83] Releasing license: Implementation
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 8 CPUs
+
+Starting Placer Task
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101421 ; free virtual = 185478
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 0fdfd73b
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101421 ; free virtual = 185478
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4476.391 ; gain = 0.000 ; free physical = 101419 ; free virtual = 185477
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: becfe6f9
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:17 . Memory (MB): peak = 4844.922 ; gain = 368.531 ; free physical = 100521 ; free virtual = 184593
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 1a5a79726
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:22 . Memory (MB): peak = 4978.938 ; gain = 502.547 ; free physical = 100053 ; free virtual = 184124
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 1a5a79726
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:22 . Memory (MB): peak = 4978.938 ; gain = 502.547 ; free physical = 100053 ; free virtual = 184123
+Phase 1 Placer Initialization | Checksum: 1a5a79726
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:22 . Memory (MB): peak = 4978.938 ; gain = 502.547 ; free physical = 100050 ; free virtual = 184120
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+
+Phase 2.1.1 Partition Driven Placement
+
+Phase 2.1.1.1 PBP: Partition Driven Placement
+Phase 2.1.1.1 PBP: Partition Driven Placement | Checksum: 1966ab04a
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:23 . Memory (MB): peak = 4978.938 ; gain = 502.547 ; free physical = 100036 ; free virtual = 184108
+
+Phase 2.1.1.2 PBP: Clock Region Placement
+INFO: [Place 30-3164] Check ILP status : ILP-based clock placer is skipped.
+Phase 2.1.1.2 PBP: Clock Region Placement | Checksum: 1966ab04a
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:23 . Memory (MB): peak = 4978.938 ; gain = 502.547 ; free physical = 100028 ; free virtual = 184109
+
+Phase 2.1.1.3 PBP: Compute Congestion
+Phase 2.1.1.3 PBP: Compute Congestion | Checksum: 1966ab04a
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:29 . Memory (MB): peak = 5381.922 ; gain = 905.531 ; free physical = 98981 ; free virtual = 183082
+
+Phase 2.1.1.4 PBP: UpdateTiming
+Phase 2.1.1.4 PBP: UpdateTiming | Checksum: ea4000d8
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+
+Phase 2.1.1.5 PBP: Add part constraints
+Phase 2.1.1.5 PBP: Add part constraints | Checksum: ea4000d8
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+Phase 2.1.1 Partition Driven Placement | Checksum: ea4000d8
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+Phase 2.1 Floorplanning | Checksum: 188494a7b
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+
+Phase 2.2 Physical Synthesis After Floorplan
+INFO: [Physopt 32-670] No setup violation found.  PSIP Post Floorplan SLR Replication was not performed.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 5413.938 ; gain = 0.000 ; free physical = 98980 ; free virtual = 183082
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                         |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------
+|  PSIP Post Floorplan SLR Replication  |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Total                                |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.2 Physical Synthesis After Floorplan | Checksum: 188494a7b
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+
+Phase 2.3 Update Timing before SLR Path Opt
+Phase 2.3 Update Timing before SLR Path Opt | Checksum: 188494a7b
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+
+Phase 2.4 Post-Processing in Floorplanning
+Phase 2.4 Post-Processing in Floorplanning | Checksum: 188494a7b
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:30 . Memory (MB): peak = 5413.938 ; gain = 937.547 ; free physical = 98980 ; free virtual = 183082
+
+Phase 2.5 Global Placement Core
+
+Phase 2.5.1 UpdateTiming Before Physical Synthesis
+Phase 2.5.1 UpdateTiming Before Physical Synthesis | Checksum: 1dd07ca3a
+
+Time (s): cpu = 00:01:39 ; elapsed = 00:00:47 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98532 ; free virtual = 182491
+
+Phase 2.5.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 0 LUTNM shape to break, 54 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 22 nets or LUTs. Breaked 0 LUT, combined 22 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-69] No nets found for rewiring optimization.
+INFO: [Physopt 32-661] Optimized 0 net.  Re-placed 0 instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 5788.957 ; gain = 0.000 ; free physical = 98519 ; free virtual = 182478
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |             22  |                    22  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Equivalent Driver Rewiring                       |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |             22  |                    22  |           0  |           5  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.5.2 Physical Synthesis In Placer | Checksum: 19a3b1cd9
+
+Time (s): cpu = 00:01:41 ; elapsed = 00:00:48 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98500 ; free virtual = 182458
+Phase 2.5 Global Placement Core | Checksum: 1c6aab3dc
+
+Time (s): cpu = 00:02:22 ; elapsed = 00:01:01 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98527 ; free virtual = 182478
+Phase 2 Global Placement | Checksum: 1c6aab3dc
+
+Time (s): cpu = 00:02:22 ; elapsed = 00:01:01 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98548 ; free virtual = 182498
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 1f0e06666
+
+Time (s): cpu = 00:02:41 ; elapsed = 00:01:07 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98534 ; free virtual = 182447
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 2a50cb7b2
+
+Time (s): cpu = 00:02:42 ; elapsed = 00:01:08 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98526 ; free virtual = 182444
+
+Phase 3.3 Small Shape DP
+
+Phase 3.3.1 Small Shape Clustering
+Phase 3.3.1 Small Shape Clustering | Checksum: 1c34b4462
+
+Time (s): cpu = 00:03:01 ; elapsed = 00:01:13 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98412 ; free virtual = 182321
+
+Phase 3.3.2 Slice Area Swap
+
+Phase 3.3.2.1 Slice Area Swap Initial
+Phase 3.3.2.1 Slice Area Swap Initial | Checksum: 1f0766dcd
+
+Time (s): cpu = 00:03:01 ; elapsed = 00:01:14 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98413 ; free virtual = 182318
+Phase 3.3.2 Slice Area Swap | Checksum: 26aca0775
+
+Time (s): cpu = 00:03:02 ; elapsed = 00:01:14 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98392 ; free virtual = 182307
+Phase 3.3 Small Shape DP | Checksum: 20990d2b5
+
+Time (s): cpu = 00:03:03 ; elapsed = 00:01:15 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98388 ; free virtual = 182299
+
+Phase 3.4 Re-assign LUT pins
+Phase 3.4 Re-assign LUT pins | Checksum: 23b4b6411
+
+Time (s): cpu = 00:03:03 ; elapsed = 00:01:15 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98344 ; free virtual = 182249
+
+Phase 3.5 Pipeline Register Optimization
+Phase 3.5 Pipeline Register Optimization | Checksum: 1feeeddb8
+
+Time (s): cpu = 00:03:03 ; elapsed = 00:01:15 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98339 ; free virtual = 182247
+Phase 3 Detail Placement | Checksum: 1feeeddb8
+
+Time (s): cpu = 00:03:03 ; elapsed = 00:01:16 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98337 ; free virtual = 182241
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 14f491b91
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 8 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=2.560 | TNS=0.000 |
+Phase 1 Physical Synthesis Initialization | Checksum: 12d1043e2
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.35 . Memory (MB): peak = 5788.957 ; gain = 0.000 ; free physical = 98354 ; free virtual = 182239
+INFO: [Place 46-56] BUFG insertion identified 0 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 0, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 12d1043e2
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.62 . Memory (MB): peak = 5788.957 ; gain = 0.000 ; free physical = 98352 ; free virtual = 182237
+Phase 4.1.1.1 BUFG Insertion | Checksum: 14f491b91
+
+Time (s): cpu = 00:03:34 ; elapsed = 00:01:25 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98352 ; free virtual = 182237
+
+Phase 4.1.1.2 BUFG Replication
+INFO: [Place 46-63] BUFG replication identified 0 candidate nets: Replicated nets: 0, Replicated BUFGs: 0, Replicated BUFG Driver: 0, moved BUFGs: 0, Skipped due to Placement / Routing Conflict: 0, Skipped due to Timing: 0, Skipped due to constraints: 0
+Phase 4.1.1.2 BUFG Replication | Checksum: 14f491b91
+
+Time (s): cpu = 00:03:34 ; elapsed = 00:01:25 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98349 ; free virtual = 182234
+
+Phase 4.1.1.3 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=2.560. For the most accurate timing information please run report_timing.
+Phase 4.1.1.3 Post Placement Timing Optimization | Checksum: 17c144b41
+
+Time (s): cpu = 00:03:35 ; elapsed = 00:01:25 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98348 ; free virtual = 182236
+
+Phase 4.1.1.4 Replication
+INFO: [Place 46-19] Post Replication Timing Summary WNS=2.560. For the most accurate timing information please run report_timing.
+Phase 4.1.1.4 Replication | Checksum: 17c144b41
+
+Time (s): cpu = 00:03:35 ; elapsed = 00:01:25 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98348 ; free virtual = 182235
+
+Time (s): cpu = 00:03:35 ; elapsed = 00:01:25 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98348 ; free virtual = 182235
+Phase 4.1 Post Commit Optimization | Checksum: 17c144b41
+
+Time (s): cpu = 00:03:35 ; elapsed = 00:01:25 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98348 ; free virtual = 182235
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 17c144b41
+
+Time (s): cpu = 00:04:07 ; elapsed = 00:01:44 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98193 ; free virtual = 182081
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ________________________________________________________________________
+|           | Global Congestion | Long Congestion   | Short Congestion  |
+| Direction | Region Size       | Region Size       | Region Size       |
+|___________|___________________|___________________|___________________|
+|      North|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|      South|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|       East|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|       West|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+
+SLR0:
+ ________________________________________________________________________
+|           | Global Congestion | Long Congestion   | Short Congestion  |
+| Direction | Region Size       | Region Size       | Region Size       |
+|___________|___________________|___________________|___________________|
+|      North|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|      South|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|       East|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|       West|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+
+SLR1:
+ ________________________________________________________________________
+|           | Global Congestion | Long Congestion   | Short Congestion  |
+| Direction | Region Size       | Region Size       | Region Size       |
+|___________|___________________|___________________|___________________|
+|      North|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|      South|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|       East|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+|       West|                1x1|                1x1|                1x1|
+|___________|___________________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 17c144b41
+
+Time (s): cpu = 00:04:07 ; elapsed = 00:01:44 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98193 ; free virtual = 182080
+Phase 4.3 Placer Reporting | Checksum: 17c144b41
+
+Time (s): cpu = 00:04:08 ; elapsed = 00:01:44 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98192 ; free virtual = 182080
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 5788.957 ; gain = 0.000 ; free physical = 98192 ; free virtual = 182080
+
+Time (s): cpu = 00:04:08 ; elapsed = 00:01:44 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98192 ; free virtual = 182080
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: e9e888c6
+
+Time (s): cpu = 00:04:08 ; elapsed = 00:01:44 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98194 ; free virtual = 182082
+Ending Placer Task | Checksum: 5ffc2517
+
+Time (s): cpu = 00:04:08 ; elapsed = 00:01:44 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98209 ; free virtual = 182097
+36 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:04:12 ; elapsed = 00:01:45 . Memory (MB): peak = 5788.957 ; gain = 1312.566 ; free physical = 98209 ; free virtual = 182097
+# phys_opt_design
+Command: phys_opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xcu50'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xcu50'
+
+Starting Initial Update Timing Task
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "ap_clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:00.93 . Memory (MB): peak = 5788.957 ; gain = 0.000 ; free physical = 98210 ; free virtual = 182104
+INFO: [Vivado_Tcl 4-383] Design worst setup slack (WNS) is greater than or equal to 0.000 ns. Skipping all physical synthesis optimizations.
+INFO: [Vivado_Tcl 4-232] No setup violation found. The netlist was not modified.
+INFO: [Common 17-83] Releasing license: Implementation
+4 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+# route_design
+Command: route_design
+Attempting to get a license for feature 'Implementation' and/or device 'xcu50'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xcu50'
+Running DRC as a precondition to command route_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 8 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 595bf69b ConstDB: 0 ShapeSum: 6a02e7c RouteDB: 0
+Nodegraph reading from file.  Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 5865.988 ; gain = 0.000 ; free physical = 98196 ; free virtual = 182083
+WARNING: [Route 35-197] Clock port "ap_clk" does not have an associated HD.CLK_SRC. Without this constraint, timing analysis may not be accurate and upstream checks cannot be done to ensure correct clock placement.
+WARNING: [Route 35-198] Port "ap_rst" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "ap_rst". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "ap_start" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "ap_start". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[33]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[33]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[32]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[32]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[31]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[31]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[30]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[30]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[29]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[29]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[28]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[28]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[27]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[27]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[26]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[26]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[25]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[25]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[24]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[24]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[23]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[23]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[22]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[22]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[21]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[21]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[20]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[20]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[19]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[19]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[18]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[18]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[35]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[35]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[34]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[34]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[15]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[15]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[14]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[14]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[13]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[13]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[12]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[12]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[11]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[11]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[10]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[10]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[9]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[9]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[8]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[8]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[7]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[7]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[6]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[6]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[5]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[5]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[4]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[4]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[3]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[3]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[2]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[2]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[1]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[1]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[0]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[0]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[17]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[17]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "A_matrix_q0[16]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "A_matrix_q0[16]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+Post Restoration Checksum: NetGraph: cf54b677 | NumContArr: f191aa2e | Constraints: c2a8fa9d | Timing: c2a8fa9d
+Phase 1 Build RT Design | Checksum: 3463855df
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 5865.988 ; gain = 0.000 ; free physical = 98145 ; free virtual = 182033
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 3463855df
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 5865.988 ; gain = 0.000 ; free physical = 98145 ; free virtual = 182033
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 3463855df
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 5865.988 ; gain = 0.000 ; free physical = 98145 ; free virtual = 182033
+
+Phase 2.3 Global Clock Net Routing
+Phase 2.3 Global Clock Net Routing | Checksum: 3463855df
+
+Time (s): cpu = 00:00:18 ; elapsed = 00:00:10 . Memory (MB): peak = 5990.980 ; gain = 124.992 ; free physical = 98007 ; free virtual = 181894
+
+Phase 2.4 Update Timing
+Phase 2.4 Update Timing | Checksum: 2e9fd6d87
+
+Time (s): cpu = 00:00:21 ; elapsed = 00:00:11 . Memory (MB): peak = 5990.980 ; gain = 124.992 ; free physical = 97989 ; free virtual = 181883
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=2.806  | TNS=0.000  | WHS=0.018  | THS=0.000  |
+
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0 %
+  Global Horizontal Routing Utilization  = 0 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 10113
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 9395
+  Number of Partially Routed Nets     = 718
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 2d3cfb8e6
+
+Time (s): cpu = 00:00:34 ; elapsed = 00:00:15 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97940 ; free virtual = 181827
+
+Phase 3 Initial Routing
+
+Phase 3.1 Global Routing
+Phase 3.1 Global Routing | Checksum: 2d3cfb8e6
+
+Time (s): cpu = 00:00:34 ; elapsed = 00:00:15 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97940 ; free virtual = 181827
+
+Phase 3.2 Initial Net Routing
+Phase 3.2 Initial Net Routing | Checksum: 1990daa0f
+
+Time (s): cpu = 00:00:39 ; elapsed = 00:00:17 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97914 ; free virtual = 181802
+Phase 3 Initial Routing | Checksum: 1944b8f35
+
+Time (s): cpu = 00:00:39 ; elapsed = 00:00:17 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97915 ; free virtual = 181803
+
+Phase 4 Rip-up And Reroute
+
+Phase 4.1 Global Iteration 0
+ Number of Nodes with overlaps = 777
+ Number of Nodes with overlaps = 43
+ Number of Nodes with overlaps = 4
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=1.674  | TNS=0.000  | WHS=0.042  | THS=0.000  |
+
+Phase 4.1 Global Iteration 0 | Checksum: 312cb5872
+
+Time (s): cpu = 00:00:50 ; elapsed = 00:00:21 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97908 ; free virtual = 181803
+
+Phase 4.2 Additional Iteration for Hold
+Phase 4.2 Additional Iteration for Hold | Checksum: 2c5dc2d83
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:21 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97908 ; free virtual = 181803
+Phase 4 Rip-up And Reroute | Checksum: 2c5dc2d83
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97908 ; free virtual = 181803
+
+Phase 5 Delay and Skew Optimization
+
+Phase 5.1 Delay CleanUp
+Phase 5.1 Delay CleanUp | Checksum: 2c5dc2d83
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97916 ; free virtual = 181810
+
+Phase 5.2 Clock Skew Optimization
+Phase 5.2 Clock Skew Optimization | Checksum: 2c5dc2d83
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97916 ; free virtual = 181810
+Phase 5 Delay and Skew Optimization | Checksum: 2c5dc2d83
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97916 ; free virtual = 181810
+
+Phase 6 Post Hold Fix
+
+Phase 6.1 Hold Fix Iter
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97929 ; free virtual = 181823
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=1.674  | TNS=0.000  | WHS=0.042  | THS=0.000  |
+
+Phase 6.1 Hold Fix Iter | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97929 ; free virtual = 181823
+Phase 6 Post Hold Fix | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:22 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97929 ; free virtual = 181823
+
+Phase 7 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.0899697 %
+  Global Horizontal Routing Utilization  = 0.130748 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 7 Route finalize | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:23 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97924 ; free virtual = 181819
+
+Phase 8 Verifying routed nets
+
+ Verification completed successfully
+Phase 8 Verifying routed nets | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:23 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97929 ; free virtual = 181817
+
+Phase 9 Depositing Routes
+Phase 9 Depositing Routes | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:23 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97926 ; free virtual = 181818
+
+Phase 10 Resolve XTalk
+Phase 10 Resolve XTalk | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:23 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97923 ; free virtual = 181810
+
+Phase 11 Post Router Timing
+INFO: [Route 35-57] Estimated Timing Summary | WNS=1.674  | TNS=0.000  | WHS=0.042  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 11 Post Router Timing | Checksum: 2b00b37a1
+
+Time (s): cpu = 00:00:57 ; elapsed = 00:00:23 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97918 ; free virtual = 181810
+INFO: [Route 35-16] Router Completed Successfully
+
+Phase 12 Post-Route Event Processing
+Phase 12 Post-Route Event Processing | Checksum: 167953902
+
+Time (s): cpu = 00:00:58 ; elapsed = 00:00:24 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97921 ; free virtual = 181811
+Ending Routing Task | Checksum: 167953902
+
+Time (s): cpu = 00:00:58 ; elapsed = 00:00:24 . Memory (MB): peak = 6013.410 ; gain = 147.422 ; free physical = 97919 ; free virtual = 181812
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+12 Infos, 39 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:01:02 ; elapsed = 00:00:25 . Memory (MB): peak = 6013.410 ; gain = 224.453 ; free physical = 97933 ; free virtual = 181821
+# write_checkpoint -force roteado.dcp
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00.1 ; elapsed = 00:00:00.03 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97932 ; free virtual = 181820
+Wrote PlaceDB: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.47 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97916 ; free virtual = 181823
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97917 ; free virtual = 181824
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00.12 ; elapsed = 00:00:00.12 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97907 ; free virtual = 181822
+Wrote Netlist Cache: Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97902 ; free virtual = 181819
+Wrote Device Cache: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97906 ; free virtual = 181819
+Write Physdb Complete: Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.81 . Memory (MB): peak = 6013.410 ; gain = 0.000 ; free physical = 97905 ; free virtual = 181819
+INFO: [Common 17-1381] The checkpoint '/home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos_18_20/versoes/18-8-TRN-SAT_sem_otimizacao_32x32/trabalho/vivado/roteado.dcp' has been generated.
+# report_utilization -file utilizacao.rpt
+# report_timing_summary -file timing.rpt
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -2, Temperature grade: E, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 8 CPUs
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "ap_clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+# write_verilog -mode funcsim -force netlist_roteada.v
+INFO: [Common 17-206] Exiting Vivado at Wed Nov  4 02:37:35 2026...

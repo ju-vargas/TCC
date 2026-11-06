@@ -1,0 +1,83 @@
+================================================================
+== Design Size Report
+================================================================
+
+* Total Instructions per Compilation Phase
++---------------+----------------------------+--------------+----------------------------------------------------------------------------------------+
+| Phase         | Step                       | Instructions | Description                                                                            |
++---------------+----------------------------+--------------+----------------------------------------------------------------------------------------+
+| Compile/Link  |                            | 41,473       | After all functions are compiled and linked into a single design                       |
+|               |                            |              |                                                                                        |
+| Unroll/Inline |                            |              | After user unroll and inline pragmas are applied                                       |
+|               | (1) unroll                 |  8,879       | user unroll pragmas are applied                                                        |
+|               | (2) simplification         |  3,382       | simplification of applied user unroll pragmas                                          |
+|               | (3) inline                 |  3,190       | user inline pragmas are applied                                                        |
+|               | (4) simplification         |  2,772       | simplification of applied user inline pragmas                                          |
+|               |                            |              |                                                                                        |
+| Array/Struct  |                            |              | After user array partition and struct aggregate/disaggregate pragmas are applied       |
+|               | (1) array partition        |  2,690       | user array partition pragmas are applied                                               |
+|               | (2) simplification         |  2,664       | simplification of applied user array partition & struct aggregate/disaggregate pragmas |
+|               | (3) aggregate/disaggregate |  2,682       | user struct aggregate/disaggregate pragmas are applied                                 |
+|               | (4) array reshape          |  2,675       | apply array reshape pragmas                                                            |
+|               | (5) access patterns        |  2,681       | array access pattern optmizations                                                      |
+|               |                            |              |                                                                                        |
+| Performance   |                            |              | After transformations are applied to meet performance pragma targets                   |
+|               | (1) loop simplification    |  2,643       | loop and instruction simplification                                                    |
+|               | (2) parallelization        |  2,607       | loops are unrolled or pipelined to meet performance targets                            |
+|               | (3) array partition        |  2,549       | arrays are partitioned to meet performance targets                                     |
+|               | (4) simplification         |  2,549       | simplification of design after performance transformations                             |
+|               |                            |              |                                                                                        |
+| HW Transforms |                            |              | After hardware transfomations                                                          |
+|               | (1) lowering               |  2,553       | initial conversion to HW specific instructions                                         |
+|               | (2) optimizations          |  2,601       | high level synthesis optimizations                                                     |
++---------------+----------------------------+--------------+----------------------------------------------------------------------------------------+
+
+* Instructions per Function for each Compilation Phase
++----------------------------------------+---------------------------+-------------------+-----------------+-----------------+-----------------+-----------------+
+| Function                               | Location                  | Compile/Link      | Unroll/Inline   | Array/Struct    | Performance     | HW Transforms   |
++----------------------------------------+---------------------------+-------------------+-----------------+-----------------+-----------------+-----------------+
+| + cholesky_inverse                     | cholesky_top.cpp:7        | 41,473            | 2,772           | 2,681           | 2,549           | 2,601           |
+|  + LU_decomposition                    | lu_decomposition.cpp:4    | 10,709            |   462           |   451           |   413           |                 |
+|   + cdiv<ap_fixed<48, 24, (ap_q_...    | cholesky_ops.h:51         |  4,665            |   150           |   150           |   142           |                 |
+|      conj_t<ap_fixed<48, 24, (ap_...   | cholesky_ops.h:13         |    225            |                 |                 |                 |                 |
+|    + cmul<ap_fixed<48, 24, (ap_q_...   | cholesky_ops.h:41         |  1,957            |                 |                 |                 |                 |
+|     + cmul_parts<ap_fixed<48, 24, ...  | cholesky_ops.h:29         |  1,293            |                 |                 |                 |                 |
+|        mul_operand<ap_fixed<48, 24,... | cholesky_ops.h:23         |      8 (8 calls)  |                 |                 |                 |                 |
+|    + cmul_parts<ap_fixed<48, 24, ...   | cholesky_ops.h:29         |  1,293            |                 |                 |                 |                 |
+|       mul_operand<ap_fixed<48, 24,...  | cholesky_ops.h:23         |      8 (8 calls)  |                 |                 |                 |                 |
+|   + cmul<ap_fixed<48, 24, (ap_q_...    | cholesky_ops.h:41         |  1,957            |                 |                 |                 |                 |
+|    + cmul_parts<ap_fixed<48, 24, ...   | cholesky_ops.h:29         |  1,293            |                 |                 |                 |                 |
+|       mul_operand<ap_fixed<48, 24,...  | cholesky_ops.h:23         |      8 (8 calls)  |                 |                 |                 |                 |
+|    D_extraction                        | dv_step.cpp:6             |    664            |                 |                 |                 |                 |
+|    D_square_root                       | s_step.cpp:6              |  6,198            |                 |                 |                 |                 |
+|  + G_decomposition                     | g_step.cpp:4              |  2,714            |    99           |    99           |    99           |   111           |
+|   + cmul<ap_fixed<24, 12, (ap_q_...    | cholesky_ops.h:41         |  2,033            |                 |                 |                 |                 |
+|    + cmul_parts<ap_fixed<24, 12, ...   | cholesky_ops.h:29         |  1,357            |                 |                 |                 |                 |
+|       mul_operand<ap_fixed<24, 12,...  | cholesky_ops.h:23         |      8 (8 calls)  |                 |                 |                 |                 |
+|  + forward_substitution                | foward_substitution.cpp:6 | 16,581            |   902           |   868           |   781           |   777           |
+|   + cdiv<ap_fixed<48, 24, (ap_q_...    | cholesky_ops.h:51         |  9,330 (2 calls)  |   450 (3 calls) |   450 (3 calls) |   426 (3 calls) |   426 (3 calls) |
+|      conj_t<ap_fixed<48, 24, (ap_...   | cholesky_ops.h:13         |    450 (2 calls)  |                 |                 |                 |                 |
+|    + cmul<ap_fixed<48, 24, (ap_q_...   | cholesky_ops.h:41         |  3,914 (2 calls)  |                 |                 |                 |                 |
+|     + cmul_parts<ap_fixed<48, 24, ...  | cholesky_ops.h:29         |  2,586 (2 calls)  |                 |                 |                 |                 |
+|        mul_operand<ap_fixed<48, 24,... | cholesky_ops.h:23         |     16 (16 calls) |                 |                 |                 |                 |
+|    + cmul_parts<ap_fixed<48, 24, ...   | cholesky_ops.h:29         |  2,586 (2 calls)  |                 |                 |                 |                 |
+|       mul_operand<ap_fixed<48, 24,...  | cholesky_ops.h:23         |     16 (16 calls) |                 |                 |                 |                 |
+|   + cmul<ap_fixed<48, 24, (ap_q_...    | cholesky_ops.h:41         |  1,957            |                 |                 |                 |                 |
+|    + cmul_parts<ap_fixed<48, 24, ...   | cholesky_ops.h:29         |  1,293            |                 |                 |                 |                 |
+|       mul_operand<ap_fixed<48, 24,...  | cholesky_ops.h:23         |      8 (8 calls)  |                 |                 |                 |                 |
+|  + inversion                           | inversion.cpp:8           |  4,558            |   235           |   199           |   192           |   205           |
+|     conj_t<ap_fixed<48, 24, (ap_...    | cholesky_ops.h:13         |    225            |                 |                 |                 |                 |
+|   + cmul<ap_fixed<48, 24, (ap_q_...    | cholesky_ops.h:41         |  1,957            |                 |                 |                 |                 |
+|    + cmul_parts<ap_fixed<48, 24, ...   | cholesky_ops.h:29         |  1,293            |                 |                 |                 |                 |
+|       mul_operand<ap_fixed<48, 24,...  | cholesky_ops.h:23         |      8 (8 calls)  |                 |                 |                 |                 |
+|    sqrt_fixed<24, 12>                  | hls_sqrt_apfixed.h:19     |                   |   998           |   998           |   998           |   999           |
++----------------------------------------+---------------------------+-------------------+-----------------+-----------------+-----------------+-----------------+
+
+* Design Size Message Settings
++---------------------------------------------+--------+------------------------------------------------------------------+
+| Message Setting                             | Value  | Description                                                      |
++---------------------------------------------+--------+------------------------------------------------------------------+
+| config_compile -design_size_maximum_warning | 100000 | Show a warning when total design instructions exceeds this value |
++---------------------------------------------+--------+------------------------------------------------------------------+
+
+

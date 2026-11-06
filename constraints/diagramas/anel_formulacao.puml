@@ -1,0 +1,141 @@
+@startuml anel_formulacao
+' =====================================================================
+'  O PERCURSO DO ANEL - fase de FORMULAÇÃO (daisy chain)
+'  Fonte: paper.md :87 (topologia), :392/:398 (Gauss-Seidel),
+'         :438 (variáveis de interação), :447 (o hand-off),
+'         :450 (nota de rodapé 6: fechamento do anel), :504 (eq. 30)
+'
+'  AVISO: fórmulas transliteradas de LaTeX para ASCII.
+'  Convenção: [ARTIGO :NNN] = do paper   |   [NOSSO] = derivação nossa
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam sequenceArrowColor #333333
+skinparam sequenceParticipant {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+}
+skinparam sequenceLifeLineBorderColor #999999
+skinparam sequenceGroupBackgroundColor #EEF2F6
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FAFAFA
+skinparam legendBorderColor #999999
+
+title Fase de FORMULAÇÃO percorrendo o anel daisy chain\numa iteração BCD = uma volta completa; são T voltas por PRB
+
+participant "DU 1\nM_1 antenas" as D1
+participant "DU 2\nM_2 antenas" as D2
+participant "DU c\nM_c antenas" as Dc
+participant "DU C\nM_C antenas" as DC
+
+note across
+  [ARTIGO :87] "In contrast to the star architecture, there is NO CU in the daisy
+  chain architecture. Instead, the DUs are connected via UNIDIRECTIONAL links,
+  while an additional link connects the last and first DUs to form a RING.
+  Only one DU outputs the symbol estimate and is directly linked to the decoder."
+  ....
+  Cada DU vê APENAS as suas M_c antenas: H_c, {n_c^i}, y_c. Ninguém vê H inteiro.
+end note
+
+== PREPARO LOCAL - em paralelo nos C DUs, antes do anel girar  [NOSSO] ==
+
+D1 -> D1 : fatora G_1 = E_s H_1 H_1^H + (1/N) SOMA_i n_1^i (n_1^i)^H\n( = R_{y_1 y_1}, a covariância local do sinal recebido )
+D2 -> D2 : fatora G_2
+Dc -> Dc : fatora G_c
+DC -> DC : fatora G_C
+
+note across #E8F5E9
+  [NOSSO] O fator invertido da eq. (30) [ARTIGO :504] não tem índice l e só
+  depende de informação LOCAL. Logo não precisa do anel e não entra no laço:
+  os C DUs fatoram simultaneamente. É AQUI que fica o módulo de inversão.
+  Orçamento: 30,303 ns (= T_OFDM / N_PRB), uma vez por PRB por DU.
+end note
+
+== Preprocessing - acumula A_0^0 e b_{0,i}^0 pelo anel  [ARTIGO :414-421] ==
+
+D1 -> D2 : A += W_1^0 H_1 ,  b_i += W_1^0 n_1^i
+D2 -> Dc : A += W_2^0 H_2 ,  b_i += W_2^0 n_2^i
+Dc -> DC : A += W_c^0 H_c ,  b_i += W_c^0 n_c^i
+DC -> D1 : A_0^0 , {b_{0,i}^0}   completos
+
+== BCD iterations  [ARTIGO :422-429] ==
+
+loop l = 1 .. T   (T voltas do anel)
+
+  activate D1
+  D1 -> D1 : (1) resolve W_1^l pela eq. (30)\nreusando a fatoração de G_1
+  D1 -> D1 : (2) A_1^l   = A_0^l   - W_1^{l-1} H_1 + W_1^l H_1      (28)
+  D1 -> D1 : (3) b_{1,i}^l = b_{0,i}^l - W_1^{l-1} n_1^i + W_1^l n_1^i  (29)
+  D1 -> D2 : A_1^l  (K x K)  +  {b_{1,i}^l}_{i=1..N}  (N vetores K x 1)
+  deactivate D1
+
+  activate D2
+  D2 -> D2 : mesmos 3 passos com H_2, {n_2^i}
+  D2 -> Dc : A_2^l , {b_{2,i}^l}
+  deactivate D2
+
+  activate Dc
+  Dc -> Dc : mesmos 3 passos com H_c, {n_c^i}
+  Dc -> DC : A_c^l , {b_{c,i}^l}
+  deactivate Dc
+
+  activate DC
+  DC -> DC : mesmos 3 passos com H_C, {n_C^i}
+  DC --> D1 : A_C^l , {b_{C,i}^l}   -- ENLACE QUE FECHA O ANEL
+  deactivate DC
+
+  note left of D1 #FFF3CD
+    [ARTIGO :450, nota de rodapé 6]
+    "we assume the previous DU of the first DU is
+    the C-th DU, i.e., A_0^l and {b_{0,i}^l}
+    represent A_C^{l-1} and {b_{C,i}^{l-1}}"
+    ....
+    Ou seja: A_0^{l+1} = A_C^l. A iteração seguinte
+    começa exatamente de onde esta terminou.
+  end note
+end
+
+note across
+  == POR QUE O ANEL É SERIAL: Gauss-Seidel ==
+  [ARTIGO :392] "the objective function in problem (25) is minimized with respect
+  to one block variable W_c while fixing W_j, j != c for c = 1,2,...,C SEQUENTIALLY."
+  [ARTIGO :398] "Adopting the Gauss-Seidel update rule"
+  [ARTIGO :447] "Except for the information received from the previous DU, all
+  other terms in (30) can be computed locally."
+  ....
+  Cada DU já usa o resultado ATUALIZADO dos anteriores. Por isso a ordem importa
+  e o anel não pode ser paralelizado dentro de um mesmo PRB.
+end note
+
+legend right
+  == O QUE TRAFEGA NO ANEL ==
+  A_c^l         em C^(K x K)      [ARTIGO :438]
+  {b_{c,i}^l}   N vetores C^(K x 1)  [ARTIGO :438]
+
+  Dimensão K, INDEPENDENTE de M. É essa a economia de fronthaul
+  que dá o título ao artigo: o anel carrega o canal COMPRIMIDO
+  ("the local equalization matrices act as local compression
+  matrices", [ARTIGO :447]), não o canal bruto M_c x K.
+
+  == O ANEL É SERIAL, MAS AS INSTÂNCIAS SÃO INDEPENDENTES  [NOSSO] ==
+  Este diagrama mostra UM PRB dando UMA volta. Não conclua daí
+  um gargalo de vazão:
+    - os 275 PRBs particionam FREQUÊNCIA e coexistem no mesmo
+      símbolo OFDM de 8,333 us, sem ordem natural entre si;
+    - logo o anel opera PIPELINADO: enquanto o PRB #1 está no
+      DU 5, o PRB #2 já entrou no DU 1.
+  A "higher latency" do daisy chain [ARTIGO :94] vira portanto um
+  limite de PROFUNDIDADE DE PIPELINE, não de throughput. Ver o
+  diagrama de pipeline em anel_pipeline.puml e a NOTA 13.
+
+  == RESSALVA ==
+  [ARTIGO :94] "the star architecture has less latency than the daisy chain
+  architecture since the star architecture enables parallel processing. In
+  contrast, the interface design in the daisy chain architecture is simple,
+  low-cost, and easier to extend but often has higher latency."
+endlegend
+
+@enduml

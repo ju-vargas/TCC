@@ -1,0 +1,97 @@
+@startuml anel_pipeline
+' =====================================================================
+'  POR QUE A LATÊNCIA DO ANEL NÃO VIRA GARGALO DE VAZÃO
+'  Este diagrama é [NOSSO] por inteiro. O artigo afirma apenas que o
+'  daisy chain "often has higher latency" [:94]; a leitura de que isso
+'  é profundidade de pipeline e não throughput é derivação nossa.
+'  Premissa citável: [:614] cada PRB corresponde a uma matriz de canal
+'  diferente -> os PRBs são instâncias INDEPENDENTES.
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam sequenceArrowColor #333333
+skinparam sequenceParticipant {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+}
+skinparam sequenceLifeLineBorderColor #999999
+skinparam sequenceGroupBackgroundColor #EEF2F6
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FFF3CD
+skinparam legendBorderColor #B58900
+
+title [NOSSO]  O anel opera pipelinado\nvárias instâncias (PRBs ou REs) em voo ao mesmo tempo, em DUs diferentes
+
+participant "DU 1" as D1
+participant "DU 2" as D2
+participant "DU 3" as D3
+participant "DU 4" as D4
+
+note across
+  PREMISSA  [ARTIGO :614] "Each PRB corresponds to a different channel matrix in
+  the baseband model in (1)."
+  ....
+  Os 275 PRBs particionam FREQUÊNCIA. Eles coexistem dentro do mesmo símbolo OFDM
+  de 8,333 us e NÃO têm ordem causal entre si. O mesmo vale para os 3300 REs.
+  Serial DENTRO de uma instância; independente ENTRE instâncias.
+end note
+
+== t = 0 ==
+D1 -> D2 : PRB #1
+
+== t = 1 salto ==
+D2 -> D3 : PRB #1
+D1 -> D2 : PRB #2
+
+== t = 2 saltos ==
+D3 -> D4 : PRB #1
+D2 -> D3 : PRB #2
+D1 -> D2 : PRB #3
+
+== t = 3 saltos - regime permanente ==
+D4 -> D1 : PRB #1  (fecha o anel)
+D3 -> D4 : PRB #2
+D2 -> D3 : PRB #3
+D1 -> D2 : PRB #4
+
+note across #E8F5E9
+  Em regime permanente TODOS os C DUs estão ocupados simultaneamente,
+  cada um com uma instância diferente.
+  ....
+  LATÊNCIA de uma instância  =  C saltos x T voltas   (cresce com C)
+  VAZÃO do sistema           =  1 instância por salto (NÃO cresce com C)
+  ....
+  A latência alta do daisy chain [ARTIGO :94] paga-se em PROFUNDIDADE DE
+  PIPELINE (registradores e buffers ao longo do anel), não em throughput.
+end note
+
+legend right
+  == O QUE ISSO SIGNIFICA PARA O SEU MÓDULO ==
+
+  O orçamento de 30,303 ns por PRB é um requisito de VAZÃO
+  (initiation interval), não de latência ponta a ponta:
+     "o inversor precisa ACEITAR um novo PRB a cada 30,303 ns"
+  e não
+     "o inversor precisa TERMINAR em 30,303 ns".
+
+  Isso libera o projeto: o inversor pode ser ele mesmo pipelinado,
+  com latência de vários ciclos, desde que o II seja respeitado.
+
+  == A CONTA QUE FORÇA ESSA LEITURA  [NOSSO] ==
+  Na filtragem, o orçamento é 2,525 ns por RE. Se fosse latência
+  ponta a ponta, com C = 16 (configs B e D) sobrariam
+     2,525 ns / 16 = 0,158 ns por salto
+  o que é inviável em qualquer tecnologia realista. Logo a leitura
+  correta só pode ser a de vazão, e o anel só fecha as contas
+  pipelinado.
+
+  == LIMITE SUPERIOR DA PROFUNDIDADE ==
+  A latência total ainda tem que caber no orçamento de latência do
+  slot 5G NR. Isso é o que a NOTA 13 de constraints.csv registra
+  como ponto em aberto: o artigo não fornece esse orçamento.
+endlegend
+
+@enduml

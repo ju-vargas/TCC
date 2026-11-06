@@ -1,0 +1,1043 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
+| Date             : Sun Nov  1 11:47:09 2026
+| Host             : cadmicro-el8-04.inf.ufrgs.br running 64-bit Rocky Linux release 8.10 (Green Obsidian)
+| Command          : report_power -file /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos/versoes/30-14_152_sistolico/trabalho/potencia/potencia_TDLA30-300.rpt
+| Design           : cholesky_inverse
+| Device           : xcu50-fsvh2104-2-e
+| Design State     : routed
+| Grade            : extended
+| Process          : typical
+| Characterization : Production
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Power Report
+
+Table of Contents
+-----------------
+1. Summary
+1.1 On-Chip Components
+1.2 Power Supply Summary
+1.3 Confidence Level
+2. Settings
+2.1 Environment
+2.2 Clock Constraints
+3. Detailed Reports
+3.1 By Hierarchy
+
+1. Summary
+----------
+
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------+
+| Total On-Chip Power (W)  | 5.335                                                                                                                              |
+|   FPGA Power (W)         | 5.092                                                                                                                              |
+|   HBM Power (W)          | 0.244                                                                                                                              |
+| Design Power Budget (W)  | Unspecified*                                                                                                                       |
+| Power Budget Margin (W)  | NA                                                                                                                                 |
+| Dynamic (W)              | 3.065                                                                                                                              |
+| Device Static (W)        | 2.271                                                                                                                              |
+| Effective TJA (C/W)      | 0.5                                                                                                                                |
+| Max Ambient (C)          | 97.2                                                                                                                               |
+| Junction Temperature (C) | 27.8                                                                                                                               |
+| Confidence Level         | High                                                                                                                               |
+| Setting File             | ---                                                                                                                                |
+| Simulation Activity File | /home/inf01185/juliana.vargas/TCC/pacote_servidor_formatos/versoes/30-14_152_sistolico/trabalho/potencia/atividade_TDLA30-300.saif |
+| Design Nets Matched      | 100%   (790933/791893)                                                                                                             |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------+
+* Specify Design Power Budget using, set_operating_conditions -design_power_budget <value in Watts>
+
+
+1.1 On-Chip Components
+----------------------
+
++--------------------------+-----------+----------+-----------+-----------------+
+| On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
++--------------------------+-----------+----------+-----------+-----------------+
+| Clocks                   |     0.515 |        3 |       --- |             --- |
+| CLB Logic                |     0.547 |   470861 |       --- |             --- |
+|   LUT as Logic           |     0.393 |   221106 |    871680 |           25.37 |
+|   LUT as Shift Register  |     0.074 |    14194 |    403200 |            3.52 |
+|   CARRY8                 |     0.057 |    19104 |    108960 |           17.53 |
+|   Register               |     0.021 |   147578 |   1743360 |            8.47 |
+|   LUT as Distributed RAM |     0.003 |     1408 |    403200 |            0.35 |
+|   BUFG                   |    <0.001 |        6 |        64 |            9.38 |
+|   Others                 |     0.000 |     3839 |       --- |             --- |
+|   F7/F8 Muxes            |     0.000 |     1308 |    871680 |            0.15 |
+| Signals                  |     0.684 |   546487 |       --- |             --- |
+| Block RAM                |     0.408 |      470 |      1344 |           34.97 |
+| DSPs                     |     0.910 |     3756 |      5952 |           63.10 |
+| Static Power             |     2.271 |          |           |                 |
+| Total                    |     5.335 |          |           |                 |
++--------------------------+-----------+----------+-----------+-----------------+
+
+
+1.2 Power Supply Summary
+------------------------
+
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+| Source     | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+| Vccint     |       0.850 |     4.485 |       3.577 |      0.908 |       NA    | Unspecified | NA         |
+| Vccint_io  |       0.850 |     0.208 |       0.000 |      0.208 |       NA    | Unspecified | NA         |
+| Vccbram    |       0.850 |     0.051 |       0.029 |      0.022 |       NA    | Unspecified | NA         |
+| Vccaux     |       1.800 |     0.547 |       0.000 |      0.547 |       NA    | Unspecified | NA         |
+| Vccaux_io  |       1.800 |     0.024 |       0.000 |      0.024 |       NA    | Unspecified | NA         |
+| Vcco33     |       3.300 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco25     |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco18     |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco15     |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco135    |       1.350 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco12     |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco10     |       1.000 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vccadc     |       1.800 |     0.016 |       0.000 |      0.016 |       NA    | Unspecified | NA         |
+| VCC_IO_HBM |       1.200 |     0.082 |       0.000 |      0.082 |       NA    | Unspecified | NA         |
+| VCC_HBM    |       1.200 |     0.078 |       0.000 |      0.078 |       NA    | Unspecified | NA         |
+| VCCAUX_HBM |       2.500 |     0.022 |       0.000 |      0.022 |       NA    | Unspecified | NA         |
+| MGTYAVcc   |       0.900 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| MGTYAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| MGTYVccaux |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+
+
+1.3 Confidence Level
+--------------------
+
++-----------------------------+------------+------------------------------------------------+--------+
+| User Input Data             | Confidence | Details                                        | Action |
++-----------------------------+------------+------------------------------------------------+--------+
+| Design implementation state | High       | Design is routed                               |        |
+| Clock nodes activity        | High       | User specified more than 95% of clocks         |        |
+| I/O nodes activity          | High       | User specified more than 95% of inputs         |        |
+| Internal nodes activity     | High       | User specified more than 25% of internal nodes |        |
+| Device models               | High       | Device models are Production                   |        |
+|                             |            |                                                |        |
+| Overall confidence level    | High       |                                                |        |
++-----------------------------+------------+------------------------------------------------+--------+
+
+
+2. Settings
+-----------
+
+2.1 Environment
+---------------
+
++-----------------------+--------------------------+
+| Ambient Temp (C)      | 25.0                     |
+| ThetaJA (C/W)         | 0.5                      |
+| Airflow (LFM)         | 250                      |
+| Heat Sink             | medium (Medium Profile)  |
+| ThetaSA (C/W)         | 0.7                      |
+| Board Selection       | medium (10"x10")         |
+| # of Board Layers     | 12to15 (12 to 15 Layers) |
+| Board Temperature (C) | 25.0                     |
++-----------------------+--------------------------+
+
+
+2.2 Clock Constraints
+---------------------
+
++--------+--------+-----------------+
+| Clock  | Domain | Constraint (ns) |
++--------+--------+-----------------+
+| ap_clk | ap_clk |            10.0 |
++--------+--------+-----------------+
+
+
+3. Detailed Reports
+-------------------
+
+3.1 By Hierarchy
+----------------
+
++------------------------------------------------------------------------+-----------+
+| Name                                                                   | Power (W) |
++------------------------------------------------------------------------+-----------+
+| cholesky_inverse                                                       |     3.065 |
+|   A_ch_M_imag_10_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_11_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_12_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_13_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_14_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_15_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_16_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_17_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_18_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_19_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_1_U                                                      |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_20_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_21_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_22_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_23_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_24_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_25_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_26_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_27_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_28_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_29_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_2_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_30_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_31_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_3_U                                                      |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_4_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_5_U                                                      |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_6_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_7_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_8_U                                                      |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_9_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_imag_U                                                        |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_10_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_11_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_12_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_13_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_14_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_15_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_16_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_17_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_18_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_19_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_1_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_20_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_21_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_22_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_23_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_24_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_25_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_26_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_27_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_28_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_29_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_2_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_30_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_31_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_3_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_4_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_5_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_6_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_7_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_8_U                                                      |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_9_U                                                      |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   A_ch_M_real_U                                                        |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_M_imag_16_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_17_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_18_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_19_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_22_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_23_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_2_U                                                         |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_5_U                                                         |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_6_U                                                         |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_imag_U                                                           |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_16_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_17_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_18_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_19_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_1_U                                                         |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_20_U                                                        |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_2_U                                                         |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_5_U                                                         |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_M_real_U                                                           |     0.001 |
+|     cholesky_inverse_L_M_real_RAM_AUTO_1R1W_memcore_U                  |     0.001 |
+|   G_inv_M_imag_10_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_11_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_12_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_13_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_14_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_15_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_16_U                                                    |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_17_U                                                    |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_18_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_19_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_1_U                                                     |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_20_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_21_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_22_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_23_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_24_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_25_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_26_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_27_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_28_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_29_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_2_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_30_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_31_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_3_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_4_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_5_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_6_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_7_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_8_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_imag_9_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_imag_U                                                       |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_10_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_11_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_12_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_13_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_14_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_15_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_16_U                                                    |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_17_U                                                    |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_18_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_19_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_1_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_20_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_21_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_22_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_23_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_24_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_25_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_26_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_27_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_28_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_29_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_2_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_30_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_31_U                                                    |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_3_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_4_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_5_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_6_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_7_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   G_inv_M_real_8_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_9_U                                                     |     0.003 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|     gen_buffer[1].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.002 |
+|   G_inv_M_real_U                                                       |     0.002 |
+|     gen_buffer[0].cholesky_inverse_A_ch_M_real_RAM_AUTO_1R1W_memcore_U |     0.001 |
+|   Inv_ch_M_imag_1_U                                                    |     0.005 |
+|     cholesky_inverse_Inv_ch_M_real_RAM_AUTO_1R1W_memcore_U             |     0.005 |
+|   Inv_ch_M_imag_U                                                      |     0.005 |
+|     cholesky_inverse_Inv_ch_M_real_RAM_AUTO_1R1W_memcore_U             |     0.005 |
+|   Inv_ch_M_real_1_U                                                    |     0.005 |
+|     cholesky_inverse_Inv_ch_M_real_RAM_AUTO_1R1W_memcore_U             |     0.005 |
+|   Inv_ch_M_real_U                                                      |     0.005 |
+|     cholesky_inverse_Inv_ch_M_real_RAM_AUTO_1R1W_memcore_U             |     0.005 |
+|   lote_fs_U0                                                           |     0.759 |
+|     flow_control_loop_delay_pipe_U                                     |     0.002 |
+|     mul_46s_46s_92_1_1_U1000                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1001                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1002                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1003                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1004                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1005                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1006                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1007                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1008                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1009                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1010                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1011                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1012                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1013                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1014                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1015                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1016                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1017                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1018                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1019                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1020                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1021                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1022                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1023                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1024                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1025                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1026                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1027                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1028                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1029                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1030                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1031                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1032                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1033                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1034                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1035                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1036                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1037                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1038                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1039                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1040                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1041                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1042                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1043                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1044                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1045                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1046                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1047                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1048                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1049                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1050                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1051                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1052                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1053                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1054                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1055                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1056                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1057                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1058                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1059                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1060                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1061                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1062                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1063                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1064                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1065                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1066                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1067                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1068                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1069                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1070                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1071                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1072                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U951                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U952                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U953                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U954                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U955                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U956                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U957                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U958                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U959                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U960                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U961                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U962                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U963                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U964                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U965                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U966                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U967                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U968                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U969                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U970                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U971                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U972                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U973                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U974                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U975                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U976                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U977                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U978                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U979                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U980                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U981                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U982                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U983                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U984                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U985                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U986                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U987                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U988                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U989                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U990                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U991                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U992                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U993                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U994                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U995                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U996                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U997                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U998                                            |     0.002 |
+|     mul_46s_46s_92_1_1_U999                                            |     0.004 |
+|     mul_60s_46s_106_1_1_U1075                                          |     0.007 |
+|     mul_60s_46s_106_1_1_U1076                                          |     0.003 |
+|     mul_60s_46s_106_1_1_U1077                                          |     0.007 |
+|     mul_60s_46s_106_1_1_U1078                                          |     0.004 |
+|     mul_60s_47s_105_1_1_U1079                                          |     0.005 |
+|     mul_60s_47s_105_1_1_U1080                                          |     0.005 |
+|     mul_60s_47s_105_1_1_U1081                                          |     0.003 |
+|     mul_60s_47s_105_1_1_U1082                                          |     0.003 |
+|     sdiv_92ns_60s_92_96_1_U1087                                        |     0.086 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.081 |
+|     sdiv_92ns_60s_92_96_1_U1088                                        |     0.083 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.077 |
+|     sdiv_92ns_60s_92_96_1_U1089                                        |     0.087 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.080 |
+|     sdiv_92ns_60s_92_96_1_U1090                                        |     0.083 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.077 |
+|   lote_g_U0                                                            |     0.031 |
+|     grp_lote_g_Pipeline_VITIS_LOOP_186_1_VITIS_LOOP_187_2_fu_574       |     0.005 |
+|     grp_lote_g_Pipeline_VITIS_LOOP_202_4_VITIS_LOOP_203_5_fu_770       |     0.022 |
+|   lote_inv_U0                                                          |     0.430 |
+|     flow_control_loop_pipe_U                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1223                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1226                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1227                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1228                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1231                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1232                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1233                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1234                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1235                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1236                                           |     0.001 |
+|     mul_46s_46s_92_1_1_U1237                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1238                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1239                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1240                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1241                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1242                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1243                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1244                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1245                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1246                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1247                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1248                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1249                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1250                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1251                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1252                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1253                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1254                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1255                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1256                                           |     0.002 |
+|     mul_46s_46s_92_1_1_U1257                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1258                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1259                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1260                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1261                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1262                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1263                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1264                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1265                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1266                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1267                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1268                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1269                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1270                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1271                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1272                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1273                                           |     0.006 |
+|     mul_46s_46s_92_1_1_U1274                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1275                                           |     0.006 |
+|     mul_46s_46s_92_1_1_U1276                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U1277                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1278                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1279                                           |     0.006 |
+|     mul_46s_46s_92_1_1_U1280                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1281                                           |     0.005 |
+|     mul_46s_46s_92_1_1_U1282                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1283                                           |     0.006 |
+|     mul_46s_46s_92_1_1_U1284                                           |     0.004 |
+|     mul_46s_46s_92_1_1_U1285                                           |     0.006 |
+|     mul_46s_46s_92_1_1_U1286                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1288                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1290                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1292                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1294                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1296                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1298                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1299                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1300                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1301                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1302                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1303                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1304                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1305                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1306                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1307                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1308                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1309                                           |     0.001 |
+|     mul_47s_46s_91_1_1_U1310                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1311                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1312                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1313                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1314                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1315                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1316                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1317                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1318                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1319                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1320                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1321                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1322                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1323                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1324                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1325                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1326                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1327                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1328                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1329                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1330                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1331                                           |     0.002 |
+|     mul_47s_46s_91_1_1_U1332                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1333                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1334                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1335                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1336                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1337                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1338                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1339                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1340                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1341                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1342                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1343                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1344                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1345                                           |     0.003 |
+|     mul_47s_46s_91_1_1_U1346                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1347                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1348                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1349                                           |     0.004 |
+|     mul_47s_46s_91_1_1_U1350                                           |     0.004 |
+|   lote_lu_U0                                                           |     1.395 |
+|     Ua_M_imag_11_U                                                     |     0.001 |
+|     Ua_M_imag_18_U                                                     |     0.001 |
+|     Ua_M_imag_19_U                                                     |     0.001 |
+|     Ua_M_imag_20_U                                                     |     0.001 |
+|     Ua_M_imag_23_U                                                     |     0.001 |
+|     Ua_M_imag_30_U                                                     |     0.001 |
+|     Ua_M_imag_7_U                                                      |     0.001 |
+|     Ua_M_imag_8_U                                                      |     0.001 |
+|     Ua_M_real_11_U                                                     |     0.001 |
+|     Ua_M_real_13_U                                                     |     0.001 |
+|     Ua_M_real_16_U                                                     |     0.001 |
+|     Ua_M_real_17_U                                                     |     0.001 |
+|     Ua_M_real_20_U                                                     |     0.001 |
+|     Ua_M_real_21_U                                                     |     0.001 |
+|     Ua_M_real_22_U                                                     |     0.001 |
+|     Ua_M_real_23_U                                                     |     0.001 |
+|     Ua_M_real_24_U                                                     |     0.001 |
+|     Ua_M_real_25_U                                                     |     0.001 |
+|     Ua_M_real_26_U                                                     |     0.002 |
+|     Ua_M_real_27_U                                                     |     0.002 |
+|     Ua_M_real_28_U                                                     |     0.002 |
+|     Ua_M_real_30_U                                                     |     0.001 |
+|     Ua_M_real_7_U                                                      |     0.001 |
+|     Ua_M_real_8_U                                                      |     0.001 |
+|     Ua_M_real_9_U                                                      |     0.001 |
+|     Ub_M_imag_10_U                                                     |     0.001 |
+|     Ub_M_imag_11_U                                                     |     0.001 |
+|     Ub_M_imag_12_U                                                     |     0.001 |
+|     Ub_M_imag_13_U                                                     |     0.003 |
+|     Ub_M_imag_14_U                                                     |     0.001 |
+|     Ub_M_imag_15_U                                                     |     0.001 |
+|     Ub_M_imag_16_U                                                     |     0.001 |
+|     Ub_M_imag_17_U                                                     |     0.001 |
+|     Ub_M_imag_1_U                                                      |     0.001 |
+|     Ub_M_imag_20_U                                                     |     0.001 |
+|     Ub_M_imag_21_U                                                     |     0.001 |
+|     Ub_M_imag_22_U                                                     |     0.001 |
+|     Ub_M_imag_24_U                                                     |     0.001 |
+|     Ub_M_imag_25_U                                                     |     0.002 |
+|     Ub_M_imag_26_U                                                     |     0.002 |
+|     Ub_M_imag_27_U                                                     |     0.002 |
+|     Ub_M_imag_28_U                                                     |     0.001 |
+|     Ub_M_imag_29_U                                                     |     0.003 |
+|     Ub_M_imag_2_U                                                      |     0.001 |
+|     Ub_M_imag_30_U                                                     |     0.001 |
+|     Ub_M_imag_31_U                                                     |     0.002 |
+|     Ub_M_imag_3_U                                                      |     0.001 |
+|     Ub_M_imag_4_U                                                      |     0.001 |
+|     Ub_M_imag_5_U                                                      |     0.001 |
+|     Ub_M_imag_6_U                                                      |     0.001 |
+|     Ub_M_imag_9_U                                                      |     0.001 |
+|     Ub_M_imag_U                                                        |     0.001 |
+|     Ub_M_real_10_U                                                     |     0.001 |
+|     Ub_M_real_12_U                                                     |     0.001 |
+|     Ub_M_real_14_U                                                     |     0.001 |
+|     Ub_M_real_15_U                                                     |     0.001 |
+|     Ub_M_real_18_U                                                     |     0.001 |
+|     Ub_M_real_19_U                                                     |     0.001 |
+|     Ub_M_real_29_U                                                     |     0.002 |
+|     Ub_M_real_2_U                                                      |     0.001 |
+|     Ub_M_real_31_U                                                     |     0.002 |
+|     Ub_M_real_3_U                                                      |     0.001 |
+|     Ub_M_real_4_U                                                      |     0.001 |
+|     Ub_M_real_5_U                                                      |     0.001 |
+|     Ub_M_real_6_U                                                      |     0.001 |
+|     flow_control_loop_pipe_U                                           |     0.003 |
+|     mul_46s_46s_92_1_1_U100                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U101                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U102                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U103                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U104                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U105                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U106                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U107                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U108                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U109                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U110                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U111                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U112                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U113                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U114                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U115                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U116                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U117                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U118                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U119                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U120                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U121                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U122                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U123                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U124                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U125                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U126                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U127                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U128                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U129                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U130                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U131                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U132                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U133                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U134                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U135                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U136                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U137                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U138                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U139                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U140                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U141                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U142                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U143                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U144                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U145                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U146                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U147                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U148                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U149                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U150                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U151                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U152                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U153                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U154                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U155                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U156                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U157                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U158                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U159                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U160                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U161                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U162                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U163                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U164                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U165                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U166                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U167                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U168                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U169                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U170                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U171                                            |     0.003 |
+|     mul_46s_46s_92_1_1_U172                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U173                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U174                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U175                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U176                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U177                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U178                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U179                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U180                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U181                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U182                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U183                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U184                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U185                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U186                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U187                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U188                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U189                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U190                                            |     0.006 |
+|     mul_46s_46s_92_1_1_U191                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U192                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U193                                            |     0.004 |
+|     mul_46s_46s_92_1_1_U194                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U195                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U196                                            |     0.008 |
+|     mul_46s_46s_92_1_1_U197                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U198                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U199                                            |     0.005 |
+|     mul_46s_46s_92_1_1_U200                                            |     0.007 |
+|     mul_46s_46s_92_1_1_U67                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U68                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U69                                             |     0.006 |
+|     mul_46s_46s_92_1_1_U70                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U71                                             |     0.003 |
+|     mul_46s_46s_92_1_1_U72                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U73                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U74                                             |     0.003 |
+|     mul_46s_46s_92_1_1_U75                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U76                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U77                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U78                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U79                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U80                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U81                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U82                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U83                                             |     0.006 |
+|     mul_46s_46s_92_1_1_U84                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U85                                             |     0.006 |
+|     mul_46s_46s_92_1_1_U86                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U87                                             |     0.006 |
+|     mul_46s_46s_92_1_1_U88                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U89                                             |     0.007 |
+|     mul_46s_46s_92_1_1_U90                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U91                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U92                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U93                                             |     0.007 |
+|     mul_46s_46s_92_1_1_U94                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U95                                             |     0.005 |
+|     mul_46s_46s_92_1_1_U96                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U97                                             |     0.006 |
+|     mul_46s_46s_92_1_1_U98                                             |     0.004 |
+|     mul_46s_46s_92_1_1_U99                                             |     0.006 |
+|     mul_47s_46s_91_1_1_U201                                            |     0.004 |
+|     mul_47s_46s_91_1_1_U202                                            |     0.004 |
+|     mul_47s_46s_91_1_1_U203                                            |     0.003 |
+|     mul_47s_46s_91_1_1_U204                                            |     0.005 |
+|     mul_47s_46s_91_1_1_U205                                            |     0.005 |
+|     mul_47s_46s_91_1_1_U206                                            |     0.004 |
+|     sdiv_92ns_60s_92_96_1_U212                                         |     0.085 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.084 |
+|     sdiv_92ns_60s_92_96_1_U213                                         |     0.088 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.086 |
+|     sdiv_92ns_60s_92_96_1_U217                                         |     0.090 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.089 |
+|     sdiv_92ns_60s_92_96_1_U218                                         |     0.090 |
+|       cholesky_inverse_sdiv_92ns_60s_92_96_1_divider_u                 |     0.088 |
++------------------------------------------------------------------------+-----------+
+
+

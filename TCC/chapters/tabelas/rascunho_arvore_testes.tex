@@ -1,0 +1,90 @@
+% =====================================================================
+% RASCUNHO -- árvore das combinações de testes, de cima para baixo: a raiz
+% (os canais) no topo e cada teste feito como uma folha na última linha.
+% ---------------------------------------------------------------------
+% Para usar no texto: \input{chapters/tabelas/rascunho_arvore_testes}
+% Precisa de \usepackage{forest} no preâmbulo. É larga: no TCC, usar
+% em página deitada (pacote pdflscape) ou com \resizebox{\textwidth}{!}{...}.
+% Documento à parte, só com a figura: chapters/tabelas/arvore_testes_documento.tex
+% Fontes dos números: software/testes/resultados/ (1_referencia_float,
+% 4_varredura_formatos/v2_casos_extremos, 5_candidatos/*, pareto;
+% ver software/testes/LEIAME.md) e
+% hardware/testes/3_validacao_bits/ (validacao_*_16bits, validacao_*_64bits,
+% conferir_nativo.csv).
+% =====================================================================
+
+\begin{figure}[htbp]
+\caption{Combinações de testes.}
+\label{fig:arvore_testes}
+\centering
+\providecommand{\arvorefonte}{\scriptsize}
+% A árvore se ajusta à largura da página (ou da área de texto, no TCC)
+\resizebox{\linewidth}{!}{%
+\begin{forest}
+  for tree={
+    draw, rounded corners=1.5pt, align=center, inner sep=2pt,
+    font=\arvorefonte, s sep=6pt, l sep=9pt,
+    % Linha em ângulo reto: sai da borda de baixo do pai, desce 7pt e vai ao topo do filho
+    edge path={\noexpand\path[draw=black!55] (!u.south) -- ++(0,-7pt) -| (.north);},
+  },
+  % Os conjuntos de resultados, em caixa cinza
+  conj/.style={fill=gray!12, font=\arvorefonte\bfseries},
+  % Cada teste feito: as folhas ficam todas na mesma linha, embaixo
+  folha/.style={tier=folhas, fill=white},
+  % Passos de processamento (não são testes): caixa tracejada, em itálico
+  passo/.style={dashed, fill=white, font=\arvorefonte\itshape},
+  % Ferramenta de cada teste, na última linha da folha
+  /utils/exec={\providecommand{\ferr}[1]{\\[1pt]\textsf{\textbf{[#1]}}}},
+  [{Canais do QuaDRiGa\\UMa NLOS, 100 realizações\\$(M, K)$: (128, 8), (128, 12),\\(256, 8), (256, 12); $r = 8$\\3,5 e 28~GHz\\$\times$ 5 pares $(N, f_c)$}
+    [{[1] Referência\\ideal (float64)}, conj
+      [{LMMSE, ZF e\\BCD-MMSE\\1 a 4 iterações\\16 config.\\$\times$ 5 pares\ferr{Python}}, folha]
+    ]
+    [{Simulação: todas as\\realizações e SNRs\\140.800 matrizes $\mathbf G_c$\\por par\\(config. 1--4, 9--16)}, passo
+      [{[2] Amostragem\\cerca de 430 por par:\\3 por config. e SNR\\+ extremos}, conj
+        [{Seleção: 1 por\\config. e SNR\\($-10$, $-6$, $-2$, 2, 6, 10)\\+ extremos}, passo
+          [{[3] Validação\\bit a bit\\554 matrizes}, conj
+            [{\texttt{<16,8>}\\TRN/SAT\\399 iguais\\155 divisões\\por zero\ferr{Vitis C-sim}}, folha]
+            [{\texttt{<64,32>}\\TRN/SAT\\554 iguais\ferr{Vitis C-sim}}, folha]
+            [{compilação rápida\\= C-simulation\\35 modos\\\texttt{<16,8>} e\\\texttt{<46,14>}\\140 de 140\\iguais\ferr{Vitis C-sim}\ferr{g++}}, folha]
+          ]
+        ]
+      ]
+    ]
+    [{Hardware HLS\\dentro do simulador\\todas as $\mathbf G_c$ de\\todas as realizações\\(sem amostragem)}
+      [{[4] Varredura\\de formatos\\\textcolor{red}{config. 1, 6, 8,}\\\textcolor{red}{10 e 12}\\$\times$ 2 pares\\$\times$ 35 modos\\\textcolor{red}{4 SNRs por caso}}, conj
+        [{varre $I$\\($F = 32$)\\$I$ = 6 a 32\\9 formatos\\\textcolor{red}{mínimo: 14}\\\textcolor{red}{($I = 12$: 0,61}\\\textcolor{red}{e 1,59)}\ferr{g++}}, folha]
+        [{varre $F$\\($I = 14$)\\$F$ = 4 a 32\\9 formatos\\\textcolor{red}{mínimo: 16}\\\textcolor{red}{($F = 12$: 1,80}\\\textcolor{red}{e 5,04)}\ferr{g++}}, folha]
+        [{$I = F$\\\texttt{<12,6>},\\\texttt{<14,7>}\\\textcolor{red}{não chegam}\\\textcolor{red}{a $10^{-2}$}\ferr{g++}}, folha]
+      ]
+      [{[5] Candidatos\\16 config.\\$\times$ 5 pares\\RND e TRN\\7 formatos}, conj
+        [{$I = 12$}
+          [{\texttt{<24,12>}\\perda máx. (dB)\\RND: 0,67 e 2,98\\TRN: 1,76 e 4,95\ferr{g++}}, folha]
+          [{\texttt{<28,12>}\\perda máx. (dB)\\RND: 0,61 e 1,18\\TRN: 0,60 e 1,19\ferr{g++}}, folha]
+        ]
+        [{$I = 13$\\(a configuração 6\\satura com $I = 12$)}
+          [{\texttt{<25,13>}\\perda máx. (dB)\\RND: 0,45 e 2,98\\TRN: 1,76 e 4,95\ferr{g++}}, folha]
+          [{\texttt{<27,13>}\\perda máx. (dB)\\RND: 0,03 e 0,43\\TRN: 0,06 e 0,50\ferr{g++}}, folha]
+          [{\texttt{<28,13>}\\perda máx. (dB)\\RND: 0,01 e 0,15\\TRN: 0,03 e 0,11\ferr{g++}}, folha]
+          [{\texttt{<29,13>}\\perda máx. (dB)\\RND: 0,01 e 0,02\\TRN: 0,01 e 0,04\ferr{g++}}, folha]
+        ]
+        [{$I = 14$\\(dobra a faixa:\\$I = 13$ tem só\\3\% de folga)}
+          [{\texttt{<30,14>}\\perda máx. (dB)\\RND: 0,01 e 0,02\\TRN: 0,01 e 0,04\\SER igual à\\do \texttt{<29,13>}\ferr{g++}}, folha]
+        ]
+      ]
+    ]
+  ]
+\end{forest}%
+}
+\providecommand{\arvoredefinicoes}{as configurações estão na Tabela~\ref{tab:paineis}
+e os pares $(N, f_c)$ na Tabela~\ref{tab:n-condicao}}
+\legend{Fonte: a autora. Caixas tracejadas: passos de processamento; cinza: conjuntos de
+testes; brancas na última linha: cada teste feito. Entre colchetes, a ferramenta: [Python],
+o simulador em float64; [Vitis C-sim], a C-simulation do Vitis HLS (\texttt{vitis-run --csim});
+[g++], a compilação rápida. Nenhum teste \textcolor{red}{de SER} usou síntese nem co-simulação do RTL\textcolor{red}{; a síntese só estimou o custo de cada formato}. \texttt{<W,I>} é o formato \texttt{ap\_fixed<W,I>}: $W$ bits no
+total, $I$ inteiros (com o sinal) e $F = W - I$ fracionários. RND e TRN são a quantização
+(arredondar ou truncar) e SAT o estouro (saturar); \arvoredefinicoes. Perdas de SNR do
+BCD-MMSE em SER $= 10^{-2}$, em relação à referência ideal, no pior caso das configurações e
+pares; nos candidatos, ``RND: $a$ e $b$'' é a perda com 1 e com 4 iterações\textcolor{red}{; na [4], os mínimos valem para os 35 modos e 1 a 4 iterações, e entre parênteses está a perda com TRN/SAT, com 1 e com 4 iterações}. Compilação rápida: o mesmo código C++ do hardware,
+com os cabeçalhos \texttt{ap\_fixed} do Vitis, compilado com \texttt{g++ -O2}. Só a inversão de $\mathbf G_c$ passa
+pelo hardware; $\hat{\mathbf R}_{cc}$ e a matriz $K \times K$ são invertidas em float64.}
+\end{figure}

@@ -1,0 +1,567 @@
+
+
+================================================================
+== Synthesis Summary Report of 'cholesky_inverse'
+================================================================
++ General Information: 
+    * Date:           Wed Oct 28 05:27:21 2026
+    * Version:        2026.1 (Build 6493734 on Jun 16 2026)
+    * Project:        w
+    * Solution:       hls
+    * Product family: virtexuplusHBM
+    * Target device:  xcu50-fsvh2104-2-e
+    
+
+* Performance & Resource Estimates: 
++----------------------------------------------+------+---------------+----------+---------+------+----------+---------+-----------+------+----------+----------+------------+------------+-----+
+|                    Modules                   | Issue|               | Iteration|         | Trip |          |       Latency       |      |          |          |            |            |     |
+|                    & Loops                   | Type | Violation Type|  Latency | Interval| Count| Pipelined| (cycles)|    (ns)   | Slack|   BRAM   |    DSP   |     FF     |     LUT    | URAM|
++----------------------------------------------+------+---------------+----------+---------+------+----------+---------+-----------+------+----------+----------+------------+------------+-----+
+|+ cholesky_inverse                            |     -|              -|         -|   435426|     -|        no|   435425|  4.354e+06|  0.01|  20 (~0%)|  127 (2%)|  8320 (~0%)|  15075 (1%)|    -|
+| + LU_decomposition                           |     -|              -|         -|   181916|     -|        no|   181916|  1.819e+06|  0.03|   4 (~0%)|  50 (~0%)|  2078 (~0%)|  2737 (~0%)|    -|
+|  o VITIS_LOOP_11_1                           |     -|              -|        66|        -|    32|        no|     2112|  2.112e+04|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_12_2                          |     -|              -|         2|        -|    32|        no|       64|    640.000|  7.30|         -|         -|           -|           -|    -|
+|  o VITIS_LOOP_19_3                           |     -|              -|         1|        -|    32|        no|       32|    320.000|  7.30|         -|         -|           -|           -|    -|
+|  o VITIS_LOOP_24_4                           |     -|              -|      5799|        -|    31|        no|   179769|  1.798e+06|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_25_5                          |     -|              -|       187|        -|    31|        no|     5797|  5.797e+04|  7.30|         -|         -|           -|           -|    -|
+|    o VITIS_LOOP_30_6                         |     -|              -|         3|        -|    32|        no|       96|    960.000|  7.30|         -|         -|           -|           -|    -|
+| + cholesky_inverse_Outline_VITIS_LOOP_12_1   |     -|              -|         -|     1089|     -|        no|     1089|  1.089e+04|  5.37|         -|         -|    26 (~0%)|   109 (~0%)|    -|
+|  o VITIS_LOOP_12_1                           |     -|              -|        34|        -|    32|        no|     1088|  1.088e+04|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_13_2                          |     -|              -|         1|        -|    32|        no|       32|    320.000|  7.30|         -|         -|           -|           -|    -|
+| + cholesky_inverse_Outline_VITIS_LOOP_12_14  |     -|              -|         -|       33|     -|        no|       33|    330.000|  5.89|         -|         -|     8 (~0%)|    50 (~0%)|    -|
+|  o VITIS_LOOP_12_1                           |     -|              -|         1|        -|    32|        no|       32|    320.000|  7.30|         -|         -|           -|           -|    -|
+| + cholesky_inverse_Outline_VITIS_LOOP_12_15  |     -|              -|         -|     1089|     -|        no|     1089|  1.089e+04|  5.37|         -|         -|    26 (~0%)|   109 (~0%)|    -|
+|  o VITIS_LOOP_12_1                           |     -|              -|        34|        -|    32|        no|     1088|  1.088e+04|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_13_2                          |     -|              -|         1|        -|    32|        no|       32|    320.000|  7.30|         -|         -|           -|           -|    -|
+| + cholesky_inverse_Outline_VITIS_LOOP_19_3   |     -|              -|         -|       65|     -|        no|       65|    650.000|  4.90|         -|         -|    19 (~0%)|    73 (~0%)|    -|
+|  o VITIS_LOOP_19_3                           |     -|              -|         2|        -|    32|        no|       64|    640.000|  7.30|         -|         -|           -|           -|    -|
+| + cholesky_inverse_Outline_VITIS_LOOP_17_2   |     -|              -|         -|      289|     -|        no|      289|  2.890e+03|  0.01|         -|         -|   424 (~0%)|  4333 (~0%)|    -|
+|  o VITIS_LOOP_17_2                           |     -|              -|         9|        -|    32|        no|      288|  2.880e+03|  7.30|         -|         -|           -|           -|    -|
+|   + sqrt_fixed_28_14_s                       |     -|              -|         -|        1|     -|       yes|        4|     40.000|  0.01|         -|         -|   347 (~0%)|  4186 (~0%)|    -|
+| + forward_substitution                       |     -|              -|         -|   150617|     -|        no|   150617|  1.506e+06|  0.03|         -|  53 (~0%)|  5388 (~0%)|  6046 (~0%)|    -|
+|  o VITIS_LOOP_14_1                           |     -|              -|        34|        -|    32|        no|     1088|  1.088e+04|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_15_2                          |     -|              -|         1|        -|    32|        no|       32|    320.000|  7.30|         -|         -|           -|           -|    -|
+|  o VITIS_LOOP_21_3                           |     -|              -|      4821|        -|    31|        no|   149451|  1.495e+06|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_26_4                          |     -|              -|       153|        -|    31|        no|     4743|  4.743e+04|  7.30|         -|         -|           -|           -|    -|
+|    o VITIS_LOOP_31_5                         |     -|              -|         2|        -|    31|        no|       62|    620.000|  7.30|         -|         -|           -|           -|    -|
+| + inversion                                  |     -|              -|         -|   100417|     -|        no|   100417|  1.004e+06|  0.20|         -|  20 (~0%)|   252 (~0%)|   732 (~0%)|    -|
+|  o VITIS_LOOP_15_1                           |     -|              -|      3138|        -|    32|        no|   100416|  1.004e+06|  7.30|         -|         -|           -|           -|    -|
+|   o VITIS_LOOP_16_2                          |     -|              -|        98|        -|    32|        no|     3136|  3.136e+04|  7.30|         -|         -|           -|           -|    -|
+|    o VITIS_LOOP_20_3                         |     -|              -|         3|        -|    32|        no|       96|    960.000|  7.30|         -|         -|           -|           -|    -|
+| o VITIS_LOOP_20_3                            |     -|              -|        66|        -|    32|        no|     2112|  2.112e+04|  7.30|         -|         -|           -|           -|    -|
+|  o VITIS_LOOP_21_4                           |     -|              -|         2|        -|    32|        no|       64|    640.000|  7.30|         -|         -|           -|           -|    -|
++----------------------------------------------+------+---------------+----------+---------+------+----------+---------+-----------+------+----------+----------+------------+------------+-----+
+    Name Prefix: '+' for module, 'o' for loop, '*' for dataflow
+
+
+================================================================
+== HW Interfaces
+================================================================
+* AP_MEMORY
++-------------------+-----------+----------+
+| Port              | Direction | Bitwidth |
++-------------------+-----------+----------+
+| A_matrix_address0 | out       | 10       |
+| A_matrix_q0       | in        | 56       |
+| inverse_address0  | out       | 10       |
+| inverse_d0        | out       | 56       |
++-------------------+-----------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst    | reset      | ap_rst                            |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+------------------------------------------------------------+
+| Argument | Direction | Datatype                                                   |
++----------+-----------+------------------------------------------------------------+
+| A_matrix | in        | complex<ap_fixed<28, 14, (ap_q_mode)5, (ap_o_mode)3, 0> >* |
+| inverse  | out       | complex<ap_fixed<28, 14, (ap_q_mode)5, (ap_o_mode)3, 0> >* |
++----------+-----------+------------------------------------------------------------+
+
+* SW-to-HW Mapping
++----------+-------------------+---------+----------+
+| Argument | HW Interface      | HW Type | HW Usage |
++----------+-------------------+---------+----------+
+| A_matrix | A_matrix_address0 | port    | offset   |
+| A_matrix | A_matrix_ce0      | port    |          |
+| A_matrix | A_matrix_q0       | port    |          |
+| inverse  | inverse_address0  | port    | offset   |
+| inverse  | inverse_ce0       | port    |          |
+| inverse  | inverse_we0       | port    |          |
+| inverse  | inverse_d0        | port    |          |
++----------+-------------------+---------+----------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++----------------------------------------------+-----+--------+-----------------+--------+----------+---------+
+| Name                                         | DSP | Pragma | Variable        | Op     | Impl     | Latency |
++----------------------------------------------+-----+--------+-----------------+--------+----------+---------+
+| + cholesky_inverse                           | 127 |        |                 |        |          |         |
+|   icmp_ln20_fu_291_p2                        |     |        | icmp_ln20       | seteq  | auto     | 0       |
+|   add_ln20_fu_297_p2                         |     |        | add_ln20        | add    | fabric   | 0       |
+|   icmp_ln21_fu_318_p2                        |     |        | icmp_ln21       | seteq  | auto     | 0       |
+|   add_ln21_fu_324_p2                         |     |        | add_ln21        | add    | fabric   | 0       |
+|   add_ln31_fu_340_p2                         |     |        | add_ln31        | add    | fabric   | 0       |
+|   mul_21ns_28s_42_1_1_U64                    | 2   |        | mul_ln31        | mul    | auto     | 0       |
+|   and_ln32_fu_393_p2                         |     |        | and_ln32        | and    | auto     | 0       |
+|   and_ln33_fu_411_p2                         |     |        | and_ln33        | and    | auto     | 0       |
+|   mul_28s_21ns_42_1_1_U65                    | 2   |        | mul_ln34        | mul    | auto     | 0       |
+|   re_fu_442_p2                               |     |        | re              | sub    | fabric   | 0       |
+|   im_fu_448_p2                               |     |        | im              | add    | fabric   | 0       |
+|   add_ln20_1_fu_351_p2                       |     |        | add_ln20_1      | add    | fabric   | 0       |
+|  + LU_decomposition                          | 50  |        |                 |        |          |         |
+|    icmp_ln11_fu_366_p2                       |     |        | icmp_ln11       | seteq  | auto     | 0       |
+|    add_ln11_fu_372_p2                        |     |        | add_ln11        | add    | fabric   | 0       |
+|    icmp_ln12_fu_395_p2                       |     |        | icmp_ln12       | seteq  | auto     | 0       |
+|    add_ln12_fu_401_p2                        |     |        | add_ln12        | add    | fabric   | 0       |
+|    add_ln15_fu_411_p2                        |     |        | add_ln15        | add    | fabric   | 0       |
+|    icmp_ln19_fu_446_p2                       |     |        | icmp_ln19       | seteq  | auto     | 0       |
+|    add_ln19_fu_452_p2                        |     |        | add_ln19        | add    | fabric   | 0       |
+|    add_ln20_fu_474_p2                        |     |        | add_ln20        | add    | fabric   | 0       |
+|    icmp_ln25_fu_512_p2                       |     |        | icmp_ln25       | seteq  | auto     | 0       |
+|    add_ln25_1_fu_518_p2                      |     |        | add_ln25_1      | add    | fabric   | 0       |
+|    icmp_ln25_1_fu_542_p2                     |     |        | icmp_ln25_1     | seteq  | auto     | 0       |
+|    sub_ln14_fu_623_p2                        |     |        | sub_ln14        | sub    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U5                     | 5   |        | rr              | mul    | auto     | 0       |
+|    mul_43s_42s_83_1_1_U8                     | 5   |        | ii              | mul    | auto     | 0       |
+|    mul_43s_42s_83_1_1_U9                     | 5   |        | ri              | mul    | auto     | 0       |
+|    mul_42s_42s_84_1_1_U6                     | 5   |        | ir              | mul    | auto     | 0       |
+|    re_fu_668_p2                              |     |        | re              | sub    | fabric   | 0       |
+|    im_fu_678_p2                              |     |        | im              | add    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U7                     | 5   |        | rr_5            | mul    | auto     | 0       |
+|    mul_43s_42s_83_1_1_U10                    | 5   |        | ii_5            | mul    | auto     | 0       |
+|    norm_re_fu_693_p2                         |     |        | norm_re         | sub    | fabric   | 0       |
+|    sdiv_84ns_56s_84_88_seq_1_U11             |     |        | sdiv_ln57       | sdiv   | auto_seq | 87      |
+|    sdiv_84ns_56s_84_88_seq_1_U12             |     |        | sdiv_ln58       | sdiv   | auto_seq | 87      |
+|    icmp_ln30_fu_814_p2                       |     |        | icmp_ln30       | seteq  | auto     | 0       |
+|    add_ln32_fu_824_p2                        |     |        | add_ln32        | add    | fabric   | 0       |
+|    add_ln34_fu_835_p2                        |     |        | add_ln34        | add    | fabric   | 0       |
+|    mul_42s_42s_70_1_1_U1                     | 5   |        | rr_6            | mul    | auto     | 0       |
+|    mul_42s_42s_70_1_1_U2                     | 5   |        | ii_6            | mul    | auto     | 0       |
+|    mul_42s_42s_70_1_1_U3                     | 5   |        | ri_2            | mul    | auto     | 0       |
+|    mul_42s_42s_70_1_1_U4                     | 5   |        | ir_2            | mul    | auto     | 0       |
+|    re_2_fu_885_p2                            |     |        | re_2            | sub    | fabric   | 0       |
+|    im_2_fu_891_p2                            |     |        | im_2            | add    | fabric   | 0       |
+|    sub_ln34_fu_917_p2                        |     |        | sub_ln34        | sub    | fabric   | 0       |
+|    sub_ln35_fu_923_p2                        |     |        | sub_ln35        | sub    | fabric   | 0       |
+|    add_ln30_fu_840_p2                        |     |        | add_ln30        | add    | fabric   | 0       |
+|    add_ln25_3_fu_846_p2                      |     |        | add_ln25_3      | add    | fabric   | 0       |
+|    add_ln25_fu_565_p2                        |     |        | add_ln25        | add    | fabric   | 0       |
+|    add_ln25_2_fu_570_p2                      |     |        | add_ln25_2      | add    | fabric   | 0       |
+|  + cholesky_inverse_Outline_VITIS_LOOP_12_1  | 0   |        |                 |        |          |         |
+|    icmp_ln12_fu_65_p2                        |     |        | icmp_ln12       | seteq  | auto     | 0       |
+|    add_ln12_fu_71_p2                         |     |        | add_ln12        | add    | fabric   | 0       |
+|    icmp_ln13_fu_89_p2                        |     |        | icmp_ln13       | seteq  | auto     | 0       |
+|    add_ln13_fu_95_p2                         |     |        | add_ln13        | add    | fabric   | 0       |
+|    add_ln14_fu_105_p2                        |     |        | add_ln14        | add    | fabric   | 0       |
+|  + cholesky_inverse_Outline_VITIS_LOOP_12_14 | 0   |        |                 |        |          |         |
+|    icmp_ln12_fu_66_p2                        |     |        | icmp_ln12       | seteq  | auto     | 0       |
+|    add_ln12_fu_72_p2                         |     |        | add_ln12        | add    | fabric   | 0       |
+|  + cholesky_inverse_Outline_VITIS_LOOP_12_15 | 0   |        |                 |        |          |         |
+|    icmp_ln12_fu_81_p2                        |     |        | icmp_ln12       | seteq  | auto     | 0       |
+|    add_ln12_fu_87_p2                         |     |        | add_ln12        | add    | fabric   | 0       |
+|    icmp_ln13_fu_105_p2                       |     |        | icmp_ln13       | seteq  | auto     | 0       |
+|    add_ln13_fu_111_p2                        |     |        | add_ln13        | add    | fabric   | 0       |
+|    add_ln14_fu_121_p2                        |     |        | add_ln14        | add    | fabric   | 0       |
+|  + cholesky_inverse_Outline_VITIS_LOOP_19_3  | 0   |        |                 |        |          |         |
+|    icmp_ln19_fu_65_p2                        |     |        | icmp_ln19       | seteq  | auto     | 0       |
+|    add_ln19_fu_71_p2                         |     |        | add_ln19        | add    | fabric   | 0       |
+|    add_ln20_fu_93_p2                         |     |        | add_ln20        | add    | fabric   | 0       |
+|  + cholesky_inverse_Outline_VITIS_LOOP_17_2  | 0   |        |                 |        |          |         |
+|    icmp_ln17_fu_91_p2                        |     |        | icmp_ln17       | seteq  | auto     | 0       |
+|    add_ln17_fu_97_p2                         |     |        | add_ln17        | add    | fabric   | 0       |
+|    add_ln18_fu_119_p2                        |     |        | add_ln18        | add    | fabric   | 0       |
+|    icmp_ln22_fu_134_p2                       |     |        | icmp_ln22       | setgt  | auto     | 0       |
+|   + sqrt_fixed_28_14_s                       | 0   |        |                 |        |          |         |
+|     xor_ln263_fu_296_p2                      |     |        | xor_ln263       | xor    | auto     | 0       |
+|     select_ln263_fu_302_p3                   |     |        | select_ln263    | select | auto_sel | 0       |
+|     x_l_I_1_fu_320_p3                        |     |        | x_l_I_1         | select | auto_sel | 0       |
+|     res_I_fu_328_p3                          |     |        | res_I           | select | auto_sel | 0       |
+|     icmp_ln258_fu_364_p2                     |     |        | icmp_ln258      | setlt  | auto     | 0       |
+|     sub_ln263_fu_370_p2                      |     |        | sub_ln263       | sub    | fabric   | 0       |
+|     x_l_I_5_fu_396_p3                        |     |        | x_l_I_5         | select | auto_sel | 0       |
+|     res_I_2_fu_404_p3                        |     |        | res_I_2         | select | auto_sel | 0       |
+|     icmp_ln258_1_fu_440_p2                   |     |        | icmp_ln258_1    | setlt  | auto     | 0       |
+|     sub_ln263_1_fu_446_p2                    |     |        | sub_ln263_1     | sub    | fabric   | 0       |
+|     x_l_I_7_fu_472_p3                        |     |        | x_l_I_7         | select | auto_sel | 0       |
+|     res_I_4_fu_480_p3                        |     |        | res_I_4         | select | auto_sel | 0       |
+|     icmp_ln258_2_fu_516_p2                   |     |        | icmp_ln258_2    | setlt  | auto     | 0       |
+|     sub_ln263_2_fu_522_p2                    |     |        | sub_ln263_2     | sub    | fabric   | 0       |
+|     x_l_I_9_fu_548_p3                        |     |        | x_l_I_9         | select | auto_sel | 0       |
+|     res_I_6_fu_556_p3                        |     |        | res_I_6         | select | auto_sel | 0       |
+|     icmp_ln258_3_fu_592_p2                   |     |        | icmp_ln258_3    | setlt  | auto     | 0       |
+|     sub_ln263_3_fu_598_p2                    |     |        | sub_ln263_3     | sub    | fabric   | 0       |
+|     x_l_I_11_fu_624_p3                       |     |        | x_l_I_11        | select | auto_sel | 0       |
+|     res_I_8_fu_632_p3                        |     |        | res_I_8         | select | auto_sel | 0       |
+|     icmp_ln258_4_fu_668_p2                   |     |        | icmp_ln258_4    | setlt  | auto     | 0       |
+|     sub_ln263_4_fu_674_p2                    |     |        | sub_ln263_4     | sub    | fabric   | 0       |
+|     x_l_I_13_fu_700_p3                       |     |        | x_l_I_13        | select | auto_sel | 0       |
+|     res_I_10_fu_708_p3                       |     |        | res_I_10        | select | auto_sel | 0       |
+|     icmp_ln258_5_fu_732_p2                   |     |        | icmp_ln258_5    | setlt  | auto     | 0       |
+|     sub_ln263_5_fu_738_p2                    |     |        | sub_ln263_5     | sub    | fabric   | 0       |
+|     x_l_I_15_fu_754_p3                       |     |        | x_l_I_15        | select | auto_sel | 0       |
+|     res_I_12_fu_794_p3                       |     |        | res_I_12        | select | auto_sel | 0       |
+|     icmp_ln295_fu_804_p2                     |     |        | icmp_ln295      | setgt  | auto     | 0       |
+|     icmp_ln295_1_fu_809_p2                   |     |        | icmp_ln295_1    | seteq  | auto     | 0       |
+|     icmp_ln295_2_fu_814_p2                   |     |        | icmp_ln295_2    | setne  | auto     | 0       |
+|     and_ln295_fu_819_p2                      |     |        | and_ln295       | and    | auto     | 0       |
+|     icmp_ln308_fu_825_p2                     |     |        | icmp_ln308      | seteq  | auto     | 0       |
+|     x_l_I_16_fu_772_p2                       |     |        | x_l_I_16        | add    | fabric   | 0       |
+|     x_l_I_3_fu_830_p3                        |     |        | x_l_I_3         | select | auto_sel | 0       |
+|     x_l_FH_fu_836_p2                         |     |        | x_l_FH          | add    | fabric   | 0       |
+|     x_l_I_17_fu_842_p2                       |     |        | x_l_I_17        | sub    | fabric   | 0       |
+|     or_ln295_1_fu_848_p2                     |     |        | or_ln295_1      | or     | auto     | 0       |
+|     x_l_I_4_fu_854_p3                        |     |        | x_l_I_4         | select | auto_sel | 0       |
+|     x_l_FH_30_fu_861_p3                      |     |        | x_l_FH_30       | select | auto_sel | 0       |
+|     res_FH_fu_869_p3                         |     |        | res_FH          | select | auto_sel | 0       |
+|     icmp_ln295_3_fu_913_p2                   |     |        | icmp_ln295_3    | setgt  | auto     | 0       |
+|     icmp_ln295_4_fu_919_p2                   |     |        | icmp_ln295_4    | seteq  | auto     | 0       |
+|     icmp_ln295_5_fu_925_p2                   |     |        | icmp_ln295_5    | setlt  | auto     | 0       |
+|     xor_ln295_fu_931_p2                      |     |        | xor_ln295       | xor    | auto     | 0       |
+|     and_ln295_1_fu_937_p2                    |     |        | and_ln295_1     | and    | auto     | 0       |
+|     icmp_ln308_1_fu_943_p2                   |     |        | icmp_ln308_1    | setlt  | auto     | 0       |
+|     x_l_I_18_fu_949_p2                       |     |        | x_l_I_18        | add    | fabric   | 0       |
+|     x_l_I_19_fu_955_p3                       |     |        | x_l_I_19        | select | auto_sel | 0       |
+|     x_l_FH_3_fu_963_p2                       |     |        | x_l_FH_3        | sub    | fabric   | 0       |
+|     x_l_I_20_fu_969_p2                       |     |        | x_l_I_20        | sub    | fabric   | 0       |
+|     or_ln295_2_fu_985_p2                     |     |        | or_ln295_2      | or     | auto     | 0       |
+|     x_l_I_21_fu_991_p3                       |     |        | x_l_I_21        | select | auto_sel | 0       |
+|     x_l_FH_31_fu_999_p3                      |     |        | x_l_FH_31       | select | auto_sel | 0       |
+|     res_FH_2_fu_1007_p3                      |     |        | res_FH_2        | select | auto_sel | 0       |
+|     icmp_ln295_6_fu_1051_p2                  |     |        | icmp_ln295_6    | setgt  | auto     | 0       |
+|     icmp_ln295_7_fu_1057_p2                  |     |        | icmp_ln295_7    | seteq  | auto     | 0       |
+|     icmp_ln295_8_fu_1063_p2                  |     |        | icmp_ln295_8    | setlt  | auto     | 0       |
+|     xor_ln295_1_fu_1069_p2                   |     |        | xor_ln295_1     | xor    | auto     | 0       |
+|     and_ln295_2_fu_1075_p2                   |     |        | and_ln295_2     | and    | auto     | 0       |
+|     icmp_ln308_2_fu_1081_p2                  |     |        | icmp_ln308_2    | setlt  | auto     | 0       |
+|     x_l_I_22_fu_1087_p2                      |     |        | x_l_I_22        | add    | fabric   | 0       |
+|     x_l_I_23_fu_1093_p3                      |     |        | x_l_I_23        | select | auto_sel | 0       |
+|     x_l_FH_5_fu_1101_p2                      |     |        | x_l_FH_5        | sub    | fabric   | 0       |
+|     x_l_I_24_fu_1107_p2                      |     |        | x_l_I_24        | sub    | fabric   | 0       |
+|     or_ln295_3_fu_1123_p2                    |     |        | or_ln295_3      | or     | auto     | 0       |
+|     x_l_I_25_fu_1129_p3                      |     |        | x_l_I_25        | select | auto_sel | 0       |
+|     x_l_FH_32_fu_1137_p3                     |     |        | x_l_FH_32       | select | auto_sel | 0       |
+|     res_FH_4_fu_1145_p3                      |     |        | res_FH_4        | select | auto_sel | 0       |
+|     icmp_ln295_9_fu_1189_p2                  |     |        | icmp_ln295_9    | setgt  | auto     | 0       |
+|     icmp_ln295_10_fu_1195_p2                 |     |        | icmp_ln295_10   | seteq  | auto     | 0       |
+|     icmp_ln295_11_fu_1201_p2                 |     |        | icmp_ln295_11   | setlt  | auto     | 0       |
+|     xor_ln295_2_fu_1207_p2                   |     |        | xor_ln295_2     | xor    | auto     | 0       |
+|     and_ln295_3_fu_1213_p2                   |     |        | and_ln295_3     | and    | auto     | 0       |
+|     icmp_ln308_3_fu_1219_p2                  |     |        | icmp_ln308_3    | setlt  | auto     | 0       |
+|     x_l_I_26_fu_1225_p2                      |     |        | x_l_I_26        | add    | fabric   | 0       |
+|     x_l_I_27_fu_1231_p3                      |     |        | x_l_I_27        | select | auto_sel | 0       |
+|     x_l_FH_7_fu_1239_p2                      |     |        | x_l_FH_7        | sub    | fabric   | 0       |
+|     x_l_I_28_fu_1245_p2                      |     |        | x_l_I_28        | sub    | fabric   | 0       |
+|     or_ln295_4_fu_1251_p2                    |     |        | or_ln295_4      | or     | auto     | 0       |
+|     x_l_I_29_fu_1257_p3                      |     |        | x_l_I_29        | select | auto_sel | 0       |
+|     x_l_FH_33_fu_1265_p3                     |     |        | x_l_FH_33       | select | auto_sel | 0       |
+|     res_FH_6_fu_1322_p3                      |     |        | res_FH_6        | select | auto_sel | 0       |
+|     icmp_ln295_12_fu_1348_p2                 |     |        | icmp_ln295_12   | setgt  | auto     | 0       |
+|     icmp_ln295_13_fu_1353_p2                 |     |        | icmp_ln295_13   | seteq  | auto     | 0       |
+|     icmp_ln295_14_fu_1358_p2                 |     |        | icmp_ln295_14   | setlt  | auto     | 0       |
+|     xor_ln295_3_fu_1363_p2                   |     |        | xor_ln295_3     | xor    | auto     | 0       |
+|     and_ln295_4_fu_1369_p2                   |     |        | and_ln295_4     | and    | auto     | 0       |
+|     icmp_ln308_4_fu_1375_p2                  |     |        | icmp_ln308_4    | setlt  | auto     | 0       |
+|     x_l_I_30_fu_1380_p2                      |     |        | x_l_I_30        | add    | fabric   | 0       |
+|     x_l_I_31_fu_1385_p3                      |     |        | x_l_I_31        | select | auto_sel | 0       |
+|     x_l_FH_9_fu_1392_p2                      |     |        | x_l_FH_9        | sub    | fabric   | 0       |
+|     x_l_I_32_fu_1397_p2                      |     |        | x_l_I_32        | sub    | fabric   | 0       |
+|     or_ln295_5_fu_1413_p2                    |     |        | or_ln295_5      | or     | auto     | 0       |
+|     x_l_I_33_fu_1419_p3                      |     |        | x_l_I_33        | select | auto_sel | 0       |
+|     x_l_FH_34_fu_1426_p3                     |     |        | x_l_FH_34       | select | auto_sel | 0       |
+|     res_FH_8_fu_1433_p3                      |     |        | res_FH_8        | select | auto_sel | 0       |
+|     icmp_ln295_15_fu_1461_p2                 |     |        | icmp_ln295_15   | setgt  | auto     | 0       |
+|     icmp_ln295_16_fu_1467_p2                 |     |        | icmp_ln295_16   | seteq  | auto     | 0       |
+|     icmp_ln295_17_fu_1473_p2                 |     |        | icmp_ln295_17   | setlt  | auto     | 0       |
+|     xor_ln295_4_fu_1479_p2                   |     |        | xor_ln295_4     | xor    | auto     | 0       |
+|     and_ln295_5_fu_1485_p2                   |     |        | and_ln295_5     | and    | auto     | 0       |
+|     icmp_ln308_5_fu_1491_p2                  |     |        | icmp_ln308_5    | setlt  | auto     | 0       |
+|     x_l_I_34_fu_1497_p2                      |     |        | x_l_I_34        | add    | fabric   | 0       |
+|     x_l_I_35_fu_1503_p3                      |     |        | x_l_I_35        | select | auto_sel | 0       |
+|     x_l_FH_11_fu_1511_p2                     |     |        | x_l_FH_11       | sub    | fabric   | 0       |
+|     x_l_I_36_fu_1517_p2                      |     |        | x_l_I_36        | sub    | fabric   | 0       |
+|     or_ln295_6_fu_1533_p2                    |     |        | or_ln295_6      | or     | auto     | 0       |
+|     x_l_I_37_fu_1539_p3                      |     |        | x_l_I_37        | select | auto_sel | 0       |
+|     x_l_FH_35_fu_1547_p3                     |     |        | x_l_FH_35       | select | auto_sel | 0       |
+|     res_FH_10_fu_1555_p3                     |     |        | res_FH_10       | select | auto_sel | 0       |
+|     icmp_ln295_18_fu_1583_p2                 |     |        | icmp_ln295_18   | setgt  | auto     | 0       |
+|     icmp_ln295_19_fu_1589_p2                 |     |        | icmp_ln295_19   | seteq  | auto     | 0       |
+|     icmp_ln295_20_fu_1595_p2                 |     |        | icmp_ln295_20   | setlt  | auto     | 0       |
+|     xor_ln295_5_fu_1601_p2                   |     |        | xor_ln295_5     | xor    | auto     | 0       |
+|     and_ln295_6_fu_1607_p2                   |     |        | and_ln295_6     | and    | auto     | 0       |
+|     icmp_ln308_6_fu_1613_p2                  |     |        | icmp_ln308_6    | setlt  | auto     | 0       |
+|     x_l_I_38_fu_1619_p2                      |     |        | x_l_I_38        | add    | fabric   | 0       |
+|     x_l_I_39_fu_1625_p3                      |     |        | x_l_I_39        | select | auto_sel | 0       |
+|     x_l_FH_13_fu_1633_p2                     |     |        | x_l_FH_13       | sub    | fabric   | 0       |
+|     x_l_I_40_fu_1639_p2                      |     |        | x_l_I_40        | sub    | fabric   | 0       |
+|     or_ln295_7_fu_1655_p2                    |     |        | or_ln295_7      | or     | auto     | 0       |
+|     x_l_I_41_fu_1661_p3                      |     |        | x_l_I_41        | select | auto_sel | 0       |
+|     x_l_FH_36_fu_1669_p3                     |     |        | x_l_FH_36       | select | auto_sel | 0       |
+|     res_FH_12_fu_1677_p3                     |     |        | res_FH_12       | select | auto_sel | 0       |
+|     icmp_ln295_21_fu_1700_p2                 |     |        | icmp_ln295_21   | setne  | auto     | 0       |
+|     icmp_ln295_22_fu_1706_p2                 |     |        | icmp_ln295_22   | setgt  | auto     | 0       |
+|     or_ln295_fu_1712_p2                      |     |        | or_ln295        | or     | auto     | 0       |
+|     x_l_I_42_fu_1718_p2                      |     |        | x_l_I_42        | add    | fabric   | 0       |
+|     x_l_I_43_fu_1724_p3                      |     |        | x_l_I_43        | select | auto_sel | 0       |
+|     xor_ln319_fu_1732_p2                     |     |        | xor_ln319       | xor    | auto     | 0       |
+|     x_l_FH_15_fu_1738_p2                     |     |        | x_l_FH_15       | add    | fabric   | 0       |
+|     x_l_I_44_fu_1744_p3                      |     |        | x_l_I_44        | select | auto_sel | 0       |
+|     x_l_FH_37_fu_1752_p3                     |     |        | x_l_FH_37       | select | auto_sel | 0       |
+|     x_l_FL_13_fu_1769_p3                     |     |        | x_l_FL_13       | select | auto_sel | 0       |
+|     res_FH_14_fu_1776_p3                     |     |        | res_FH_14       | select | auto_sel | 0       |
+|     icmp_ln295_23_fu_1821_p2                 |     |        | icmp_ln295_23   | setne  | auto     | 0       |
+|     icmp_ln295_24_fu_1826_p2                 |     |        | icmp_ln295_24   | setgt  | auto     | 0       |
+|     icmp_ln295_25_fu_1831_p2                 |     |        | icmp_ln295_25   | seteq  | auto     | 0       |
+|     icmp_ln295_26_fu_1836_p2                 |     |        | icmp_ln295_26   | setlt  | auto     | 0       |
+|     xor_ln295_6_fu_1842_p2                   |     |        | xor_ln295_6     | xor    | auto     | 0       |
+|     and_ln295_7_fu_1848_p2                   |     |        | and_ln295_7     | and    | auto     | 0       |
+|     delta_fu_1854_p2                         |     |        | delta           | setlt  | auto     | 0       |
+|     x_l_FL_fu_1860_p2                        |     |        | x_l_FL          | sub    | fabric   | 0       |
+|     icmp_ln308_7_fu_1866_p2                  |     |        | icmp_ln308_7    | setlt  | auto     | 0       |
+|     and_ln308_fu_1871_p2                     |     |        | and_ln308       | and    | auto     | 0       |
+|     or_ln308_fu_1877_p2                      |     |        | or_ln308        | or     | auto     | 0       |
+|     x_l_I_45_fu_1883_p2                      |     |        | x_l_I_45        | add    | fabric   | 0       |
+|     x_l_I_46_fu_1888_p3                      |     |        | x_l_I_46        | select | auto_sel | 0       |
+|     p_neg9_fu_1895_p3                        |     |        | p_neg9          | select | auto_sel | 0       |
+|     or_ln295_8_fu_1924_p2                    |     |        | or_ln295_8      | or     | auto     | 0       |
+|     or_ln295_9_fu_1930_p2                    |     |        | or_ln295_9      | or     | auto     | 0       |
+|     x_l_I_47_fu_1936_p3                      |     |        | x_l_I_47        | select | auto_sel | 0       |
+|     x_l_FH_38_fu_1944_p3                     |     |        | x_l_FH_38       | select | auto_sel | 0       |
+|     x_l_FL_14_fu_1951_p3                     |     |        | x_l_FL_14       | select | auto_sel | 0       |
+|     res_FH_16_fu_1959_p3                     |     |        | res_FH_16       | select | auto_sel | 0       |
+|     icmp_ln295_27_fu_2010_p2                 |     |        | icmp_ln295_27   | setne  | auto     | 0       |
+|     icmp_ln295_28_fu_2016_p2                 |     |        | icmp_ln295_28   | setgt  | auto     | 0       |
+|     icmp_ln295_29_fu_2022_p2                 |     |        | icmp_ln295_29   | seteq  | auto     | 0       |
+|     icmp_ln295_30_fu_2028_p2                 |     |        | icmp_ln295_30   | setlt  | auto     | 0       |
+|     xor_ln295_7_fu_2034_p2                   |     |        | xor_ln295_7     | xor    | auto     | 0       |
+|     and_ln295_8_fu_2040_p2                   |     |        | and_ln295_8     | and    | auto     | 0       |
+|     delta_1_fu_2046_p2                       |     |        | delta_1         | setlt  | auto     | 0       |
+|     x_l_FL_3_fu_2052_p2                      |     |        | x_l_FL_3        | sub    | fabric   | 0       |
+|     icmp_ln308_8_fu_2058_p2                  |     |        | icmp_ln308_8    | setlt  | auto     | 0       |
+|     and_ln308_1_fu_2064_p2                   |     |        | and_ln308_1     | and    | auto     | 0       |
+|     or_ln308_1_fu_2070_p2                    |     |        | or_ln308_1      | or     | auto     | 0       |
+|     x_l_I_48_fu_2076_p2                      |     |        | x_l_I_48        | add    | fabric   | 0       |
+|     x_l_I_49_fu_2082_p3                      |     |        | x_l_I_49        | select | auto_sel | 0       |
+|     select_ln319_fu_2090_p3                  |     |        | select_ln319    | select | auto_sel | 0       |
+|     sub_ln319_1_fu_2098_p2                   |     |        | sub_ln319_1     | sub    | fabric   | 0       |
+|     x_l_FH_19_fu_2108_p2                     |     |        | x_l_FH_19       | add    | fabric   | 0       |
+|     or_ln295_10_fu_2124_p2                   |     |        | or_ln295_10     | or     | auto     | 0       |
+|     or_ln295_11_fu_2130_p2                   |     |        | or_ln295_11     | or     | auto     | 0       |
+|     x_l_I_50_fu_2136_p3                      |     |        | x_l_I_50        | select | auto_sel | 0       |
+|     x_l_FH_39_fu_2144_p3                     |     |        | x_l_FH_39       | select | auto_sel | 0       |
+|     x_l_FL_15_fu_2152_p3                     |     |        | x_l_FL_15       | select | auto_sel | 0       |
+|     res_FH_18_fu_2160_p3                     |     |        | res_FH_18       | select | auto_sel | 0       |
+|     icmp_ln295_31_fu_2211_p2                 |     |        | icmp_ln295_31   | setne  | auto     | 0       |
+|     icmp_ln295_32_fu_2217_p2                 |     |        | icmp_ln295_32   | setgt  | auto     | 0       |
+|     icmp_ln295_33_fu_2223_p2                 |     |        | icmp_ln295_33   | seteq  | auto     | 0       |
+|     icmp_ln295_34_fu_2229_p2                 |     |        | icmp_ln295_34   | setlt  | auto     | 0       |
+|     xor_ln295_8_fu_2235_p2                   |     |        | xor_ln295_8     | xor    | auto     | 0       |
+|     and_ln295_9_fu_2241_p2                   |     |        | and_ln295_9     | and    | auto     | 0       |
+|     delta_2_fu_2247_p2                       |     |        | delta_2         | setlt  | auto     | 0       |
+|     x_l_FL_5_fu_2253_p2                      |     |        | x_l_FL_5        | sub    | fabric   | 0       |
+|     icmp_ln308_9_fu_2259_p2                  |     |        | icmp_ln308_9    | setlt  | auto     | 0       |
+|     and_ln308_2_fu_2265_p2                   |     |        | and_ln308_2     | and    | auto     | 0       |
+|     or_ln308_2_fu_2271_p2                    |     |        | or_ln308_2      | or     | auto     | 0       |
+|     x_l_I_51_fu_2277_p2                      |     |        | x_l_I_51        | add    | fabric   | 0       |
+|     x_l_I_52_fu_2283_p3                      |     |        | x_l_I_52        | select | auto_sel | 0       |
+|     select_ln319_1_fu_2291_p3                |     |        | select_ln319_1  | select | auto_sel | 0       |
+|     sub_ln319_2_fu_2299_p2                   |     |        | sub_ln319_2     | sub    | fabric   | 0       |
+|     x_l_FH_21_fu_2309_p2                     |     |        | x_l_FH_21       | add    | fabric   | 0       |
+|     or_ln295_12_fu_2325_p2                   |     |        | or_ln295_12     | or     | auto     | 0       |
+|     or_ln295_13_fu_2331_p2                   |     |        | or_ln295_13     | or     | auto     | 0       |
+|     x_l_I_53_fu_2337_p3                      |     |        | x_l_I_53        | select | auto_sel | 0       |
+|     x_l_FH_40_fu_2345_p3                     |     |        | x_l_FH_40       | select | auto_sel | 0       |
+|     x_l_FL_16_fu_2353_p3                     |     |        | x_l_FL_16       | select | auto_sel | 0       |
+|     res_FH_20_fu_2361_p3                     |     |        | res_FH_20       | select | auto_sel | 0       |
+|     icmp_ln295_35_fu_2412_p2                 |     |        | icmp_ln295_35   | setne  | auto     | 0       |
+|     icmp_ln295_36_fu_2418_p2                 |     |        | icmp_ln295_36   | setgt  | auto     | 0       |
+|     icmp_ln295_37_fu_2424_p2                 |     |        | icmp_ln295_37   | seteq  | auto     | 0       |
+|     icmp_ln295_38_fu_2430_p2                 |     |        | icmp_ln295_38   | setlt  | auto     | 0       |
+|     xor_ln295_9_fu_2436_p2                   |     |        | xor_ln295_9     | xor    | auto     | 0       |
+|     and_ln295_10_fu_2442_p2                  |     |        | and_ln295_10    | and    | auto     | 0       |
+|     delta_3_fu_2448_p2                       |     |        | delta_3         | setlt  | auto     | 0       |
+|     x_l_FL_7_fu_2520_p2                      |     |        | x_l_FL_7        | sub    | fabric   | 0       |
+|     icmp_ln308_10_fu_2454_p2                 |     |        | icmp_ln308_10   | setlt  | auto     | 0       |
+|     and_ln308_3_fu_2460_p2                   |     |        | and_ln308_3     | and    | auto     | 0       |
+|     or_ln308_3_fu_2466_p2                    |     |        | or_ln308_3      | or     | auto     | 0       |
+|     x_l_I_54_fu_2472_p2                      |     |        | x_l_I_54        | add    | fabric   | 0       |
+|     x_l_I_55_fu_2478_p3                      |     |        | x_l_I_55        | select | auto_sel | 0       |
+|     select_ln319_2_fu_2486_p3                |     |        | select_ln319_2  | select | auto_sel | 0       |
+|     sub_ln319_3_fu_2494_p2                   |     |        | sub_ln319_3     | sub    | fabric   | 0       |
+|     x_l_FH_23_fu_2527_p2                     |     |        | x_l_FH_23       | add    | fabric   | 0       |
+|     or_ln295_14_fu_2500_p2                   |     |        | or_ln295_14     | or     | auto     | 0       |
+|     or_ln295_15_fu_2506_p2                   |     |        | or_ln295_15     | or     | auto     | 0       |
+|     x_l_I_56_fu_2512_p3                      |     |        | x_l_I_56        | select | auto_sel | 0       |
+|     x_l_FH_41_fu_2541_p3                     |     |        | x_l_FH_41       | select | auto_sel | 0       |
+|     x_l_FL_17_fu_2547_p3                     |     |        | x_l_FL_17       | select | auto_sel | 0       |
+|     res_FH_22_fu_2553_p3                     |     |        | res_FH_22       | select | auto_sel | 0       |
+|     icmp_ln295_39_fu_2602_p2                 |     |        | icmp_ln295_39   | setne  | auto     | 0       |
+|     icmp_ln295_40_fu_2607_p2                 |     |        | icmp_ln295_40   | setgt  | auto     | 0       |
+|     icmp_ln295_41_fu_2613_p2                 |     |        | icmp_ln295_41   | seteq  | auto     | 0       |
+|     icmp_ln295_42_fu_2619_p2                 |     |        | icmp_ln295_42   | setlt  | auto     | 0       |
+|     xor_ln295_10_fu_2625_p2                  |     |        | xor_ln295_10    | xor    | auto     | 0       |
+|     and_ln295_11_fu_2631_p2                  |     |        | and_ln295_11    | and    | auto     | 0       |
+|     delta_4_fu_2637_p2                       |     |        | delta_4         | setlt  | auto     | 0       |
+|     x_l_FL_9_fu_2643_p2                      |     |        | x_l_FL_9        | sub    | fabric   | 0       |
+|     icmp_ln308_11_fu_2649_p2                 |     |        | icmp_ln308_11   | setlt  | auto     | 0       |
+|     and_ln308_4_fu_2655_p2                   |     |        | and_ln308_4     | and    | auto     | 0       |
+|     or_ln308_4_fu_2661_p2                    |     |        | or_ln308_4      | or     | auto     | 0       |
+|     x_l_I_57_fu_2667_p2                      |     |        | x_l_I_57        | add    | fabric   | 0       |
+|     x_l_I_58_fu_2672_p3                      |     |        | x_l_I_58        | select | auto_sel | 0       |
+|     select_ln319_3_fu_2679_p3                |     |        | select_ln319_3  | select | auto_sel | 0       |
+|     sub_ln319_4_fu_2687_p2                   |     |        | sub_ln319_4     | sub    | fabric   | 0       |
+|     x_l_FH_25_fu_2697_p2                     |     |        | x_l_FH_25       | add    | fabric   | 0       |
+|     or_ln295_16_fu_2713_p2                   |     |        | or_ln295_16     | or     | auto     | 0       |
+|     or_ln295_17_fu_2719_p2                   |     |        | or_ln295_17     | or     | auto     | 0       |
+|     x_l_I_59_fu_2725_p3                      |     |        | x_l_I_59        | select | auto_sel | 0       |
+|     x_l_FH_42_fu_2733_p3                     |     |        | x_l_FH_42       | select | auto_sel | 0       |
+|     x_l_FL_18_fu_2741_p3                     |     |        | x_l_FL_18       | select | auto_sel | 0       |
+|     res_FH_24_fu_2749_p3                     |     |        | res_FH_24       | select | auto_sel | 0       |
+|     icmp_ln295_43_fu_2800_p2                 |     |        | icmp_ln295_43   | setne  | auto     | 0       |
+|     icmp_ln295_44_fu_2806_p2                 |     |        | icmp_ln295_44   | setgt  | auto     | 0       |
+|     icmp_ln295_45_fu_2812_p2                 |     |        | icmp_ln295_45   | seteq  | auto     | 0       |
+|     icmp_ln295_46_fu_2818_p2                 |     |        | icmp_ln295_46   | setlt  | auto     | 0       |
+|     xor_ln295_11_fu_2824_p2                  |     |        | xor_ln295_11    | xor    | auto     | 0       |
+|     and_ln295_12_fu_2830_p2                  |     |        | and_ln295_12    | and    | auto     | 0       |
+|     delta_5_fu_2836_p2                       |     |        | delta_5         | setlt  | auto     | 0       |
+|     x_l_FL_12_fu_2842_p2                     |     |        | x_l_FL_12       | sub    | fabric   | 0       |
+|     icmp_ln308_12_fu_2848_p2                 |     |        | icmp_ln308_12   | setlt  | auto     | 0       |
+|     and_ln308_5_fu_2854_p2                   |     |        | and_ln308_5     | and    | auto     | 0       |
+|     or_ln308_5_fu_2860_p2                    |     |        | or_ln308_5      | or     | auto     | 0       |
+|     x_l_I_60_fu_2866_p2                      |     |        | x_l_I_60        | add    | fabric   | 0       |
+|     x_l_I_61_fu_2872_p3                      |     |        | x_l_I_61        | select | auto_sel | 0       |
+|     select_ln319_4_fu_2880_p3                |     |        | select_ln319_4  | select | auto_sel | 0       |
+|     sub_ln319_5_fu_2888_p2                   |     |        | sub_ln319_5     | sub    | fabric   | 0       |
+|     x_l_FH_28_fu_2898_p2                     |     |        | x_l_FH_28       | add    | fabric   | 0       |
+|     or_ln295_18_fu_2914_p2                   |     |        | or_ln295_18     | or     | auto     | 0       |
+|     or_ln295_19_fu_2920_p2                   |     |        | or_ln295_19     | or     | auto     | 0       |
+|     x_l_FH_27_fu_2926_p3                     |     |        | x_l_FH_27       | select | auto_sel | 0       |
+|     x_l_FL_11_fu_2934_p3                     |     |        | x_l_FL_11       | select | auto_sel | 0       |
+|     res_FH_26_fu_2942_p3                     |     |        | res_FH_26       | select | auto_sel | 0       |
+|     icmp_ln295_47_fu_2981_p2                 |     |        | icmp_ln295_47   | setne  | auto     | 0       |
+|     and_ln295_14_fu_2987_p2                  |     |        | and_ln295_14    | and    | auto     | 0       |
+|     icmp_ln295_48_fu_2993_p2                 |     |        | icmp_ln295_48   | setgt  | auto     | 0       |
+|     icmp_ln295_49_fu_2999_p2                 |     |        | icmp_ln295_49   | seteq  | auto     | 0       |
+|     icmp_ln295_50_fu_3005_p2                 |     |        | icmp_ln295_50   | setlt  | auto     | 0       |
+|     xor_ln295_12_fu_3011_p2                  |     |        | xor_ln295_12    | xor    | auto     | 0       |
+|     and_ln295_13_fu_3017_p2                  |     |        | and_ln295_13    | and    | auto     | 0       |
+|     or_ln295_20_fu_3033_p2                   |     |        | or_ln295_20     | or     | auto     | 0       |
+|     or_ln295_21_fu_3039_p2                   |     |        | or_ln295_21     | or     | auto     | 0       |
+|     res_FH_28_fu_3045_p3                     |     |        | res_FH_28       | select | auto_sel | 0       |
+|     add_ln338_fu_3057_p2                     |     |        | add_ln338       | add    | fabric   | 0       |
+|     res_I_13_fu_3071_p2                      |     |        | res_I_13        | add    | fabric   | 0       |
+|     res_I_14_fu_3076_p3                      |     |        | res_I_14        | select | auto_sel | 0       |
+|  + forward_substitution                      | 53  |        |                 |        |          |         |
+|    icmp_ln14_fu_356_p2                       |     |        | icmp_ln14       | seteq  | auto     | 0       |
+|    add_ln14_fu_362_p2                        |     |        | add_ln14        | add    | fabric   | 0       |
+|    icmp_ln15_fu_390_p2                       |     |        | icmp_ln15       | seteq  | auto     | 0       |
+|    add_ln15_fu_396_p2                        |     |        | add_ln15        | add    | fabric   | 0       |
+|    add_ln16_fu_406_p2                        |     |        | add_ln16        | add    | fabric   | 0       |
+|    sub_ln14_fu_441_p2                        |     |        | sub_ln14        | sub    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U33                    | 5   |        | rr              | mul    | auto     | 0       |
+|    mul_43s_42s_83_1_1_U39                    | 5   |        | ii              | mul    | auto     | 0       |
+|    norm_re_fu_467_p2                         |     |        | norm_re         | sub    | fabric   | 0       |
+|    sdiv_70ns_56s_70_74_seq_1_U42             |     |        | sdiv_ln57       | sdiv   | auto_seq | 73      |
+|    sdiv_71ns_56s_71_75_seq_1_U43             |     |        | sdiv_ln58       | sdiv   | auto_seq | 74      |
+|    icmp_ln26_fu_547_p2                       |     |        | icmp_ln26       | seteq  | auto     | 0       |
+|    indvars_iv_next_fu_553_p2                 |     |        | indvars_iv_next | add    | fabric   | 0       |
+|    add_ln24_fu_575_p2                        |     |        | add_ln24        | add    | fabric   | 0       |
+|    icmp_ln26_1_fu_593_p2                     |     |        | icmp_ln26_1     | seteq  | auto     | 0       |
+|    add_ln41_fu_615_p2                        |     |        | add_ln41        | add    | fabric   | 0       |
+|    icmp_ln31_fu_654_p2                       |     |        | icmp_ln31       | setlt  | auto     | 0       |
+|    add_ln33_fu_668_p2                        |     |        | add_ln33        | add    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U33                    | 5   |        | rr_2            | mul    | auto     | 0       |
+|    mul_42s_42s_84_1_1_U34                    | 5   |        | ii_2            | mul    | auto     | 0       |
+|    mul_42s_42s_84_1_1_U35                    | 5   |        | ri              | mul    | auto     | 0       |
+|    mul_42s_42s_84_1_1_U36                    | 5   |        | ir              | mul    | auto     | 0       |
+|    re_fu_760_p2                              |     |        | re              | sub    | fabric   | 0       |
+|    im_fu_766_p2                              |     |        | im              | add    | fabric   | 0       |
+|    add_ln34_fu_792_p2                        |     |        | add_ln34        | add    | fabric   | 0       |
+|    add_ln35_fu_798_p2                        |     |        | add_ln35        | add    | fabric   | 0       |
+|    add_ln31_fu_692_p2                        |     |        | add_ln31        | add    | fabric   | 0       |
+|    sub_ln38_fu_804_p2                        |     |        | sub_ln38        | sub    | fabric   | 0       |
+|    sub_ln39_fu_810_p2                        |     |        | sub_ln39        | sub    | fabric   | 0       |
+|    sub_ln14_2_fu_836_p2                      |     |        | sub_ln14_2      | sub    | fabric   | 0       |
+|    mul_42s_56s_84_1_1_U37                    | 7   |        | rr_3            | mul    | auto     | 0       |
+|    mul_43s_56s_84_1_1_U40                    | 7   |        | ii_3            | mul    | auto     | 0       |
+|    mul_43s_56s_84_1_1_U41                    | 7   |        | ri_1            | mul    | auto     | 0       |
+|    mul_42s_56s_84_1_1_U38                    | 7   |        | ir_1            | mul    | auto     | 0       |
+|    re_1_fu_873_p2                            |     |        | re_1            | sub    | fabric   | 0       |
+|    im_1_fu_879_p2                            |     |        | im_1            | add    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U33                    | 5   |        | rr_4            | mul    | auto     | 0       |
+|    mul_43s_42s_83_1_1_U39                    | 5   |        | ii_4            | mul    | auto     | 0       |
+|    norm_re_2_fu_894_p2                       |     |        | norm_re_2       | sub    | fabric   | 0       |
+|    sdiv_84ns_56s_84_88_seq_1_U44             |     |        | sdiv_ln57_2     | sdiv   | auto_seq | 87      |
+|    sdiv_84ns_56s_84_88_seq_1_U45             |     |        | sdiv_ln58_2     | sdiv   | auto_seq | 87      |
+|    add_ln26_1_fu_698_p2                      |     |        | add_ln26_1      | add    | fabric   | 0       |
+|    sub_ln14_1_fu_1001_p2                     |     |        | sub_ln14_1      | sub    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U33                    | 5   |        | rr_1            | mul    | auto     | 0       |
+|    mul_43s_42s_83_1_1_U39                    | 5   |        | ii_1            | mul    | auto     | 0       |
+|    norm_re_1_fu_1027_p2                      |     |        | norm_re_1       | sub    | fabric   | 0       |
+|    sdiv_70ns_56s_70_74_seq_1_U46             |     |        | sdiv_ln57_1     | sdiv   | auto_seq | 73      |
+|    sdiv_71ns_56s_71_75_seq_1_U47             |     |        | sdiv_ln58_1     | sdiv   | auto_seq | 74      |
+|    add_ln26_fu_640_p2                        |     |        | add_ln26        | add    | fabric   | 0       |
+|  + inversion                                 | 20  |        |                 |        |          |         |
+|    icmp_ln15_fu_194_p2                       |     |        | icmp_ln15       | seteq  | auto     | 0       |
+|    add_ln15_fu_200_p2                        |     |        | add_ln15        | add    | fabric   | 0       |
+|    icmp_ln16_fu_222_p2                       |     |        | icmp_ln16       | seteq  | auto     | 0       |
+|    add_ln16_fu_228_p2                        |     |        | add_ln16        | add    | fabric   | 0       |
+|    add_ln28_fu_242_p2                        |     |        | add_ln28        | add    | fabric   | 0       |
+|    icmp_ln17_fu_252_p2                       |     |        | icmp_ln17       | setgt  | auto     | 0       |
+|    start_fu_257_p3                           |     |        | start           | select | auto_sel | 0       |
+|    icmp_ln20_fu_272_p2                       |     |        | icmp_ln20       | seteq  | auto     | 0       |
+|    add_ln21_fu_290_p2                        |     |        | add_ln21        | add    | fabric   | 0       |
+|    add_ln22_fu_301_p2                        |     |        | add_ln22        | add    | fabric   | 0       |
+|    sub_ln14_fu_380_p2                        |     |        | sub_ln14        | sub    | fabric   | 0       |
+|    mul_42s_42s_84_1_1_U56                    | 5   |        | rr              | mul    | auto     | 0       |
+|    mul_42s_43s_83_1_1_U58                    | 5   |        | ii              | mul    | auto     | 0       |
+|    mul_42s_42s_84_1_1_U57                    | 5   |        | ri              | mul    | auto     | 0       |
+|    mul_42s_43s_83_1_1_U59                    | 5   |        | ir              | mul    | auto     | 0       |
+|    re_fu_422_p2                              |     |        | re              | sub    | fabric   | 0       |
+|    im_fu_432_p2                              |     |        | im              | add    | fabric   | 0       |
+|    add_ln24_fu_458_p2                        |     |        | add_ln24        | add    | fabric   | 0       |
+|    add_ln25_fu_464_p2                        |     |        | add_ln25        | add    | fabric   | 0       |
+|    add_ln20_fu_306_p2                        |     |        | add_ln20        | add    | fabric   | 0       |
++----------------------------------------------+-----+--------+-----------------+--------+----------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
++---------------------+---------------+------+------+------+--------+--------+--------------+------+---------+------------------+
+| Name                | Usage         | Type | BRAM | URAM | CE_REG | Pragma | Variable     | Impl | Latency | Bitwidth, Depth, |
+|                     |               |      |      |      |        |        |              |      |         | Banks            |
++---------------------+---------------+------+------+------+--------+--------+--------------+------+---------+------------------+
+| + cholesky_inverse  |               |      | 20   | 0    |        |        |              |      |         |                  |
+|   L_M_real_U        | ram_1p array  |      | 2    |      | N      |        | L_M_real     | auto | 1       | 28, 1024, 1      |
+|   L_M_imag_U        | ram_1p array  |      | 2    |      | N      |        | L_M_imag     | auto | 1       | 28, 1024, 1      |
+|   U_M_real_U        | ram_1p array  |      | 2    |      | N      |        | U_M_real     | auto | 1       | 28, 1024, 1      |
+|   D_M_real_U        | ram_1p array  |      | 2    |      | N      |        | D_M_real     | auto | 1       | 28, 1024, 1      |
+|   S_M_real_U        | ram_1p array  |      |      |      | N      |        | S_M_real     | auto | 1       | 21, 32, 1        |
+|   S_M_imag_U        | ram_1p array  |      |      |      | N      |        | S_M_imag     | auto | 1       | 1, 32, 1         |
+|   G_M_real_U        | ram_1p array  |      | 2    |      | N      |        | G_M_real     | auto | 1       | 28, 1024, 1      |
+|   G_M_imag_U        | ram_1p array  |      | 2    |      | N      |        | G_M_imag     | auto | 1       | 28, 1024, 1      |
+|   G_inv_M_real_U    | ram_1p array  |      | 2    |      | N      |        | G_inv_M_real | auto | 1       | 28, 1024, 1      |
+|   G_inv_M_imag_U    | ram_1p array  |      | 2    |      | N      |        | G_inv_M_imag | auto | 1       | 28, 1024, 1      |
+|  + LU_decomposition |               |      | 4    | 0    |        |        |              |      |         |                  |
+|    U_M_imag_U       | ram_t2p array |      | 4    |      | N      |        | U_M_imag     | auto | 1       | 28, 1024, 1      |
++---------------------+---------------+------+------+------+--------+--------+--------------+------+---------+------------------+
+
+
+================================================================
+== Pragma Report
+================================================================
+  No pragmas found
+

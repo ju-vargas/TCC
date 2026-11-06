@@ -1,0 +1,114 @@
+@startuml anel_filtragem
+' =====================================================================
+'  O PERCURSO DO ANEL - fase de FILTRAGEM (daisy chain)
+'  Fonte: paper.md :87 (só um DU fala com o decodificador),
+'         :430-434 (bloco Equalizer filter), :79 (s_hat = W y),
+'         :383 (W_c em C^(K x M_c)), :623/:631 (filtering phase)
+'
+'  AVISO: fórmulas transliteradas de LaTeX para ASCII.
+'  Convenção: [ARTIGO :NNN] = do paper   |   [NOSSO] = derivação nossa
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam sequenceArrowColor #333333
+skinparam sequenceParticipant {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+}
+skinparam sequenceLifeLineBorderColor #999999
+skinparam sequenceGroupBackgroundColor #EEF2F6
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FAFAFA
+skinparam legendBorderColor #999999
+
+title Fase de FILTRAGEM percorrendo o anel daisy chain\ns_hat = SOMA_c W_c y_c  acumulada de DU em DU
+
+participant "DU 1" as D1
+participant "DU 2" as D2
+participant "DU c" as Dc
+participant "DU C" as DC
+participant "Decodificador" as DEC
+
+note across
+  [ARTIGO :430-434] bloco "Equalizer filter" do Algoritmo 3:
+        s_hat_BCD-MMSE <- 0
+        for c = 1 to C do
+            s_hat_BCD-MMSE <- s_hat_BCD-MMSE + W_c y_c
+        end for
+  ....
+  A soma sobre DUs vira, no daisy chain, uma ACUMULAÇÃO ao longo do anel:
+  cada DU soma a sua parcela ao vetor que recebeu e passa adiante.
+end note
+
+== Uma volta por elemento de recurso (RE); 3300 REs por símbolo OFDM ==
+
+activate D1
+D1 -> D1 : p_1 = W_1 y_1\n(K x M_1) x (M_1 x 1) -> K x 1
+D1 -> D2 : s_parcial = p_1        (K x 1)
+deactivate D1
+
+activate D2
+D2 -> D2 : p_2 = W_2 y_2
+D2 -> Dc : s_parcial += p_2       (K x 1)
+deactivate D2
+
+activate Dc
+Dc -> Dc : p_c = W_c y_c
+Dc -> DC : s_parcial += p_c       (K x 1)
+deactivate Dc
+
+activate DC
+DC -> DC : p_C = W_C y_C\ns_hat = s_parcial + p_C
+DC -> DEC : s_hat_BCD-MMSE   (K x 1)
+deactivate DC
+
+note right of DEC #FFF3CD
+  [ARTIGO :87] "Only ONE DU outputs the
+  symbol estimate and is directly linked
+  to the decoder."
+  ....
+  [NOSSO] Esse DU é o último da cadeia de
+  acumulação. O artigo diz que existe um
+  único DU de saída, mas não numera qual.
+end note
+
+note across #E8F5E9
+  == NÃO HÁ INVERSÃO NESTA FASE ==
+  W já veio pronto da fase de formulação. Aqui só há, por DU:
+     K x M_c multiplicações-acumulações complexas (MACs)
+  e uma soma vetorial de K elementos.
+  [ARTIGO :383] "we deliberately partition the equalization matrix W into
+  block matrix as W = [W_1, ..., W_C] with W_c em C^(K x M_c)"
+  ....
+  [NOSSO] Dimensionamento: config A (M = 128, C = 8 -> M_c = 16, K = 8)
+  dá K x M_c = 128 MACs complexas por DU por RE. Módulo bem mais simples
+  que o inversor, mas com cadência 12x mais apertada.
+end note
+
+legend right
+  == ORÇAMENTO DESTA FASE  [NOSSO, a partir de :640] ==
+  N_u = 3300 elementos de recurso por símbolo OFDM
+  T_OFDM = 1 / 120 kHz = 8,333 us
+  Orçamento por RE = T_OFDM / N_u = 2,525 ns
+
+  12x mais apertado que o da formulação (30,303 ns) porque
+  N_u = N_sc,PRB x N_PRB e N_sc,PRB = 12. Ver fases.puml.
+
+  == O ANEL SÓ FECHA AS CONTAS PIPELINADO  [NOSSO] ==
+  2,525 ns para uma volta completa daria, com C = 16, cerca de
+  0,16 ns por salto - inviável em qualquer tecnologia realista.
+  Logo a leitura correta NÃO é "uma volta a cada 2,525 ns", e sim
+  "um RE ENTRA no anel a cada 2,525 ns", com vários REs em voo
+  simultaneamente em DUs diferentes. Ver anel_pipeline.puml.
+
+  == FRONTHAUL  [ARTIGO :631] ==
+  R_fil = w S_s N_u / T_OFDM
+  Note que multiplica por N_u (por RE), enquanto R_form [:619]
+  multiplica por N_PRB (por PRB). É a mesma assimetria 12x
+  aparecendo na conta de banda do artigo.
+endlegend
+
+@enduml

@@ -60,6 +60,10 @@ class SimConfig:
     #: Iteration-study mode: when non-empty, only LMMSE, ZF and one BCD-MMSE curve per
     #: iteration count are computed (e.g. (1, 2, 3, 4)). Empty = the six Figure 8 curves.
     bcd_iteration_list: tuple = ()
+    #: Iteration study only: skip LMMSE and ZF, which do not depend on the BCD inverse
+    #: (format sweeps take them from the float reference). They consume no random
+    #: numbers, so the BCD curves stay identical.
+    skip_reference_curves: bool = False
     lrd_iterations: int = M7_Equalizers.lrd_iterations.value
     lrd_rank: int = M7_Equalizers.lrd_rank.value
     #: M_c x M_c inversion of the BCD-MMSE update: 'float' or 'cholesky_hw'.
@@ -78,6 +82,8 @@ class SimConfig:
     hw_intermediates: tuple = M7_Equalizers.hw_intermediates.value
 
     channel_backend: str = M2_Channel.backend.value
+    #: Carrier of the QuaDriGa export (3.5 GHz FR1; 28 GHz for the FR2 test conditions).
+    carrier_hz: float = M2_Channel.center_frequency_hz.value
     normalization: str = M2_Channel.normalization.value
     channel_kwargs: dict = field(default_factory=dict)
 
@@ -101,14 +107,16 @@ def curve_names(cfg: SimConfig) -> tuple[str, ...]:
     """The curves `run_panel` computes for this configuration, in legend order."""
     if not cfg.bcd_iteration_list:
         return FIGURE8_CURVES
-    return ("LMMSE", "ZF") + tuple(bcd_curve_name(n) for n in cfg.bcd_iteration_list)
+    refs = () if cfg.skip_reference_curves else ("LMMSE", "ZF")
+    return refs + tuple(bcd_curve_name(n) for n in cfg.bcd_iteration_list)
 
 
 def build_equalizers(cfg: SimConfig, H, S, cond, clusters) -> dict[str, np.ndarray]:
     """Every equalizer of `curve_names(cfg)` for one (realization, SNR) point."""
     eq: dict[str, np.ndarray] = {}
-    eq["LMMSE"] = m7_equalizers.lmmse(H, S, cfg.Es, cond)
-    eq["ZF"] = m7_equalizers.zero_forcing(H)
+    if not (cfg.skip_reference_curves and cfg.bcd_iteration_list):
+        eq["LMMSE"] = m7_equalizers.lmmse(H, S, cfg.Es, cond)
+        eq["ZF"] = m7_equalizers.zero_forcing(H)
     inverse = hw_inverse.make_inverter(cfg.bcd_inverse, cfg.hw_int_bits, cfg.hw_frac_bits,
                                        cfg.hw_acc_int_bits, cfg.hw_acc_frac_bits,
                                        cfg.hw_quant, cfg.hw_overflow,
@@ -150,6 +158,7 @@ def run_panel(cfg: SimConfig, progress: bool = False) -> dict[str, np.ndarray]:
         radius_min_m=M2_Channel.radius_min_m.value,
         radius_max_m=M2_Channel.radius_max_m.value,
         normalization=cfg.normalization,
+        carrier_hz=cfg.carrier_hz,
         **cfg.channel_kwargs)
 
     clusters = m3_clustering.cluster_indices(cfg.M, cfg.C, cfg.mapping)

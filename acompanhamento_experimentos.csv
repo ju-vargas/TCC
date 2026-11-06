@@ -1,0 +1,70 @@
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,acompanhamento experimentos,,,,,,,,
+,,,,síntese vitis,síntese vivado local,sintese vivado servidor,testbench power local,testbench power servidor,,,,descrição da otimização aplicada
+,,"<22,12>",sem otimização de ciclos,ok,ok,ok,ok,ok,,,,"sem diretivas, RND_ZERO/WRAP; Vivado e potencia em 16 x 16 e 32 x 32"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok,,ok,,ok,,,,
+,,,sem otimização de ciclos (32 x 32),ok,ok,ok,ok,ok,,,,"sem diretivas, RND_ZERO/WRAP; servidor: os 5 cenarios, mesma potencia"
+,,"<24,12>",sem otimização de ciclos,ok,ok,ok,ok,ok,,,,"sem diretivas, RND_ZERO/WRAP; Vivado e potencia em 16 x 16 e 32 x 32"
+,,,TDLA30-5,ok,ok,ok,ok,ok,,,TDLA30-5,"pipeline nos lacos (LU, forward substitution e inversao); 7.594 ciclos por matriz"
+,,,TDLA30-10,ok,ok,ok,ok,ok,,,,
+,,,TDLA30-75,ok,ok,ok,ok,ok,,,TDLA30-75,"lote de 12 matrizes em 6 vias, com dataflow; 504 ciclos por matriz"
+,,,TDLA30-300,ok,falhou (memoria),ok,,ok,,,TDLA30-300,"array sistolico, lote de 32 matrizes em 2 vias; 128 ciclos por matriz"
+,,,TDLC300-100,ok,ok,ok,ok,ok,,,TDLC300-100,lote de 16 matrizes em 8 vias; 402 ciclos por matriz
+,,,TDLB100-400,ok,,ok,,ok,,,TDLB100-400,"array sistolico, lote de 32 matrizes em 4 vias; 64 ciclos por matriz"
+,,,sem otimização de ciclos (32 x 32),ok,ok,ok,ok,ok,,,,"sem diretivas, RND_ZERO/WRAP; servidor: os 5 cenarios, mesma potencia (menos TDLB100-400: 0,047 contra 0,046 W)"
+,,,otimizações de ciclos (32 x 32),ok,,,,,,,,"so sintese C local (2026.1, hardware/viabilidade_32x32); nenhuma atende o alvo de ciclos; 114 nao cabe; Vivado e potencia nao rodados"
+,,"<28,14>",sem otimização de ciclos,ok,ok,ok,ok,ok,,,,"sem diretivas, RND_ZERO/WRAP; Vivado e potencia em 16 x 16 e 32 x 32"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok,,ok,,ok,,,,
+,,,sem otimização de ciclos (32 x 32),ok,ok,ok,ok,ok,,,,"sem diretivas, RND_ZERO/WRAP; servidor: os 5 cenarios, mesma potencia"
+,,"<26,12>",sem otimização de ciclos,ok,,ok,,ok,,,,"so sintese C (16 x 16, RND_ZERO/WRAP)"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok,,ok,,ok,,,,
+,,,sem otimização de ciclos (32 x 32),ok,,ok,,ok,,,,"sem diretivas, RND_ZERO/WRAP; servidor: os 5 cenarios, mesma potencia"
+,,"<30,14>",sem otimização de ciclos,ok,,ok,,ok,,,,"so sintese C (16 x 16, TRN/SAT)"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok (nao cabe: 7.512 DSP),,fora (nao cabe),,fora (nao cabe),,,,
+,,,sem otimização de ciclos (32 x 32),ok,,ok,,ok,,,,"sem diretivas, TRN/SAT; servidor: os 5 cenarios, mesma potencia"
+,,"<18,8>",sem otimização de ciclos,ok,,ok,,ok,,,,"sem diretivas, RND_ZERO/WRAP; servidor (pacote_servidor_formatos_18_20); C com a divisao por zero igual ao RTL (-DCHOL_DIV0_COMO_RTL)"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok,,ok,,ok,,,,
+,,,sem otimização de ciclos (32 x 32),ok,,ok,,rodando,,,,"sem diretivas, RND_ZERO/WRAP; potencia ainda rodando no servidor (2026-11-04)"
+,,"<18,8> TRN/SAT",sem otimização de ciclos,ok,,ok,,ok,,,,"sem diretivas, TRN/SAT; servidor (pacote_servidor_formatos_18_20); C com a divisao por zero igual ao RTL (-DCHOL_DIV0_COMO_RTL)"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok,,ok,,ok,,,,
+,,,sem otimização de ciclos (32 x 32),ok,,ok,,rodando,,,,"sem diretivas, TRN/SAT; potencia ainda rodando no servidor (2026-11-04)"
+,,"<20,8>",sem otimização de ciclos,ok,,ok,,ok,,,,"sem diretivas, RND_ZERO/WRAP; servidor (pacote_servidor_formatos_18_20); C com a divisao por zero igual ao RTL (-DCHOL_DIV0_COMO_RTL)"
+,,,TDLA30-5,ok,,ok,,ok,,,,
+,,,TDLA30-10,ok,,ok,,ok,,,,
+,,,TDLA30-75,ok,,ok,,ok,,,,
+,,,TDLA30-300,ok,,ok,,ok,,,,
+,,,TDLC300-100,ok,,ok,,ok,,,,
+,,,TDLB100-400,ok,,ok,,ok,,,,
+,,,sem otimização de ciclos (32 x 32),ok,,ok,,rodando,,,,"sem diretivas, RND_ZERO/WRAP; potencia ainda rodando no servidor (2026-11-04)"

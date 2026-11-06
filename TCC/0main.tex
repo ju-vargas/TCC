@@ -7,7 +7,7 @@
 % This is an example file and is hereby explicitly put in the
 % public domain.
 % 
-\documentclass[ecp,tc]{iiufrgs}
+\documentclass[ecp,tc,english]{iiufrgs}
 % Para usar o modelo, deve-se informar o programa e o tipo de documento.
 % Programas :
 % * cic       -- Graduação em Ciência da Computação
@@ -31,6 +31,7 @@
 
 % Use unicode
 \usepackage[utf8]{inputenc}   % pacote para acentuação
+\DeclareUnicodeCharacter{200B}{} % ignora o espaço de largura zero que vem em textos colados
 
 % Necessário para incluir figuras
 \usepackage{graphicx}         % pacote para importar figuras
@@ -42,11 +43,15 @@
 \usepackage{amsmath,amssymb}  % pacotes para ambientes e símbolos matemáticos
 
 \usepackage[alf,abnt-emphasize=bf]{abntex2cite}	% pacote para usar citações abnt
+\newcommand{\citesp}[1]{\citeauthor{#1}, \citeyear{#1}} % citação sem parênteses (fontes das tabelas)
 
 % --- PACOTES ADICIONADOS PARA O DESENHO DAS MATRIZES ---
 \usepackage{tikz}
+\usepackage{booktabs}         % tabelas com \toprule, \midrule e \bottomrule
+\usepackage{multirow}         % células mescladas nas tabelas
 \usepackage[normalem]{ulem}     % texto riscado (\sout) nas revisões do capítulo
-\usetikzlibrary{decorations.pathreplacing, calc, positioning}
+\definecolor{RED}{rgb}{1,0,0} % a classe põe títulos de capítulo em maiúsculas: \textcolor{red} vira \textcolor{RED}
+\usetikzlibrary{decorations.pathreplacing, calc, positioning, shapes.geometric, shapes.symbols, arrows.meta, backgrounds, fit, shapes.misc}
 
 
 % 
@@ -197,6 +202,7 @@
     \item[O2I] Outdoor-to-Indoor
     \item[OFDM] Orthogonal Frequency Division Multiplexing
     \item[PRB] Physical Resource Block
+    \item[PUSCH] Physical Uplink Shared Channel
     \item[QAM] Quadrature Amplitude Modulation
     \item[QPSK] Quadrature Phase Shift Keying
     \item[QuaDRiGa] Quasi-Deterministic Radio Channel Generator
@@ -243,9 +249,9 @@
 \include{chapters/FUNDAMENTACAO_TEORICA.tex}
 \include{chapters/METODOLOGIA.tex}
 \include{chapters/RESULTADOS.tex}
+\include{chapters/CONCLUSAO.tex}
 
 
-%\include{chapters/secoes/modelo-de-ruído.tex}
 
 % referências
 % aqui será usado o environment padrao `thebibliography'; porém, sugere-se

@@ -1,0 +1,204 @@
+% =====================================================================
+% RASCUNHO -- bloco de canal do simulador (modelo de canal e parâmetros)
+% ---------------------------------------------------------------------
+% Estrutura inspirada em Bjornson et al. (bjornson-mimo): Seção 7.3
+% (modelo de canal em geral e o modelo 3GPP), Seção 7.7.1 (parâmetros em
+% parágrafos) e Tabela 7.2 (lista de parâmetros).
+%
+% Chaves de citação:
+%   zhao-lmmse, bjornson-mimo      -> já existem (biblio.bib / rascunho_referencias.bib)
+%   quadriga-manual, tr38901       -> NOVAS, em rascunho_referencias.bib
+%
+% Páginas de bjornson-mimo conferidas no PDF books/Chapter-7-FnT-Massive-MIMO-Networks.pdf.
+% Páginas do manual do QuaDRiGa: CONFERIR (foi usado só o resumo do manual).
+% "conf" = simulador/QuaDRiGa_latest/quadriga_src/config/3GPP_38.901_UMa_NLOS.conf
+% "script" = simulador/export_quadriga_channels.m
+%
+% CUIDADOS DE NOTAÇÃO
+%  - "cluster" no texto do TCC já é o grupo de antenas de uma DU. Aqui os
+%    clusters do modelo de canal viram "grupos de espalhadores".
+%  - beta em bjornson-mimo é o ganho médio do canal; em zhao-lmmse é a
+%    potência dos interferentes. Este rascunho não usa beta.
+%
+% Fora deste rascunho: o particionamento das antenas entre as DUs (bloco A2).
+% =====================================================================
+
+
+% ---------------------------------------------------------------------
+% 1. Modelo de canal
+% ---------------------------------------------------------------------
+
+O canal descreve como o sinal de cada UE chega a cada antena da estação base. Na simulação, ele é representado pelas matrizes $\mathbf{H}$, dos UEs alvo, e $\overline{\mathbf{H}}$, dos UEs não-alvo \cite{zhao-lmmse}.
+% FONTE: paper.md:577 (H gerada pelo QuaDRiGa; Hbar = canal dos r UEs não-alvo).
+Um modelo de canal para sistemas com muitas antenas precisa representar pelo menos a geometria do arranjo, a correlação entre os canais das antenas e a posição e a orientação da BS e dos UEs \cite[p.~329]{bjornson-mimo}.
+% FONTE: bjornson-mimo, Seção 7.3, p. 329 ("must account at least for the array
+%        geometry, the correlation ... and the physical location and orientation").
+
+Os modelos de canal podem ser determinísticos ou estocásticos \cite[p.~329]{bjornson-mimo}. Um modelo determinístico depende de um ambiente fixo, com posições conhecidas de transmissores, receptores e obstáculos. O traçado de raios sobre um modelo 3D de prédios e as medições gravadas são exemplos desse tipo \cite[p.~329]{bjornson-mimo}. Esses modelos são precisos, mas valem só para o cenário em que foram feitos \cite[p.~330]{bjornson-mimo}. Já um modelo estocástico não depende de um ambiente específico. Ele gera quantas realizações de canal forem necessárias, com as propriedades estatísticas desejadas \cite[p.~330]{bjornson-mimo}.
+% FONTE: bjornson-mimo, p. 329-330.
+
+Entre os modelos estocásticos, os modelos geométricos sorteiam a posição dos espalhadores, isto é, dos objetos que refletem ou espalham o sinal. Depois, cada caminho de propagação é calculado a partir dessas posições \cite[p.~330]{bjornson-mimo}. Esse tipo de modelo é adotado pelo 3GPP, porque é fácil de simular e concorda com medições \cite[p.~330--331]{bjornson-mimo}.
+% FONTE: bjornson-mimo, p. 330-331 ("stochastic geometry-based models define a
+%        distribution of the physical location of scatterers ... frequently adopted
+%        by standardization bodies such as the 3GPP ... agree very well with measurements").
+
+O modelo usado neste trabalho é plano em frequência. Isso significa que o canal de um UE é o mesmo em todas as subportadoras consideradas. O artigo base usa essa hipótese dentro de cada PRB, em que o canal é constante \cite{zhao-lmmse}. Um modelo plano é suficiente quando a análise considera um bloco de coerência, em que o canal não muda \cite[p.~330]{bjornson-mimo} (Seção~\ref{subsec:bloco-coerencia}).
+% FONTE: paper.md:614 ("A PRB is defined as a frequency-time stripe over which the
+%        wireless channel remains constant"); bjornson-mimo, p. 330 ("it is a frequency
+%        flat-fading channel model ... this is sufficient as we focus only on
+%        communication over a coherence block").
+
+
+% ---------------------------------------------------------------------
+% 2. O modelo 3GPP e o QuaDRiGa
+% ---------------------------------------------------------------------
+
+O artigo base gera as matrizes de canal com o QuaDRiGa, que considera desvanecimento de larga e de pequena escala \cite{zhao-lmmse}. O QuaDRiGa é uma implementação de código aberto do modelo de canal do 3GPP, desenvolvida pelo Instituto Fraunhofer Heinrich Hertz \cite[p.~342]{bjornson-mimo}. Neste trabalho, foi usada a versão 2.8.1, que implementa os cenários do relatório TR 38.901 \cite{quadriga-manual, tr38901}.
+% FONTE: paper.md:577; bjornson-mimo, Seção 7.3.3, p. 342 (implementação
+%        open-source, Fraunhofer HHI); quadriga-manual, cap. 1 (implementação de
+%        referência do TR 36.873 / TR 38.901) -- página CONFERIR. A versão do TR
+%        (v16.1.0) está no cabeçalho do conf, linha 2.
+% NOTA: o artigo não diz qual versão do QuaDRiGa usou. A escolha da 2.8.1 está
+%       em params.M2_Channel.quadriga_version.
+
+O modelo tem uma parte fixa e uma parte sorteada. A parte fixa é o layout: a posição da BS e dos UEs, a orientação e o diagrama das antenas e a frequência da portadora \cite[p.~340--341]{bjornson-mimo}. A parte sorteada são parâmetros como o espalhamento dos atrasos, o espalhamento dos ângulos, o sombreamento e a potência de cada grupo de caminhos \cite[p.~341]{bjornson-mimo}. As distribuições desses parâmetros vêm de medições e mudam de acordo com o cenário escolhido \cite[p.~341]{bjornson-mimo}.
+% FONTE: bjornson-mimo, p. 340-341 ("characterized by a deterministic system layout
+%        ... and a set of random parameters ... generated from statistical
+%        distributions obtained from extensive channel measurements"); nota 8, p. 341
+%        (cenários diferentes).
+
+Para cada par de BS e UE, o modelo cria grupos de espalhadores. Cada grupo tem uma direção de chegada, um atraso e uma potência \cite[p.~341]{bjornson-mimo}. Dentro de um grupo, há 20 caminhos com direções um pouco diferentes, que chegam com o mesmo atraso \cite[p.~341--342]{bjornson-mimo}. No QuaDRiGa, o cenário usado neste trabalho tem 21 grupos, com 20 caminhos cada \cite{quadriga-manual}.
+% FONTE: bjornson-mimo, p. 341-342, Figura 7.17.
+%        21 grupos e 20 caminhos: conf, linhas 96-97 (NumClusters = 21,
+%        NumSubPaths = 20). É valor do arquivo de configuração distribuído com o
+%        QuaDRiGa, por isso a citação é quadriga-manual e não tr38901.
+%        No QuaDRiGa, NumClusters inclui o caminho direto (resumo do manual, tabela
+%        de parâmetros). Os confs dão 21 (UMa NLOS) e 20 (UMi NLOS); o TR pode dar
+%        um a menos para NLOS. CONFERIR na Tabela 7.5-6 do TR antes de citar o TR.
+% ATENÇÃO: os números da p. 341-342 do livro (12 a 20 grupos, espalhamentos de
+%        1-6 e 20-90 graus, validade de 2 a 6 GHz) são do modelo 3GPP 3D antigo.
+%        Não usar para o TR 38.901.
+
+Um modelo sem consistência espacial trata cada UE de forma independente. Nesse caso, dois UEs quase no mesmo lugar não compartilham espalhadores \cite[p.~342]{bjornson-mimo}. O QuaDRiGa tem um mecanismo de consistência espacial, controlado por uma distância de descorrelação \cite{quadriga-manual}. No cenário usado, essa distância é de 50~m \cite{quadriga-manual}. Assim, UEs mais próximos do que essa distância têm parâmetros de canal correlacionados.
+% FONTE: bjornson-mimo, p. 342 (o modelo 3GPP 3D "is not spatially consistent").
+%        quadriga-manual, tabela de parâmetros (SC_lambda: distância de descorrelação
+%        da consistência espacial; 0 = desligado) -- página CONFERIR.
+%        conf, linha 116 (SC_lambda = 50) -- valor do QuaDRiGa, não conferido no TR.
+% POR QUE IMPORTA: os interferentes são sorteados na mesma região que os UEs alvo
+%        (notas_redacao.md, 5.3). Com a consistência ligada, os parâmetros de um
+%        interferente perto de um UE alvo são correlacionados com os dele. Isso NÃO
+%        quer dizer que os vetores de canal (M elementos) sejam parecidos.
+% CONFERIR: a frase "têm parâmetros de canal correlacionados" é a leitura do resumo
+%        do manual. Confirmar no manual original antes de manter.
+
+
+% ---------------------------------------------------------------------
+% 3. Parâmetros da simulação
+% ---------------------------------------------------------------------
+
+\textbf{Posição da BS e dos UEs.} O cenário tem uma única célula, com a BS no centro. Os UEs ficam em um setor de $120^\circ$, a uma distância entre 50 e 100~m da BS \cite{zhao-lmmse}. O artigo base diz que os UEs são distribuídos de forma uniforme, mas não diz se é no raio ou na área. Neste trabalho, a distribuição é uniforme na área. Assim, a chance de um UE cair em uma região é proporcional à área dela. Como o anel é mais largo longe da BS, há mais UEs perto de 100~m do que perto de 50~m. O setor fica centrado na direção frontal do arranjo de antenas.
+% FONTE: paper.md:577 ("UEs are uniformly distributed within a 120 degree sector of
+%        radius 50 ~ 100 m centered at BS").
+% NOSSO: uniforme em área (script, linha do sqrt(rand...)); setor centrado no eixo x,
+%        com a ULA ao longo do eixo y. Ainda não é um Param em params.py.
+
+\textbf{UEs alvo e não-alvo.} Há $K=8$ UEs alvo e $r=8$ UEs não-alvo \cite{zhao-lmmse}. Em uma das configurações, o número de UEs alvo sobe para $K=12$ \cite{zhao-lmmse}. Os UEs não-alvo são modelados da mesma forma que os UEs alvo \cite{zhao-lmmse}. Neste trabalho, todos os UEs são sorteados juntos, com a mesma distribuição. As $K$ primeiras colunas formam $\mathbf{H}$ e as $r$ seguintes formam $\overline{\mathbf{H}}$. Por isso, um UE não-alvo pode ficar perto de um UE alvo.
+% FONTE: paper.md:577 (K = 8 alvo e não-alvo; "molded [modeled] similarly");
+%        paper.md:593 (Fig. 8(e), K = 12).
+% NOSSO: sorteio conjunto (script: n_ue = K + r; u <= K vai para H).
+
+\textbf{Cenário e alturas.} O artigo base não informa o cenário do QuaDRiGa nem a altura da BS. Neste trabalho, foi usado o cenário urbano macro sem linha de visada (UMa NLOS) do TR 38.901. A BS fica a 25~m de altura e os UEs a 1,5~m. Essas alturas estão dentro da faixa válida do cenário \cite{tr38901}. O estudo de caso de \citeonline{bjornson-mimo} usa as mesmas alturas \cite[p.~386--387]{bjornson-mimo}. Todos os UEs estão sem linha de visada.
+% FONTE: conf, linhas 6-7 (BS 25 m; UE 1,5 a 22,5 m); bjornson-mimo, Tabela 7.2,
+%        p. 386 (BS 25 m, UE 1,5 m).
+% POR QUE UMa: a distância de 50-100 m não separa UMa de UMi (os dois conf dizem
+%        "valid distance range 10 to 5000 m"). O que separa é a altura válida da
+%        BS: UMa 25 m, UMi 10 m (cabeçalhos dos dois conf). O artigo não dá a altura.
+%        Cuidado: o livro usa 25 m em UMi. Não apresentar "25 m implica UMa" como
+%        regra geral; apoiar a escolha no cabeçalho do conf.
+% NLOS em todos: o script passa o nome completo "3GPP_38.901_UMa_NLOS". Com o nome
+%        base ("3GPP_38.901_UMa") o QuaDRiGa sortearia LOS ou NLOS pela distância
+%        (quadriga-manual, qd_layout.set_scenario -- página CONFERIR).
+
+\textbf{Frequência da portadora.} O artigo base não informa a frequência. Neste trabalho, foi usada a frequência de 3,5~GHz. Esse valor está dentro da faixa válida do cenário, de 0,5 a 100~GHz \cite{tr38901}. Os parâmetros do cenário dependem da frequência. Por isso, o valor precisa ser informado junto com os resultados.
+% FONTE: conf, linha 4 (0,5 a 100 GHz); linhas 23, 32, 36 (parâmetros dados
+%        "@ 1 GHz", com termos de dependência em frequência).
+% SEM FONTE: se quiser dizer que 3,5 GHz é uma faixa usada pelo 5G NR, precisa
+%        de uma referência (ex.: o livro 5G and Beyond).
+
+\textbf{Arranjo de antenas.} A BS usa um arranjo linear uniforme (ULA) horizontal com $M$ antenas. As antenas são isotrópicas, com polarização vertical. O espaçamento entre elas é de meio comprimento de onda. Com espaçamento maior, o arranjo passa a confundir algumas direções. Assim, dois UEs que chegam por essas direções não podem ser separados \cite[p.~354]{bjornson-mimo}. Por isso, o espaçamento de meio comprimento de onda, chamado de espaçamento crítico, é frequentemente considerado \cite[p.~354]{bjornson-mimo}. Em 3,5~GHz, o comprimento de onda é de cerca de 8,6~cm, então as antenas ficam a cerca de 4,3~cm uma da outra.
+% FONTE: script (qd_arrayant('omni'); element_position ao longo de y, passo lambda/2);
+%        quadriga-manual, qd_arrayant, tipo "omni" = isotrópica, polarização
+%        vertical -- página CONFERIR. bjornson-mimo, Seção 7.4.2, p. 354 (espaçamento
+%        crítico d = 1/2, "we often consider"; espaçamento maior gera main-lobes
+%        extras). A mesma página diz que o espaçamento VERTICAL maior é comum em
+%        redes celulares -- por isso não escrever "é o mais usado".
+% NOSSO: o artigo não informa a geometria do arranjo (params.M2_Channel.array_geometry).
+% ATENÇÃO: com ULA, M = 256 dá uma abertura de cerca de 11 m (M = 128: cerca de 5,4 m).
+%        Um arranjo planar seria mais compacto. Se a banca perguntar, a resposta
+%        é: o artigo não informa, e a ULA foi a escolha mais simples.
+
+\textbf{Canal plano.} O QuaDRiGa gera a resposta em frequência do canal. Neste trabalho, é usada a resposta em uma única frequência, a da portadora. O resultado é um vetor com $M$ elementos para cada UE. O artigo base não diz como o canal plano é obtido.
+% FONTE: quadriga-manual, qd_channel.fr(bandwidth, carriers): com carriers = 1, uma
+%        portadora na frequência inicial -- página CONFERIR. Script: c(u).fr(bw, 1).
+% NOSSO: item 2B.4 de simulation_parameters.md.
+
+\textbf{Sentido do enlace.} O QuaDRiGa gera o canal da BS para o UE. Neste trabalho, esse mesmo vetor é usado como canal de \textit{uplink}.
+% SEM FONTE: precisa de uma referência para reciprocidade do canal (por exemplo,
+%        a parte de TDD da monografia completa de bjornson-mimo). CONFERIR.
+
+\textbf{Realizações.} Os resultados são a média de 100 realizações de canal \cite{zhao-lmmse}. Neste trabalho, cada realização é um sorteio novo das posições de todos os UEs. Assim, cada realização muda as direções de chegada em relação ao arranjo e os caminhos de propagação. A semente do sorteio é fixa, então os mesmos canais podem ser gerados de novo.
+% FONTE: paper.md:577 ("averaged over 100 randomly generated channel realizations").
+% NOSSO: script, rng(cfg.seed + rr) e novo qd_layout a cada realização (item 2B.5).
+
+\textbf{Normalização.} Em uma célula, a diferença de ganho de canal entre os UEs pode chegar a 50~dB \cite[p.~311]{bjornson-mimo}. Nos canais gerados com $M=128$ e $K=8$, a diferença entre o UE alvo mais forte e o mais fraco teve mediana de 13~dB nas 100 realizações. No LTE, essas diferenças são reduzidas com controle de potência no \textit{uplink}. Nele, os UEs mais próximos da BS transmitem com menos potência \cite[p.~311]{bjornson-mimo}. O artigo base não descreve controle de potência. Neste trabalho, cada coluna de $\mathbf{H}$ e de $\overline{\mathbf{H}}$ é escalada para que a sua potência total seja igual a $M$. Assim, todos os UEs chegam à BS com a mesma potência média. Isso é uma versão ideal do controle de potência. Ela se aproxima do caso $\Delta = 0$~dB da regra de \citeonline[eq.~(7.11)]{bjornson-mimo}, em que os UEs chegam com a mesma potência recebida. Com essa escolha, a diferença de perda de percurso entre os UEs desaparece. O que continua vindo do QuaDRiGa é o formato do canal de cada UE: as direções de chegada e como os caminhos se somam em cada antena. A potência dos UEs não-alvo em relação ao ruído térmico é definida depois, junto com o modelo de ruído.
+% FONTE: bjornson-mimo, Seção 7.1.2, p. 311 ("channel gain differences of up to
+%        50 dB between the UEs in a cell"; LTE reduz a potência dos UEs mais próximos);
+%        eq. (7.11), p. 311, e p. 312 (Delta = razão máxima de potência recebida).
+%        Diferença: em (7.11) Delta usa o ganho MÉDIO do canal; aqui a normalização
+%        usa a norma da coluna em cada realização. Por isso "se aproxima".
+% NOSSO (medição): 13,0 dB de mediana, UEs alvo, channels_quadriga_M128_K8_r8.npz;
+%        16,2 dB na primeira realização. Mesmos números da nota em params.py.
+% NOSSO (escolha): params.M2_Channel.normalization = "per_ue_power_control";
+%        m2_channel.normalize_per_ue.
+% "O artigo não descreve controle de potência": busca feita em paper.md
+%        (params.py registra a busca). Conferir de novo antes de afirmar.
+% LIGAÇÃO: o livro liga o controle de potência a ADCs de baixa resolução e à faixa
+%        dinâmica (p. 311). Pode ser útil na parte de hardware.
+
+
+% ---------------------------------------------------------------------
+% 4. Tabela de parâmetros
+% ---------------------------------------------------------------------
+
+A Tabela~\ref{tab:parametros-canal} resume os parâmetros usados na geração dos canais. A coluna de origem indica se o valor é do artigo base ou se foi escolhido neste trabalho.
+
+\begin{table}[h]
+    \caption{Parâmetros da geração dos canais}
+    \label{tab:parametros-canal}
+    \begin{center}
+    \begin{tabular}{lll}
+        \hline
+        Parâmetro & Valor & Origem \\
+        \hline
+        Arquitetura & uma célula, BS no centro & artigo base \\
+        Antenas na BS ($M$) & 128 ou 256 & artigo base \\
+        UEs alvo ($K$) & 8 (12 em uma configuração) & artigo base \\
+        UEs não-alvo ($r$) & 8 & artigo base \\
+        Região dos UEs & setor de $120^\circ$, 50 a 100~m & artigo base \\
+        Distribuição dos UEs & uniforme na área & este trabalho \\
+        Gerador de canal & QuaDRiGa 2.8.1 & artigo base (versão: este trabalho) \\
+        Cenário & 3GPP TR 38.901 UMa NLOS & este trabalho \\
+        Altura da BS / dos UEs & 25~m / 1,5~m & este trabalho \\
+        Frequência da portadora & 3,5~GHz & este trabalho \\
+        Arranjo da BS & ULA horizontal, espaçamento $\lambda/2$ & este trabalho \\
+        Antenas & isotrópicas, polarização vertical & este trabalho \\
+        Canal & plano, resposta na portadora & artigo base (extração: este trabalho) \\
+        Realizações & 100, posições sorteadas a cada uma & artigo base (sorteio: este trabalho) \\
+        Normalização & mesma potência média por UE & este trabalho \\
+        \hline
+    \end{tabular}
+    \end{center}
+    \legend{Fonte: elaborado pela autora, com base em \citeonline{zhao-lmmse}.}
+\end{table}
+% NOTA: a tabela é larga para a página. Se não couber, trocar "lll" por
+%       "p{4cm}p{5cm}p{4cm}" ou usar \small.

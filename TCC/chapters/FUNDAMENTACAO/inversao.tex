@@ -3,3 +3,57 @@
 % ---------------------------------------------------------------------
 
 \subsubsection{Decomposicao de Cholesky}
+
+
+% ---------------------------------------------------------------------
+% SEPARAÇÃO (2026-11-04): conceitos trazidos do rascunho (Parte 1.5) e de
+%   METODOLOGIA/requisitos-tempo.tex (vazão, latência e II).
+% ---------------------------------------------------------------------
+\subsubsection{\textcolor{red}{Representação em ponto fixo}}\label{subsubsec:ponto-fixo}
+\textcolor{red}{Em hardware, os números costumam ser representados em ponto fixo. No Vitis HLS, o tipo \texttt{ap\_fixed}$\langle W, I\rangle$ tem $W$ bits no total, dos quais $I$ são da parte inteira \cite[p.~73--74]{kastner-hls}. A parte fracionária tem $F = W - I$ bits. Neste trabalho, o formato é escrito como $\langle W, I\rangle$.}
+
+\textcolor{red}{Quando um valor não cabe na parte inteira, ocorre um estouro (\textit{overflow}). Uma forma comum de tratá-lo é descartar os bits mais significativos, o que se chama \textit{wrapping} \cite[p.~70]{kastner-hls}. Em complemento de dois, isso pode até trocar o sinal do número \cite[p.~71]{kastner-hls}. Quando um valor não cabe na parte fracionária, ele precisa ser arredondado \cite[p.~71]{kastner-hls}. Descartar os bits extras arredonda em direção a $-\infty$. Outras formas arredondam em direção a $+\infty$, em direção a zero, para longe de zero, ou para o valor mais próximo, com o empate indo para o valor par \cite[p.~71]{kastner-hls}.}
+
+\textcolor{red}{O tipo \texttt{ap\_fixed} tem 7 modos de quantização e 5 modos de estouro, o que dá 35 combinações. A Tabela~\ref{tab:modos-apfixed} descreve cada um.} % TODO FONTE: UG1399.
+
+\begin{table}[htbp]
+\caption{\textcolor{red}{Modos de quantização e de estouro do tipo \texttt{ap\_fixed}.}}
+\label{tab:modos-apfixed}
+\centering
+\footnotesize
+\begin{tabular}{p{2.6cm}p{11cm}}
+\toprule
+Modo & Comportamento \\
+\midrule
+\multicolumn{2}{l}{\textit{Quantização (afeta os bits fracionários)}} \\
+\texttt{AP\_TRN}       & Descarta os bits menos significativos. Arredonda em direção a $-\infty$. \\
+\texttt{AP\_TRN\_ZERO} & Arredonda em direção a zero. Para números positivos, é igual ao \texttt{AP\_TRN}. \\
+\texttt{AP\_RND}       & Arredonda para o valor mais próximo. No empate, arredonda em direção a $+\infty$. \\
+\texttt{AP\_RND\_ZERO} & Arredonda para o valor mais próximo. No empate, arredonda em direção a zero. \\
+\texttt{AP\_RND\_MIN\_INF} & Arredonda para o valor mais próximo. No empate, arredonda em direção a $-\infty$. \\
+\texttt{AP\_RND\_INF}  & Arredonda para o valor mais próximo. No empate, afasta-se de zero. \\
+\texttt{AP\_RND\_CONV} & Arredonda para o valor mais próximo. No empate, vai para o valor par. \\
+\midrule
+\multicolumn{2}{l}{\textit{Estouro (afeta os bits inteiros)}} \\
+\texttt{AP\_SAT}       & Satura no maior ou no menor valor representável. \\
+\texttt{AP\_SAT\_ZERO} & Em caso de estouro, o resultado vira zero. \\
+\texttt{AP\_SAT\_SYM}  & Satura de forma simétrica: os limites positivo e negativo têm o mesmo módulo. \\
+\texttt{AP\_WRAP}      & Descarta os bits mais significativos que não cabem (estouro em complemento de dois). \\
+\texttt{AP\_WRAP\_SM}  & Faz o mesmo descarte, mas em sinal e magnitude. \\
+\bottomrule
+\end{tabular}
+\legend{\textcolor{red}{Fonte: TODO (UG1399).}}
+\end{table}
+% ORIGEM: Análise bits.md, corrigido (AP_TRN_ZERO). Frases de custo de hardware dos
+%   modos ficaram fora (sem fonte). Kastner et al. só tratam os conceitos, não os nomes
+%   dos modos; para os nomes, a UG1399.
+
+\subsubsection{\textcolor{red}{Latência, intervalo e vazão}}\label{subsubsec:latencia-intervalo}
+\textcolor{red}{Em síntese de alto nível, uma tarefa é uma chamada de função. A latência da tarefa é o tempo entre o início e o fim de uma tarefa. O intervalo da tarefa é o tempo entre o início de uma tarefa e o início da seguinte \cite[p.~20]{kastner-hls}. Em um circuito com \textit{pipeline}, uma nova tarefa pode começar antes de a anterior terminar. Assim, o intervalo pode ser menor que a latência \cite[p.~21]{kastner-hls}. O intervalo entre dois dados que entram no \textit{pipeline} é chamado de intervalo de iniciação (II, \textit{Initiation Interval}) \cite[p.~21]{kastner-hls}.}
+
+\textcolor{red}{Muitas ferramentas chamam o intervalo de vazão (\textit{throughput}). Um intervalo maior quer dizer menos tarefas por unidade de tempo, ou seja, uma vazão menor \cite[p.~22]{kastner-hls}. Neste trabalho, a vazão é medida pelo intervalo entre inversões, e a latência é o tempo de uma inversão.}
+% FONTE: Kastner et al. 2018 (books/Parallel Programming for FPGAs.pdf): p. 20
+%   (task latency/interval), Fig. 1.7 p. 21 (pipelined: interval 1 < latency 10),
+%   p. 21 (initiation interval), p. 22 (ferramentas chamam o intervalo de throughput).
+% A CONFERIR: páginas contadas pelo PDF (páginas impressas iguais às do PDF neste livro).
+

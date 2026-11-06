@@ -1,0 +1,57 @@
+\begin{table}[htbp]
+\caption{Perda de SNR do BCD-MMSE com 1 iteração em ponto fixo contra o mesmo em float, em SER = $10^{-2}$, por estação e formato. Cada caso é uma configuração em um par ($N$, portadora); as colunas das faixas dão a fração e o número de casos. Perdas em dB.}
+\label{tab:perfil-perdas}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+Grupo & Formato & Até 0,1 & De 0,1 a 3 & Acima de 3 & Pior perda (onde) & Mediana \\
+\hline
+G1 16-QAM & $<$22,12$>$ & 50\% (10) & 50\% (10) & 0\% (0) & 0,20 (1F, TDLC300-100) & 0,09 \\
+\cline{2-7}
+(1A, 1E, 1B, 1F) & $<$24,12$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,01 (1E, TDLA30-300) & 0,01 \\
+\cline{2-7}
+ & $<$28,14$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,01 (1E, TDLC300-100) & 0,00 \\
+\hline
+G1 QPSK & $<$22,12$>$ & 35\% (7) & 45\% (9) & 20\% (4) & 3,27 (1G, TDLC300-100) & 1,44 \\
+\cline{2-7}
+(1C, 1G, 1D, 1H) & $<$24,12$>$ & 50\% (10) & 50\% (10) & 0\% (0) & 0,45 (1G, TDLB100-400) & 0,09 \\
+\cline{2-7}
+ & $<$28,14$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,03 (1G, TDLB100-400) & 0,00 \\
+\hline
+G2 & $<$22,12$>$ & 10\% (2) & 90\% (18) & 0\% (0) & 2,70 (2F, TDLA30-75) & 0,60 \\
+\cline{2-7}
+(2A, 2E, 2B, 2F) & $<$24,12$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,08 (2F, TDLC300-100) & 0,03 \\
+\cline{2-7}
+ & $<$28,14$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,01 (2F, TDLA30-5) & 0,00 \\
+\hline
+G3 & $<$22,12$>$ & 50\% (10) & 50\% (10) & 0\% (0) & 0,32 (3E, TDLA30-5) & 0,15 \\
+\cline{2-7}
+(3A, 3E, 3B, 3F) & $<$24,12$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,03 (3E, TDLA30-300) & 0,01 \\
+\cline{2-7}
+ & $<$28,14$>$ & 100\% (20) & 0\% (0) & 0\% (0) & 0,01 (3E, TDLA30-75) & 0,00 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Quanto o BCD-MMSE com 1 iteração perde para o LMMSE (SNR a mais em SER = $10^{-2}$, os dois em float), por estação.}
+\label{tab:perfil-bcd-lmmse}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Grupo & Mediana (dB) & Menor (dB) & Maior (dB) \\
+\hline
+G1 16-QAM (1A, 1E, 1B, 1F) & 1,3 & 1,0 & 3,0 \\
+\hline
+G1 QPSK (1C, 1G, 1D, 1H) & 0,8 & 0,0 & 2,3 \\
+\hline
+G2 (2A, 2E, 2B, 2F) & 1,1 & 0,7 & 1,4 \\
+\hline
+G3 (3A, 3E, 3B, 3F) & 1,4 & 1,1 & 3,0 \\
+\hline
+\end{tabular}
+\end{table}

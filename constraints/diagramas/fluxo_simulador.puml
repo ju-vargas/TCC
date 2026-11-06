@@ -1,0 +1,146 @@
+@startuml fluxo_simulador
+' =====================================================================
+'  How the code works: QuaDRiGa channels -> Python simulator -> SER
+'  Inputs (notes on the left) and their sources:
+'    QuaDRiGa: software/simulador/quadriga/export_quadriga_channels.m (cfg.*; seed: line 83)
+'    Python seed: dbp_sim/m1_driver.py:151 (np.random.default_rng(cfg.seed)); the file
+'      backend does not use the generator (m2_channel.py:134)
+'    loop and equalizers: dbp_sim/m1_driver.py:149-211, dbp_sim/m7_equalizers.py
+'      (lmmse, bdac_mmse, bcd_mmse_path), Ledoit-Wolf: dbp_sim/m5_noise.py:162-168
+'    simulator: software/simulador/dbp_sim/params.py (M1_Driver: n_realizations,
+'      n_symbols, snr_db_grid, rng_seed, test_conditions; ALL_PANELS: M, C, K, r,
+'      iot_db, modulation; M7_Equalizers: bcd_iterations, perfect_csi)
+'    fixed point: M7_Equalizers.hw_* , set by software/testes/varredura_formatos.py
+'  Inverse backend of the SER results: varredura_formatos.py, bcd_inverse="hls"
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam ArrowColor #333333
+skinparam PartitionBorderColor #444444
+skinparam activity {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+  StartColor #3A5673
+  EndColor #3A5673
+}
+skinparam note {
+  BackgroundColor #EAF2FB
+  BorderColor #3A5673
+}
+
+start
+
+partition "1. QuaDRiGa 2.8.1 (MATLAB)" {
+  :export_quadriga_channels.m
+  once per configuration (M, K, r) and carrier (3.5 or 28 GHz);
+  note left
+    Inputs:
+    configuration: M = 128 or 256 antennas,
+      K = 8 or 12 target UEs, r = 8 interfering UEs
+    carrier f<sub>c</sub>: 3.5 or 28 GHz
+    scenario: 3GPP 38.901 UMa NLOS
+    UEs in a 120 deg sector, 50-100 m from the BS
+    100 channel realizations, random seed
+  end note
+  :for each realization i: set the seed to 0 + i,
+  draw the UE positions,
+  generate H (target UEs) and H-bar (interfering UEs);
+  note right
+    Seed: rng(seed + i) in MATLAB, seed = 0.
+    It fixes the UE positions and the random
+    parameters of QuaDRiGa in realization i.
+    The same seed at 3.5 and 28 GHz gives
+    the same UE positions at both carriers.
+  end note
+  :save to .mat;
+  :convert_quadriga_export.py: .mat -> .npz;
+}
+
+partition "2. Python simulator (dbp_sim)" {
+  :read the stored channels;
+  note left
+    Inputs:
+    channels H and H-bar (.npz)
+    configuration A to P: M, C clusters, K,
+      IoTh = 10 or 20 dB, 16-QAM or QPSK
+    test condition: N noise samples
+      (192, 168, 132 or 24) and carrier
+    100 realizations x 480 symbols per UE
+    SNR grid: -10 to 10 dB, step 2 dB
+    BCD-MMSE iterations (1), perfect CSI
+  end note
+  :start one random generator, seed = 0
+  (M1_Driver.rng_seed), once per run
+  (one configuration and one test condition);
+  note right
+    The draws below come from this generator,
+    in sequence: noise samples, symbols, noise
+    of the symbols. The fixed-point inverse
+    draws nothing, so a fixed-point run gets
+    the same draws as the float run.
+  end note
+  repeat :Monte Carlo loop: for each realization (100);
+    :take H and H-bar of this realization
+    (the same channel for every SNR point);
+    repeat :for each SNR point (11);
+      :noise covariance from H-bar, IoTh and SNR;
+      :draw the N noise samples (generator)
+      S (M x N), shared by LMMSE and BCD-MMSE;
+      fork
+        :centralized:
+        covariance S S<sup>H</sup> (M x M);
+        :Ledoit-Wolf
+        (one intensity, from all of S);
+        :LMMSE (float64)
+        one M x M inversion;
+      fork again
+        :ZF (float64)
+        does not use S;
+      fork again
+        :decentralized, in each DU c:
+        covariance of its M<sub>c</sub> rows of S (M<sub>c</sub> x M<sub>c</sub>);
+        :Ledoit-Wolf
+        (each DU with its own intensity);
+        :BDAC-MMSE initialization (float64);
+        :BCD-MMSE update in each DU:
+        den<sub>c</sub> = E<sub>s</sub> H<sub>c</sub> H<sub>c</sub><sup>H</sup> + covariance of DU c;
+        partition "3. Fixed-point inverse of den<sub>c</sub> (M<sub>c</sub> x M<sub>c</sub>)" {
+          if (bcd_inverse) then ("hls"\n(used for the\nSER results))
+            :hls_inverse.py
+            HLS code compiled by the Vitis C-simulation
+            (tb_servidor.cpp + cholesky_hardware/);
+            note left
+              Inputs:
+              fixed-point format <W,I>,
+                e.g. <24,12>
+              quantization and overflow modes,
+                e.g. AP_RND_ZERO / AP_WRAP
+              matrix size M<sub>c</sub> = M/C
+                (16 or 32)
+            end note
+            :send each matrix through a pipe,
+            receive the inverse back;
+          else ("cholesky_hw")
+            :hw_inverse.py
+            bit-exact Python model
+            (hardware/golden_cholesky.py),
+            checked against the C-simulation;
+          endif
+        }
+      end fork
+      :draw 480 symbols per UE (480K) and their noise (generator),
+      y = H s + n;
+      :each equalizer detects the symbols;
+      :SER of this realization and SNR point:
+      wrong symbols / 480K;
+    repeat while (more SNR points?) is (yes)
+    ->no;
+  repeat while (more realizations?) is (yes)
+  ->no;
+  :average the 100 SERs of each SNR point;
+}
+
+:SER x SNR curves;
+
+stop
+@enduml

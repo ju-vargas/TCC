@@ -1,7 +1,7 @@
 \subsection{Uplink}\label{subsec:uplink}
 \textcolor{red}{Este trabalho considera o \textit{uplink} de um sistema MIMO (\textit{Multiple-Input Multiple-Output}) massivo, em que $K$ Equipamentos de Usuário (UEs, \textit{User Equipments}) alvo, cada um com uma antena, transmitem dados para uma Estação Base (BS, \textit{Base Station}) com $M$ antenas, sendo $M \gg K$ \cite{zhao2025jsac}. Os UEs são atendidos ao mesmo tempo, nos mesmos recursos de tempo e frequência \cite{zhao2025jsac}.}
 
-\textcolor{red}{O sistema segue o 5G NR (\textit{New Radio}), a tecnologia de acesso sem fio da quinta geração de redes móveis (5G) \cite[p.~2]{lin-lee-5g}. O NR é especificado pelo 3GPP (\textit{3rd Generation Partnership Project}) em um conjunto de normas técnicas, como a TS 38.211, que define os canais físicos e a modulação \cite{3gpp-ts38211}, e a TS 38.104, que define a transmissão e a recepção da BS \cite{3gpp-ts38104}. O NR divide o espectro em duas faixas de frequência: FR1 (\textit{Frequency Range} 1), de 410 MHz a 7125 MHz, e FR2, de 24250 MHz a 52600 MHz \cite[Tab.~5.1-1]{3gpp-ts38104}.}
+\textcolor{red}{O sistema segue o 5G NR (\textit{New Radio}), a tecnologia de acesso sem fio da quinta geração de redes móveis (5G) \cite[p.~2]{lin-lee-5g}. O NR é especificado pelo 3GPP (\textit{3rd Generation Partnership Project}) em um conjunto de normas técnicas, como a TS 38.211, que define os canais físicos e a modulação \cite{3gpp-ts38211}, e a TS 38.104, que define a transmissão e a recepção da BS \cite{3gpp-ts38104}. O NR divide o espectro em duas faixas de frequência: FR1 (\textit{Frequency Range} 1), de 410 MHz a 7125 MHz, e FR2, de 24250 MHz a 52600 MHz \cite[Tab.~5.1-1]{3gpp-ts38104}. No \textit{uplink}, os dados dos UEs são transmitidos no canal físico compartilhado de \textit{uplink} (PUSCH, \textit{Physical Uplink Shared Channel}) \cite[Sec.~6.3.1]{3gpp-ts38211}.}
 
 \subsection{Símbolos e constelação}\label{subsec:simbolos}
 \textcolor{red}{Cada UE transmite símbolos de uma constelação de modulação, como a 16-QAM (\textit{Quadrature Amplitude Modulation}) \cite{zhao2025jsac}. A energia média por símbolo é $E_s$ \cite{zhao2025jsac}.}
@@ -10,6 +10,31 @@
 
 \textcolor{red}{No tempo, as transmissões são organizadas em quadros de 10 ms, e cada quadro tem dez subquadros de 1 ms \cite[Sec.~4.3.1]{3gpp-ts38211}. O slot é a divisão do subquadro usada na transmissão. Com prefixo cíclico normal, cada slot tem 14 símbolos OFDM, e cada subquadro tem $2^{\mu}$ slots \cite[Tab.~4.3.2-1]{3gpp-ts38211}. Assim, um slot dura 0,5 ms com $\mu=1$ e 0,125 ms com $\mu=3$.}
 
+\textcolor{red}{O UE só transmite o PUSCH quando a BS lhe concede recursos para isso. Essa concessão indica o slot e os recursos de frequência do PUSCH \cite[p.~293]{lin-lee-5g}. Assim, um slot só leva o PUSCH de um UE quando esse UE tem dados para enviar e foi escalonado. O \textit{uplink} e o \textit{downlink} também precisam dividir o espectro. Na duplexação por divisão no tempo (TDD, \textit{Time Division Duplex}), os dois usam a mesma banda de frequência, em tempos diferentes \cite[p.~104]{lin-lee-5g}. Na duplexação por divisão na frequência (FDD, \textit{Frequency Division Duplex}), os dois usam bandas diferentes ao mesmo tempo \cite[p.~104]{lin-lee-5g}. O TDD é cada vez mais comum nas bandas de frequência mais altas \cite[p.~10]{lin-lee-5g}. Com TDD, só os slots de \textit{uplink} podem levar o PUSCH.}
+% FONTE: Lin e Lee (orgs.), 5G and Beyond: p. 293 (cap. 9, Sec. 5.2, PUSCH: "the UE receives an uplink
+%   grant ... which grants resource in a given slot"; também configured grant tipos 1 e 2);
+%   p. 104 (cap. 4, FDD e TDD: "in TDD operation, the downlink and uplink transmissions perform in the
+%   same frequency bands, but different time"); p. 10 (cap. 1: "TDD becomes increasingly common for
+%   higher-frequency bands with unpaired spectra"). Bandas n78 e n257 são TDD: TS 38.104 Tabs. 5.2-1 e 5.2-2.
+% "Só os slots de uplink podem levar o PUSCH": consequência da definição de TDD (sem citação própria).
+
 \textcolor{red}{A grade de recursos combina subportadoras, na frequência, e símbolos OFDM, no tempo. Cada elemento dessa grade é um elemento de recurso (RE, \textit{Resource Element}), que corresponde a uma subportadora em um símbolo OFDM \cite[Sec.~4.4.3]{3gpp-ts38211}. Um bloco de recursos (RB, \textit{Resource Block}) tem 12 subportadoras consecutivas na frequência \cite[Sec.~4.4.4.1]{3gpp-ts38211}. Os blocos de recursos físicos (PRBs, \textit{Physical Resource Blocks}) são os RBs usados dentro da parte da banda configurada para a transmissão \cite[Sec.~4.4.4.4]{3gpp-ts38211}.}
 
-\subsection{Relação sinal-ruído}
+\textcolor{red}{O número de PRBs da transmissão é $N_{\text{PRB}}$. A parte da banda configurada pode ter de 1 a 275 RBs \cite[p.~367]{lin-lee-5g}. Esse limite vem da grade de recursos: a norma numera as suas subportadoras de 0 a 3299 \cite[Sec.~4.4.2]{3gpp-ts38211}. São, portanto, até 3300 subportadoras. Como cada RB tem 12 subportadoras, isso equivale a $3300/12 = 275$ RBs. As larguras de banda da norma ficam um pouco abaixo desse limite. O maior número de PRBs é 273 com SCS de 30~kHz e banda de 100~MHz, e 264 com SCS de 120~kHz e banda de 400~MHz \cite[Tabs.~5.3.2-1 e 5.3.2-2]{3gpp-ts38104}. Com 275 PRBs, as subportadoras ocupariam $3300 \times 30~\text{kHz} = 99$~MHz e $3300 \times 120~\text{kHz} = 396$~MHz, quase toda a banda. Como o receptor processa cada PRB, $N_{\text{PRB}} = 275$ é o pior caso do 5G NR \cite{zhao2025jsac}.}
+% FONTE: 1 a 275 RBs: Lin e Lee (orgs.), 5G and Beyond, cap. de X. Lin et al. (BWP), p. 367 do livro
+%   ("the bandwidth of a BWP spans from 1 RB to 275 RBs"). 0-3299: TS 38.211 v18.6.0 Sec. 4.4.2 (p. 14-15),
+%   valores do txDirectCurrentLocation dentro da grade. 273 e 264: TS 38.104 v16.4.0 Tabs. 5.3.2-1 e 5.3.2-2.
+%   275 como pior caso: paper.md:640 (N_PRB = 275, N_u = 3300 = 275 x 12, "worst case in 5G NR").
+% CONTA: 273 x 12 x 30 kHz = 98,28 MHz em 100 MHz; 264 x 12 x 120 kHz = 380,16 MHz em 400 MHz.
+
+
+\sout{Resource Element (RE) é a menor unidade básica de transmissão, correspondendo a uma subportadora no domínio da frequência e um símbolo OFDM no domínio do tempo.  Slot é a unidade básica de tempo para o agendamento de transmissões na rede, representando um bloco temporal contínuo. No padrão 5G NR, cada PRB possui 12 subportadores consecutivas na frequência, e cada slot possui 14 símbolos.} 
+
+\subsection{Relação sinal-ruído}\label{subsec:snr}
+% SEPARAÇÃO (2026-11-04): definição trazida de METODOLOGIA/simulacao.tex.
+\textcolor{red}{A relação sinal-ruído (SNR, \textit{Signal-to-Noise Ratio}) compara a energia média por símbolo com a potência do ruído térmico em cada antena, $\sigma^2$ (Seção~\ref{subsec:ruido-colorido}). Ela é definida como \cite{zhao2025jsac}}
+\begin{equation}
+\mathrm{SNR}=10\log_{10}\left(\frac{E_s}{\sigma^2}\right).
+\label{eq:snr}
+\end{equation}
+% FONTE: paper.md:577.

@@ -16,314 +16,235 @@
 % "Lnnn" = linha do paper.md do artigo base.
 % =====================================================================
 
-\section{Setup de simulação}
+\section{Simulation setup}
+The simulation parameters are organized as the simulation flow of Figure~\ref{fig:fluxo_simulacao}. The base station configurations are inputs of both parts of the flow. The channels are generated before the simulation, by a MATLAB script that runs QuaDRiGa (Section~\ref{subsec:setup_canal}). The Python simulator reads the stored channels and sets the other parameters: test conditions, signal and noise, receiver and evaluation (Section~\ref{subsec:setup_python}). In the tables, the source column gives the reference of each value, and the name in the code gives the variable that sets it.
 
-% NOVO -- substitui 9-results.tex:4
-Os parâmetros da simulação estão organizados de acordo com a parte do simulador em que são usados: o canal, o sinal e o ruído, o receptor e a avaliação. Os parâmetros do sistema seguem o modelo de \citeonline{zhao2025jsac}, que propõe os equalizadores descentralizados avaliados neste trabalho. Em cada tabela, a coluna de origem indica a referência de cada valor.
+
+
 % TOM: Zhao et al. é a referência do modelo, não objeto de reprodução.
 
 
-% ---------------------------------------------------------------------
-\subsection{Configurações simuladas}
-% ---------------------------------------------------------------------
-% Vem primeiro: M, C, K, r, IoT e modulação mudam entre as configurações e
-% não se repetem nas tabelas seguintes.
+% Subseção "Base Stations Configurations" (texto e Tabela tab:paineis) movida para
+%   METODOLOGIA/configuracoes.tex em 2026-11-04, para os nomes 1A-3D serem definidos
+%   antes de serem usados na Metodologia.
 
-% AUTORA (9-results.tex:214), tom ajustado
-Foram simuladas seis configurações, as mesmas avaliadas por \citeonline{zhao2025jsac}. A configuração 1 é a de referência. Cada uma das outras muda um parâmetro em relação a ela. A Tabela~\ref{tab:paineis} mostra essas configurações.
+% ---------------------------------------------------------------------
+\subsection{Channel Generation in QuaDRiGa}\label{subsec:setup_canal}
+% ---------------------------------------------------------------------
+
+Table~\ref{tab:param_canal} shows the parameters of the MATLAB script that generates the channel matrices $\mathbf{H}$ and $\overline{\mathbf{H}}$. The remaining QuaDRiGa parameters were kept at their default values \cite{quadriga-manual}.
+
+The BS features a uniform linear array (ULA) of $M$ antennas, with a standard spacing of half a wavelength ($\lambda/2$) of the operating signal. The antennas at both the BS and the UEs are omnidirectional, meaning they provide the same gain in all directions.
+
+For each realization, the script randomly determines the positions of the $K$ target UEs and the $r$ interferers. The distance is sampled such that the UE density remains uniform across the entire area. The random seed used for this sampling is always the realization number. Based on these positions, QuaDRiGa generates the frequency-domain channel response between each BS antenna and each UE within the propagation scenario.
+
+
 
 \begin{table}[htbp]
-\color{red}
-\caption{Configurações simuladas.}
-\label{tab:paineis}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-Configuração & $M$ & $C$ & $M_c$ & $K$ & IoT (dB) & Modulação \\
-\hline
--- & \texttt{M} & \texttt{C} & -- & \texttt{K} & \texttt{iot\_db} & \texttt{modulation} \\
-\hline
-1 & 128 & 8  & 16 & 8  & 10 & 16-QAM \\
-\hline
-2 & 256 & 8  & 32 & 8  & 10 & 16-QAM \\
-\hline
-3 & 256 & 16 & 16 & 8  & 10 & 16-QAM \\
-\hline
-4 & 128 & 8  & 16 & 12 & 10 & 16-QAM \\
-\hline
-5 & 128 & 8  & 16 & 8  & 20 & 16-QAM \\
-\hline
-6 & 128 & 8  & 16 & 8  & 10 & QPSK \\
-\hline
-\end{tabular}
-\legend{\textcolor{red}{Fonte: adaptado de \citeonline{zhao2025jsac}. Em todas as configurações, $r = 8$. Nomes no código: campos de \texttt{Panel} (\texttt{dbp\_sim/params.py}); $M_c = M/C$.}}
-\end{table}
-
-% AUTORA (9-results.tex:245) -- parágrafo retirado do texto (tom); o conteúdo ficou em comentário.
-% Configurações 1 a 6 = painéis (a), (b), (c), (e), (f), (g) da Fig. 8 de Zhao et al.
-% O painel (d) não aparece no artigo. Na configuração 4 (painel e), r = 8 foi
-% mantido; L577 liga r a K, então r = 12 também seria defensável.
-
-
-% ---------------------------------------------------------------------
-\subsection{Canal}\label{subsec:setup_canal}
-% ---------------------------------------------------------------------
-
-% NOVO
-A Tabela~\ref{tab:param_canal} mostra os parâmetros usados para gerar as matrizes de canal $\mathbf{H}$ e $\overline{\mathbf{H}}$.
-% AUTORA (9-results.tex:67), adaptado: "A Tabela ... lista esses valores" saiu,
-% porque agora os padrões estão na mesma tabela.
-Os demais parâmetros do QuaDRiGa foram mantidos no valor padrão do simulador \cite{quadriga-manual}.
-% Saiu "e não mudam o resultado de forma importante" (não foi medido).
-
-\begin{table}[htbp]
-\caption{Parâmetros do cenário e do canal.}
+\caption{Channel parameters set in the MATLAB script that runs QuaDRiGa.}
 \label{tab:param_canal}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.0} % 1.0 (e não 1.2) para a legenda caber na página
-\begin{tabular}{|p{2.2cm}|p{3.6cm}|p{4.6cm}|p{3.4cm}|}
-\hline
-\raggedright Origem & \raggedright Parâmetro & \raggedright Nome no código & \raggedright Valor \tabularnewline
-\hline
-\raggedright \cite{zhao2025jsac} & \raggedright Número de células e de BSs & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak n\_\allowbreak{}cells} & \raggedright 1 \tabularnewline
+\renewcommand{\arraystretch}{1.1}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|p{2.5cm}|p{3.4cm}|p{4.2cm}|p{3.1cm}|}
+\toprule
+\centering\textbf{Source} & \centering\textbf{Parameter} & \centering\textbf{Name in the MATLAB script} & \centering\textbf{Value} \tabularnewline
+\midrule
+\multirow{5}{=}{\raggedright \citesp{zhao2025jsac}} & \raggedright Number of cells and BSs & \raggedright \texttt{tx\_\allowbreak{}position} (one BS) & \raggedright 1 \tabularnewline
 \cline{2-4}
- & \raggedright Setor onde ficam os UEs & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak sector\_\allowbreak{}deg} & \raggedright $120^\circ$ \tabularnewline
+ & \raggedright Sector where the UEs are & \raggedright \texttt{sector\_\allowbreak{}deg} & \raggedright $120^\circ$ \tabularnewline
 \cline{2-4}
- & \raggedright Distância dos UEs até a BS & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak radius\_\allowbreak{}min\_\allowbreak{}m}, \texttt{radius\_\allowbreak{}max\_\allowbreak{}m} & \raggedright 50 a 100 m \tabularnewline
+ & \raggedright Position of the interferers & \raggedright \texttt{n\_\allowbreak{}ue = K + r} & \raggedright Same rule as the served UEs \tabularnewline
 \cline{2-4}
- & \raggedright Posição dos interferentes & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak interferers\_\allowbreak{}like\_\allowbreak{}targets} & \raggedright Mesma regra dos UEs atendidos \tabularnewline
+ & \raggedright Channel generator & \raggedright -- & \raggedright QuaDRiGa \tabularnewline
 \cline{2-4}
- & \raggedright Gerador do canal & \raggedright -- & \raggedright QuaDRiGa \tabularnewline
+ & \raggedright Channel constant within a PRB & \raggedright -- & \raggedright Flat channel \tabularnewline
+\midrule
+\multirow{5}{=}{\raggedright QuaDRiGa default \citesp{quadriga-manual}} & \raggedright Uses only the minimal version of the 3GPP model & \raggedright \texttt{use\_\allowbreak{}3GPP\_\allowbreak{}baseline} & \raggedright \texttt{false} \tabularnewline
 \cline{2-4}
- & \raggedright Canal constante dentro de um PRB & \raggedright -- & \raggedright Canal plano \tabularnewline
-\hline
-\raggedright Padrão do QuaDRiGa \cite{quadriga-manual} & \raggedright Usa só a versão mínima do modelo 3GPP & \raggedright \texttt{qd\_\allowbreak{}simulation\_\allowbreak{}parameters.\allowbreak use\_\allowbreak{}3GPP\_\allowbreak{}baseline} & \raggedright \texttt{false} \tabularnewline
+ & \raggedright Shape of the spatial correlation of the large-scale parameters & \raggedright \texttt{autocorrelation\_\allowbreak{}function} & \raggedright \texttt{Comb300} \tabularnewline
 \cline{2-4}
- & \raggedright Forma da correlação espacial dos parâmetros de larga escala & \raggedright \texttt{qd\_\allowbreak{}simulation\_\allowbreak{}parameters.\allowbreak autocorrelation\_\allowbreak{}function} & \raggedright \texttt{Comb300} \tabularnewline
+ & \raggedright Adds the direct-path delay to the delays & \raggedright \texttt{use\_\allowbreak{}absolute\_\allowbreak{}delays} & \raggedright \texttt{false} \tabularnewline
 \cline{2-4}
- & \raggedright Soma o atraso do caminho direto aos atrasos & \raggedright \texttt{qd\_\allowbreak{}simulation\_\allowbreak{}parameters.\allowbreak use\_\allowbreak{}absolute\_\allowbreak{}delays} & \raggedright \texttt{false} \tabularnewline
+ & \raggedright Each path starts with a random phase & \raggedright \texttt{use\_\allowbreak{}random\_\allowbreak{}initial\_\allowbreak{}phase} & \raggedright \texttt{true} \tabularnewline
 \cline{2-4}
- & \raggedright Cada caminho começa com uma fase aleatória & \raggedright \texttt{qd\_\allowbreak{}simulation\_\allowbreak{}parameters.\allowbreak use\_\allowbreak{}random\_\allowbreak{}initial\_\allowbreak{}phase} & \raggedright \texttt{true} \tabularnewline
+ & \raggedright Samples per half wavelength along the track & \raggedright \texttt{sample\_\allowbreak{}density} & \raggedright 2.5 \tabularnewline
+\midrule
+\multirow{9}{=}{\raggedright Defined in this work} & \raggedright QuaDRiGa version & \raggedright \texttt{version} & \raggedright 2.8.1-0 \tabularnewline
 \cline{2-4}
- & \raggedright Amostras por meio comprimento de onda na trajetória & \raggedright \texttt{qd\_\allowbreak{}simulation\_\allowbreak{}parameters.\allowbreak sample\_\allowbreak{}density} & \raggedright 2,5 \tabularnewline
+ & \raggedright Propagation scenario & \raggedright \texttt{scenario} & \raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMa\_\allowbreak{}NLOS} (Table~\ref{tab:cenario_uma}) \tabularnewline
 \cline{2-4}
- & \raggedright Altura da BS & \raggedright \texttt{qd\_\allowbreak{}layout.\allowbreak tx\_\allowbreak{}position} & \raggedright 25 m \tabularnewline
-\hline
-\raggedright Este trabalho & \raggedright Forma de uso do QuaDRiGa & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak backend} & \raggedright Canais exportados em arquivo e lidos em Python \tabularnewline
+ & \raggedright Bandwidth & \raggedright \texttt{bandwidth} & \raggedright 20 MHz \tabularnewline
 \cline{2-4}
- & \raggedright Versão do QuaDRiGa & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak quadriga\_\allowbreak{}version} & \raggedright 2.8.1-0 \tabularnewline
+ & \raggedright Flat-channel extraction & \raggedright \texttt{fr(bandwidth, 1)} & \raggedright Response at one subcarrier \tabularnewline
 \cline{2-4}
- & \raggedright Cenário & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak quadriga\_\allowbreak{}scenario} & \raggedright \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMa\_\allowbreak{}NLOS} \tabularnewline
+ & \raggedright BS array & \raggedright \texttt{tx\_\allowbreak{}array} & \raggedright ULA with $\lambda/2$ spacing \tabularnewline
 \cline{2-4}
- & \raggedright Frequência da portadora & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak center\_\allowbreak{}frequency\_\allowbreak{}hz} & \raggedright 3,5 GHz \tabularnewline
+ & \raggedright Antenna elements (BS and UE) & \raggedright \texttt{qd\_\allowbreak{}arrayant('omni')} & \raggedright Omnidirectional \tabularnewline
 \cline{2-4}
- & \raggedright Largura de banda & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak bandwidth\_\allowbreak{}hz} & \raggedright 20 MHz \tabularnewline
+ & \raggedright Sector orientation & \raggedright \texttt{tx\_\allowbreak{}array}, \texttt{ang} & \raggedright Centered on the direction perpendicular to the array \tabularnewline
 \cline{2-4}
- & \raggedright Extração do canal plano & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak flat\_\allowbreak{}channel\_\allowbreak{}extraction} & \raggedright Resposta em uma subportadora \tabularnewline
+ & \raggedright UE placement & \raggedright \texttt{rx\_\allowbreak{}track} & \raggedright Uniform over the sector area \tabularnewline
 \cline{2-4}
- & \raggedright Arranjo da BS & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak array\_\allowbreak{}geometry} & \raggedright ULA com espaçamento $\lambda/2$ \tabularnewline
-\cline{2-4}
- & \raggedright Elementos de antena (BS e UE) & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak array\_\allowbreak{}geometry} & \raggedright Omnidirecionais \tabularnewline
-\cline{2-4}
- & \raggedright Orientação do setor & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak array\_\allowbreak{}geometry} & \raggedright Centrado na direção perpendicular ao arranjo \tabularnewline
-\cline{2-4}
- & \raggedright Altura do UE & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak ue\_\allowbreak{}height\_\allowbreak{}m} & \raggedright 1,5 m \tabularnewline
-\cline{2-4}
- & \raggedright Posição dos UEs & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak ue\_\allowbreak{}placement} & \raggedright Uniforme na área do setor \tabularnewline
-\cline{2-4}
- & \raggedright Realizações & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak independent\_\allowbreak{}drops} & \raggedright Posições novas a cada realização \tabularnewline
-\cline{2-4}
- & \raggedright Normalização do canal & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak normalization} & \raggedright Controle de potência por UE \tabularnewline
-\hline
+ & \raggedright Realizations & \raggedright \texttt{rng(seed + rr)} & \raggedright New positions in each realization \tabularnewline
+\bottomrule
 \end{tabular}
-\legend{Fonte: \citeonline{zhao2025jsac}, código-fonte do QuaDRiGa v2.8.1 e a autora. $M$, $K$ e $r$ estão na Tabela~\ref{tab:paineis}. Nomes no código: \texttt{dbp\_sim/params.py} e propriedades das classes do QuaDRiGa.} % TODO citar QuaDRiGa
+\vspace{4pt}
+\legend{Source: \citesp{zhao2025jsac}; \citesp{quadriga-manual} and the author.}
 \end{table}
-% FONTES (artigo): L577 (célula única, setor, raio, QuaDRiGa, interferentes
-%   "molded similarly"); L614 (canal constante no PRB).
-% Altura do UE: o script fixa 1,5 m, igual ao padrão de randomize_rx_positions;
-%   por isso está em "Escolhido" e não em "Padrão do QuaDRiGa".
-% Altura da BS: o script também fixa 25 m, igual ao padrão de qd_layout.
-%   Mantida em "Padrão" porque a escolha do cenário se apoia nesse padrão.
-%   Se preferir coerência com a altura do UE, mover para "Escolhido".
 
-% AUTORA (9-results.tex:173-175) -- antes na subseção "Cenário escolhido".
-% A frase da linha 171 ("O QuaDRiGa define cada cenário por um arquivo de
-% configuração...") saiu: o mesmo conceito já está na fundamentação
-% (0.channel-modelling.tex, "Cenário de propagação").
-Neste trabalho foi usado o cenário \texttt{3GPP\_38.901\_UMa\_NLOS}, que representa uma macrocélula urbana (\textit{Urban Macro} -- UMa) sem linha de visada (NLoS) entre a BS e os UEs. % TODO citar 3GPP TR 38.901 e QuaDRiGa
-Os cenários UMa e UMi (\textit{Urban Micro}) aceitam a mesma faixa de distâncias, de 10 a 5000 m. Então o raio de 50 a 100 m não separa os dois. A diferença está na altura da BS: 10 m no UMi e 25 m no UMa. Foi usada a altura padrão do QuaDRiGa, de 25 m, que corresponde ao cenário UMa. % TODO citar QuaDRiGa (qd_layout: tx em [0;0;25])
-A Tabela~\ref{tab:cenario_uma} compara a faixa de validade do cenário com os valores usados na simulação.
 
-% AUTORA (9-results.tex:178-209) -- tabela de validade do cenário
+In this work, the \texttt{3GPP\_38.901\_UMa\_NLOS} propagation scenario was used, which represents an urban macrocell (\textit{Urban Macro} -- UMa) with no line-of-sight (NLoS) between the base station (BS) and the user equipment (UEs). Table~\ref{tab:cenario_uma} presents the valid range for the UMa propagation scenario and the values selected. The system model assumes a flat-fading channel, in which all subcarriers within a physical resource block (PRB) experience the same channel conditions.
+
+
 \begin{table}[htbp]
-\color{red}
-\caption{Faixa de validade do cenário \texttt{3GPP\_38.901\_UMa\_NLOS} e valores usados na simulação.}
+\caption{Parameters of the propagation scenario \texttt{3GPP\_38.901\_UMa\_NLOS}: valid range and values used in the simulation.}
 \label{tab:cenario_uma}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|p{3.2cm}|p{4.6cm}|p{3.1cm}|p{2.3cm}|}
-\hline
-\raggedright Parâmetro & \raggedright Nome no código & \raggedright Faixa válida do cenário & \raggedright Valor usado \tabularnewline
-\hline
-\raggedright Frequência da portadora & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak center\_\allowbreak{}frequency\_\allowbreak{}hz} & \raggedright 0,5 a 100 GHz & \raggedright 3,5 GHz \tabularnewline
-\hline
-\raggedright Distância BS--UE & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak radius\_\allowbreak{}min\_\allowbreak{}m}, \texttt{radius\_\allowbreak{}max\_\allowbreak{}m} & \raggedright 10 a 5000 m & \raggedright 50 a 100 m \tabularnewline
-\hline
-\raggedright Altura da BS & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak bs\_\allowbreak{}height\_\allowbreak{}m} & \raggedright 25 m & \raggedright 25 m \tabularnewline
-\hline
-\raggedright Altura do UE & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak ue\_\allowbreak{}height\_\allowbreak{}m} & \raggedright 1,5 a 22,5 m & \raggedright 1,5 m \tabularnewline
-\hline
-\raggedright Número de \textit{clusters} & \raggedright \texttt{NumClusters} & \multicolumn{2}{c|}{21} \tabularnewline
-\hline
-\raggedright Caminhos por \textit{cluster} & \raggedright \texttt{NumSubPaths} & \multicolumn{2}{c|}{20} \tabularnewline
-\hline
-\raggedright Desvio padrão do sombreamento & \raggedright \texttt{SF\_\allowbreak{}sigma} & \multicolumn{2}{c|}{6 dB} \tabularnewline
-\hline
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|p{1.9cm}|p{2.6cm}|p{3.0cm}|p{2.6cm}|p{2.6cm}|}
+\toprule
+\centering\textbf{Set in} & \centering\textbf{Parameter} & \centering\textbf{Name} & \centering\textbf{Valid range of the propagation scenario} & \centering\textbf{Value used} \tabularnewline
+\midrule
+\multirow{4}{=}{\raggedright MATLAB script} & \raggedright Carrier frequency & \raggedright \texttt{center\_\allowbreak{}freq} & \raggedright 0.5 to 100 GHz & \raggedright 3.5 GHz (FR1) and 28 GHz (FR2) \tabularnewline
+\cline{2-5}
+ & \raggedright BS--UE distance & \raggedright \texttt{r\_\allowbreak{}min\_\allowbreak{}m}, \texttt{r\_\allowbreak{}max\_\allowbreak{}m} & \raggedright 10 to 5000 m & \raggedright 50 to 100 m \tabularnewline
+\cline{2-5}
+ & \raggedright BS height & \raggedright \texttt{bs\_\allowbreak{}height\_\allowbreak{}m} & \raggedright 25 m & \raggedright 25 m \tabularnewline
+\cline{2-5}
+ & \raggedright UE height & \raggedright \texttt{ue\_\allowbreak{}height\_\allowbreak{}m} & \raggedright 1.5 to 22.5 m & \raggedright 1.5 m \tabularnewline
+\midrule
+\multirow{3}{=}{\raggedright Scenario file (\texttt{.conf})} & \raggedright Number of \textit{clusters} & \raggedright \texttt{NumClusters} & \multicolumn{2}{c|}{21} \tabularnewline
+\cline{2-5}
+ & \raggedright Paths per \textit{cluster} & \raggedright \texttt{NumSubPaths} & \multicolumn{2}{c|}{20} \tabularnewline
+\cline{2-5}
+ & \raggedright Shadowing standard deviation & \raggedright \texttt{SF\_\allowbreak{}sigma} & \multicolumn{2}{c|}{6 dB} \tabularnewline
+\bottomrule
 \end{tabular}
-\legend{\textcolor{red}{Fonte: arquivo \texttt{3GPP\_38.901\_UMa\_NLOS.conf} do QuaDRiGa v2.8.1. Nomes no código: \texttt{dbp\_sim/params.py} e chaves do arquivo \texttt{.conf}.}} % TODO citar QuaDRiGa
+\vspace{4pt}
+\legend{Source: \citesp{quadriga-manual}; \citesp{zhao2025jsac} and the author.}
 \end{table}
 
 
 
 
 
-% AUTORA (9-results.tex:153)
-A frequência da portadora não é definida pelo arquivo do cenário. Ela precisa ser escolhida e informada, porque os parâmetros do cenário mudam com a frequência. Foi usado 3,5 GHz. % TODO: 3,5 GHz não tem fonte. Sugestão: citar uma referência que use 3,5 GHz como banda típica do 5G NR (ex.: livro 5G and Beyond), ou dizer só que é uma escolha deste trabalho.
 
-% AUTORA (9-results.tex:155-156)
-O modelo de sistema considera o canal plano, ou seja, o canal é o mesmo em todas as subportadoras de um PRB \cite{zhao2025jsac}. % L614
-O QuaDRiGa gera a resposta do canal em frequência. Por isso foi usada a resposta em uma única subportadora como a matriz $\mathbf{H}$. A largura de banda de 20 MHz só define a grade de subportadoras e não muda o resultado.
+% ---------------------------------------------------------------------
+\subsection{Python Simulator}\label{subsec:setup_python}
+% ---------------------------------------------------------------------
 
-% AUTORA (9-results.tex:158)
-Foi usado um arranjo linear uniforme (ULA) de $M$ elementos, com espaçamento de meio comprimento de onda ($\lambda/2$). Todos os elementos são omnidirecionais, ou seja, recebem com o mesmo ganho em todas as direções. Os UEs também têm uma antena omnidirecional.
+The Python simulator reads the stored channels and runs the rest of the simulation flow. Its parameters are grouped as in Figure~\textcolor{red}{\ref{fig:fluxo_python}}: test conditions, signal and noise, receiver and evaluation. \textcolor{red}{The test conditions are described in Section~\ref{subsec:setup_condicoes}.}
 
-% AUTORA (9-results.tex:160-161)
-Os UEs são sorteados de forma uniforme na área do setor de $120^\circ$, entre 50 e 100 m da BS. O centro do setor fica na direção perpendicular ao arranjo. O ângulo é sorteado de forma uniforme dentro do setor. A distância é sorteada de forma que a densidade de UEs seja a mesma em toda a área. Assim a região mais distante, que tem área maior, recebe mais UEs. Os interferentes seguem a mesma regra dos UEs atendidos \cite{zhao2025jsac}. % L577
-Cada uma das 100 realizações sorteia posições novas para todos os UEs.
-
-% AUTORA (9-results.tex:163-164)
-Como os UEs ficam entre 50 e 100 m da BS, a perda de percurso varia muito entre eles. Nos canais gerados, a diferença de potência entre o UE mais forte e o mais fraco teve mediana de 13 dB nas 100 realizações. Sem nenhum ajuste, a taxa de erro média fica dominada pelo UE mais fraco. Por isso cada coluna de $\mathbf{H}$ e $\overline{\mathbf{H}}$ foi normalizada para ter a mesma potência média, com $\mathbb{E}[|h_{mk}|^2] = 1$. Isso equivale a um controle de potência ideal no enlace de subida.
-% Medição deste trabalho (13 dB). Saíram do texto: "foi o parâmetro que mais mudou o
-%   resultado", "o artigo não fala de controle de potência" e as razões de SER contra a
-%   Fig. 8(a) (0,56-0,65x / 0,8-7,5x). Se forem usadas, o lugar é a discussão dos
-%   resultados, não o setup. Fonte possível para controle de potência: bjornson-mimo,
-%   p. 311 (ver rascunho_bloco_canal.tex).
+% MOVIDO (2026-11-04): a subsubseção "Test Conditions" (texto da autora e Tabela
+%   tab:condicoes_teste) foi para METODOLOGIA/condicoes-teste.tex, junto com a escolha do N.
 
 
 % ---------------------------------------------------------------------
-\subsection{Sinal e ruído}\label{subsec:setup_ruido}
+\subsubsection{Signal and Noise}\label{subsec:setup_ruido}
 % ---------------------------------------------------------------------
 
 % NOVO
-A Tabela~\ref{tab:param_ruido} mostra os parâmetros usados para gerar os símbolos transmitidos e o ruído.
+Table~\ref{tab:param_ruido} shows the parameters used to read the channels and to generate the transmitted symbols and the noise.
 
 \begin{table}[htbp]
-\caption{Parâmetros do sinal e do ruído.}
+\caption{Signal and noise parameters.}
 \label{tab:param_ruido}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|p{2.2cm}|p{3.6cm}|p{4.6cm}|p{3.4cm}|}
-\hline
-\raggedright Origem & \raggedright Parâmetro & \raggedright Nome no código & \raggedright Valor \tabularnewline
-\hline
-\raggedright \cite{zhao2025jsac} & \raggedright Modelo do ruído & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak noise\_\allowbreak{}model} & \raggedright $\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, \beta\overline{\mathbf{H}}\,\overline{\mathbf{H}}^H + \sigma^2\mathbf{I})$ \tabularnewline
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|p{2.3cm}|p{3.4cm}|p{4.3cm}|p{3.2cm}|}
+\toprule
+\centering\textbf{Source} & \centering\textbf{Parameter} & \centering\textbf{Name in the Python simulator} & \centering\textbf{Value} \tabularnewline
+\midrule
+\multirow{4}{=}{\raggedright \citesp{zhao2025jsac}} & \raggedright Noise model & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak noise\_\allowbreak{}model} & \raggedright $\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, \beta\overline{\mathbf{H}}\,\overline{\mathbf{H}}^H + \sigma^2\mathbf{I})$ \tabularnewline
 \cline{2-4}
- & \raggedright Definição da SNR & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak snr\_\allowbreak{}definition} & \raggedright $10\log_{10}(E_s/\sigma^2)$ \tabularnewline
+ & \raggedright SNR definition & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak snr\_\allowbreak{}definition} & \raggedright $10\log_{10}(E_s/\sigma^2)$ \tabularnewline
 \cline{2-4}
- & \raggedright Energia média do símbolo & \raggedright \texttt{M4\_\allowbreak{}Source.\allowbreak Es} & \raggedright $E_s = 1$ \tabularnewline
+ & \raggedright Mean symbol energy & \raggedright \texttt{M4\_\allowbreak{}Source.\allowbreak Es} & \raggedright $E_s = 1$ \tabularnewline
 \cline{2-4}
- & \raggedright Potência do ruído térmico & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak snr\_\allowbreak{}definition} & \raggedright $\sigma^2 = 10^{-\mathrm{SNR}/10}$ \tabularnewline
-\hline
-\raggedright Este trabalho & \raggedright Energia da constelação & \raggedright \texttt{M4\_\allowbreak{}Source.\allowbreak unit\_\allowbreak{}energy\_\allowbreak{}constellation} & \raggedright Média unitária \tabularnewline
+ & \raggedright Thermal noise power & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak snr\_\allowbreak{}definition} & \raggedright $\sigma^2 = 10^{-\mathrm{SNR}/10}$ \tabularnewline
+\midrule
+\multirow{5}{=}{\raggedright Defined in this work} & \raggedright Channel input & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak backend} & \raggedright $\mathbf{H}$ and $\overline{\mathbf{H}}$ read from the \texttt{.npz} file of QuaDRiGa \tabularnewline
 \cline{2-4}
- & \raggedright Potência dos interferentes & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak beta\_\allowbreak{}convention} & \raggedright $\beta = \sigma^2(10^{\mathrm{IoT}/10} - 1)/r$ \tabularnewline
+ & \raggedright Channel normalization & \raggedright \texttt{M2\_\allowbreak{}Channel.\allowbreak normalization} & \raggedright Same mean power for every UE \tabularnewline
 \cline{2-4}
- & \raggedright Ruído dos símbolos de dados & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak data\_\allowbreak{}noise\_\allowbreak{}independent} & \raggedright Independente das $N$ amostras \tabularnewline
-\hline
+ & \raggedright Constellation energy & \raggedright \texttt{M4\_\allowbreak{}Source.\allowbreak unit\_\allowbreak{}energy\_\allowbreak{}constellation} & \raggedright Unit mean \tabularnewline
+\cline{2-4}
+ & \raggedright Interferer power & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak beta\_\allowbreak{}convention} & \raggedright $\beta = \sigma^2(10^{\mathrm{IoTh}/10} - 1)/r$ \tabularnewline
+\cline{2-4}
+ & \raggedright Noise of the data symbols & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak data\_\allowbreak{}noise\_\allowbreak{}independent} & \raggedright Independent of the $N$ samples \tabularnewline
+\bottomrule
 \end{tabular}
-\legend{Fonte: \citeonline{zhao2025jsac} e a autora. IoT e modulação estão na Tabela~\ref{tab:paineis}. Nomes no código: \texttt{dbp\_sim/params.py}.}
+\vspace{4pt}
+\legend{Source: \citesp{zhao2025jsac} and the author. IoTh and modulation are in Table~\ref{tab:paineis}.}
 \end{table}
-% FONTES: modelo do ruído L113, L577; SNR L577; E_s e sigma^2 L577, L79.
-% beta: IoT definido em L577, N_0 nunca definido, lido como sigma^2 via [P] L207,
-%   e dividido por r para que a IoT medida por antena seja a IoT pedida.
-%   A fórmula com /r vale com a normalização por UE (média de diag(Hbar Hbar^H) = r).
 
-% NOVO
-A SNR é definida como $10\log_{10}(E_s/\sigma^2)$ \cite{zhao2025jsac}. Assim, só a razão entre $E_s$ e $\sigma^2$ importa. Por isso foi usado $E_s = 1$, com as constelações normalizadas para energia média unitária. Dessa forma, a potência do ruído térmico é $\sigma^2 = 10^{-\mathrm{SNR}/10}$.
-% FONTE: L577 (definição da SNR).
-% NOSSO (derivação): na eq. (3), multiplicar E_s e R pelo mesmo fator não muda W.
-%   Como beta é proporcional a sigma^2 (IoT), R é proporcional a sigma^2. Então só
-%   E_s/sigma^2 importa. Se a banca pedir, mostrar essa conta em uma linha.
+The SNR depends solely on the ratio between the symbol energy $E_s$ and the thermal noise power $\sigma^2$, as defined by the parameter \texttt{M5\_Noise.snr\_definition}. Accordingly, the constellations were normalized to have unit average energy (parameter \texttt{M4\_Source.unit\_energy\_constellation}), and the symbol energy was set to $E_s = 1$ (parameter \texttt{M4\_Source.Es}). Thus, the power $\sigma^2$ could be calculated based on the SNR to be simulated.
 
-% NOVO
-A IoT é definida como $10\log_{10}((\beta + N_0)/\sigma^2)$ \cite{zhao2025jsac}, em que $N_0$ é a potência do ruído térmico, $\sigma^2$. O parâmetro $\beta$ é a potência de cada interferente, mas cada antena recebe a soma dos $r$ interferentes. Por isso, $\beta$ foi dividido por $r$. Assim, a razão entre a interferência e o ruído térmico em cada antena fica igual à IoT da configuração. Sem essa divisão, com IoT de 10~dB e $r = 8$, essa razão seria de cerca de 18,6~dB. Essa forma de medir a interferência, pela média por antena, também é usada por \citeonline{tomasin-interference}.
-% FONTE: L577 (definição da IoT; N_0 não aparece em outro lugar do artigo).
-% TODO FONTE: N_0 = sigma^2 vem do artigo anterior do mesmo grupo (Zhao et al.,
-%   GLOBECOM 2021, L207: SNR medida como Es/N0). Esse artigo não está no .bib.
-% NOSSO (conta): com a normalização por UE, a média de diag(Hbar Hbar^H) é r.
-%   Sem dividir: 10*log10((10^1 - 1)*8 + 1) = 10*log10(73) = 18,6 dB.
-% FONTE: Tomasin et al., eq. (47), linha 515 de Estimation*.md: ROT = (tr R / N)/sigma^2 - 1.
-%   CUIDADO: o ROT deles é interferência/ruído; a IoT do artigo é
-%   (interferência + ruído)/ruído. IoT linear = 1 + ROT. Por isso o texto diz só
-%   "medir pela média por antena", não "IoT = ROT".
+Furthermore, the power of the UEs was adjusted via channel normalization, defined by the parameter \texttt{M2\_Channel.normalization}, ensuring that signals from UEs located at varying distances arrived at the BS with the same average power.
 
-% NOVO
-As amostras usadas para estimar $\hat{\mathbf{R}}$ vêm dos REs de piloto \cite{zhao2025jsac}. Por isso, o ruído dos símbolos de dados é sorteado de forma independente dessas amostras. Assim, o equalizador é testado com um ruído que não foi usado na estimação.
-% FONTE: L123 ("noise samples in N pilot resource elements").
-% NOSSO: a escolha (params.M5_Noise.data_noise_independent, status A/2B).
-%   (Zhao et al. não tratam disso; não citar como deles.)
+With the channel normalized, each of the $r$ interferers reaches every BS antenna with the same average power. In this scenario, the interference received at each antenna is scaled by the number of interferers, $r$. To ensure that the ratio of interference to thermal noise at each antenna equals the IoTh value specified in the configuration (parameter \texttt{M5\_Noise.iot\_db}), the power $\beta$ of each interferer is divided by $r$. This convention is governed by the parameter \texttt{M5\_Noise.beta\_convention} and follows the approach of averaging interference at each antenna, a method also employed by \citeonline{tomasin-interference}.
 
+The parameter \texttt{M5\_Noise.data\_noise\_independent} specifies that the noise affecting the data symbols is drawn independently from the $N$ noise samples used to estimate the covariance matrix $\hat{\mathbf{R}}$. The parameter \texttt{M5\_Noise.resample\_noise\_per\_realization} specifies that the $N$ samples are re-drawn for each channel realization and each SNR point. This mimics the real behavior of the system, where samples come from the pilot REs and the data occupies other REs.
 
-% ---------------------------------------------------------------------
-\subsection{Receptor}\label{subsec:setup_receptor}
+\subsubsection{Receiver}\label{subsec:setup_receptor}
 % ---------------------------------------------------------------------
 
-% NOVO
-A Tabela~\ref{tab:param_receptor} mostra os parâmetros da divisão das antenas, da estimação da covariância e dos equalizadores.
+Table~\ref{tab:param_receptor} shows the parameters for antenna partitioning, covariance estimation, and the equalizers.
 
 \begin{table}[htbp]
-\caption{Parâmetros do receptor: particionamento, estimação da covariância e equalização.}
+\caption{Receiver parameters: partitioning, covariance estimation and equalization.}
 \label{tab:param_receptor}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|p{2.2cm}|p{3.6cm}|p{4.6cm}|p{3.4cm}|}
-\hline
-\raggedright Origem & \raggedright Parâmetro & \raggedright Nome no código & \raggedright Valor \tabularnewline
-\hline
-\raggedright \cite{zhao2025jsac} & \raggedright Antenas por \textit{cluster} & \raggedright \texttt{M3\_\allowbreak{}Clustering.\allowbreak equal\_\allowbreak{}cluster\_\allowbreak{}size} & \raggedright $M_c = M/C$ \tabularnewline
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|p{2.3cm}|p{3.4cm}|p{4.3cm}|p{3.2cm}|}
+\toprule
+\centering\textbf{Source} & \centering\textbf{Parameter} & \centering\textbf{Name in the Python simulator} & \centering\textbf{Value} \tabularnewline
+\midrule
+\multirow{8}{=}{\raggedright \citesp{zhao2025jsac}} & \raggedright Antennas per cluster & \raggedright \texttt{M3\_\allowbreak{}Clustering.\allowbreak equal\_\allowbreak{}cluster\_\allowbreak{}size} & \raggedright $M_c = M/C$ \tabularnewline
 \cline{2-4}
- & \raggedright Amostras de ruído para estimar $\hat{\mathbf{R}}$ & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak n\_\allowbreak{}noise\_\allowbreak{}samples} & \raggedright \sout{$N = 192$} \textcolor{red}{No máximo $N = 192$} \tabularnewline
+ & \raggedright Noise samples to estimate $\hat{\mathbf{R}}$ & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak n\_\allowbreak{}noise\_\allowbreak{}samples} & \raggedright $N = 192$ \tabularnewline
 \cline{2-4}
- & \raggedright Estimativa da covariância & \raggedright \texttt{M6\_\allowbreak{}Covariance.\allowbreak estimator} & \raggedright Média amostral das $N$ amostras \tabularnewline
+ & \raggedright Covariance estimate & \raggedright \texttt{M6\_\allowbreak{}Covariance.\allowbreak estimator} & \raggedright Sample mean of the $N$ samples \tabularnewline
 \cline{2-4}
- & \raggedright Conhecimento do canal na BS & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak perfect\_\allowbreak{}csi} & \raggedright $\mathbf{H}$ perfeito \tabularnewline
+ & \raggedright Channel knowledge at the BS & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak perfect\_\allowbreak{}csi} & \raggedright Perfect $\mathbf{H}$ \tabularnewline
 \cline{2-4}
- & \raggedright Equalizadores comparados & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak curves} & \raggedright LMMSE, ZF e BCD-MMSE \tabularnewline
+ & \raggedright Compared equalizers & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak curves} & \raggedright LMMSE, ZF and BCD-MMSE \tabularnewline
 \cline{2-4}
- & \raggedright Iterações do BCD-MMSE & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak bcd\_\allowbreak{}iterations} & \raggedright 1 \tabularnewline
+ & \raggedright BCD-MMSE iterations & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak bcd\_\allowbreak{}iterations} & \raggedright 1 \tabularnewline
 \cline{2-4}
- & \raggedright Ordem de atualização do BCD & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak bcd\_\allowbreak{}update\_\allowbreak{}rule} & \raggedright Sequencial, $c = 1, \dots, C$ \tabularnewline
+ & \raggedright BCD update order & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak bcd\_\allowbreak{}update\_\allowbreak{}rule} & \raggedright Sequential, $c = 1, \dots, C$ \tabularnewline
 \cline{2-4}
- & \raggedright Cálculo do equalizador $\mathbf{W}$ & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak recompute\_\allowbreak{}W\_\allowbreak{}per\_\allowbreak{}realization} & \raggedright Uma vez por realização e por ponto de SNR \tabularnewline
-\hline
-\raggedright Este trabalho & \raggedright Divisão das antenas em \textit{clusters} & \raggedright \texttt{M3\_\allowbreak{}Clustering.\allowbreak mapping} & \raggedright Contígua \tabularnewline
+ & \raggedright Computation of the equalizer $\mathbf{W}$ & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak recompute\_\allowbreak{}W\_\allowbreak{}per\_\allowbreak{}realization} & \raggedright Once per realization and SNR point \tabularnewline
+\midrule
+\multirow{5}{=}{\raggedright Defined in this work} & \raggedright Antenna partitioning into clusters & \raggedright \texttt{M3\_\allowbreak{}Clustering.\allowbreak mapping} & \raggedright Contiguous \tabularnewline
 \cline{2-4}
- & \raggedright \textcolor{red}{$N$ em cada condição de teste} & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak n\_\allowbreak{}noise\_\allowbreak{}samples\_\allowbreak{}by\_\allowbreak{}condition} & \raggedright \textcolor{red}{12, 48, 144 ou 192 (Tabela~\ref{tab:n-maximo})} \tabularnewline
+ & \raggedright $N$ in each test condition & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak test\_\allowbreak{}conditions} & \raggedright 192, 168, 132 or 24 (Table~\ref{tab:condicoes_teste}) \tabularnewline
 \cline{2-4}
- & \raggedright Sorteio das amostras de ruído & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak resample\_\allowbreak{}noise\_\allowbreak{}per\_\allowbreak{}realization} & \raggedright Novas a cada realização e ponto de SNR \tabularnewline
+ & \raggedright Noise sample draws & \raggedright \texttt{M5\_\allowbreak{}Noise.\allowbreak resample\_\allowbreak{}noise\_\allowbreak{}per\_\allowbreak{}realization} & \raggedright New samples at each realization and SNR point \tabularnewline
 \cline{2-4}
- & \raggedright Condicionamento de $\hat{\mathbf{R}}$ & \raggedright \texttt{M6\_\allowbreak{}Covariance.\allowbreak shrinkage} & \raggedright \textit{Shrinkage} de Ledoit--Wolf \tabularnewline
+ & \raggedright Conditioning of $\hat{\mathbf{R}}$ & \raggedright \texttt{M6\_\allowbreak{}Covariance.\allowbreak shrinkage} & \raggedright Ledoit--Wolf shrinkage \tabularnewline
 \cline{2-4}
- & \raggedright Forma do ZF & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak zf\_\allowbreak{}form} & \raggedright $(\mathbf{H}^H\mathbf{H})^{-1}\mathbf{H}^H$ \tabularnewline
-\hline
+ & \raggedright ZF form & \raggedright \texttt{M7\_\allowbreak{}Equalizers.\allowbreak zf\_\allowbreak{}form} & \raggedright $(\mathbf{H}^H\mathbf{H})^{-1}\mathbf{H}^H$ \tabularnewline
+\bottomrule
 \end{tabular}
-\legend{Fonte: \citeonline{zhao2025jsac} e a autora. $C$ e $K$ estão na Tabela~\ref{tab:paineis}. Nomes no código: \texttt{dbp\_sim/params.py}.} % TODO citar Ledoit e Wolf (2004)
+\vspace{4pt}
+\legend{Source: \citesp{zhao2025jsac} and the author. $C$ and $K$ are in Table~\ref{tab:paineis}. Names in the code: \texttt{dbp\_sim/params.py}.} % TODO citar Ledoit e Wolf (2004)
 \end{table}
 % FONTES: M_c = M/C L577, L85; N L577, L640; covariância eq. (6) L119 e L125;
 %   H perfeito L63 e nota 2 (L817); equalizadores L581 e Figura 8;
@@ -334,87 +255,61 @@ A Tabela~\ref{tab:param_receptor} mostra os parâmetros da divisão das antenas,
 % LEMBRETE: o Ledoit-Wolf também é aplicado no R_cc do BCD (m7_equalizers.bcd_mmse).
 %   Com N = 192 o bloco M_c x M_c tem inversa; com N = 12 (HST) não tem, pois
 %   N < M_c. O módulo alvo do constraints.csv inverte o R_cc sem ajuste.
-% N por condição: params.M5_Noise.n_noise_samples_by_condition; run_figure8.py --conditions.
+% N e portadora por condição: params.M1_Driver.test_conditions; run_figure8.py --conditions.
 
-% NOVO
-Cada \textit{cluster} fica com antenas vizinhas. O primeiro fica com as antenas 1 a $M_c$, o segundo com as antenas $M_c+1$ a $2M_c$, e assim por diante. Essa divisão segue a notação em blocos $\mathbf{H}=[\mathbf{H}_1^T,\dots,\mathbf{H}_C^T]^T$ de \citeonline{zhao2025jsac}.
-% FONTE: L85 (divisão em C clusters); L96 (notação em blocos).
-% Outra fonte possível: o código de referência DBP-master (DBP_detector_sim.m:305)
-%   e o artigo dele (ref. [6] do artigo base, nota 3). Não está no .bib.
 
-% NOVO
-O equalizador $\mathbf{W}$ é calculado uma vez para cada realização de canal e cada ponto de SNR. Depois, ele é usado para todos os 480 símbolos. Uma mesma matriz de equalização pode ser usada para vários símbolos, enquanto o canal não muda \cite{zhao2025jsac}.
+Each cluster is assigned neighboring antennas (parameter \texttt{M3\_Clustering.mapping}). The first cluster is assigned antennas 1 to $M_c$, the second is assigned antennas $M_c+1$ to $2M_c$, and so on. All \textit{clusters} have the same number of antennas (parameter \texttt{M3\_Clustering.equal\_cluster\_size}).
 
-% NOVO (2026-10-14)
-\textcolor{red}{O número $N$ de amostras de ruído depende da condição de teste. Ele é o número de REs de DM-RS de um PRB dentro de $T_c$, limitado a 192 (Tabela~\ref{tab:n-maximo}). Assim, cada configuração da Tabela~\ref{tab:paineis} é simulada com $N = 192$, 144, 48 e 12. A simulação não tem eixo de tempo e o canal não tem Doppler. Por isso, entre as condições de teste, só muda o valor de $N$.}
-% FONTE: Tabela tab:n-maximo (dbp-ruido.tex); código: params.M5_Noise.n_noise_samples_by_condition,
-%   run_figure8.py --conditions all. "Sem Doppler": nota do próprio params.py.
-% FONTE: L61, L561 (reuso da matriz de equalização).
-% Código: m1_driver.run_panel (W montado dentro do laço de SNR).
+The equalizers receive the true $\mathbf{H}$ channel, without channel estimation (parameter \texttt{M7\_Equalizers.perfect\_csi}), as in \cite{zhao2025jsac}. The BCD-MMSE was simulated with 1 iteration (parameter \texttt{M7\_Equalizers.bcd\_iterations}). The DUs update sequentially, from $c = 1$ to $C$, and each one uses the result of the previous one (parameter \texttt{M7\_Equalizers.bcd\_update\_rule}) \cite{zhao2025jsac}.
 
-% AUTORA (9-results.tex:333), tom ajustado e "soma" trocada por "média ponderada"
-% ATENÇÃO (não alterado): "soma à matriz um múltiplo da identidade" descreve a
-%   carga diagonal fixa, a alternativa rejeitada. O Ledoit-Wolf faz uma média
-%   ponderada: (1 - rho) R_hat + rho mu I (m5_noise.shrink). Decidir a redação.
-O equalizador LMMSE usa a inversa de $\hat{\mathbf{R}}$ \cite{zhao2025jsac}. Com $M = 256$ antenas e $N = 192$ amostras, $\hat{\mathbf{R}}$ não tem inversa. \textcolor{red}{Com $N = 48$ ou $N = 12$, isso vale também para $M = 128$.} Por isso foi usado o \textit{shrinkage} de Ledoit--Wolf. Ele faz uma média ponderada entre $\hat{\mathbf{R}}$ e um múltiplo da identidade, e o peso dessa média é calculado a partir das próprias amostras. Assim não foi preciso escolher uma constante. % TODO citar Ledoit e Wolf (2004)
+% FONTE: L63, nota 2 (L817).
 
-% NOVO
-No BCD-MMSE, cada DU inverte a matriz $E_s\mathbf{H}_c\mathbf{H}_c^H + \hat{\mathbf{R}}_{cc}$, de tamanho $M_c \times M_c$ \cite{zhao2025jsac}. \sout{Nas configurações simuladas, $M_c \le 32$, um valor menor que $N = 192$. Mesmo assim, o simulador também aplica o \textit{shrinkage} ao bloco $\hat{\mathbf{R}}_{cc}$ antes dessa inversão.} \textcolor{red}{Nas configurações simuladas, $M_c \le 32$. Com $N = 192$, 144 ou 48, esse valor é menor que $N$. Nas condições HST, com $N = 12$, ele é maior que $N$, e o bloco $\hat{\mathbf{R}}_{cc}$ não tem inversa (Seção~\ref{subsec:ruido-colorido}). O simulador aplica o \textit{shrinkage} ao bloco $\hat{\mathbf{R}}_{cc}$ em todas as condições.}
-% FONTE: eq. (30), L504; tamanhos na Tabela tab:paineis.
-% Código: m7_equalizers.bcd_mmse -- den = Es*Hc*Hc^H + cond.covariance(Sc).
-% DECIDIR ANTES DE MANTER: o módulo alvo do constraints.csv inverte o R_cc sem
-%   ajuste. Duas saídas: (1) manter o shrinkage e dizer isso aqui; (2) rodar o BCD
-%   com --shrinkage none, para os resultados mostrarem o que o hardware vai receber.
-% SEM FONTE: dizer que o bloco "tem inversa" porque N > M_c precisa de referência
-%   (ligar à seção "Quantidade de amostras" do capítulo 1). Por isso a frase só
-%   compara os números.
+% FONTE: paper.md:590-591 (Fig. 8 com 1 iteração); Gauss-Seidel L398, nota 6 (L450).
+% DECISÃO da autora (2026-11-04): a primeira versão usa só 1 iteração. As rodadas [1], [4]
+%   e [5] também têm 4 iterações (mapas iter4); podem entrar depois, se houver tempo.
+%   Nesse caso, este parágrafo vira "1 e 4 iterações".
 
-% NOVO
-O ZF centralizado é usado como referência \cite{zhao2025jsac}, na forma da Equação~\eqref{eq:zf_filter}.
-% FONTE: L581 (ZF citado sem fórmula). eq:zf_filter está em 1-noise-and-constraints.tex.
+
+
 
 
 % ---------------------------------------------------------------------
-\subsection{Avaliação}\label{subsec:setup_avaliacao}
+\subsubsection{Evaluation}\label{subsec:setup_avaliacao}
 % ---------------------------------------------------------------------
 
-% NOVO
-A Tabela~\ref{tab:param_avaliacao} mostra como os resultados são medidos.
+
+Table~\ref{tab:param_avaliacao} shows how the results are measured.
+The random number generator seed was set to 0, so that the results can be replicated.
+
 
 \begin{table}[htbp]
-\caption{Parâmetros da avaliação.}
+\caption{Evaluation parameters.}
 \label{tab:param_avaliacao}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|p{2.2cm}|p{3.6cm}|p{4.6cm}|p{3.4cm}|}
-\hline
-\raggedright Origem & \raggedright Parâmetro & \raggedright Nome no código & \raggedright Valor \tabularnewline
-\hline
-\raggedright \cite{zhao2025jsac} & \raggedright Realizações de canal & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak n\_\allowbreak{}realizations} & \raggedright 100 \tabularnewline
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|p{2.3cm}|p{3.4cm}|p{4.3cm}|p{3.2cm}|}
+\toprule
+\centering\textbf{Source} & \centering\textbf{Parameter} & \centering\textbf{Name in the Python simulator} & \centering\textbf{Value} \tabularnewline
+\midrule
+\multirow{5}{=}{\raggedright \citesp{zhao2025jsac}} & \raggedright Channel realizations & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak n\_\allowbreak{}realizations} & \raggedright 100 \tabularnewline
 \cline{2-4}
- & \raggedright Símbolos por realização & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak n\_\allowbreak{}symbols} & \raggedright 480 \tabularnewline
+ & \raggedright Symbols per realization & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak n\_\allowbreak{}symbols} & \raggedright 480 \tabularnewline
 \cline{2-4}
- & \raggedright Detecção & \raggedright \texttt{M8\_\allowbreak{}Metric.\allowbreak detection} & \raggedright Ponto mais próximo da constelação \tabularnewline
+ & \raggedright Detection & \raggedright \texttt{M8\_\allowbreak{}Metric.\allowbreak detection} & \raggedright Nearest constellation point \tabularnewline
 \cline{2-4}
- & \raggedright Métrica & \raggedright \texttt{M8\_\allowbreak{}Metric.\allowbreak metric} & \raggedright Taxa de erro de símbolo (SER) \tabularnewline
+ & \raggedright Metric & \raggedright \texttt{M8\_\allowbreak{}Metric.\allowbreak metric} & \raggedright Symbol error rate (SER) \tabularnewline
 \cline{2-4}
- & \raggedright Faixa de SNR & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak snr\_\allowbreak{}db\_\allowbreak{}grid} & \raggedright $-10$ a $10$ dB, passo de 2 dB \tabularnewline
-\hline
-\raggedright Este trabalho & \raggedright Remoção de viés antes da detecção & \raggedright \texttt{M8\_\allowbreak{}Metric.\allowbreak bias\_\allowbreak{}removal} & \raggedright Não \tabularnewline
+ & \raggedright SNR range & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak snr\_\allowbreak{}db\_\allowbreak{}grid} & \raggedright $-10$ to $10$ dB, 2 dB step \tabularnewline
+\midrule
+\multirow{2}{=}{\raggedright Defined in this work} & \raggedright Bias removal before detection & \raggedright \texttt{M8\_\allowbreak{}Metric.\allowbreak bias\_\allowbreak{}removal} & \raggedright No \tabularnewline
 \cline{2-4}
- & \raggedright Semente aleatória & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak rng\_\allowbreak{}seed} & \raggedright 0 \tabularnewline
-\hline
+ & \raggedright Random seed & \raggedright \texttt{M1\_\allowbreak{}Driver.\allowbreak rng\_\allowbreak{}seed} & \raggedright 0 \tabularnewline
+\bottomrule
 \end{tabular}
-\legend{Fonte: \citeonline{zhao2025jsac} e a autora. Nomes no código: \texttt{dbp\_sim/params.py}.}
+\vspace{4pt}
+\legend{Source: \citesp{zhao2025jsac} and the author. Names in the code: \texttt{dbp\_sim/params.py}.}
 \end{table}
-
-% NOVO
-Cada ponto das curvas é a média da SER sobre 100 realizações de canal, com 480 símbolos em cada uma. A SNR varia de $-10$ a $10$~dB, com passo de 2~dB, como em \citeonline{zhao2025jsac}.
-% FONTE: L577 (100 x 480); faixa de SNR lida dos marcadores das Figs. 6 a 8
-%   (o passo não está escrito no artigo; ver params.M1_Driver.snr_db_grid).
-
-% NOVO
-Os símbolos são detectados pelo ponto mais próximo da constelação \cite{zhao2025jsac}. Antes da detecção, a estimativa de cada UE não passa por nenhuma correção de ganho. A semente do gerador aleatório foi fixada em 0, para que os resultados possam ser repetidos.
-% FONTE: L79 (detecção). "Não fala dessa correção": busca registrada em
-%   params.M8_Metric.bias_removal. Código: m8_metric.symbol_error_rate.

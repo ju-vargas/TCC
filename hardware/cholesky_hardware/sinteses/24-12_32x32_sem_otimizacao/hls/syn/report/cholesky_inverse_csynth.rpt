@@ -1,0 +1,234 @@
+
+
+================================================================
+== Vitis HLS Report for 'cholesky_inverse'
+================================================================
+* Date:           Thu Oct 22 01:23:14 2026
+
+* Version:        2026.1 (Build 6493734 on Jun 16 2026)
+* Project:        sintese_24_12_32
+* Solution:       hls
+* Product family: virtexuplusHBM
+* Target device:  xcu50-fsvh2104-2-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  7.163 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-------+--------+---------+
+    |  Latency (cycles) |  Latency (absolute) |    Interval    | Pipeline|
+    |   min   |   max   |    min   |    max   |  min  |   max  |   Type  |
+    +---------+---------+----------+----------+-------+--------+---------+
+    |    11502|   382731|  0.115 ms|  3.827 ms|  11503|  382732|       no|
+    +---------+---------+----------+----------+-------+--------+---------+
+
+    + Detail: 
+        * Instance: 
+        +------------------------------------------------------+-------------------------------------------+---------+---------+-----------+-----------+------+--------+---------+
+        |                                                      |                                           |  Latency (cycles) |   Latency (absolute)  |    Interval   | Pipeline|
+        |                       Instance                       |                   Module                  |   min   |   max   |    min    |    max    |  min |   max  |   Type  |
+        +------------------------------------------------------+-------------------------------------------+---------+---------+-----------+-----------+------+--------+---------+
+        |grp_LU_decomposition_fu_145                           |LU_decomposition                           |     2209|   169423|  22.090 us|   1.694 ms|  2209|  169423|       no|
+        |grp_cholesky_inverse_Outline_VITIS_LOOP_12_1_fu_157   |cholesky_inverse_Outline_VITIS_LOOP_12_1   |     1089|     1089|  10.890 us|  10.890 us|  1089|    1089|       no|
+        |grp_cholesky_inverse_Outline_VITIS_LOOP_12_15_fu_163  |cholesky_inverse_Outline_VITIS_LOOP_12_15  |       33|       33|   0.330 us|   0.330 us|    33|      33|       no|
+        |grp_cholesky_inverse_Outline_VITIS_LOOP_19_3_fu_171   |cholesky_inverse_Outline_VITIS_LOOP_19_3   |       65|       65|   0.650 us|   0.650 us|    65|      65|       no|
+        |grp_G_decomposition_fu_177                            |G_decomposition                            |     1250|     4226|  12.500 us|  42.260 us|  1250|    4226|       no|
+        |grp_sqrt_fixed_24_12_s_fu_187                         |sqrt_fixed_24_12_s                         |        4|        4|  40.000 ns|  40.000 ns|     1|       1|      yes|
+        |grp_forward_substitution_fu_193                       |forward_substitution                       |     3680|   141103|  36.800 us|   1.411 ms|  3680|  141103|       no|
+        |grp_inversion_fu_201                                  |inversion                                  |     4161|    67649|  41.610 us|   0.676 ms|  4161|   67649|       no|
+        +------------------------------------------------------+-------------------------------------------+---------+---------+-----------+-----------+------+--------+---------+
+
+        * Loop: 
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                   |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |     Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_17_2  |      128|      256|     4 ~ 8|          -|          -|    32|        no|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+--------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT  | URAM|
++---------------------+---------+------+---------+--------+-----+
+|DSP                  |        -|     -|        -|       -|    -|
+|Expression           |        -|     -|        0|      81|    -|
+|FIFO                 |        -|     -|        -|       -|    -|
+|Instance             |        4|    90|     5015|   14774|    0|
+|Memory               |       18|     -|       34|      36|    0|
+|Multiplexer          |        -|     -|        0|     538|    -|
+|Register             |        -|     -|       66|       -|    -|
++---------------------+---------+------+---------+--------+-----+
+|Total                |       22|    90|     5115|   15429|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available SLR        |     1344|  2976|   871680|  435840|  320|
++---------------------+---------+------+---------+--------+-----+
+|Utilization SLR (%)  |        1|     3|       ~0|       3|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available            |     2688|  5952|  1743360|  871680|  640|
++---------------------+---------+------+---------+--------+-----+
+|Utilization (%)      |       ~0|     1|       ~0|       1|    0|
++---------------------+---------+------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +------------------------------------------------------+-------------------------------------------+---------+----+------+------+-----+
+    |                       Instance                       |                   Module                  | BRAM_18K| DSP|  FF  |  LUT | URAM|
+    +------------------------------------------------------+-------------------------------------------+---------+----+------+------+-----+
+    |grp_G_decomposition_fu_177                            |G_decomposition                            |        0|   2|    99|   775|    0|
+    |grp_LU_decomposition_fu_145                           |LU_decomposition                           |        4|  24|  1981|  4045|    0|
+    |grp_cholesky_inverse_Outline_VITIS_LOOP_12_1_fu_157   |cholesky_inverse_Outline_VITIS_LOOP_12_1   |        0|   0|    26|   109|    0|
+    |grp_cholesky_inverse_Outline_VITIS_LOOP_12_15_fu_163  |cholesky_inverse_Outline_VITIS_LOOP_12_15  |        0|   0|     8|    50|    0|
+    |grp_cholesky_inverse_Outline_VITIS_LOOP_19_3_fu_171   |cholesky_inverse_Outline_VITIS_LOOP_19_3   |        0|   0|    19|    73|    0|
+    |grp_forward_substitution_fu_193                       |forward_substitution                       |        0|  48|  2434|  5016|    0|
+    |grp_inversion_fu_201                                  |inversion                                  |        0|  16|   169|  1422|    0|
+    |grp_sqrt_fixed_24_12_s_fu_187                         |sqrt_fixed_24_12_s                         |        0|   0|   279|  3284|    0|
+    +------------------------------------------------------+-------------------------------------------+---------+----+------+------+-----+
+    |Total                                                 |                                           |        4|  90|  5015| 14774|    0|
+    +------------------------------------------------------+-------------------------------------------+---------+----+------+------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    +----------------+-----------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |     Memory     |                  Module                 | BRAM_18K| FF | LUT| URAM| Words| Bits| Banks| W*Bits*Banks|
+    +----------------+-----------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |G_inv_M_real_U  |G_inv_M_real_RAM_AUTO_1R1W               |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |G_inv_M_imag_U  |G_inv_M_real_RAM_AUTO_1R1W               |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |U_M_real_U      |LU_decomposition_U_M_imag_RAM_AUTO_1R1W  |        4|   0|   0|    0|  1024|   24|     1|        24576|
+    |L_M_real_U      |L_M_real_RAM_AUTO_1R1W                   |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |L_M_imag_U      |L_M_real_RAM_AUTO_1R1W                   |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |D_M_real_U      |L_M_real_RAM_AUTO_1R1W                   |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |G_M_real_U      |L_M_real_RAM_AUTO_1R1W                   |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |G_M_imag_U      |L_M_real_RAM_AUTO_1R1W                   |        2|   0|   0|    0|  1024|   24|     1|        24576|
+    |S_M_imag_U      |S_M_imag_RAM_AUTO_1R1W                   |        0|   2|   3|    0|    32|    1|     1|           32|
+    |S_M_real_U      |S_M_real_RAM_AUTO_1R1W                   |        0|  32|  33|    0|    32|   18|     1|          576|
+    +----------------+-----------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |Total           |                                         |       18|  34|  36|    0|  8256|  211|    10|       197216|
+    +----------------+-----------------------------------------+---------+----+----+-----+------+-----+------+-------------+
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------------------------+----------+----+---+----+------------+------------+
+    |          Variable Name          | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------------------------+----------+----+---+----+------------+------------+
+    |add_ln17_fu_223_p2               |         +|   0|  0|  13|           6|           1|
+    |add_ln18_fu_245_p2               |         +|   0|  0|  17|          10|          10|
+    |icmp_ln17_fu_217_p2              |      icmp|   0|  0|  14|           6|           7|
+    |icmp_ln22_fu_260_p2              |      icmp|   0|  0|  31|          24|           1|
+    |S_M_imag_we0                     |        or|   0|  0|   2|           1|           1|
+    |S_M_real_we0                     |        or|   0|  0|   2|           1|           1|
+    |ap_block_state2_on_subcall_done  |        or|   0|  0|   2|           1|           1|
+    +---------------------------------+----------+----+---+----+------------+------------+
+    |Total                            |          |   0|  0|  81|          49|          22|
+    +---------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-----------------------+----+-----------+-----+-----------+
+    |          Name         | LUT| Input Size| Bits| Total Bits|
+    +-----------------------+----+-----------+-----+-----------+
+    |D_M_real_address0      |  14|          3|   10|         30|
+    |D_M_real_ce0           |  14|          3|    1|          3|
+    |D_M_real_d0            |  14|          3|   24|         72|
+    |D_M_real_we0           |  14|          3|    1|          3|
+    |G_M_imag_address0      |  14|          3|   10|         30|
+    |G_M_imag_ce0           |  14|          3|    1|          3|
+    |G_M_imag_we0           |   9|          2|    1|          2|
+    |G_M_real_address0      |  14|          3|   10|         30|
+    |G_M_real_ce0           |  14|          3|    1|          3|
+    |G_M_real_we0           |   9|          2|    1|          2|
+    |G_inv_M_imag_address0  |  14|          3|   10|         30|
+    |G_inv_M_imag_ce0       |  14|          3|    1|          3|
+    |G_inv_M_imag_ce1       |   9|          2|    1|          2|
+    |G_inv_M_imag_we0       |   9|          2|    1|          2|
+    |G_inv_M_real_address0  |  14|          3|   10|         30|
+    |G_inv_M_real_ce0       |  14|          3|    1|          3|
+    |G_inv_M_real_ce1       |   9|          2|    1|          2|
+    |G_inv_M_real_we0       |   9|          2|    1|          2|
+    |L_M_imag_address0      |  14|          3|   10|         30|
+    |L_M_imag_ce0           |  14|          3|    1|          3|
+    |L_M_imag_we0           |   9|          2|    1|          2|
+    |L_M_real_address0      |  14|          3|   10|         30|
+    |L_M_real_ce0           |  14|          3|    1|          3|
+    |L_M_real_we0           |   9|          2|    1|          2|
+    |S_M_imag_address0      |  14|          3|    5|         15|
+    |S_M_imag_ce0           |  14|          3|    1|          3|
+    |S_M_imag_d0            |   9|          2|    1|          2|
+    |S_M_imag_we0           |   9|          2|    1|          2|
+    |S_M_real_address0      |  14|          3|    5|         15|
+    |S_M_real_ce0           |  14|          3|    1|          3|
+    |S_M_real_d0            |   9|          2|   18|         36|
+    |S_M_real_we0           |   9|          2|    1|          2|
+    |U_M_real_address0      |  14|          3|   10|         30|
+    |U_M_real_ce0           |  14|          3|    1|          3|
+    |U_M_real_ce1           |   9|          2|    1|          2|
+    |U_M_real_we0           |   9|          2|    1|          2|
+    |U_M_real_we1           |   9|          2|    1|          2|
+    |ap_NS_fsm              |  86|         18|    1|         18|
+    |line_3_fu_64           |   9|          2|    6|         12|
+    +-----------------------+----+-----------+-----+-----------+
+    |Total                  | 538|        116|  164|        469|
+    +-----------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------------------------------------------------+----+----+-----+-----------+
+    |                                Name                               | FF | LUT| Bits| Const Bits|
+    +-------------------------------------------------------------------+----+----+-----+-----------+
+    |add_ln17_reg_286                                                   |   6|   0|    6|          0|
+    |ap_CS_fsm                                                          |  17|   0|   17|          0|
+    |grp_G_decomposition_fu_177_ap_start_reg                            |   1|   0|    1|          0|
+    |grp_LU_decomposition_fu_145_ap_start_reg                           |   1|   0|    1|          0|
+    |grp_cholesky_inverse_Outline_VITIS_LOOP_12_15_fu_163_ap_start_reg  |   1|   0|    1|          0|
+    |grp_cholesky_inverse_Outline_VITIS_LOOP_12_1_fu_157_ap_start_reg   |   1|   0|    1|          0|
+    |grp_cholesky_inverse_Outline_VITIS_LOOP_19_3_fu_171_ap_start_reg   |   1|   0|    1|          0|
+    |grp_forward_substitution_fu_193_ap_start_reg                       |   1|   0|    1|          0|
+    |grp_inversion_fu_201_ap_start_reg                                  |   1|   0|    1|          0|
+    |icmp_ln22_reg_301                                                  |   1|   0|    1|          0|
+    |line_3_fu_64                                                       |   6|   0|    6|          0|
+    |trunc_ln18_reg_296                                                 |  23|   0|   23|          0|
+    |zext_ln17_reg_305                                                  |   6|   0|   64|         58|
+    +-------------------------------------------------------------------+----+----+-----+-----------+
+    |Total                                                              |  66|   0|  124|         58|
+    +-------------------------------------------------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------+-----+-----+------------+------------------+--------------+
+|     RTL Ports     | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++-------------------+-----+-----+------------+------------------+--------------+
+|ap_clk             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_rst             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_start           |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_done            |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_idle            |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_ready           |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|A_matrix_address0  |  out|   10|   ap_memory|          A_matrix|         array|
+|A_matrix_ce0       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_q0        |   in|   48|   ap_memory|          A_matrix|         array|
+|inverse_address0   |  out|   10|   ap_memory|           inverse|         array|
+|inverse_ce0        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_we0        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_d0         |  out|   48|   ap_memory|           inverse|         array|
++-------------------+-----+-----+------------+------------------+--------------+
+

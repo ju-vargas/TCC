@@ -25,6 +25,7 @@ result-determining choice in the simulator; see the parameter note for the measu
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -93,6 +94,9 @@ class QuaDriGaFileChannel(ChannelBackend):
 
     path: str = "dados/channels_quadriga_M{M}_K{K}_r{r}.npz"
     normalization: str = "per_ue_power_control"
+    #: Carrier of the export. 3.5 GHz uses the plain file name; any other carrier
+    #: reads the file with "_fc<GHz>GHz" before ".npz", as the MATLAB export writes it.
+    carrier_hz: float = 3.5e9
     _cache: dict = field(default_factory=dict)
 
     def _load(self, M: int, K: int, r: int):
@@ -100,18 +104,26 @@ class QuaDriGaFileChannel(ChannelBackend):
         if key in self._cache:
             return self._cache[key]
         p = Path(self.path.format(M=M, K=K, r=r))
+        if self.carrier_hz != 3.5e9:
+            p = p.with_name(f"{p.stem}_fc{self.carrier_hz / 1e9:g}GHz{p.suffix}")
         if not p.is_absolute():
             p = SIMULATOR_ROOT / p
         if not p.exists():
             raise FileNotFoundError(
                 f"QuaDriGa export not found: {p}\n"
                 "Generate it with:\n"
-                "  matlab -nodisplay -r \"run('quadriga/export_quadriga_channels.m')\"\n"
+                "  matlab -nodisplay -r \"fc_override=<carrier in Hz>; "
+                "run('quadriga/export_quadriga_channels.m')\"\n"
                 "  .venv/bin/python quadriga/convert_quadriga_export.py\n"
                 "Or use --channel standin_ula for the substitute channel (NOT the "
                 "article's).")
         data = np.load(p, allow_pickle=False)
         H, Hbar = data["H"], data["Hbar"]
+        if "meta" in data:
+            fc = json.loads(str(data["meta"])).get("center_freq")
+            if fc is not None and float(fc) != self.carrier_hz:
+                raise ValueError(f"{p}: exported at {float(fc):g} Hz, expected "
+                                 f"{self.carrier_hz:g} Hz")
         if H.shape[1:] != (M, K) or Hbar.shape[1:] != (M, r):
             raise ValueError(
                 f"{p}: shape mismatch - got H{H.shape}, Hbar{Hbar.shape}; "
@@ -171,7 +183,8 @@ def make_backend(name: str, **kwargs) -> ChannelBackend:
     if name == "quadriga_file":
         return QuaDriGaFileChannel(
             path=kwargs["path"],
-            normalization=kwargs.get("normalization", "per_ue_power_control"))
+            normalization=kwargs.get("normalization", "per_ue_power_control"),
+            carrier_hz=kwargs.get("carrier_hz", 3.5e9))
     if name == "standin_ula":
         return StandInULAChannel(
             spread_deg=kwargs.get("spread_deg", 10.0),

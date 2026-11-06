@@ -9,6 +9,13 @@
 %   Hbar : M x r x n_realizations   interfering-UE channels
 % into ../dados/.  Then run:  .venv/bin/python quadriga/convert_quadriga_export.py
 %
+% Carrier: 3.5 GHz by default (FR1, n78).  Set fc_override before running for another
+% carrier; the file name then carries it, e.g. channels_quadriga_M128_K8_r8_fc28GHz.mat:
+%   matlab -nodisplay -r "fc_override=28e9; run('quadriga/export_quadriga_channels.m')"
+% 28 GHz (FR2, n257) is the carrier of the FR2 test conditions (TDLA30-75, TDLA30-300;
+% software/Restrições - Parâmetros.csv).  The same seed gives the same UE drops.
+% configs_override = [M K r; ...] exports only those configurations, e.g. [256 12 8].
+%
 % -------------------------------------------------------------------------------------
 % PROVENANCE  (full argument in simulation_parameters.md)
 %
@@ -40,6 +47,12 @@ addpath(fullfile(base, 'QuaDRiGa_latest', 'quadriga_src'));     % 2A.3
 
 cfg.scenario    = '3GPP_38.901_UMa_NLOS';   % 2A.1
 cfg.center_freq = 3.5e9;                    % 2B   <-- NOT from the article
+if exist('fc_override', 'var'), cfg.center_freq = fc_override; end
+if cfg.center_freq == 3.5e9
+    fc_tag = '';                            % original file names, unchanged
+else
+    fc_tag = sprintf('_fc%gGHz', cfg.center_freq/1e9);
+end
 cfg.bandwidth   = 20e6;                     % 2B.4 (only sets the subcarrier grid)
 cfg.bs_height_m = 25;                       % 2A.4 (QuaDriGa default = UMa spec)
 cfg.ue_height_m = 1.5;                      % 2A.4 (randomize_rx_positions default)
@@ -50,6 +63,7 @@ cfg.r_max_m     = 100;                      % L577
 cfg.seed        = 0;                        % 2B (reproducibility only)
 
 configs = [128 8 8; 256 8 8; 128 12 8];     % (M, K, r) needed by Figure 8
+if exist('configs_override', 'var'), configs = configs_override; end   % e.g. [256 12 8]
 
 fprintf('QuaDriGa %s | MATLAB %s\n', qd_simulation_parameters.version, version);
 fprintf('scenario=%s  fc=%.3g Hz\n\n', cfg.scenario, cfg.center_freq);
@@ -111,7 +125,7 @@ for ci = 1:size(configs,1)
         end
     end
 
-    fn = fullfile(base, 'dados', sprintf('channels_quadriga_M%d_K%d_r%d.mat', M, K, r));
+    fn = fullfile(base, 'dados', sprintf('channels_quadriga_M%d_K%d_r%d%s.mat', M, K, r, fc_tag));
     save(fn, 'H', 'Hbar', 'cfg', '-v7');     % -v7 so scipy.io.loadmat can read it
     fprintf('  wrote %s  (%.1f s)\n\n', fn, toc(t0));
 end

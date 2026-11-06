@@ -1,0 +1,128 @@
+@startuml algoritmo3_hardware
+' =====================================================================
+'  Algoritmo 3 - LEITURA DE HARDWARE (reordenação NOSSA)
+'
+'  ATENÇÃO: este diagrama NÃO é o pseudocódigo do artigo.
+'  Ele move a inversão para FORA do laço BCD. Essa reordenação é
+'  derivação nossa, justificada pela ausência do índice l no fator
+'  invertido da eq. (30) [ARTIGO :504].
+'  O pseudocódigo LITERAL está em algoritmo3.puml.
+'
+'  Convenção: [ARTIGO :NNN] = do paper   |   [NOSSO] = derivação nossa
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam ArrowColor #333333
+skinparam PartitionBorderColor #444444
+skinparam activity {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+  DiamondBackgroundColor #FFFFFF
+  DiamondBorderColor #3A5673
+  StartColor #3A5673
+  EndColor #3A5673
+}
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FFF3CD
+skinparam legendBorderColor #B58900
+
+title [NOSSO]  Algoritmo 3 reordenado para hardware\ninversão içada para fora do laço BCD - NÃO é o pseudocódigo do artigo
+
+start
+:Chegou um novo PRB\n(canal H_c constante dentro do PRB, [ARTIGO :614]);
+
+partition "CAMINHO LENTO - uma vez por DU por PRB\n(fora do laço BCD)" {
+  :Monta a covariância local do sinal recebido\nG_c = E_s H_c H_c^H + (1/N) SOMA_i n_c^i (n_c^i)^H\nou seja, R_{y_c y_c}   (M_c x M_c, hermitiana definida positiva);
+  note right #E8F5E9
+    *** MÓDULO DE INVERSÃO - O ALVO DO TG ***
+    ....
+    [NOSSO] Justificativa da posição: na eq. (30) [ARTIGO :504]
+    o fator invertido é ( E_s H_c H_c^H + (1/N) SOMA_i n_c^i (n_c^i)^H )^-1
+    e NÃO carrega índice l. Ele não muda de uma iteração BCD
+    para a outra. Logo pode ser fatorado UMA vez por PRB e
+    reusado nas T voltas do anel.
+    ....
+    Só depende de H_c e {n_c^i}: informação puramente LOCAL do
+    DU c. Não depende de nada que venha pelo anel. Portanto os
+    C DUs podem fatorar EM PARALELO, antes do anel girar.
+    ....
+    Consequência: a serialização Gauss-Seidel do anel restringe
+    o caminho multiplicação+enlace, NÃO o inversor. (NOTA 2)
+  end note
+  note left #E3F2FD
+    O QUE ESSA MATRIZ É        [NOSSO, ver NOTA 25]
+    ....
+    y_c = H_c s + n_c, logo
+      E[y_c y_c^H] = H_c E[s s^H] H_c^H + E[n_c n_c^H]
+                   = E_s H_c H_c^H + R_cc          = G_c
+    (usa E[s s^H] = E_s I_K, hipótese IMPLÍCITA H9: o artigo
+     só define E_s em :79 e usa a forma na eq. 3, :75)
+    ....
+    G_c é a COVARIÂNCIA DO SINAL RECEBIDO no cluster c.
+    Daí vêm, de graça:
+      - hermitiana         (toda covariância é)
+      - semidef. positiva  (x^H R_yy x = E[|y_c^H x|^2] >= 0)
+      - def. positiva      (R_cc é PD porque N >> M_c, H8)
+    ....
+    E os autovalores são POTÊNCIAS recebidas por direção
+    espacial: o maior ~ potência total, o menor ~ sigma^2.
+    A razão entre eles é o número de condição -> governado
+    pelo IoT, não pela SNR (NOTA 23). Permite dimensionar a
+    faixa dinâmica do ponto fixo analiticamente.
+  end note
+  :Fatora G_c = L_c L_c^H  (Cholesky)\nGuarda L_c - não materializa a inversa\n(a eq. 30 é X = B G_c^-1: resolve, não inverte);
+  :ORÇAMENTO: 30,303 ns = T_OFDM / N_PRB    [NOSSO];
+}
+
+partition "CAMINHO RÁPIDO - laço BCD, T x C paradas no anel" {
+  repeat
+    repeat
+      :Recebe A_{c-1}^l e {b_{c-1,i}^l} do DU anterior\n[ARTIGO :447];
+      :Monta o lado esquerdo B_c^l da eq. (30)\n(usa o que veio do anel + termos locais);
+      :Resolve  W_c^l L_c L_c^H = B_c^l  por substituição\n(eq. 30 é W_c^l = B_c^l G_c^-1, logo W_c^l G_c = B_c^l)\nREUSANDO a fatoração L_c do caminho lento — sem nova inversão;
+      :Atualiza A_c^l (28) e b_{c,i}^l (29)\ne transfere ao próximo DU;
+    repeat while (c = 1 .. C?) is (sim) not (não)
+  repeat while (l = 1 .. T?) is (sim) not (não)
+}
+
+:W = [W_1, ..., W_C]  pronto para a fase de filtragem;
+stop
+
+legend right
+  == O QUE MUDA E O QUE NÃO MUDA ==
+
+  NÃO MUDA: o resultado numérico. É a mesma eq. (30), só que
+  com o fator constante fatorado uma vez em vez de T vezes.
+
+  MUDA: o dimensionamento do inversor.
+     leitura literal   -> 1 inversão por DU por iteração
+                          = T x C inversões por PRB
+     leitura de hw     -> 1 inversão por DU por PRB
+                          = C inversões por PRB, em paralelo
+
+  Com T = 2 e C = 8 isso é a diferença entre 16 e 8 fatorações
+  por PRB - e, mais importante, entre estar DENTRO ou FORA do
+  caminho crítico serial do anel.
+
+  == POR QUE O FATOR INVERTIDO NÃO DEPENDE DE l ==
+  Justificativa SINTÁTICA: na eq. (30) [ARTIGO :504] o fator
+  invertido simplesmente não carrega índice l.
+
+  Justificativa ESTRUTURAL [NOSSO, NOTA 25]: reescrita em
+  covariâncias, a eq. (26) [ARTIGO :454] é a equação normal
+  de Wiener resolvida por bloco --
+     W_c = ( R_{s,yc} - SOMA_{j!=c} W_j R_{yj,yc} ) R_{yc,yc}^-1
+  e R_{yc,yc} depende só de H_c e {n_c^i}, nunca de W.
+  É o LADO ESQUERDO que carrega a iteração.
+
+  == RESSALVA PARA A DEFESA ==
+  O artigo NÃO afirma esta reordenação, não nomeia G_c e não
+  deriva a eq. (26) por esse caminho (deriva pelo MSE, :379-383).
+  Tudo isso é consequência direta e verificável das equações
+  citadas, mas deve ser apresentado como derivação própria.
+endlegend
+
+@enduml

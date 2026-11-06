@@ -1,0 +1,170 @@
+,,,,,,,,,,,,,,,,,,,,
+,Ponto de operação,a SNR em que a referência ideal [1] cruze SER = 10⁻2 (1 iteração),,,,,,,,,,,,,,,,,,
+,G_c no ponto de operação,"Pega os dois pontos ao lado do ponto de operação, cada um com 800 matrizes (100 realizações × 8 DUs), 1600 no total
+
+Para cada uma das matrizes, extrai o elemento com maior valor absoluto, e fica com uma lista de 1600 valores
+
+Ignora o 1% mais alto da lista (outliers) e fica com o percentil 99
+
+Esse valor serve para ordenar os casos, do mais exigente para o menos exigente. O número de bits necessário sai da varredura [4].
+
+Nas configurações QPSK (5 a 8), usa as matrizes das configurações 16-QAM com os mesmos M, C, K e IoT (1 a 4)",,,,,,,,,,,,,,,,,,
+,O que é par,"Dupla (N, f_c) 
+- N é o número de amostras de ruído por PRB
+- f_c é a frequência da portadora (3,5 ou 28)",,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,Escolha de configurações para 4: ,"As 4 configurações diferentes do topo do ranking de G_c no ponto de operação (80 casos: 16 configurações × 5 pares)
+
+A configuração 1, padrão
+
+Todos os pares por configuração, para fazer análise de bit por cenário",,,,"Os pares exigem valores diferentes de bits
+
+Escolher valores acima do numero de bits necessário não faz sentido
+
+Os gráficos precisam fixando os tamanhos e com as curvas por cenário. ",,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,Configurações escolhidas para 4,,,,,,,,,,,,,,,,,,,
+,Configurações,,"Ponto de operação (dB)
+(192; 3,5)
+(168; 28)","G_c no ponto de operação (maior |parte|, percentil 99)
+(192; 3,5)
+(168; 28)",,,Varredura 4,,,,,,,,,,,,,
+,1,"M=128
+C=8
+M_c=16
+K=8
+IoT 10dB
+16-QAM","-2,6
+-2,4","63
+66",,,Bits Inteiros,Bits fracionários,"Menor número de bits com perda < 0,1 dB em SER = 10⁻², no pior dos 5 pares",,,,,,,,,,,
+,6,"M=128
+C=8
+M_c=16
+K=8
+IoT 20dB
+QPSK","-9,3
+-9,1","2266
+2383",,Varredura Inteiro,"6
+8
+10
+12
+14
+16
+20
+24
+32",32,"cfg 1: 8 bits
+cfg 10; cfg 12: 12 bits
+cfg 6: cfg 8: 14 bits  ",,,,,,,,,,,
+,8,"M=128
+C=8
+M_c=16
+K=12
+IoT 20dB
+QPSK","-8,7
+-8,6","2470
+2385",,Varredura Fracionário,14,"4
+6
+8
+10
+12
+16
+20
+24
+32","cfg 1; 12 TRN 
+cfg 1: 10 RND (1) 12 RND (4)
+ 
+cfg 10; cfg 12: 16 TRN
+cfg 10; cfg 12: 12 RND (1) 16 RND (4)
+
+cfg 6; cfg 8: 16 TRN
+cfg 6; cfg 8: 16 RND 
+",,,,,,,,,,,
+,10,"M=256
+C=8
+M_c=32
+K=8
+IoT 20dB
+16-QAM
+","-5,8
+-5,6","962
+999",,I = F ,6 e 7,6 e 7,,,,,,,,,,,,
+,12,"M=256
+C=8
+M_c=32
+K=12
+IoT 20dB
+16-QAM","-5,6
+-5,5","983
+987",,,,,,,,,,,,,,,,
+,,,,,,,,,,1 ITERAÇÃO (TRN/SAT),"TDLA30-5 (FR1)
+TDLA30-10 (FR1)",,TDLA30-75 (FR2),,TDLA30-300 (FR2),,TDLC300-100 (FR1),,TDLB100-400 (FR1),
+,,,,,,,,,,Configurações,I,F,I,F,I,F,I,F,I,F
+,Configuração,M,C,M_C,K,IoT,Modulação,,,1,8,12,8,12,8,12,8,12,8,12
+artigo,1,128,8,16,8,10,16-QAM,,,6,14,16,14,16,14,16,14,16,12,16
+artigo,2,128,8,16,8,20,16-QAM,,,8,14,16,14,16,14,16,14,16,12,16
+artigo,3,128,8,16,12,10,16-QAM,,,10,12,16,12,16,12,16,12,16,10,16
+,4,128,8,16,12,20,16-QAM,,,12,12,16,12,16,12,16,12,16,10,16
+artigo,5,128,8,16,8,10,QPSK,,,,,,,,,,,,,
+,6,128,8,16,8,20,QPSK,pior caso,,4 ITERAÇÕES (TRN/SAT),"TDLA30-5 (FR1)
+TDLA30-10 (FR1)",,TDLA30-75 (FR2),,TDLA30-300 (FR2),,TDLC300-100 (FR1),,TDLB100-400 (FR1),
+,7,128,8,16,12,10,QPSK,,,Configurações,I,F,I,F,I,F,I,F,I,F
+,8,128,8,16,12,20,QPSK,pior caso,,1,8,12,8,12,8,12,8,12,8,12
+artigo,9,256,8,32,8,10,16-QAM,,,6,14,16,14,16,14,16,14,16,12,16
+,10,256,8,32,8,20,16-QAM,,,8,14,16,14,16,14,16,14,16,12,16
+,11,256,8,32,12,10,16-QAM,,,10,12,16,12,16,12,16,12,16,10,16
+,12,256,8,32,12,20,16-QAM,,,12,12,16,12,16,12,16,12,16,10,16
+artigo,13,256,16,16,8,10,16-QAM,,,,,,,,,,,,,
+,14,256,16,16,8,20,16-QAM,,,,,,,,,,,,,
+,15,256,16,16,12,10,16-QAM,,,,,,,,,,,,,
+,16,256,16,16,12,20,16-QAM,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,Varredura 5,,,,,,,,,,,,,,,,,,
+,Formato selecionado ,Bits Inteiros,Bits fracionários,,,,,,,,,,,,,,,,,
+,"<24,12>",12,12,,,,,,,,,,,,,,,,,
+,"<28,12>",12,16,,,,,,,,,,,,,,,,,
+,"<25,13>",13,12,,,,,,,,,,,,,,,,,
+,"<27,13>",13,14,,,,,,,,,,,,,,,,,
+,"<28,13>",13,15,,,,,,,,,,,,,,,,,
+,"<29,13>",13,16,,,,,,,,,,,,,,,,,
+,"<30,14>",14,16,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,Primeira coluna sem ×,Primeiro número de bits em que os 35 modos chegam a SER = 10⁻² nas SNRs simuladas. O × quer dizer que a SER não chega a 10⁻² (perda grande demais para medir); não é divisão por zero. Divisão por zero só aparece em F = 4.,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,1 ITERAÇÃO (35 modos),"TDLA30-5 (FR1)
+TDLA30-10 (FR1)",,TDLA30-75 (FR2),,TDLA30-300 (FR2),,TDLC300-100 (FR1),,TDLB100-400 (FR1),
+,,,,,,,,,,Configurações,I,F,I,F,I,F,I,F,I,F
+,,,,,,,,,,1,6,8,6,8,6,8,6,8,6,8
+,,,,,,,,,,6,12,12,12,12,12,12,12,12,10,12
+,,,,,,,,,,8,12,12,12,12,12,12,12,12,10,12
+,,,,,,,,,,10,10,12,10,12,10,12,10,12,8,12
+,,,,,,,,,,12,10,12,10,12,10,12,10,12,8,12
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,4 ITERAÇÕES (35 modos),"TDLA30-5 (FR1)
+TDLA30-10 (FR1)",,TDLA30-75 (FR2),,TDLA30-300 (FR2),,TDLC300-100 (FR1),,TDLB100-400 (FR1),
+,,,,,,,,,,Configurações,I,F,I,F,I,F,I,F,I,F
+,,,,,,,,,,1,6,10,6,10,6,10,6,10,6,10
+,,,,,,,,,,6,12,16,12,16,12,16,12,16,10,16
+,,,,,,,,,,8,12,16,12,16,12,16,12,16,10,16
+,,,,,,,,,,10,10,16,10,16,10,16,10,16,8,16
+,,,,,,,,,,12,10,16,10,16,10,16,10,16,8,16
+,,,,,,,,,,,,,,,,,,,,
+,Primeira coluna com perda zero,"Primeiro número de bits em que os 35 modos ficam abaixo de 0,05 dB de perda (aparecem como 0,0 no mapa com 1 casa). É a última coluna dos mapas de perda.",,,,,,,,,,,,,,,,,,
+,,,,,,,,,,1 ITERAÇÃO (35 modos),"TDLA30-5 (FR1)
+TDLA30-10 (FR1)",,TDLA30-75 (FR2),,TDLA30-300 (FR2),,TDLC300-100 (FR1),,TDLB100-400 (FR1),
+,,,,,,,,,,Configurações,I,F,I,F,I,F,I,F,I,F
+,,,,,,,,,,1,8,12,8,12,8,12,8,12,8,12
+,,,,,,,,,,6,14,16,14,16,14,16,14,16,12,20
+,,,,,,,,,,8,14,16,14,16,14,16,14,16,12,20
+,,,,,,,,,,10,12,16,12,16,12,16,12,16,10,16
+,,,,,,,,,,12,12,16,12,16,12,16,12,16,12,16
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,4 ITERAÇÕES (35 modos),"TDLA30-5 (FR1)
+TDLA30-10 (FR1)",,TDLA30-75 (FR2),,TDLA30-300 (FR2),,TDLC300-100 (FR1),,TDLB100-400 (FR1),
+,,,,,,,,,,Configurações,I,F,I,F,I,F,I,F,I,F
+,,,,,,,,,,1,8,16,8,16,8,16,8,16,8,16
+,,,,,,,,,,6,14,16,14,16,14,20,14,20,12,24
+,,,,,,,,,,8,14,16,14,16,14,16,14,20,12,24
+,,,,,,,,,,10,12,16,12,16,12,16,12,16,10,20
+,,,,,,,,,,12,12,16,12,16,12,16,12,16,12,20
+,,,,,,,,,,,,,,,,,,,,

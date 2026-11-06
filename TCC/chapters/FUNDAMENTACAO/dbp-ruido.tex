@@ -195,14 +195,14 @@ E_s\mathbf H\mathbf H^H+
 A IoT mede a intensidade da interferência em relação ao ruído térmico. Ela é definida como \cite{zhao2025jsac}:
 
 \begin{equation}
-\mathrm{IoT}=10\log_{10}\left(\frac{\beta+N_0}{\sigma^2}\right),
+\mathrm{IoT}=10\log_{10}\left(\frac{\beta+N_0}{\sigma^2}\right),\label{eq:iot}
 \end{equation}
 
 em que $N_0$ é a potência do ruído térmico, ou seja, $N_0=\sigma^2$, assim como na SNR medida por $E_s/N_0$ em \cite{zhao2021-globecom}.
 
 A potência $\beta$ dos UEs não-alvo controla a intensidade da interferência. Quando a IoT é baixa, $\mathbf R_n$ se aproxima de $\sigma^2\mathbf I_M$ e o ruído é praticamente branco. À medida que a IoT cresce, a parcela $\beta\overline{\mathbf H}\,\overline{\mathbf H}^H$ domina e a correlação entre as antenas se torna mais forte.
 
-\subsubsection{Estimação da matriz de covariância}
+\subsubsection{Estimação da matriz de covariância}\label{subsubsec:estimacao-R}
 % aqui eh o lugar para explicar RCC
 % explicar tambem a quantidade de pilotos e etc
 A matriz $\mathbf R_n$ é uma grandeza teórica, definida por uma esperança, o que exigiria infinitas realizações do ruído, além de depender dos canais $\overline{\mathbf H}$ dos usuários interferentes e de sua potência de transmissão $\beta$ que o receptor não conhece. Por isso, $\mathbf R_n$ precisa ser estimada a partir de observações de amostras do ruído observadas pelo receptor.
@@ -247,44 +247,53 @@ A média desses produtos ao longo das $N$ amostras fornece uma estimativa dos el
 A quantidade de amostras, no entanto, é limitada pelos recursos disponíveis para a coleta. No sistema considerado, as amostras são obtidas a partir de elementos de recurso de pilotos, cuja disponibilidade depende da configuração do sinal e do intervalo durante o qual a covariância pode ser considerada constante.
 
 
-\subsubsection{Disponibilidade das amostras no bloco de coerência}
-Todas as amostras utilizadas na estimação de ruído devem representar a mesma matriz de covariância. Por isso, o intervalo da amostragem é limitado pela variação no tempo e na frequência dos canais que determinam a interferência. 
+\subsubsection{Availability of noise samples within the coherence time}\label{subsubsec:disponibilidade-amostras}
+All samples used in noise estimation must represent the same covariance matrix. Therefore, the sampling interval is limited by the variation in time and frequency of the channels that determine the interference. The variation in time is defined by the coherence time. The variation in frequency is defined by the PRB. It is considered that the channels of the interfering users remain constant within the PRB \cite{zhao2025jsac}. The estimate $R_{cc}$, therefore, is unique per PRB within each coherence time.
 
-A variação no tempo é definida pelo tempo de coerência. Já a variação na frequência é definida pelo \sout{Physical Resource Block (PRB)} \textcolor{red}{PRB}. Considera-se que os canais dos usuários interferentes permanecem constantes dentro do PRB. A estima $R_{cc}$, portanto, é única por PRB dentro de cada tempo de coerência. 
 
-O valor de $T_c$ determina quantas amostras estão disponíveis no período constante de canal. O número máximo de amostras utilizáveis depende da configuração dos pilotos e da duração do intervalo considerado. 
+In 5G NR, the Demodulation Reference Signal (DM-RS) is the reference signal transmitted by the UE to allow the receiver to estimate channel conditions. The DM-RS is transmitted alongside the PUSCH (Section~\ref{subsec:uplink}) within the same PRBs \cite[Sec.~6.4.1.1.3]{3gpp-ts38211}. Each UE transmits its own DM-RS within the same OFDM symbols, and the receiver must distinguish the DM-RS of each one. The double-symbol DM-RS occupies two consecutive OFDM symbols at each position within the slot and allows for the differentiation of up to 12 UEs \cite[Tab.~6.4.1.1.3-5]{3gpp-ts38211}. To achieve this, each UE employs different subcarriers or sequences of $+1$ and $-1$ values \cite[Tab.~6.4.1.1.3-2]{3gpp-ts38211}. For instance, when two UEs utilize the same subcarriers, one may transmit $(+1, +1)$ across two adjacent REs while the other transmits $(+1, -1)$; the sum and difference of the received REs then allow for the isolation of each UE.
 
-\sout{Resource Element (RE) é a menor unidade básica de transmissão, correspondendo a uma subportadora no domínio da frequência e um símbolo OFDM no domínio do tempo.  Slot é a unidade básica de tempo para o agendamento de transmissões na rede, representando um bloco temporal contínuo. No padrão 5G NR, cada PRB possui 12 subportadores consecutivas na frequência, e cada slot possui 14 símbolos.} \textcolor{red}{Como apresentado na Seção~\ref{subsec:simbolos}, cada PRB tem 12 subportadoras consecutivas na frequência, e cada slot tem 14 símbolos OFDM.} 
+Noise samples are obtained from the REs occupied by the DM-RS. \textcolor{red}{Como o DM-RS só é transmitido junto com o PUSCH, só há amostras nos slots em que os UEs alvo transmitem o PUSCH (Seção~\ref{subsec:simbolos}).} The number of samples therefore depends on how many DM-RS REs are present within the interval over which the covariance remains constant. With a maximum of two positions per slot, the double-symbol DM-RS occupies 4 OFDM symbols \cite[Tab.~6.4.1.1.3-4]{3gpp-ts38211}. Since each PRB contains 12 subcarriers (Section~\ref{subsec:simbolos}), a maximum of 4 $\times$ 12 = 48 DM-RS REs per slot are available within each PRB. Figure~\ref{fig:prb-dmrs} illustrates these REs within a PRB. Consequently, the quantity of samples collected within an interval $T_c$ depends on the number of OFDM symbols contained within that interval.
 
-No \sout{5G} \textcolor{red}{5G NR}, Demodulation Reference Signal (DM-RS) é o nome do sinal de referência transmitido pelo UE para que o receptor estime as condições do canal. As amostras de ruído são obtidas a partir dos RE ocupados pelo DM-RS. O número máximo de símbolos de DM-RS por slot é 4. Por PRB, no máximo 4 símbolos * 12 subportadoras = 48 REs de pilotos por slot estão disponíveis. Assim, a quantidade de amostras coletada dentro de um \sout{Tc} \textcolor{red}{$T_c$} depende do número de símbolos OFDM contidos nesse intervalo. A Tabela~\ref{tab:n-maximo} indica a quantidade de amostras em cada cenário de teste.
+\input{chapters/FUNDAMENTACAO/fig-prb-dmrs.tex}
+
+A sample represents the noise covariance for a given data symbol only if both fall within the same interval of duration $T_c$. As a result, the number of available samples may vary from one data symbol to another. For any given symbol, the number of samples corresponds to the maximum count of DM-RS REs found within an interval of duration $T_c$ that encompasses that symbol. The number of samples available for all symbols in the slot is the smallest of these values. Figure~\ref{fig:dmrs-n} shows an example with the DM-RS located at symbols 2, 3, 10, and 11 of each slot. Under the TDLB100-400 condition, symbols 5 through 8 represent the worst-case scenario, with 24 samples. Therefore, the number of samples available for all symbols is 24. Table~\ref{tab:n-maximo} presents this value for each test condition.
 
 \begin{table}[htbp]
-\caption{Número máximo de REs de DM-RS por PRB dentro de $T_c$.}
+\caption{Number of DM-RS REs per PRB available to every data symbol of the slot, in each test condition.}
 \label{tab:n-maximo}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|l|r|r|r|r|}
-\hline
-Condição de teste & $T_c$ (ms) & Símbolos OFDM em $T_c$ & REs de DM-RS (máx.) & $N$ usado \\
-\hline
-TDLA30-5 (FR1)    & 25,0000 & 700 & 2400 & 192 \\
-TDLA30-10 (FR1)   & 12,5000 & 350 & 1200 & 192 \\
-TDLA30-75 (FR2)   & 1,6667  & 186 & 672  & 192 \\
-TDLA30-300 (FR2)  & 0,4167  & 46  & 192  & 192 \\
-TDLC300-100 (FR1) & 1,2500  & 35  & 144  & 144 \\
-TDLB100-400 (FR1) & 0,3125  & 8   & 48   & 48 \\
-HST350 (FR1)      & 0,0536  & 1   & 12   & 12 \\
-HST500 (FR1)      & 0,0375  & 1   & 12   & 12 \\
-\hline
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|c|c|c|c|c|}
+\toprule
+\multirow{2}{*}{\textbf{Test condition}} & \textbf{Frequency} & \multirow{2}{*}{{\boldmath $T_c$} \textbf{(ms)}} & \textbf{OFDM symbols} & \textbf{DM-RS REs} \\
+ & \textbf{range} & & \textbf{in} {\boldmath $T_c$} & \textbf{available} \\
+\midrule
+TDLA30-5    & \multirow{2}{*}{FR1} & 25.0000 & 700 & 2400 \\
+TDLA30-10   &                      & 12.5000 & 350 & 1200 \\
+\cline{2-2}
+TDLA30-75   & \multirow{2}{*}{FR2} & 1.6667  & 186 & 648 \\
+TDLA30-300  &                      & 0.4167  & 46  & 168 \\
+\cline{2-2}
+TDLC300-100 & \multirow{4}{*}{FR1} & 1.2500  & 35  & 132 \\
+TDLB100-400 &                      & 0.3125  & 8   & 24 \\
+HST350      &                      & 0.0536  & \multirow{2}{*}{1} & \multirow{2}{*}{0} \\
+HST500      &                      & 0.0375  &     &  \\
+\bottomrule
 \end{tabular}
+\vspace{4pt}
+\legend{Source: the author, from \citesp{3gpp-ts38104}; \citesp{3gpp-ts38211}; \citesp{tse-viswanath}. \textcolor{red}{Double-symbol DM-RS} in symbols 2, 3, 10 and 11, with every slot carrying PUSCH.}
 \end{table}
-% FONTE da tabela: f_D e condições: [R5] TS 38.104, Anexo G; T_c: Tse e Viswanath, Eq. (2.44);
-%        símbolo OFDM: 1/28 ms (30 kHz) e 1/112 ms (120 kHz), [R2] Tab. 4.3.2-1, p. 14.
-%        Valores: software/Restrições - Parâmetros.csv, linhas 44-53.
+
+The best range of a data symbol may include DM-RS that arrive after that symbol. In Figure ~\ref{fig:dmrs-n}(b), the best range of symbol 13 goes up to symbol 3 of the next slot. To use these samples, the receiver needs to store symbol 13 for 4 more symbols.
+\input{chapters/FUNDAMENTACAO/fig-dmrs-n.tex}
 
 
-\subsubsection{Condicionamento da estimativa}
+\subsubsection{Condicionamento da estimativa}\label{subsubsec:condicionamento-R}
 O posto de uma matriz é o número máximo de linhas ou colunas linearmente independentes que essa matriz possui.  Cada parcela $\mathbf{n}^i(\mathbf{n}^i)^H$ é uma matriz de posto unitário, uma vez que todas as suas colunas são múltiplas do mesmo vetor $\mathbf{n}^i$. Consequentemente, o posto da soma de (N) desses produtos é limitado por (N):
 
 \[
@@ -294,6 +303,20 @@ O posto de uma matriz é o número máximo de linhas ou colunas linearmente inde
 Assim, quando (N<M), a estimativa amostral da matriz completa $(M\times M)$ é necessariamente singular. Uma matriz singular não é inversível. Essa propriedade precisa ser considerada em operações que exigem a inversão da matriz de covariância.
 
 \cite{zhao2025jsac} adota a condição $N\gg K$, para obter uma estimativa suficientemente precisa. Em suas simulações, utiliza (N=192) amostras por realização do canal. Um trabalho anterior dos mesmos autores também apresenta 96 e 192 como valores típicos para essa quantidade de amostras (Zhao et al., 2021).
+
+% SEPARAÇÃO (2026-11-04): explicação do Ledoit-Wolf trazida de METODOLOGIA/simulacao.tex.
+\textcolor{red}{Uma forma de tornar a estimativa inversível é o encolhimento (\textit{shrinkage}) de Ledoit e Wolf. Ele troca $\hat{\mathbf R}_n$ por uma média ponderada entre $\hat{\mathbf R}_n$ e um múltiplo da identidade \cite{ledoit-wolf}:}
+\begin{equation}
+\hat{\mathbf R}_{\text{LW}}=(1-\rho)\,\hat{\mathbf R}_n+\rho\,\mu\,\mathbf I_M,
+\qquad
+\mu=\frac{\operatorname{tr}(\hat{\mathbf R}_n)}{M}.
+\label{eq:ledoit-wolf}
+\end{equation}
+\textcolor{red}{O peso $\rho$, entre 0 e 1, é calculado a partir das próprias amostras, de forma a minimizar o erro quadrático esperado entre a estimativa e a covariância verdadeira \cite{ledoit-wolf}. Assim, não é preciso escolher uma constante. Como $\hat{\mathbf R}_n$ não tem autovalores negativos, todo autovalor de $\hat{\mathbf R}_{\text{LW}}$ é pelo menos $\rho\mu$. Quando $\rho > 0$, a matriz resultante é inversível.}
+% FONTE: Ledoit e Wolf (2004), alvo mu I com mu = tr/M e rho estimado das amostras
+%   (TODO: conferir número da equação/página). Simulador: m5_noise.shrink.
+% NOSSO (conta): autovalores de (1-rho)R + rho mu I = (1-rho) lambda_i + rho mu >= rho mu.
+% FORA (sem fonte): a alternativa da carga diagonal com epsilon fixo.
 
 
 

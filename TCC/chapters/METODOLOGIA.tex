@@ -1,16 +1,51 @@
 \chapter{Metodologia}\label{chap:metodologia}
-% Decisões deste trabalho que levam dos conceitos da Fundamentação aos limites de
-% tempo da inversão. Os conceitos (quando as matrizes são refeitas, quantas inversões
-% o BCD exige, vazão, latência e II) ficam na Fundamentação; aqui ficam os números.
-% Os Resultados comparam o módulo HLS com estes limites.
-%
-% PENDENTE (decisões que mudam os números):
-%   - M_c = 8 no módulo (recomendado: aproveita o HLS 8x8 e tem o tamanho do K x K).
-%   - Clock do módulo (as contas de 2026-10-12 usaram 100 MHz, ciclo de 10 ns; sem fonte).
-%   - Acrescentar T = 1 às tabelas de vazão (Fig. 8 usa 1 iteração, paper.md:590).
-%   - Se a vazão do fronthaul (enlaces entre DUs, paper.md:87, método da Tab. I) entra.
+This chapter describes the tools used and the tests performed for this work. The uplink transmission of a massive MIMO system with decentralized processing (Section~\ref{subsec:uplink}) was simulated to analyze the effect of the approximation used in the inversion module of the BCD-MMSE algorithm. Based on this analysis, the fixed-point formats for the inversion module, implemented on an FPGA, are selected. The chapter begins by presenting the simulation flow (Section~\ref{sec:simulador}) and the hardware tools (Section~\ref{sec:setup-hardware}). It then covers test configurations and conditions (Section~\ref{sec:configuracoes}), timing constraints for the inversion process (Section~\ref{sec:requisitos-tempo}), the selection of the numerical format (Section~\ref{sec:formato}), the hardware architectures and testing (Section~\ref{sec:testes-hardware}), and the organization of the results (Section~\ref{sec:organizacao-resultados}).
+
+
 
 % =====================================================================
-\section{Requisitos de tempo da inversão}\label{sec:requisitos-tempo}
+\section{\texorpdfstring{Simulation workflow}{Simulation workflow}}\label{sec:simulador}
+% =====================================================================
+\input{chapters/METODOLOGIA/simulacao.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Hardware setup}{Hardware setup}}\label{sec:setup-hardware}
+% =====================================================================
+\input{chapters/METODOLOGIA/setup-hardware.tex}
+
+% =====================================================================
+\section{\texorpdfstring{\textcolor{red}{Configurations and test conditions}}{Configurations and test conditions}}\label{sec:configuracoes}
+% =====================================================================
+\subsection{\texorpdfstring{\textcolor{red}{Base station configurations}}{Base station configurations}}\label{subsec:configuracoes-bs}
+\input{chapters/METODOLOGIA/configuracoes.tex}
+
+\subsection{Test Conditions}\label{subsec:setup_condicoes}
+\input{chapters/METODOLOGIA/condicoes-teste.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Inversion cycle limit}{Inversion cycle limit}}\label{sec:requisitos-tempo}
 % =====================================================================
 \input{chapters/METODOLOGIA/requisitos-tempo.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Selection of the fixed-point format}{Escolha do formato de ponto fixo}}\label{sec:formato}
+% =====================================================================
+\input{chapters/METODOLOGIA/formato.tex}
+
+% =====================================================================
+\section{\texorpdfstring{\textcolor{red}{Hardware architectures and tests}}{Hardware architectures and tests}}\label{sec:testes-hardware}
+% =====================================================================
+\input{chapters/METODOLOGIA/arquiteturas-hardware.tex}
+
+% =====================================================================
+\section{\texorpdfstring{\textcolor{red}{Organização dos resultados}}{Organização dos resultados}}\label{sec:organizacao-resultados}
+% =====================================================================
+
+
+% ---------------------------------------------------------------------
+% 1.6  ORGANIZAÇÃO DOS RESULTADOS                 -> fim da Metodologia
+% ---------------------------------------------------------------------
+\textcolor{red}{Os resultados são agrupados pelas características físicas da estação base: o tamanho do circuito de inversão ($16 \times 16$ ou $32 \times 32$), o número $M$ de antenas e o número $C$ de \textit{clusters}. Dentro de cada grupo, variam a modulação, $K$ e a IoTh. Assim, há três grupos: as configurações 1A--1H ($M = 128$, $C = 8$, circuito $16 \times 16$), 2A--2H ($M = 256$, $C = 8$, circuito $32 \times 32$) e 3A--3H ($M = 256$, $C = 16$, circuito $16 \times 16$).}
+% ORIGEM: Análise bits.md, "hard-constraints" (M, C, tamanho do circuito) e
+%   "soft-constraints" (modulação, K, IoTh). Os nomes G1-G3 não vão para a tese.
+

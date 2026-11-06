@@ -1,0 +1,254 @@
+<ENTRY>
+{
+ "thisFile": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/cholesky_hardware.hlscompile_summary",
+ "connectId": "",
+ "serverToken": "",
+ "timestamp": "0"
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_CmdStep",
+ "dateTimestamp": "Thu Nov  5 17:10:39 2026",
+ "timestampMillis": "1793909439730",
+ "buildStep": {
+  "cmdId": "868e3de6-4c5d-4ee3-ac01-ae979ce9fde3",
+  "name": "v++",
+  "logFile": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/logs/cholesky_hardware.steps.log",
+  "commandLine": "/home/juliana/2026.1/Vitis/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/juliana/GitHub/TCC/hardware/cholesky_hardware/hls_config.cfg --work_dir cholesky_hardware ",
+  "args": [
+   "-c",
+   "--mode",
+   "hls",
+   "--config",
+   "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/hls_config.cfg",
+   "--work_dir",
+   "cholesky_hardware"
+  ],
+  "iniFiles": [
+   {
+    "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/hls_config.cfg",
+    "content": "part=xcu50-fsvh2104-2-e\n\n[hls]\npackage.output.format=ip_catalog\npackage.output.syn=false\n# Topo da sintese: cholesky_inverse (so A e a inversa como portas). O testbench\n# chama tambem cholesky_decomposition, que expoe cada etapa, e confere que as\n# duas dao a mesma inversa.\nsyn.top=cholesky_inverse\n\n# Parametros do hardware (ver cholesky.h). As duas linhas precisam ser iguais:\n# syn.cflags vale para o codigo do hardware e tb.cflags para o testbench.\n# Opcoes: CHOL_N, CHOL_INT_BITS, CHOL_FRAC_BITS, CHOL_QUANT, CHOL_OVERFLOW,\n# CHOL_ACC_* (acumulador; padrao = o dobro dos bits e os mesmos modos) e os\n# intermediarios CHOL_MULIN_*, CHOL_PROD_*, CHOL_CMUL_*, CHOL_NUM_*, CHOL_NORM_*,\n# CHOL_QUOT_*, CHOL_SUM_* (_INT_BITS, _FRAC_BITS, _QUANT, _OVERFLOW) e\n# CHOL_SQRT_* (so _INT_BITS e _FRAC_BITS); padroes no cholesky.h.\nsyn.cflags=-DCHOL_N=8 -DCHOL_INT_BITS=8 -DCHOL_FRAC_BITS=8 -DCHOL_QUANT=AP_TRN -DCHOL_OVERFLOW=AP_SAT\ntb.cflags=-DCHOL_N=8 -DCHOL_INT_BITS=8 -DCHOL_FRAC_BITS=8 -DCHOL_QUANT=AP_TRN -DCHOL_OVERFLOW=AP_SAT\ntb.file=tb_lu_decomposition.cpp\nsyn.file=cholesky.h\nsyn.file=cholesky_ops.h\nsyn.file=cholesky_decomposition.cpp\nsyn.file=lu_decomposition.cpp\nsyn.file=dv_step.cpp\nsyn.file=s_step.cpp\nsyn.file=g_step.cpp\nsyn.file=foward_substitution.cpp\nsyn.file=inversion.cpp\nsyn.file=cholesky_top.cpp\n"
+   }
+  ],
+  "cwd": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Thu Nov  5 17:10:39 2026",
+ "timestampMillis": "1793909439730",
+ "status": {
+  "cmdId": "868e3de6-4c5d-4ee3-ac01-ae979ce9fde3",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_FlowMetaData",
+ "dateTimestamp": "Thu Nov  5 17:10:44 2026",
+ "timestampMillis": "1793909444875",
+ "buildSummary": {
+  "hardwarePlatform": "",
+  "hardwareDsa": "",
+  "platformDirectory": "",
+  "runtime": "",
+  "systemConfig": "",
+  "flow": "BF_COMPILE",
+  "target": "TT_HW",
+  "kernels": [
+   {
+    "base": {
+     "type": "KERNEL",
+     "name": "cholesky_inverse",
+     "file": "",
+     "reports": [],
+     "uuid": ""
+    },
+    "sources": [
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky.h",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_ops.h",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_decomposition.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/lu_decomposition.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/dv_step.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/s_step.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/g_step.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/foward_substitution.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/inversion.cpp",
+     "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_top.cpp"
+    ],
+    "psSources": [],
+    "cuNames": [],
+    "type": "HLS",
+    "frequency": 0,
+    "freqUnits": ""
+   }
+  ],
+  "toolVersion": "2026.1"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_SubCmdStep",
+ "dateTimestamp": "Thu Nov  5 17:10:44 2026",
+ "timestampMillis": "1793909444876",
+ "buildStep": {
+  "cmdId": "9363fbe2-e8ca-4d4a-a127-f00d55552262",
+  "name": "",
+  "logFile": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls/hls.log",
+  "commandLine": "",
+  "args": [],
+  "iniFiles": [],
+  "cwd": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Thu Nov  5 17:10:44 2026",
+ "timestampMillis": "1793909444876",
+ "status": {
+  "cmdId": "9363fbe2-e8ca-4d4a-a127-f00d55552262",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:10:44 2026",
+ "timestampMillis": "1793909444877",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls/hls_data.json",
+  "name": "",
+  "fileType": "JSON",
+  "reportType": "HLS_SYNTHESIS",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:10:44 2026",
+ "timestampMillis": "1793909444877",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls/syn/report/csynth.rpt",
+  "name": "",
+  "fileType": "TEXT",
+  "reportType": "HLS_SYNTHESIS",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:10:44 2026",
+ "timestampMillis": "1793909444877",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls/syn/report/csynth.xml",
+  "name": "",
+  "fileType": "XML",
+  "reportType": "HLS_SYNTHESIS",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:12:13 2026",
+ "timestampMillis": "1793909533732",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls",
+  "name": "",
+  "fileType": "DIR",
+  "reportType": "HLS_DATAFLOW",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:12:13 2026",
+ "timestampMillis": "1793909533737",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls",
+  "name": "",
+  "fileType": "DIR",
+  "reportType": "HLS_FUNCTION_CALL_GRAPH",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:12:13 2026",
+ "timestampMillis": "1793909533737",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/hls",
+  "name": "",
+  "fileType": "DIR",
+  "reportType": "HLS_SCHEDULE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Thu Nov  5 17:12:13 2026",
+ "timestampMillis": "1793909533737",
+ "status": {
+  "cmdId": "9363fbe2-e8ca-4d4a-a127-f00d55552262",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Thu Nov  5 17:12:14 2026",
+ "timestampMillis": "1793909534603",
+ "status": {
+  "cmdId": "868e3de6-4c5d-4ee3-ac01-ae979ce9fde3",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:12:14 2026",
+ "timestampMillis": "1793909534645",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/reports/v++_compile_cholesky_hardware_guidance.html",
+  "name": "",
+  "fileType": "HTML",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Thu Nov  5 17:12:14 2026",
+ "timestampMillis": "1793909534645",
+ "report": {
+  "path": "/home/juliana/GitHub/TCC/hardware/cholesky_hardware/cholesky_hardware/reports/.db/v++_compile_cholesky_hardware_guidance.pb3",
+  "name": "",
+  "fileType": "BINARY_PROTOBUF",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>

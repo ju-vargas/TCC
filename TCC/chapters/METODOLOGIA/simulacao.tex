@@ -1,0 +1,350 @@
+The simulation workflow~\ref{fig:fluxo_simulacao} employs three tools: the QuaDRiGa channel generator, a Python simulator developed in this work, and C++ code developed in Vitis HLS, which computes the inverse of $\mathbf{G}_c$ using fixed-point arithmetic. QuaDRiGa generates the channel matrices $\mathbf{H}$ for the target UEs and $\overline{\mathbf{H}}$ for the interfering UEs.
+
+The Python simulator handles the transmission process. It generates symbols for the target UEs and creates colored noise, with a covariance derived from $\overline{\mathbf{H}}$ (Section~\ref{subsec:ruido-colorido}), to construct the received signal using $\mathbf{H}$. Subsequently, it computes the equalizers, performs symbol detection, and measures the SER at various SNR levels. The BCD-MMSE algorithm is simulated in two ways: using the inverse of $\mathbf{G}_c$ in 64-bit floating-point format (which serves as a reference) and using the inverse in fixed-point format. In the latter case, whenever the BCD-MMSE algorithm requires $\mathbf{G}_c^{-1}$, the Python simulator invokes the C++ code.
+
+The Python simulator models the same uplink as in \cite{zhao2025jsac}. According to the authors, that paper was the first work on decentralized processing to consider colored noise \cite{zhao2025jsac}. Therefore, the simulation parameters follow that work, except where the text indicates otherwise.
+
+
+
+% Fluxo conferido no código:
+%   QuaDRiGa: software/simulador/quadriga/export_quadriga_channels.m (semente: linha 83)
+%   laço e equalizadores: dbp_sim/m1_driver.py:149-211; dbp_sim/m7_equalizers.py
+%     (lmmse, zero_forcing, bdac_mmse, bcd_mmse_path); Ledoit-Wolf: dbp_sim/m5_noise.py:162-168
+%   inversa em ponto fixo: dbp_sim/hls_inverse.py (usada nos resultados de SER,
+%     varredura_formatos.py, bcd_inverse="hls") e dbp_sim/hw_inverse.py (modelo em Python)
+% Conteúdo vem de constraints/diagramas/fluxo_simulador.puml; estrutura em caixas do
+% rascunho constraints/diagramas/metodologia.svg.
+\begin{figure}[!ht]
+\caption{\textcolor{red}{Simulation flow: channel generation in QuaDRiGa, Python simulator (detailed in Figure~\ref{fig:fluxo_python}) and fixed-point inverse of the BCD-MMSE update.}}
+\label{fig:fluxo_simulacao}
+\vspace{4pt} % a classe zera o espaço entre a caption e a figura
+\centering
+\begin{tikzpicture}[
+  font=\fontsize{7}{8.4}\selectfont,
+  >={Stealth[length=2.1mm, width=1.7mm]},
+  node distance=2.4mm,
+  box/.style={draw=black!65, fill=white, align=center,
+              inner sep=2.5pt, text width=#1,
+              execute at begin node={\hyphenpenalty=10000}},
+  box/.default=4.9cm,
+  inp/.style={trapezium, trapezium left angle=78, trapezium right angle=102,
+              trapezium stretches body, draw=black!65, fill=black!6,
+              align=left, inner xsep=9pt, inner ysep=3pt},
+  arq/.style={tape, tape bend top=none, draw=black!65, fill=white, align=center,
+              text width=#1, inner sep=2.5pt},
+  pre/.style={box=#1, inner xsep=2.5pt+1.3mm,
+              append after command={
+                ($(\tikzlastnode.north west)+(1.1mm,0)$) edge[draw=black!65, -]
+                ($(\tikzlastnode.south west)+(1.1mm,0)$)
+                ($(\tikzlastnode.north east)+(-1.1mm,0)$) edge[draw=black!65, -]
+                ($(\tikzlastnode.south east)+(-1.1mm,0)$)}},
+  lini/.style={chamfered rectangle, chamfered rectangle corners={north west, north east},
+              chamfered rectangle xsep=2mm, chamfered rectangle ysep=0.6mm,
+              draw=black!65, fill=black!6, align=center, inner sep=2.5pt, text width=#1},
+  lini/.default=4.2cm,
+  lfim/.style={lini=#1, chamfered rectangle corners={south west, south east}},
+  lfim/.default=4.2cm,
+  term/.style={rounded rectangle, draw=black!65, fill=black!6, align=center,
+              inner xsep=8pt, inner ysep=3pt},
+  dec/.style={diamond, aspect=3.2, draw=black!65, fill=black!6, align=center, inner sep=0.5pt},
+  ponto/.style={circle, draw=black!65, fill=white, minimum size=2.2mm, inner sep=0pt},
+  cont/.style={draw=black!65, dashed, fill=black!4},
+  tit/.style={anchor=north west, font=\fontsize{8}{9.6}\selectfont\bfseries\boldmath, align=left, inner sep=3pt},
+  seta/.style={->, draw=black, line width=0.6pt},
+  rot/.style={font=\fontsize{5.5}{6.6}\selectfont, text=black!70, inner sep=1.5pt},
+]
+
+% Colunas: QuaDRiGa [0; 5,4], Python [5,7; 9,0] (mais estreita, só um bloco),
+%   inversa [9,3; 14,7]; 0,3 cm entre elas. Caixas tracejadas com a mesma altura;
+%   entradas com o mesmo tamanho e alinhadas; setas das entradas à direita do centro
+%   de cada coluna (fora dos títulos).
+% =====================================================================
+% Entradas
+% =====================================================================
+\begin{scope}[ent/.style={inp, anchor=north, text width=3.0cm, minimum height=1.5cm,
+                           execute at begin node={\hyphenpenalty=10000\raggedright}}]
+\node[term] (ini) at (2.7,0.75) {Start};
+\node[ent] (inq) at (2.7,0) {\textbf{Inputs:} $M$, $K$, $r$, carrier frequency, propagation scenario, seed};
+\node[ent] (ins) at (7.35,0) {\textbf{Inputs:} configuration, test condition, SNR points, realizations, symbols per UE, BCD-MMSE iterations};
+\node[ent] (inf) at (12.0,0) {\textbf{Inputs:} format $\langle W, I\rangle$, quantization and overflow modes};
+\end{scope}
+
+% topo do conteúdo das colunas (as caixas tracejadas começam 9 mm acima)
+\path let \p1=(ins.south) in coordinate (topo) at (7.35,\y1-14mm);
+
+% =====================================================================
+% QuaDRiGa (coluna da esquerda)
+% =====================================================================
+\path let \p1=(topo) in
+  node[box=3.95cm, anchor=north] (exp) at (2.7,\y1) {\texttt{export\_quadriga\_channels.m}\\ once per configuration $(M, K, r)$\\ and carrier};
+\node[lini=3.3cm, below=of exp] (lq) {for each realization $i$ (100)};
+\node[box=3.3cm, below=of lq] (rea) {\mbox{seed $= i$}; draws the UE positions, generates $\mathbf{H}$ for the target UEs and $\overline{\mathbf{H}}$ for the interfering UEs};
+\node[lfim=3.3cm, below=of rea] (lqf) {next realization};
+\node[arq=2.8cm, below=of lqf] (mat) {all channel matrices\\ in one \texttt{.mat} file};
+\node[pre=3.95cm, below=of mat] (cnv) {\texttt{convert\_quadriga\_export.py}\\ \texttt{.mat} to \texttt{.npz} (NumPy file)};
+\node[arq=2.8cm, below=of cnv] (npz) {all channel matrices\\ in one \texttt{.npz} file};
+
+\draw[seta] (ini) -- (inq);
+\draw[seta] let \p1=(inq.south), \p2=(exp.north) in (4.3,\y1) -- (4.3,\y2);
+\draw[seta] (exp) -- (lq);
+\draw[seta] (lq) -- (rea);
+\draw[seta] (rea) -- (lqf);
+\draw[seta] (lqf) -- (mat);
+\draw[seta] (mat) -- (cnv);
+\draw[seta] (cnv) -- (npz);
+
+% =====================================================================
+% Inversa em ponto fixo (coluna da direita)
+% =====================================================================
+\path let \p1=(topo) in
+  node[dec, aspect=2.4] (bcdi) at (12.0,\y1-1.0cm) {\texttt{bcd\_inverse}};
+\path let \p1=(bcdi.south) in
+  node[pre=1.9cm, anchor=north] (hls) at (13.4,\y1-5mm) {{\fontsize{6.2}{7.4}\selectfont\texttt{hls\_inverse.py}}\\ sends $\mathbf{G}_c$\\ through a pipe};
+\path let \p1=(bcdi.south) in
+  node[pre=1.7cm, anchor=north] (gold) at (10.6,\y1-5mm) {{\fontsize{6.2}{7.4}\selectfont\texttt{hw\_inverse.py}}\\ bit-exact Python model (golden model), checked against the C-simulation};
+\node[box=1.95cm, below=7mm of hls] (cfx) {computes the inverse in fixed point with the compiled HLS C++ code};
+\node[box=1.95cm, below=of cfx] (dev) {returns the inverse through the pipe};
+\node[rot, align=center, below=9.5mm of dev] (uso) {\texttt{"hls"} was used\\ for the SER results};
+
+\draw[seta] let \p1=(inf.south), \p2=(bcdi.north) in (13.6,\y1) -- (13.6,\y2+3mm) -- (\x2,\y2+3mm) -- (\p2);
+\draw[seta] (bcdi.east) -| node[rot, pos=0.8, left] {\texttt{"hls"}} (hls.north);
+\draw[seta] (bcdi.west) -| node[rot, pos=0.8, right] {\texttt{"cholesky\_hw"}} (gold.north);
+\draw[seta] (hls) -- (cfx);
+\draw[seta] (cfx) -- (dev);
+
+% fundo comum das três caixas tracejadas
+\path let \p1=(npz.south), \p2=(uso.south), \n1={min(\y1,\y2)-2.5mm} in coordinate (fundo) at (7.35,\n1);
+
+% =====================================================================
+% Simulador em Python: um bloco (detalhado na Figura fig:fluxo_python)
+% =====================================================================
+\path let \p1=(fundo) in
+  node[arq=2.3cm, anchor=south] (crv) at (7.2,\y1+2.5mm) {SER $\times$ SNR curves};
+\path let \p1=(topo), \p2=(crv.north), \n1={\y1-\y2-3mm} in
+  node[box=2.1cm, anchor=north, minimum height=\n1, text=red] (py) at (7.2,\y1) {Monte Carlo\\ simulation\\ of the uplink\\[2pt] (detailed in\\ Figure~\ref{fig:fluxo_python})};
+\node[term, below=7mm of crv] (fim) {End};
+
+\draw[seta] let \p1=(ins.south), \p2=(py.north) in (8.1,\y1) -- (8.1,\y2);
+\draw[seta] (py) -- (crv);
+\draw[seta] (crv) -- (fim);
+
+% canais do QuaDRiGa para o simulador
+\draw[seta] (npz.east) -- (npz.east -| py.west);
+
+% inversa: simulador (BCD-MMSE update) <-> coluna da direita
+\draw[seta] let \p1=(py.east), \p2=(hls) in (\x1,\y2+1.5mm) -- node[rot, above, fill=white, inner sep=0.6pt, pos=0.5] {$\mathbf{G}_c$} (9.3,\y2+1.5mm);
+\draw[seta] let \p1=(py.east), \p2=(hls) in (9.3,\y2-1.5mm) -- node[rot, below, fill=white, inner sep=0.6pt, pos=0.5] {$\mathbf{G}_c^{-1}$} (\x1,\y2-1.5mm);
+
+% =====================================================================
+% Caixas tracejadas (fundo)
+% =====================================================================
+\begin{scope}[on background layer]
+  \path let \p1=(topo) in coordinate (qt) at (0,\y1+9mm);
+  \draw[cont] (qt) rectangle (5.4,0 |- fundo);
+  \node[tit] at (qt) {QuaDRiGa 2.8.1 (MATLAB)};
+
+  \path let \p1=(topo) in coordinate (rt) at (5.7,\y1+9mm);
+  \draw[cont] (rt) rectangle (9.0,0 |- fundo);
+  \node[tit] at (rt) {Python simulator\\ (\texttt{dbp\_sim})};
+
+  \path let \p1=(topo) in coordinate (it) at (9.3,\y1+9mm);
+  \draw[cont] (it) rectangle (14.7,0 |- fundo);
+  \node[tit] at (it) {Fixed-point inverse\\ of $\mathbf{G}_c$ ($M_c \times M_c$)};
+
+  \path let \p1=(cfx.north), \p2=(dev.south) in
+    coordinate (vt) at (12.2,\y1+2mm) coordinate (vb) at (14.55,\y2-8.5mm);
+  \draw[cont, fill=black!9] (vt) rectangle (vb);
+  \node[tit, font=\fontsize{7}{8.4}\selectfont\bfseries, anchor=south west] at (vt |- vb) {\textcolor{red}{g++ with Vitis}\\ \textcolor{red}{HLS headers}};
+\end{scope}
+
+\end{tikzpicture}
+\vspace{4pt}
+\legend{\textcolor{red}{Source: the author.}}
+\end{figure}
+
+% ---------------------------------------------------------------------
+\subsection{\texorpdfstring{Channel generation}{Channel generation}}\label{subsec:simul-canal}
+% ---------------------------------------------------------------------
+The channels are generated using QuaDRiGa 2.8.1 in MATLAB. They depend on the number of antennas $M$, the number of target UEs $K$, the number of interfering UEs $r$, and the carrier frequency. Consequently, they are generated once for each combination of these values. Other parameters, such as $C$, the modulation scheme, and the IoTh, only affect the processing steps within the Python-based simulator. The simulation employs 100 channel realizations. Each realization consists of a random selection of UE positions, along with the corresponding channels $\mathbf{H}$ and $\overline{\mathbf{H}}$ generated by QuaDRiGa for those specific positions. Every realization uses its own unique random seed.
+% ANTIGO (2026-11-05): The simulation employs 100 channel realizations, as per \cite{zhao2025jsac}.
+
+
+MATLAB saves the channels for all 100 realizations into a \texttt{.mat} file. A Python script then converts this file into an \texttt{.npz} file, NumPy’s format for storing multiple arrays within a single compressed file. The Python-based simulator reads the matrices $\mathbf{H}$ and $\overline{\mathbf{H}}$ from this file.
+% ---------------------------------------------------------------------
+\subsection{\texorpdfstring{Python simulator}{Python simulator}}\label{subsubsec:simul-python}
+% ---------------------------------------------------------------------
+The Python simulator runs two nested loops (Figure~\textcolor{red}{\ref{fig:fluxo_python}}). The outer loop iterates through the 100 realizations, while the inner loop iterates through the SNR points. The SNR points range from $-10$ to $10$~dB, with a step of $2$~dB. For each realization, the simulator takes $\mathbf{H}$ and $\overline{\mathbf{H}}$ corresponding to that realization and uses these channels across all SNR points. Each point on the SER curves represents the average over the 100 realizations. This is a Monte Carlo simulation, as in \cite{zhuang2025}: the SER (Section~\ref{subsubsec:ser}) is estimated by the fraction of erroneous symbols across many random draws of the channel, noise, and symbols.
+
+At each SNR point, the simulator constructs the noise covariance matrix based on $\overline{\mathbf{H}}$, the IoTh (interference-over-thermal), and the SNR. It then generates $N$ noise samples, $\mathbf{n}^i$ (Section~\ref{subsubsec:estimacao-R}). It also generates 480 data symbols for each UE, along with the noise associated with these symbols. Based on this, the equalizers are calculated. The channel remains constant within the coherence block (Section~\ref{subsec:bloco-coerencia}); therefore, each equalizer is computed once and applied to all 480 symbols. The BCD-MMSE is compared against two centralized equalizers, the LMMSE and the ZF, which serve as benchmarks. The ZF does not utilize the noise samples $\mathbf{n}^i$. In contrast, both the LMMSE and the BCD-MMSE employ these samples to estimate the noise covariance (Section~\ref{subsubsec:condicionamento-R}). This estimate is always subjected to Ledoit–Wolf shrinkage (Equation~\ref{eq:ledoit-wolf}) before being used, even in cases where the estimate is already invertible.
+
+In the LMMSE, this adjustment is applied to the estimate $\hat{\mathbf{R}}$ corresponding to all $M$ antennas. In the BCD-MMSE, each DU performs the adjustment on its own block, $\hat{\mathbf{R}}_{cc}$, using only the samples from its $M_c$ antennas. Consequently, no DU requires access to the samples from any other DU. The adjusted block forms the matrix $\mathbf{G}_c$ (Section~\ref{subsec:bcd}). In the reference version of the BCD-MMSE, this matrix is inverted using 64-bit floating-point arithmetic; alternatively, it can be inverted using fixed-point arithmetic (Section~\ref{subsubsec:simul-inversa}).
+
+
+
+\begin{figure}[!ht]
+\caption{\textcolor{red}{Detailed flow of the Python simulator: Monte Carlo loop, equalizers and SER.}}
+\label{fig:fluxo_python}
+\vspace{4pt} % a classe zera o espaço entre a caption e a figura
+\centering
+\begin{tikzpicture}[
+  font=\fontsize{7}{8.4}\selectfont,
+  >={Stealth[length=2.1mm, width=1.7mm]},
+  node distance=2.4mm,
+  box/.style={draw=black!65, fill=white, align=center,
+              inner sep=2.5pt, text width=#1,
+              execute at begin node={\hyphenpenalty=10000}},
+  box/.default=4.9cm,
+  inp/.style={trapezium, trapezium left angle=78, trapezium right angle=102,
+              trapezium stretches body, draw=black!65, fill=black!6,
+              align=left, inner xsep=9pt, inner ysep=3pt},
+  arq/.style={tape, tape bend top=none, draw=black!65, fill=white, align=center,
+              text width=#1, inner sep=2.5pt},
+  pre/.style={box=#1, inner xsep=2.5pt+1.3mm,
+              append after command={
+                ($(\tikzlastnode.north west)+(1.1mm,0)$) edge[draw=black!65, -]
+                ($(\tikzlastnode.south west)+(1.1mm,0)$)
+                ($(\tikzlastnode.north east)+(-1.1mm,0)$) edge[draw=black!65, -]
+                ($(\tikzlastnode.south east)+(-1.1mm,0)$)}},
+  lini/.style={chamfered rectangle, chamfered rectangle corners={north west, north east},
+              chamfered rectangle xsep=2mm, chamfered rectangle ysep=0.6mm,
+              draw=black!65, fill=black!6, align=center, inner sep=2.5pt, text width=#1},
+  lini/.default=4.2cm,
+  lfim/.style={lini=#1, chamfered rectangle corners={south west, south east}},
+  lfim/.default=4.2cm,
+  term/.style={rounded rectangle, draw=black!65, fill=black!6, align=center,
+              inner xsep=8pt, inner ysep=3pt},
+  dec/.style={diamond, aspect=3.2, draw=black!65, fill=black!6, align=center, inner sep=0.5pt},
+  ponto/.style={circle, draw=black!65, fill=white, minimum size=2.2mm, inner sep=0pt},
+  cont/.style={draw=black!65, dashed, fill=black!4},
+  tit/.style={anchor=north west, font=\fontsize{8}{9.6}\selectfont\bfseries\boldmath, align=left, inner sep=3pt},
+  seta/.style={->, draw=black, line width=0.6pt},
+  rot/.style={font=\fontsize{5.5}{6.6}\selectfont, text=black!70, inner sep=1.5pt},
+  lp/.style={draw=black!65, rounded corners=3pt, fill=#1},
+  lab/.style={anchor=north east, font=\fontsize{7}{8.4}\selectfont\bfseries, inner sep=3pt},
+  grp/.style={font=\fontsize{6.5}{7.8}\selectfont\bfseries, text=black!70, inner sep=1pt},
+  bus/.style={draw=black, line width=0.6pt},
+]
+
+% Organização (2026-11-05): entrada em coluna acima de Signal and noise, laços como molduras
+%   (realizações por fora, pontos de SNR por dentro), três grupos lado a lado dentro do
+%   laço de SNR (Signal and noise | Receiver | Evaluation, os grupos das tabelas de
+%   Resultados) e saída em coluna abaixo de Evaluation. Conteúdo das caixas igual ao da
+%   versão anterior (cópia: scratchpad/simulacao_antes_detalhada.tex).
+
+% =====================================================================
+% Entrada: coluna vertical acima do grupo Signal and noise (x = 1,85)
+% =====================================================================
+\node[term] (ini) at (1.85,0) {Start};
+\node[inp, anchor=north, text width=4.4cm, execute at begin node={\hyphenpenalty=10000\raggedright}] (ins) at (3.0,-0.55) {%
+  \textbf{Inputs:} configuration ($M$, $C$, $K$, IoTh, modulation), test condition ($N$, carrier frequency), SNR points, realizations, symbols per UE, BCD-MMSE iterations};
+\path let \p1=(ins.south) in
+  node[box=3.2cm, anchor=north] (rd) at (1.85,\y1-3mm) {reads the channels $\mathbf{H}$ and $\overline{\mathbf{H}}$ (\texttt{.npz})};
+\node[box=3.2cm, below=3mm of rd] (gen) {starts a random generator with \mbox{seed $= 0$}, once per run; it draws the noise samples, the symbols and the noise};
+\draw[seta] (ini) -- (ini |- ins.north);
+\draw[seta] (rd.north |- ins.south) -- (rd);
+\draw[seta] (rd) -- (gen);
+
+% referências verticais
+\path let \p1=(gen.south) in
+  coordinate (yo) at (0,\y1-4mm)       % topo da moldura das realizações
+  coordinate (yi) at (0,\y1-10mm)      % topo da moldura dos pontos de SNR
+  coordinate (y0) at (0,\y1-16mm);     % topo do conteúdo
+
+% =====================================================================
+% Receiver: três faixas (BCD-MMSE, ZF, LMMSE)
+% =====================================================================
+\path let \p1=(y0) in
+  node[box=2.1cm, anchor=north] (d4) at (10.35,\y1) {BCD-MMSE update in each DU: $\mathbf{G}_c = E_s \mathbf{H}_c \mathbf{H}_c^H$ $+$ covariance of DU $c$; \textcolor{red}{$\mathbf{G}_c^{-1}$ in float64 or fixed point (Figure~\ref{fig:fluxo_simulacao})}};
+\path let \p1=(d4) in
+  node[box=2.1cm] (d1) at (4.95,\y1) {\textbf{Decentralized estimation:} each DU $c$ makes a Ledoit-Wolf estimate of the covariance of the $M_c$ entries of $\mathbf{n}^i$ from its antennas ($M_c \times M_c$)}
+  node[box=2.1cm] (d3) at (7.65,\y1) {BDAC-MMSE initialization (float64)};
+\path let \p1=(d1.south), \p2=(d4.south), \n1={min(\y1,\y2)} in
+  node[box=2.1cm, anchor=north] (z1) at (4.95,\n1-3.5mm) {ZF equalizer (float64); does not use $\mathbf{n}^i$};
+\node[box=2.1cm, below=3.5mm of z1] (c1) {\textbf{Centralized estimation:} Ledoit-Wolf estimate of the covariance $\hat{\mathbf{R}}_n$ ($M \times M$)};
+\path let \p1=(c1) in node[box=2.1cm] (c3) at (7.65,\y1) {LMMSE equalizer (float64)};
+\draw[seta] (d1) -- (d3);
+\draw[seta] (d3) -- (d4);
+\draw[seta] (c1) -- (c3);
+
+% centro vertical dos grupos laterais
+\path let \p1=(d4), \p2=(c1), \n1={(\y1+\y2)/2} in coordinate (ym) at (0,\n1);
+
+% =====================================================================
+% Signal and noise (esquerda) e Evaluation (direita)
+% =====================================================================
+\path let \p1=(ym) in
+  node[box=2.3cm, anchor=south] (cov) at (1.85,\y1+1.75mm) {builds the noise covariance from $\overline{\mathbf{H}}$, IoTh and the SNR point}
+  node[box=2.3cm, anchor=north] (smp) at (1.85,\y1-1.75mm) {the generator draws the $N$ noise samples $\mathbf{n}^i$ ($M \times 1$ each), used by the LMMSE and the BCD-MMSE};
+\draw[seta] (cov) -- (smp);
+\path let \p1=(ym) in
+  node[box=2.4cm, anchor=south] (sym) at (13.3,\y1+1.75mm) {the generator draws 480 symbols per UE and their noise: $\mathbf{y} = \mathbf{H}\mathbf{s} + \mathbf{n}$}
+  node[box=2.4cm, anchor=north] (ser) at (13.3,\y1-1.75mm) {each equalizer detects the symbols; SER of this realization and SNR point $=$ wrong symbols$\,/\,480K$};
+\draw[seta] (sym) -- (ser);
+
+% barramentos: amostras -> três equalizadores -> símbolos
+\draw[bus] (smp.east) -- (smp.east -| 3.45,0);
+\draw[bus] (d1 -| 3.45,0) -- (c1 -| 3.45,0);
+\draw[seta] (d1 -| 3.45,0) -- (d1.west);
+\draw[seta] (z1 -| 3.45,0) -- (z1.west);
+\draw[seta] (c1 -| 3.45,0) -- (c1.west);
+\draw[bus] (d4.east) -- (d4 -| 11.75,0);
+\draw[bus] (z1.east) -- (z1 -| 11.75,0);
+\draw[bus] (c3.east) -- (c3 -| 11.75,0);
+\draw[bus] (d4 -| 11.75,0) -- (c3 -| 11.75,0);
+\draw[seta] (sym.west -| 11.75,0) -- (sym.west);
+
+% =====================================================================
+% Molduras dos laços e nomes dos grupos
+% =====================================================================
+\path let \p1=(c1.south), \p2=(c3.south), \p3=(ser.south), \p4=(smp.south),
+          \n1={min(\y1,\y2,\y3,\y4)} in
+  coordinate (yg) at (0,\n1-3mm)       % nomes dos grupos
+  coordinate (yib) at (0,\n1-6.5mm)    % fundo da moldura dos pontos de SNR
+  coordinate (yob) at (0,\n1-9.5mm);   % fundo da moldura das realizações
+\node[grp] at (1.85,0 |- yg) {Signal and noise};
+\node[grp] at (7.65,0 |- yg) {Receiver};
+\node[grp, anchor=east] at (13.15,0 |- yg) {Evaluation};
+
+\begin{scope}[on background layer]
+  \draw[lp=black!3] (0,0 |- yo) rectangle (15.0,0 |- yob);
+  \draw[lp=black!8] (0.3,0 |- yi) rectangle (14.7,0 |- yib);
+\end{scope}
+\node[lab] at (15.0,0 |- yo) {Monte Carlo loop: for each realization (100), with its $\mathbf{H}$ and $\overline{\mathbf{H}}$};
+\node[lab] at (14.7,0 |- yi) {for each SNR point (11)};
+
+% entrada nos laços: gerador -> covariância (reta)
+\draw[seta] (gen) -- (cov);
+
+% =====================================================================
+% Saída: coluna vertical abaixo do grupo Evaluation (x = 13,3)
+% =====================================================================
+\path let \p1=(yob) in
+  node[box=2.6cm, anchor=north] (avg) at (13.3,\y1-4mm) {average of the 100 SERs of each SNR point};
+\node[arq=2.6cm, below=3mm of avg] (crv) {SER $\times$ SNR curves};
+\node[term, below=4mm of crv] (fim) {End};
+\draw[seta] (ser) -- (avg);
+\draw[seta] (avg) -- (crv);
+\draw[seta] (crv) -- (fim);
+
+\end{tikzpicture}
+\vspace{4pt}
+\legend{\textcolor{red}{Source: the author.}}
+\end{figure}
+
+% ---------------------------------------------------------------------
+\subsection{\texorpdfstring{Fixed-point inverse}{Fixed-point inverse}}\label{subsubsec:simul-inversa}
+% ---------------------------------------------------------------------
+The inverse of $\mathbf{G}_c$ in fixed-point arithmetic is derived from the C++ code of the inversion module (Section~\ref{subsec:hw-modulo}). This code is compiled using \texttt{g++} along with the \texttt{ap\_fixed} header files from Vitis HLS 2026.1, with a separate compilation performed for each combination of format $\langle W, I\rangle$, quantization mode, overflow mode (Table~\ref{tab:modos-apfixed}), and size $M_c$. The program remains active throughout the simulation. Other calculations within the simulator, including the inverses used for BDAC initialization and LMMSE, utilize 64-bit floating-point arithmetic.
+
+To verify this program, the same $\mathbf{G}_c$ matrices used in the simulator were inverted both by this program and by the Vitis HLS C-simulation. This process involved 30 matrices for each of the 35 mode combinations, with $M_c$ set to 16 and 32. In every instance, the resulting inverses were bit-identical. Consequently, the Symbol Error Rate (SER) is measured using the exact same inverse as that calculated by the hardware. The simulator also includes a Python-based model of the inversion, which has been verified bit-for-bit against the C++ code; however, the reported SER results are based on the C++ implementation.
+
+% REMOVIDO (2026-11-05): subseção "Flow diagram". A Figura fig:fluxo_simulacao foi para a
+%   abertura da seção; a frase da subseção ficou redundante com a abertura.
+% ANTIGO   % ---------------------------------------------------------------------
+% ANTIGO   \subsection{\texorpdfstring{\textcolor{red}{Flow diagram}}{Flow diagram}}\label{subsec:simul-diagram}
+% ANTIGO   % Título anterior: "Simulation flow" (passou a ser o nome da seção, 2026-11-04).
+% ANTIGO   % Título anterior: "Diagrama de simulacao" (2026-11-04). Agora é o fechamento da seção.
+% ANTIGO   % ---------------------------------------------------------------------
+% ANTIGO   \textcolor{red}{A Figura~\ref{fig:fluxo_simulacao} junta as três ferramentas do fluxo de simulação. À esquerda, fica a geração do canal. No meio, fica o simulador em Python, simplificado. À direita, fica a inversa em ponto fixo, chamada pelo simulador a cada $\mathbf{G}_c$.}
+% ANTIGO   % ANTIGO (2026-11-05): \textcolor{red}{A Figura~\ref{fig:fluxo_simulacao} junta as três ferramentas do fluxo de simulação. À esquerda, ficam a geração do canal e a inversa em ponto fixo. À direita, fica o simulador em Python, que chama a inversa a cada $\mathbf{G}_c$.}
+

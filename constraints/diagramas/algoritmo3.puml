@@ -1,0 +1,116 @@
+@startuml algoritmo3
+' =====================================================================
+'  Algoritmo 3 - The Proposed BCD-MMSE Equalization
+'  TRANSCRIÇÃO FIEL ao pseudocódigo de paper.md:407-436
+'  Nenhum bloco foi movido, reordenado ou fundido.
+'  A leitura de hardware (com a inversão içada para fora do laço)
+'  está em arquivo separado: algoritmo3_hardware.puml
+'
+'  AVISO: fórmulas transliteradas de LaTeX para ASCII. Conteúdo fiel;
+'  confira pelos números de linha.
+'  Convenção: [ARTIGO :NNN] = do paper   |   [NOSSO] = derivação nossa
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam ArrowColor #333333
+skinparam PartitionBorderColor #444444
+skinparam activity {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+  DiamondBackgroundColor #FFFFFF
+  DiamondBorderColor #3A5673
+  StartColor #3A5673
+  EndColor #3A5673
+}
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FAFAFA
+skinparam legendBorderColor #999999
+
+title Algoritmo 3 - BCD-MMSE Equalization  [ARTIGO :407-436]\ntranscrição fiel do pseudocódigo, sem reordenação
+
+start
+:ENTRADA  [ARTIGO :408]\ny_c, H_c, {n_c^i}_{i=1..N},  c = 1..C\nE_s  e  número total de iterações T;
+
+partition "Preprocessing   [ARTIGO :414-421]\n(fase de FORMULAÇÃO)" {
+  :Inicializa W^0 pela eq. (7),\nde forma descentralizada\n(BDAC-MMSE como inicializador);
+  :A_0^0     <- 0\nb_{0,i}^0 <- 0,   i = 1..N;
+  repeat
+    :A_0^0     <- A_0^0     + W_c^0 H_c\nb_{0,i}^0 <- b_{0,i}^0 + W_c^0 n_c^i,  i = 1..N;
+  repeat while (c = 1 .. C  ->  próximo DU do anel?) is (sim) not (não)
+}
+
+partition "BCD iterations   [ARTIGO :422-429]\n(fase de FORMULAÇÃO)" {
+  repeat
+    repeat
+      :Atualiza W_c^l pela eq. (30);
+      note right #FFF3CD
+        eq. (30)  [ARTIGO :504]:
+        W_c^l = ( E_s (I_K - A_{c-1}^l + W_c^{l-1} H_c) H_c^H
+                  - (1/N) SOMA_i (b_{c-1,i}^l - W_c^{l-1} n_c^i)(n_c^i)^H )
+                x ( E_s H_c H_c^H + (1/N) SOMA_i n_c^i (n_c^i)^H )^-1
+                  \-----------------------------------------------/
+                                   M_c x M_c
+                        ESTE É O MÓDULO A SER PROJETADO
+        ....
+        [ARTIGO :447] "Except for the information received from
+        the previous DU, all other terms in (30) can be computed
+        locally."
+        ....
+        [NOSSO] Repare que o FATOR INVERTIDO não tem índice l e
+        depende só de H_c e {n_c^i} - ambos locais e constantes
+        dentro do bloco de coerência. Ou seja: escrito aqui dentro
+        do laço, mas invariante ao laço. Consequência de projeto
+        em algoritmo3_hardware.puml e na NOTA 2 de constraints.csv.
+      end note
+      :Atualiza A_c^l pela eq. (28)  [ARTIGO :442]\nA_c^l = A_{c-1}^l - W_c^{l-1} H_c + W_c^l H_c;
+      :Atualiza b_{c,i}^l pela eq. (29), i = 1..N  [ARTIGO :443]\nb_{c,i}^l = b_{c,i}^{l-1} - W_c^{l-1} n_c^i + W_c^l n_c^i;
+      note right
+        [ARTIGO :438] A_c^l em C^(K x K)  e  {b_{c,i}^l em C^(K x 1)}
+        são as "interaction variables". São elas que trafegam
+        no anel - dimensão K, independente de M. Detalhe do
+        percurso em anel_formulacao.puml.
+      end note
+    repeat while (c = 1 .. C  ->  próximo DU?) is (sim) not (não)
+  repeat while (l = 1 .. T  ->  próxima iteração BCD?) is (sim) not (não)
+}
+
+partition "Equalizer filter   [ARTIGO :430-434]\n(fase de FILTRAGEM)" {
+  :s_hat_BCD-MMSE <- 0;
+  repeat
+    :s_hat_BCD-MMSE <- s_hat_BCD-MMSE + W_c y_c;
+  repeat while (c = 1 .. C  ->  próximo DU?) is (sim) not (não)
+  note right
+    Primeiro e único ponto do algoritmo em que y_c aparece.
+    É exatamente aqui que a fase de formulação termina e a de
+    filtragem começa - os dois blocos anteriores usam apenas
+    H_c e {n_c^i}.
+    ....
+    [ARTIGO :79] "The LMMSE estimate s_hat_MMSE is obtained by
+    applying the equalization matrix W_MMSE to the received
+    signal y, i.e., s_hat_MMSE = W_MMSE y."
+  end note
+}
+
+:SAÍDA  [ARTIGO :435]\nW = [W_1, W_2, ..., W_C]   e   s_hat_BCD-MMSE;
+stop
+
+legend right
+  == O ALGORITMO JÁ VEM DIVIDIDO NAS DUAS FASES ==
+  Os três rótulos de bloco são do próprio artigo:
+     Preprocessing    -> FORMULAÇÃO
+     BCD iterations   -> FORMULAÇÃO   (contém a inversão)
+     Equalizer filter -> FILTRAGEM    (sem inversão)
+
+  Confirmação independente em [ARTIGO :571], que divide a conta
+  de banda nos mesmos três termos e amortiza os DOIS PRIMEIROS
+  por N_coh, deixando o terceiro pago a cada símbolo.
+
+  == CADÊNCIAS  [NOSSO, a partir de :640] ==
+     Formulação (blocos 1 e 2): 275 x por símbolo -> 30,303 ns
+     Filtragem  (bloco 3):     3300 x por símbolo ->  2,525 ns
+endlegend
+
+@enduml

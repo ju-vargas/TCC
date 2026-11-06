@@ -1,0 +1,132 @@
+@startuml fases
+' =====================================================================
+'  Fases do equalizador BCD-MMSE - visao geral
+'  Fonte da verdade: paper.md (Zhao et al., IEEE JSAC 2025)
+'  Caminho: constraints/Efficient_LMMSE_..._Archit.md/paper.md
+'  Arquitetura alvo: DAISY CHAIN (star/sDR/cDR fora de escopo)
+'
+'  AVISO SOBRE OS ROTULOS: as formulas do artigo estao em LaTeX; aqui
+'  foram transliteradas para ASCII (W_c^l, A_{c-1}^l, SOMA_c, ^H ...).
+'  O CONTEUDO e fiel - confira pelos numeros de linha citados.
+'
+'  Convencao:  [ARTIGO :NNN] = afirmacao do paper, na linha NNN
+'              [NOSSO]       = derivacao nossa, NAO esta no artigo
+' =====================================================================
+skinparam shadowing false
+skinparam defaultFontName Sans
+skinparam ArrowColor #333333
+skinparam PartitionBorderColor #444444
+skinparam activity {
+  BackgroundColor #F5F7FA
+  BorderColor #3A5673
+  StartColor #3A5673
+  EndColor #3A5673
+}
+skinparam note {
+  BackgroundColor #FFFDF0
+  BorderColor #999999
+}
+skinparam legendBackgroundColor #FAFAFA
+skinparam legendBorderColor #999999
+
+title As duas fases do equalizador BCD-MMSE\ne onde cada uma cai no orçamento de tempo
+
+start
+
+partition "FASE DE FORMULAÇÃO  [ARTIGO :616]\n(equalization matrix formulation phase)" {
+  :Entradas locais do DU c:\nH_c      - canal local (M_c x K)\n{n_c^i}  - amostras de ruído, i = 1..N;
+  note right
+    [ARTIGO :616] "Define A as the set of all matrices
+    transmitted during the equalization matrix
+    formulation phase for a decentralized scheme."
+    Taxa de fronthaul: R_form = w S_A N_PRB / T_OFDM   [:619]
+    ....
+    CADÊNCIA: 1 vez por PRB
+    N_PRB = 275 por símbolo OFDM      [ARTIGO :640]
+    ....
+    ORÇAMENTO = T_OFDM / N_PRB = 30,303 ns      [NOSSO]
+    (cadência de transferência -> cadência de computação;
+     ver NOTA 15 de constraints.csv)
+  end note
+
+  :Preprocessing\ninicializa W^0 pela eq. (7) e acumula\nA_0^0 e b_{0,i}^0 ao longo do anel;
+  :BCD iterations\nT voltas do anel atualizando\nW_c^l (30), A_c^l (28), b_{c,i}^l (29);
+  note right #FFF3CD
+    *** AQUI ESTÁ O MÓDULO DE INVERSÃO ***
+    A eq. (30) [ARTIGO :504] contém o fator
+      ( E_s H_c H_c^H + (1/N) SOMA_i n_c^i (n_c^i)^H )^-1
+    de dimensão M_c x M_c, hermitiano definido positivo.
+    ....
+    [NOSSO] Esse fator NÃO carrega índice l: ele não muda
+    entre iterações. Detalhe em algoritmo3.puml.
+  end note
+
+  :Saída da fase:\nW = [W_1, W_2, ..., W_C],  W_c em C^(K x M_c)\n[ARTIGO :383];
+}
+
+partition "FASE DE FILTRAGEM  [ARTIGO :623]\n(filtering phase)" {
+  :Entrada: y_c - sinal recebido no DU c (M_c x 1);
+  note right
+    [ARTIGO :623] "The local processing results
+    (e.g., {Q_c y_c} for DR-MMSE) are collected to
+    obtain the final estimate."
+    Taxa de fronthaul: R_fil = w S_s N_u / T_OFDM      [:631]
+    ....
+    CADÊNCIA: 1 vez por elemento de recurso (RE)
+    N_u = 3300 por símbolo OFDM       [ARTIGO :640]
+    ....
+    ORÇAMENTO = T_OFDM / N_u = 2,525 ns         [NOSSO]
+    ....
+    NÃO CONTÉM INVERSÃO. Apenas um produto
+    W_c y_c  (K x M_c por M_c x 1) e uma soma vetorial.
+  end note
+
+  :Equalizer filter      [ARTIGO :430-434]\ns_hat_BCD-MMSE = SOMA_c  W_c y_c;
+  :Saída: s_hat (K x 1) -> decodificador;
+}
+
+stop
+
+legend right
+  == POR QUE OS DOIS ORÇAMENTOS DIFEREM POR EXATAMENTE 12 ==
+
+    30,303 ns / 2,525 ns  =  12  =  N_sc,PRB
+
+  porque  N_u = N_sc,PRB x N_PRB = 12 x 275 = 3300
+  [ARTIGO :614] "Each symbol contains N_u = N_sc,PRB x N_PRB
+  subcarriers... Each PRB corresponds to a different channel
+  matrix in the baseband model in (1)."
+
+  Razão física: dentro de um PRB o CANAL é constante, mas os
+  DADOS não. São 12 subportadoras carregando 12 símbolos QAM
+  diferentes. Logo:
+      1 PRB  ->  1 formulação de W  ->  12 filtragens reusando W.
+
+  == POR QUE O ARTIGO SEPARA AS FASES ==
+  [ARTIGO :61] "the CSI is considered almost constant across
+  several contiguous symbols, which enables the reuse of the
+  equalization matrix. Consequently, it is more cost-effective
+  to compute the equalization matrix and reuse it, rather than
+  estimating symbols directly for each instance."
+
+  [ARTIGO :561] "the data required for computing the equalization
+  matrix is transferred only once for N_coh symbols, while the
+  received signal y must be transferred for each symbol."
+
+  == CONFIRMAÇÃO NA CONTABILIDADE DE BANDA  [ARTIGO :571] ==
+  "The average data transfer size of the proposed BCD-MMSE method
+  is  C(4K^2 + 2NK)/N_coh + 2TCK(N+K)/N_coh + 2CK , where the
+  three terms are induced by preprocessing, T iterations for
+  computing equalization matrix, and symbol estimation."
+     termo 1 (Preprocessing)   / N_coh  -> FORMULAÇÃO, AMORTIZADA
+     termo 2 (BCD iterations)  / N_coh  -> FORMULAÇÃO, AMORTIZADA
+     termo 3 (symbol estim.)   SEM N_coh -> FILTRAGEM, NÃO AMORTIZADA
+
+  Cuidado com o alcance desta evidência: :571 estabelece a estrutura
+  AMORTIZADA vs. NÃO-AMORTIZADA, e só isso. A CADÊNCIA de cada fase
+  (por PRB / por RE) vem de outra fonte, :619 e :631, onde R_form
+  multiplica por N_PRB e R_fil multiplica por N_u. As duas evidências
+  são independentes e apontam no mesmo sentido.
+endlegend
+
+@enduml
