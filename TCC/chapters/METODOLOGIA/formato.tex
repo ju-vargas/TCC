@@ -9,131 +9,89 @@
 
 \subsection{\texorpdfstring{SNR increase}{SNR increase}}
 
-To select the $\langle W, I\rangle$ format (Section~\ref{subsubsec:ponto-fixo}), the BCD-MMSE algorithm was simulated using both fixed-point and 64-bit floating-point matrix inversion. Only the inversion of $\mathbf G_c$ differs between the two simulations; however, the SNR and SER are measured for the entire uplink. Each format was evaluated based on the SNR increase—that is, the additional SNR required by the uplink to achieve an $\mathrm{SER} = 10^{-2}$ compared to the floating-point case. This increase corresponds to the horizontal distance between the two SER curves, which is the standard method for comparing two schemes \cite[p.~55]{tse-viswanath}.
+To select the $\langle W, I\rangle$ format (Section~\ref{subsubsec:ponto-fixo}), the BCD-MMSE algorithm was simulated using both fixed-point and 64-bit floating-point matrix inversion. Only the inversion of $\mathbf G_c$ differs between the two simulations; however, the SNR and SER are measured for the entire uplink. Each format was evaluated based on the SNR increase, that is, the additional SNR required by the uplink to achieve an $\mathrm{SER} = 10^{-2}$ compared to the floating-point case. This increase corresponds to the horizontal distance between the two SER curves, which is the standard method for comparing two schemes \cite[p.~55]{tse-viswanath}.
 
 Two thresholds were employed. A 0.1~dB threshold represents a near-ideal format, where the SER curve is virtually identical to that of the floating-point implementation. A 3~dB threshold serves as the maximum acceptable increase. An increase of 3~dB is equivalent to doubling the power \cite[p.~73]{tse-viswanath}. Consequently, at this threshold, each UE would need to transmit with twice the energy per symbol to compensate for the error introduced by the matrix inversion (Section~\ref{subsec:snr}).
 
 
 
-\subsection{\texorpdfstring{\textcolor{red}{Varredura inicial}}{Varredura inicial}}
-\textcolor{red}{A primeira etapa variou a parte inteira e a parte fracionária separadamente, com a outra parte fixa (Tabela~\ref{tab:varredura-inicial}). Cada tamanho foi testado nos 35 modos de quantização e de estouro (Tabela~\ref{tab:modos-apfixed}), com o BCD-MMSE em 1 e em 4 iterações.}
-
+\subsection{\texorpdfstring{Initial sweep}{Initial sweep}}
+The first stage involved varying the integer and fractional parts separately, while keeping the other part fixed (Table~\ref{tab:varredura-inicial}). Each size was tested across 35 combinations of quantization and overflow modes (Table~\ref{tab:modos-apfixed}), using the BCD-MMSE algorithm with both 1 and 4 iterations.
 
 \begin{table}[htbp]
-\caption{\textcolor{red}{Tamanhos testados na varredura inicial.}}
+\caption{Sizes tested in the initial sweep.}
 \label{tab:varredura-inicial}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
+\renewcommand{\arraystretch}{1.2}
 \begin{tabular}{lll}
 \toprule
-Varredura & Bits inteiros ($I$) & Bits fracionários ($F$) \\
+\textbf{Sweep} & \textbf{Integer bits} ({\boldmath $I$}) & \textbf{Fractional bits} ({\boldmath $F$}) \\
 \midrule
-Parte inteira & 6, 8, 10, 12, 14, 16, 20, 24, 32 & 32 \\
-Parte fracionária & 14 & 4, 6, 8, 10, 12, 16, 20, 24, 32 \\
+Integer part & 6, 8, 10, 12, 14, 16, 20, 24, 32 & 32 \\
+Fractional part & 14 & 4, 6, 8, 10, 12, 16, 20, 24, 32 \\
 \bottomrule
 \end{tabular}
-\legend{\textcolor{red}{Fonte: a autora.}}
+\vspace{4pt}
+\legend{Source: the author.}
 \end{table}
 % NOTA: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas
 %   varreduras: 17 tamanhos por varredura de configuração e condição.
 
-\subsection{\texorpdfstring{\textcolor{red}{Configurações de teste para as matrizes}}{Configurações de teste para as matrizes}}
-\textcolor{red}{Na varredura inicial, foram usadas as 16 configurações cuja curva em ponto flutuante atinge $\mathrm{SER} = 10^{-2}$ entre $-10$ e 10~dB: 1A--1H, 2A, 2B, 2E, 2F, 3A, 3B, 3E e 3F. Rodar as 16 nas 5 condições de teste daria 80 casos, cada um com 17 tamanhos e 35 modos. Por isso, foram escolhidas só 5 configurações.}
-% CONFERIDO (2026-11-06): metrica_ponto_operacao.csv tem os 80 casos, pontos de operação de
-%   -10,0 a 2,36 dB. 1C (configuração 5) no (192; 3,5 GHz) cruza no limite: SER = 1,00e-2 em
-%   -10 dB. As QPSK com M = 256 (2C, 2D, 2G, 2H, 3C, 3D, 3G, 3H) cruzam abaixo de -10 dB
-%   (curvas_qpsk_256, grade de -20 a 10 dB); a autora preferiu não citar isso por enquanto.
-% ANTIGO (2026-11-06, texto reduzido; tirada a frase "As configurações QPSK dos grupos 2 e 3 foram incluídas depois"):
-% \textcolor{red}{Na varredura inicial, havia 16 configurações: 1A--1H, 2A, 2B, 2E, 2F, 3A, 3B, 3E e 3F. As configurações QPSK dos grupos 2 e 3 foram incluídas depois. Simular as 16 configurações nas 5 condições de teste daria 80 varreduras, cada uma com 17 tamanhos e todos os modos. Por isso, a varredura inicial usou só 5 configurações.}
-% ANTIGO (2026-11-06): o parágrafo começava em "Simular as 16 configurações ..." sem dizer quais eram.
-% FONTE: software/testes/mapa_cenarios_v4.py, LETRAS (numeração antiga 1-16 = 1A-1H, 2A, 2E,
-%   2B, 2F, 3A, 3E, 3B, 3F); a autora incluiu as QPSK dos grupos 2 e 3 por último.
+\subsection{\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}
+The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.
 
-\textcolor{red}{Os 80 casos foram ordenados pelo maior valor absoluto entre as partes reais e imaginárias de $\mathbf{G}_c$, pois o circuito guarda as duas partes em separado. Esse valor é chamado aqui de maior $|$parte$|$ de $\mathbf{G}_c$. Foram usadas as matrizes dos dois pontos de SNR em volta do ponto de operação, $\mathrm{SER} = 10^{-2}$ em ponto flutuante. Em cada caso, foi tomado o percentil 99, para que poucas matrizes raras não decidam a ordem.}
-% ANTIGO (2026-11-06, texto reduzido; juntado com o parágrafo do percentil):
-% \textcolor{red}{Para escolher essas configurações, os 80 casos (16 configurações nas 5 condições de teste) foram ordenados pelo tamanho dos elementos de $\mathbf{G}_c$. Em cada caso, o ponto de operação é a SNR em que a curva em ponto flutuante atinge $\mathrm{SER} = 10^{-2}$. Foram usadas as matrizes $\mathbf{G}_c$ dos dois pontos de SNR simulados em volta desse ponto. Os elementos de $\mathbf{G}_c$ são complexos, e o circuito guarda a parte real e a parte imaginária em separado. Por isso, de cada matriz foi tomado o maior valor absoluto entre as partes reais e imaginárias de todos os seus elementos. Esse valor é chamado aqui de maior $|$parte$|$ de $\mathbf{G}_c$.}
 
-% (parágrafo do percentil juntado ao anterior)
-% ANTIGO (2026-11-06, texto reduzido):
-% \textcolor{red}{Cada caso tem 1600 ou 3200 matrizes. Para resumir esses valores em um número, foi usado o percentil 99: o valor que fica acima de 99\% dos valores do caso. Assim, só 1\% das matrizes tem um elemento maior que ele. O percentil foi usado no lugar do máximo para que poucas matrizes raras não decidam a ordem.}
-% FONTE: software/testes/metrica_ponto_operacao.py (docstring, passos 1-4) e
-%   resultados/4_varredura_formatos/metrica_ponto_operacao.csv (80 linhas, coluna gc_p99).
-%   Ponto de operação: referência em ponto flutuante [1], BCD-MMSE com 1 iteração.
-%   Matrizes por caso: 100 realizações x C DUs x 2 SNRs = 1600 (C = 8) ou 3200 (C = 16).
-%   As configurações QPSK do grupo 1 (5 a 8) usam as matrizes das 16-QAM (1 a 4) nas suas
-%   próprias SNRs: a modulação não muda G_c.
-% "Partes em separado": hls_inverse / cholesky_ops.h usam ap_fixed para real e imaginária
-%   (CONFERIR a forma de citar; a definição do formato está em FUNDAMENTACAO/inversao.tex).
-% JUSTIFICATIVA do percentil 99 (no lugar do máximo): escrita por mim, não está registrada
-%   pela autora. CONFERIR se é esse o motivo.
+The selection process relied on the $\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\ref{tab:gc-ponto-operacao}).
 
-\textcolor{red}{As configurações 1G, 1H, 2E e 2F ocupam as 17 primeiras posições. Elas têm os maiores elementos e, por isso, precisam de mais bits inteiros. A configuração 1A tem os menores elementos e foi usada como caso base (Tabela~\ref{tab:gc-ponto-operacao}).}
-% ANTIGO (2026-11-06, texto reduzido):
-% \textcolor{red}{Quatro delas são as configurações em que a matriz $\mathbf{G}_c$, no ponto de operação $\mathrm{SER} = 10^{-2}$, tem os elementos de maior valor absoluto: 2E, 2F, 1G e 1H. Elementos maiores precisam de mais bits inteiros para não saturar a entrada da inversão. Assim, essas são as configurações mais exigentes. A quinta é a configuração 1A, que tem os elementos de menor valor absoluto. Ela foi usada como caso base, para comparação. A Tabela~\ref{tab:gc-ponto-operacao} mostra esses valores.}
 
-% (parágrafo das posições juntado ao anterior)
-% ANTIGO (2026-11-06, texto reduzido):
-% \textcolor{red}{As quatro configurações exigentes aparecem repetidas no topo da ordenação. As configurações 1G e 1H ocupam as 10 primeiras posições, com todas as suas condições de teste. As configurações 2E e 2F ocupam as posições 11 a 17. Já a configuração 1A ocupa a última posição, e as suas outras condições ficam entre as posições 75 e 78.}
-% FONTE: metrica_ponto_operacao.csv, coluna posicao. 1G = 6, 1H = 8: posições 1-10.
-%   2E = 10, 2F = 12: posições 11-17 (as condições restantes em 20, 27 e 29; N = 24 nas
-%   duas últimas). 1A = 1: posições 75-78 e 80 (79 é 1B com N = 24).
-%   Logo depois de 2E e 2F vêm 3F (18) e 3E (19), com valores parecidos (948 e 944).
+These configurations also span the extremes of precision requirements. With a limited number of bits, the rounding error in matrix inversion increases with the condition number \cite[p.~1603]{osinsky2023}. When the smallest eigenvalue is very small, the matrix approaches a singular state, making the result more dependent on the fractional part (Section~\ref{subsubsec:ponto-fixo}). Configurations 2E and 2F exhibit the highest condition numbers (at the 99th percentile), whereas configuration 1A features the smallest eigenvalues (at the 1st percentile).
+
 
 \begin{table}[htbp]
-\caption{\textcolor{red}{SNR no ponto de operação e maior elemento de $\mathbf{G}_c$ nas configurações da varredura inicial.}}
+\caption{$\mathbf{G}_c$ at the operating point of the initial-sweep configurations.}
 \label{tab:gc-ponto-operacao}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
-\begin{tabular}{ccccc}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccccccc}
 \toprule
- & \multicolumn{2}{c}{SNR no ponto de operação (dB)} & \multicolumn{2}{c}{Maior $|$parte$|$ de $\mathbf{G}_c$ (percentil 99)} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
-Configuração & $N = 192$; 3,5 GHz & $N = 168$; 28 GHz & $N = 192$; 3,5 GHz & $N = 168$; 28 GHz \\
+ & \multicolumn{2}{c}{\textbf{SNR (dB)}} & \multicolumn{2}{c}{\textbf{Largest} {\boldmath $|$}\textbf{part}{\boldmath $|$}} & \multicolumn{2}{c}{\textbf{Condition number}} & \multicolumn{2}{c}{\textbf{Smallest eigenvalue}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+\textbf{Configuration} & \textbf{192; 3.5} & \textbf{168; 28} & \textbf{192; 3.5} & \textbf{168; 28} & \textbf{192; 3.5} & \textbf{168; 28} & \textbf{192; 3.5} & \textbf{168; 28} \\
 \midrule
-1A & $-2{,}6$ & $-2{,}4$ & 63   & 66   \\
-\textcolor{red}{1G} & $-9{,}3$ & $-9{,}1$ & 2266 & 2383 \\
-\textcolor{red}{1H} & $-8{,}7$ & $-8{,}6$ & 2470 & 2385 \\
-\textcolor{red}{2E} & $-5{,}8$ & $-5{,}6$ & 962  & 999  \\
-\textcolor{red}{2F} & $-5{,}6$ & $-5{,}5$ & 983  & 987  \\
+1A & $-2.6$ & $-2.4$ & 63   & 66   & 57  & 58  & 1.9  & 1.9 \\
+1G & $-9.3$ & $-9.1$ & 2266 & 2383 & 187 & 169 & 22.4 & 24.1 \\
+1H & $-8.7$ & $-8.6$ & 2470 & 2385 & 195 & 172 & 22.1 & 24.7 \\
+2E & $-5.8$ & $-5.6$ & 962  & 999  & 286 & 254 & 8.8  & 9.7 \\
+2F & $-5.6$ & $-5.5$ & 983  & 987  & 282 & 285 & 8.8  & 9.5 \\
 \bottomrule
 \end{tabular}
-\legend{\textcolor{red}{Fonte: a autora.}}
-% ANTIGO (legenda): "Parte" é a parte real ou imaginária de cada elemento. -> foi para o texto.
+\vspace{4pt}
+\legend{Source: the author. Subcolumns: $N$; carrier in GHz.}
+
 \end{table}
-% CORREÇÃO (2026-11-04): as linhas estavam com os nomes trocados (2E/2F com os valores de
-%   1G/1H e vice-versa). Pelo metrica_ponto_operacao.csv: config 6 (1G) = -9,29/-9,13 dB e
-%   2265,6/2382,9; config 8 (1H) = -8,74/-8,59 e 2470,0/2385,2; config 10 (2E) = -5,80/-5,60
-%   e 961,5/999,0; config 12 (2F) = -5,61/-5,49 e 983,4/986,5. As QPSK (1G, 1H) operam em
-%   SNR mais baixa e por isso têm G_c maior. Ordem antiga das linhas: 1A, 2E, 2F, 1G, 1H.
-% CORREÇÃO antiga de nomes (mapa LETRAS de software/testes/mapa_cenarios_v4.py):
-%   A = config 1 -> 1A; M = 10 -> 2E; N = 12 -> 2F; P = 6 -> 1G; O = 8 -> 1H.
-%   No Análise bits.md, a primeira tabela troca o K de O e P (O com K = 8, P com
-%   K = 12). Pelos números, 6 (1G) tem K = 8 e 8 (1H) tem K = 12; a tabela do
-%   grupo 16x16, mais abaixo no mesmo arquivo, está certa. As linhas de 1G e 1H
-%   acima seguem os números (P = 1G, O = 1H). CONFERIR os valores no CSV de origem.
-% A CONFERIR: a tabela mostra só as 5 escolhidas. Para sustentar "as 4 maiores",
-%   vale mostrar (ou citar em nota) o percentil 99 das 16 configurações.
-% Ressalva (memória do projeto): o máximo absoluto de |G_c| chegou a 3960 em 1G/1H
-%   a -10 dB, contra o limite de 4096 de I = 13; por isso I = 12 satura.
 
-% SEPARAÇÃO (2026-11-04): a subseção dos modos de quantização e de estouro (texto e
-%   Tabela tab:modos-apfixed) foi para FUNDAMENTACAO/inversao.tex.
+\subsection{\texorpdfstring{Synthesis and selection of formats for validation}{Synthesis and selection of formats for validation}}
 
-\subsection{\texorpdfstring{\textcolor{red}{Síntese e seleção dos formatos para a validação}}{Síntese e seleção dos formatos para a validação}}
-\textcolor{red}{Os tamanhos e modos da varredura inicial também foram sintetizados no Vitis HLS, para medir a ocupação de recursos (LUT, DSP, FF e BRAM). A ocupação de cada circuito é a do recurso mais usado no FPGA. Para cada parte da palavra, foram escolhidos os tamanhos com menor ocupação em duas classes: aumento de SNR de até 3~dB e de até 0,1~dB. Combinando os tamanhos escolhidos para a parte inteira e para a fracionária, ficaram 10 formatos para a etapa de validação.}
+The sizes and modes of the initial sweep were also synthesized in Vitis HLS to measure resource occupancy (LUT, DSP, FF, and BRAM). The occupancy of each circuit is that of the most used resource in the FPGA. In each configuration and test condition, the integer and fractional parts with the lowest occupancy were chosen, with an SNR increase of up to 3 dB and of up to 0.1 dB, in 1 and in 4 iterations. Combining the two parts resulted in 10 formats (Table~\ref{tab:formatos-origem}).
 
-\textcolor{red}{A escolha foi feita para cada par (configuração, condição de teste), separada por limite de aumento de SNR e por número de iterações. Quando dois tamanhos empatam na ocupação, fica o que se repete em mais pares. O formato de um par junta a parte inteira e a parte fracionária escolhidas para ele. Os 10 formatos são todos os que apareceram nessa escolha. A Tabela~\ref{tab:formatos-origem} mostra em quais configurações cada formato foi escolhido.}
 
 \begin{table}[htbp]
-\caption{\textcolor{red}{Configurações em que cada formato foi escolhido na varredura inicial.}}
+\caption{Configurations in which each format was chosen in the initial sweep.}
 \label{tab:formatos-origem}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
 \centering
 \footnotesize
+\renewcommand{\arraystretch}{1.2}
 \begin{tabular}{ccccc}
 \toprule
- & \multicolumn{2}{c}{1 iteração} & \multicolumn{2}{c}{4 iterações} \\
+ & \multicolumn{2}{c}{\textbf{1 iteration}} & \multicolumn{2}{c}{\textbf{4 iterations}} \\
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}
-Formato & Aumento até 3~dB & Aumento até 0,1~dB & Aumento até 3~dB & Aumento até 0,1~dB \\
+\textbf{Format} & \textbf{Up to 3~dB} & \textbf{Up to 0.1~dB} & \textbf{Up to 3~dB} & \textbf{Up to 0.1~dB} \\
 \midrule
 $\langle 14,6\rangle$  & 1A         & --                       & --             & --                       \\
 $\langle 16,6\rangle$  & --         & --                       & 1A             & --                       \\
@@ -147,101 +105,28 @@ $\langle 28,14\rangle$ & --         & 1G$^{b}$, 1H$^{b}$       & --             
 $\langle 30,14\rangle$ & --         & --                       & --             & 1G$^{b}$, 1H$^{b}$       \\
 \bottomrule
 \end{tabular}
-\legend{\textcolor{red}{Fonte: a autora. Sem marca: nas 5 condições de teste. $^{a}$Só na TDLB100-400. $^{b}$Nas outras 4 condições.}}
+\vspace{4pt}
+\legend{Source: the author. Columns: SNR increase. No mark: all 5 test conditions. $^{a}$Only TDLB100-400. $^{b}$The other 4 conditions.}
 \end{table}
-% FONTE: resultados/4_varredura_formatos/v2_casos_extremos/restricoes_varredura_4_detalhe.csv
-%   (restricoes_v2.py). Cada linha do CSV é um lado (I ou F) de um par; o formato do par
-%   é <I + F, I>. Nomes: 1 = 1A, 6 = 1G, 8 = 1H, 10 = 2E, 12 = 2F. TDLA30-10 = TDLA30-5.
-% DESEMPATE (restricoes_v2.py): 1) a opção (tamanho e modo) que empata em mais células;
-%   2) no lado de F, AP_RND_ZERO; 3) menor perda; 4) ordem dos modos. O texto cita só o 1.
-% A "repetição" só desempata. Nenhum formato que apareceu foi descartado: os 10 são a
-%   união das escolhas.
 
-\textcolor{red}{Os formatos menores vêm do caso base, a configuração 1A. Os formatos com 12 e 14 bits inteiros vêm das configurações mais exigentes. Os formatos com mais bits fracionários vêm do limite de 0,1~dB e de 4 iterações.}
 
-% CORREÇÃO: o Análise bits.md fala em minimizar "aumento de SNR / % de ocupação".
-%   O critério aplicado é em ordem: primeiro o limite de perda, depois a menor
-%   ocupação. Não é uma razão.
-% A CONFERIR: como os pares (I, F) foram combinados nos 10 formatos.
 
-\subsection{\texorpdfstring{\textcolor{red}{Validação}}{Validação}}
-\textcolor{red}{A varredura inicial fixou uma parte da palavra enquanto variava a outra, e usou só 5 configurações. As duas coisas podem mudar o recurso mais usado e o melhor modo. Por isso, os 10 formatos foram simulados de novo, com os 35 modos, nas \textcolor{red}{24} configurações e nas 5 condições de teste, com o BCD-MMSE em 1 iteração.}
-% ANTIGO: "nas 16 configurações". As 8 configurações QPSK com M = 256 (2C, 2D, 2G, 2H, 3C,
-%   3D, 3G, 3H) entraram na [4] v5, completa (1750 rodadas por configuração = 10 x 35 x 5).
-% FONTE: software/testes/LEIAME.md, varredura [4] v4 (28.000 rodadas = 10 formatos x
-%   35 modos x 16 configurações x 5 condições), só nas SNRs em volta de SER = 1e-2.
+\subsection{\texorpdfstring{Validation}{Validation}}
+The initial sweep fixed one part of the word while varying the other, and used only 5 configurations. This can change the most used resource and the best mode. Therefore, the 10 formats were simulated again, with the 35 mode combinations, in the 24 configurations and 5 test conditions.
 
-\textcolor{red}{O circuito tem um modo só. Por isso, cada formato recebeu um modo fixo \textcolor{red}{em cada grupo de configurações (Seção~\ref{sec:configuracoes}). Todas as configurações de um grupo usam o mesmo circuito.} O modo foi escolhido pelos seguintes critérios, nesta ordem:}
-% ANTIGO: "cada formato recebeu um modo fixo para os circuitos 16 x 16 (configurações 1A--1H
-%   e 3A--3H) e outro para os circuitos 32 x 32 (configurações 2A--2H)."
-% MOTIVO: os mapas por grupo (mapa_grupos_v4.py) escolhem o modo só com as configurações do
-%   grupo (modo_fixo(p, occ_k, ks, ...) com ks = configurações do grupo). Os grupos 1 e 3
-%   têm o mesmo circuito 16 x 16, mas podem receber modos diferentes. RESOLVIDO (2026-11-04):
-%   a autora decidiu fazer a análise por grupo (modo e formatos escolhidos por grupo).
+In this step, BCD-MMSE used only 1 iteration. The 4 iterations of the initial sweep had already helped to choose the formats of the most demanding cases: $\langle 16,6\rangle$, $\langle 20,8\rangle$, $\langle 28,12\rangle$ and $\langle 30,14\rangle$ only appeared with 4 iterations (Table~\ref{tab:formatos-origem}). With 1 iteration, BCD-MMSE already has a good result in SER. Furthermore, the inverse of $\mathbf G_c$ is calculated once and used in all iterations, so the number of inversions does not change (Section~\ref{subsec:bcd}).
+
+The circuit has only one mode. Therefore, each format received a fixed mode in each group of configurations (Section~\ref{sec:configuracoes}). All configurations in a group use the same circuit. The mode was chosen according to the following criteria, in this order:
+
 \begin{enumerate}
-\item \textcolor{red}{o modo que deixa mais pares (configuração, condição de teste) com aumento de SNR de até 3~dB. Um par que não atinge $\mathrm{SER} = 10^{-2}$ conta como fora do limite;}
-\item \textcolor{red}{a menor ocupação, pelo recurso mais usado na síntese;}
-\item \textcolor{red}{a quantização \texttt{AP\_RND\_ZERO};}
-\item \textcolor{red}{o menor aumento de SNR no pior par;}
-\item \textcolor{red}{a ordem dos modos na lista.}
+
+\item the mode that leaves more pairs (configuration, test condition) with an increase in SNR of up to 3~dB. A pair that does not reach $\mathrm{SER} = 10^{-2}$ counts as out of bounds;
+\item the lowest resource occupancy, by the most used resource in the synthesis;
+\item  the quantization \texttt{AP\_RND\_ZERO}, which never uses more resources than the other tied modes;
+
+\item the smallest increase in SNR in the worst pair;
+\item the order of the modes in the list.
+
 \end{enumerate}
-% FONTE: mapa_cenarios_v4.py, modo_fixo (linhas 149-176): a chave é (pares dentro do
-%   limite, ocupação, AP_RND_ZERO, pior perda, ordem dos modos). RESOLVIDO: AP_RND_ZERO
-%   vem antes da pior perda (item acrescentado em vermelho).
 
-\subsection{\texorpdfstring{\textcolor{red}{Mapas de aumento de SNR}}{Mapas de aumento de SNR}}\label{subsec:mapas-perda}
-\textcolor{red}{O resultado da validação é mostrado em mapas de aumento de SNR, um para cada grupo de configurações. Cada linha do mapa é um formato, com o modo fixo do grupo. Cada coluna é uma configuração. A célula mostra o maior aumento de SNR entre as condições de teste. Os símbolos mostram as condições com aumento de SNR acima de 0,1~dB (vazados) e acima de 3~dB (cheios). Um x marca a configuração em que alguma condição não atinge $\mathrm{SER} = 10^{-2}$. Os mapas estão no capítulo de resultados.}
-% FIGURAS: resultados/4_varredura_formatos/v4_formatos_juntos_16_configs/figuras/por_grupo/
-%   mapa_perda_modo_fixo_ate_3dB_iter1_grupo{1,2,3}_modo_por_grupo.pdf (mapa_grupos_v4.py).
-%   Grupos 2 e 3 já com as QPSK da v5. Escala de cor logarítmica, de 0,01 a 3 dB.
-
-\subsection{\texorpdfstring{\textcolor{red}{Formatos escolhidos}}{Formatos escolhidos}}
-\textcolor{red}{Os formatos foram escolhidos em cada grupo de configurações, com o modo fixo do grupo. Em cada grupo, foram escolhidos três formatos: o primeiro em que todas as configurações e condições atingem $\mathrm{SER} = 10^{-2}$; o primeiro em que todas atingem esse ponto com aumento de SNR de até 3~dB; e o primeiro em que todas atingem com aumento de até 0,1~dB. Os formatos são percorridos do menor para o maior $W$. A Tabela~\ref{tab:formatos-escolhidos} mostra os formatos escolhidos. Esses formatos foram implementados no Vivado, para medir a potência e as arquiteturas de cada condição de teste.}
-
-\begin{table}[htbp]
-\caption{\textcolor{red}{Formatos escolhidos em cada grupo de configurações.}}
-\label{tab:formatos-escolhidos}
-\centering
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{>{\raggedright\arraybackslash}p{2.1cm}ccc}
-\toprule
-Critério & Grupo 1 & Grupo 2 & Grupo 3 \\
-\midrule
-Atinge $\mathrm{SER} = 10^{-2}$ & \begin{tabular}[c]{@{}c@{}}$\langle 22,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} \\
-\addlinespace
-Aumento de até 3~dB & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 28,14\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} \\
-\addlinespace
-Aumento de até 0,1~dB & \begin{tabular}[c]{@{}c@{}}$\langle 28,14\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 30,14\rangle$\\ \texttt{AP\_TRN}/\texttt{AP\_SAT}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 30,14\rangle$\\ \texttt{AP\_TRN}/\texttt{AP\_SAT}\end{tabular} \\
-\bottomrule
-\end{tabular}
-\legend{\textcolor{red}{Fonte: a autora. Abaixo do formato, o modo de quantização e o de estouro.}}
-\end{table}
-% FONTE: mesmo cálculo de mapa_grupos_v4.py (modo_fixo com as configurações do grupo, limite
-%   3 dB, 1 iteração, v4 + v5). Script de conferência no scratchpad da sessão 981d36d9
-%   (formatos_por_grupo.py). Pior perda no grupo (todas as configurações e condições):
-%   G1: <22,12> 3,33; <24,12> 0,45; <26,12> 0,16; <28,12> 0,17; <28,14> 0,02; <30,14> 0,01.
-%   G2: <22,12> x; <24,12> 4,12; <26,12> 3,76; <28,12> 3,67; <28,14> 0,34; <30,14> 0,04.
-%   G3: <22,12> x; <24,12> 2,55; <26,12> 2,45; <28,12> 2,46; <28,14> 0,13; <30,14> 0,03.
-%   Formatos de 6 e 8 bits inteiros têm x em todos os grupos.
-% "Grupo 1/2/3": os nomes G1-G3 eram só internos (memória tcc-nomes-configuracoes). Aqui o
-%   grupo é o número da configuração; CONFERIR se a autora quer "Grupo 1" na tese ou outro
-%   rótulo (ex.: "1A--1H").
-% <26,12>: com a análise por grupo, não é escolhido em nenhum grupo.
-% ANTIGO (lista por todas as configurações juntas, antes da análise por grupo):
-% Da validação, foram escolhidos os formatos para a implementação no Vivado, a medição de potência e as arquiteturas de cada condição de teste:
-% \begin{itemize}
-% \item $\langle 22,12\rangle$: o primeiro formato em que todas as configurações e condições atingem $\mathrm{SER} = 10^{-2}$;
-% \item $\langle 24,12\rangle$: o primeiro formato em que todas atingem $\mathrm{SER} = 10^{-2}$ com perda de até 3~dB;
-% \item $\langle 28,14\rangle$: o primeiro formato em que todas atingem $\mathrm{SER} = 10^{-2}$ com perda de até 0,1~dB;
-% \item $\langle 26,12\rangle$: % PENDENTE: critério da escolha (decidido em 2026-10-31).
-% \item $\langle 30,14\rangle$ em \texttt{AP\_TRN}/\texttt{AP\_SAT}: % PENDENTE: critério.
-%       % ATENÇÃO (1 iteração): a única justificativa registrada era atender T = 4
-%       % (0,04 dB na [5]). Com T = 1, <28,14> já fica até 0,1 dB. Na primeira versão,
-%       % decidir se <30,14> entra e por quê; na versão com 4 iterações (se houver
-%       % tempo), essa é a justificativa natural.
-% \end{itemize}
-% Os quatro primeiros usam \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}.
-% % FONTE: software/testes/LEIAME.md, rodada [5] modo_fixo_3dB; mapa iter1 (decisão de
-% %   2026-11-04: o TCC usa só 1 iteração). "Primeiro" = menor W na ordem dos 10 formatos.
-%
+Then, with the fixed mode, three formats were chosen in each group. The first is the smallest format in which all configurations and conditions of the group reach $\mathrm{SER} = 10^{-2}$, with any increase in SNR. The second and third are the smallest, where all reach this point with an increase of up to 3 dB and up to 0.1 dB, respectively. These formats were implemented in Vivado and are in the Section \ref{sec:resultados-formato}.

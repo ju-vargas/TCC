@@ -1,0 +1,41 @@
+% =====================================================================
+% Formato de ponto fixo (Resultados). Movido de METODOLOGIA/formato.tex em 2026-11-06:
+%   a descrição dos mapas e a tabela dos formatos escolhidos são resultado; o critério de
+%   escolha ficou na Metodologia (fim da subseção Validação).
+% TODO: incluir os 3 mapas (um por grupo); ver o comentário FIGURAS abaixo.
+% =====================================================================
+\section{\texorpdfstring{\textcolor{red}{Formato de ponto fixo}}{Formato de ponto fixo}}\label{sec:resultados-formato}
+
+\subsection{\texorpdfstring{\textcolor{red}{Mapas de aumento de SNR}}{Mapas de aumento de SNR}}\label{subsec:mapas-perda}
+\textcolor{red}{O resultado da validação é mostrado em mapas de aumento de SNR, um para cada grupo de configurações. Cada linha do mapa é um formato, com o modo fixo do grupo. Cada coluna é uma configuração. A célula mostra o maior aumento de SNR entre as condições de teste. Os símbolos mostram as condições com aumento de SNR acima de 0,1~dB (vazados) e acima de 3~dB (cheios). Um x marca a configuração em que alguma condição não atinge $\mathrm{SER} = 10^{-2}$.}
+% ANTIGO (2026-11-06): terminava em "Os mapas estão no capítulo de resultados." (agora a subseção já está nos Resultados)
+% FIGURAS: resultados/4_varredura_formatos/v4_formatos_juntos_16_configs/figuras/por_grupo/
+%   mapa_perda_modo_fixo_ate_3dB_iter1_grupo{1,2,3}_modo_por_grupo.pdf (mapa_grupos_v4.py).
+%   Grupos 2 e 3 já com as QPSK da v5. Escala de cor logarítmica, de 0,01 a 3 dB.
+
+\subsection{\texorpdfstring{\textcolor{red}{Formatos escolhidos}}{Formatos escolhidos}}\label{subsec:formatos-escolhidos}
+\textcolor{red}{A Tabela~\ref{tab:formatos-escolhidos} mostra os formatos escolhidos em cada grupo, pelo critério da Seção~\ref{sec:formato}.}
+% (critério de escolha: ficou na Metodologia, fim da subseção Validação)
+
+\begin{table}[htbp]
+\caption{\textcolor{red}{Formatos escolhidos em cada grupo de configurações.}}
+\label{tab:formatos-escolhidos}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.1cm}ccc}
+\toprule
+Critério & Grupo 1 & Grupo 2 & Grupo 3 \\
+\midrule
+Atinge $\mathrm{SER} = 10^{-2}$ & \begin{tabular}[c]{@{}c@{}}$\langle 22,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} \\
+\addlinespace
+Aumento de até 3~dB & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 28,14\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} \\
+\addlinespace
+Aumento de até 0,1~dB & \begin{tabular}[c]{@{}c@{}}$\langle 28,14\rangle$\\ \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 30,14\rangle$\\ \texttt{AP\_TRN}/\texttt{AP\_SAT}\end{tabular} & \begin{tabular}[c]{@{}c@{}}$\langle 30,14\rangle$\\ \texttt{AP\_TRN}/\texttt{AP\_SAT}\end{tabular} \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{\textcolor{red}{Fonte: a autora. Abaixo do formato, o modo de quantização e o de estouro.}}
+\end{table}

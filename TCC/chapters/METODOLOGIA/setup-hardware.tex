@@ -14,16 +14,16 @@
 % =====================================================================
 
 % ---------------------------------------------------------------------
-\subsection{\texorpdfstring{Tools and Target Device}{Tools and Target Device}}\label{subsec:hw-ferramentas}
+\subsection{\texorpdfstring{Tools and target device}{Tools and target device}}\label{subsec:hw-ferramentas}
 % ---------------------------------------------------------------------
 The inversion module was described in C++ and synthesized in Vitis HLS 2026.1. Vitis HLS generates the module's RTL. Then, the RTL was synthesized, placed, and routed in Vivado 2023.2. The target device is the AMD Alveo U50 board, with the XCU50-FSVH2104-2-E FPGA. This FPGA has 5,952 DSP blocks and 871,680 LUTs. All circuits use a clock frequency of 100 MHz, or a period of 10 ns.
 
-In Vivado, the inversion module is synthesized and implemented alone, as the top-level design, without any other surrounding board logic. The flow performs synthesis, optimization, placement, physical optimization, and routing. The only timing constraint is the clock period, and the paths entering and exiting the module's ports are not constrained. Thus, the resource, \textcolor{red}{timing}, and power figures for this work are only for the module and come from the routed design in Vivado 2023.2.
+In Vivado, the inversion module is synthesized and implemented alone, as the top-level design, without any other surrounding board logic. The flow performs synthesis, optimization, placement, physical optimization, and routing. The only timing constraint is the clock period, and the paths entering and exiting the module's ports are not constrained. Thus, the resource, timing, and power figures for this work are only for the module and come from the routed design in Vivado 2023.2.
 
 Before the Vivado workflow, each version went through the Vitis HLS C synthesis. A version only went to Vivado if the HLS estimate fit within the FPGA: a maximum of 5,952 DSP blocks and a maximum of 90\% of the LUTs.
 
 % ---------------------------------------------------------------------
-\subsection{\texorpdfstring{Inversion Module}{Inversion Module}}\label{subsec:hw-modulo}
+\subsection{\texorpdfstring{Inversion module}{Inversion module}}\label{subsec:hw-modulo}
 % ---------------------------------------------------------------------
 The module receives the $M_c \times M_c$ matrix $\mathbf{G}_c$ and returns its inverse. It calculates the inverse using Cholesky decomposition (Section~\ref{sec:inversao}). Two sizes for $\mathbf{G}_c$, corresponding to the configurations described in Section~\ref{subsec:configuracoes-bs}, have been implemented: $16 \times 16$ and $32 \times 32$. The input, output, and internal values use the \texttt{ap\_fixed} data type, following the formats selected in Section~\ref{sec:formato}.
 
@@ -91,28 +91,6 @@ Real or imaginary part of a complex product (sum of two products) & $4I + 1$ & $
 \vspace{4pt}
 \legend{Source: the author. The intermediate values use the same quantization and overflow modes as the format; the square root uses AP\_TRN and AP\_WRAP.}
 \end{table}
-% ANTIGO (2026-11-05, versão em português, em vermelho):
-% \begin{table}[!ht]
-% \caption{\textcolor{red}{Tipos dos valores no módulo de inversão, para o formato $\langle W, I\rangle$ com $F = W - I$ bits fracionários.}}
-% \label{tab:tipos-intermediarios}
-% \centering
-% \footnotesize
-% \color{red}
-% \renewcommand{\arraystretch}{1.2}
-% \begin{tabular}{p{7.4cm}cc}
-% \toprule
-% \textbf{Valor} & \textbf{Bits inteiros} & \textbf{Bits fracionários} \\
-% \midrule
-% Entrada, saída e saída de cada etapa & $I$ & $F$ \\
-% Raiz quadrada (\texttt{hls::sqrt}) & $I$ & $F$ \\
-% Somas acumuladas, numerador e divisor da divisão complexa, quociente & $2I$ & $2F$ \\
-% Produto de dois números reais & $4I$ & $4F$ \\
-% Parte real ou imaginária de um produto complexo (soma de dois produtos) & $4I + 1$ & $4F$ \\
-% \bottomrule
-% \end{tabular}
-% \vspace{4pt}
-% \legend{Fonte: a autora. Os intermediários usam os mesmos modos de quantização e de estouro do formato; a raiz quadrada usa AP\_TRN e AP\_WRAP.}
-% \end{table}
 
 
 % ---------------------------------------------------------------------

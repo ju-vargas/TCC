@@ -1,5 +1,5 @@
-\chapter{Metodologia}\label{chap:metodologia}
-This chapter describes the tools used and the tests performed for this work. The uplink transmission of a massive MIMO system with decentralized processing (Section~\ref{subsec:uplink}) was simulated to analyze the effect of the approximation used in the inversion module of the BCD-MMSE algorithm. Based on this analysis, the fixed-point formats for the inversion module, implemented on an FPGA, are selected. The chapter begins by presenting the simulation flow (Section~\ref{sec:simulador}) and the hardware tools (Section~\ref{sec:setup-hardware}). It then covers test configurations and conditions (Section~\ref{sec:configuracoes}), timing constraints for the inversion process (Section~\ref{sec:requisitos-tempo}), the selection of the numerical format (Section~\ref{sec:formato}), the hardware architectures and testing (Section~\ref{sec:testes-hardware}), and the organization of the results (Section~\ref{sec:organizacao-resultados}).
+\chapter{Methodology}\label{chap:metodologia}
+This chapter describes the tools used and the tests performed for this work. The uplink transmission of a massive MIMO system with decentralized processing (Section~\ref{subsec:uplink}) was simulated to analyze the effect of the approximation used in the inversion module of the BCD-MMSE algorithm. Based on this analysis, the fixed-point formats for the inversion module, implemented on an FPGA, are selected. The chapter begins by presenting the simulation workflow (Section~\ref{sec:simulador}) and the hardware tools (Section~\ref{sec:setup-hardware}). It then covers test configurations and conditions (Section~\ref{sec:configuracoes}), timing constraints for the inversion process (Section~\ref{sec:requisitos-tempo}), the selection of the numerical format (Section~\ref{sec:formato}), the hardware architectures, the matrices used to test them and the power estimation (Section~\ref{sec:testes-hardware}), and the organization of the results (Section~\ref{sec:organizacao-resultados}).
 
 
 
@@ -14,12 +14,12 @@ This chapter describes the tools used and the tests performed for this work. The
 \input{chapters/METODOLOGIA/setup-hardware.tex}
 
 % =====================================================================
-\section{\texorpdfstring{\textcolor{red}{Configurations and test conditions}}{Configurations and test conditions}}\label{sec:configuracoes}
+\section{\texorpdfstring{Configurations and test conditions}{Configurations and test conditions}}\label{sec:configuracoes}
 % =====================================================================
-\subsection{\texorpdfstring{\textcolor{red}{Base station configurations}}{Base station configurations}}\label{subsec:configuracoes-bs}
+\subsection{\texorpdfstring{Base station configurations}{Base station configurations}}\label{subsec:configuracoes-bs}
 \input{chapters/METODOLOGIA/configuracoes.tex}
 
-\subsection{Test Conditions}\label{subsec:setup_condicoes}
+\subsection{Test conditions}\label{subsec:setup_condicoes}
 \input{chapters/METODOLOGIA/condicoes-teste.tex}
 
 % =====================================================================
@@ -28,24 +28,24 @@ This chapter describes the tools used and the tests performed for this work. The
 \input{chapters/METODOLOGIA/requisitos-tempo.tex}
 
 % =====================================================================
-\section{\texorpdfstring{Selection of the fixed-point format}{Escolha do formato de ponto fixo}}\label{sec:formato}
+\section{\texorpdfstring{Selection of the fixed-point format}{Selection of the fixed-point format}}\label{sec:formato}
 % =====================================================================
 \input{chapters/METODOLOGIA/formato.tex}
 
 % =====================================================================
-\section{\texorpdfstring{\textcolor{red}{Hardware architectures and tests}}{Hardware architectures and tests}}\label{sec:testes-hardware}
+\section{\texorpdfstring{Hardware architectures, test matrices and power}{Hardware architectures, test matrices and power}}\label{sec:testes-hardware}
 % =====================================================================
 \input{chapters/METODOLOGIA/arquiteturas-hardware.tex}
 
 % =====================================================================
-\section{\texorpdfstring{\textcolor{red}{Organização dos resultados}}{Organização dos resultados}}\label{sec:organizacao-resultados}
+\section{\texorpdfstring{Organization of the results}{Organization of the results}}\label{sec:organizacao-resultados}
 % =====================================================================
 
 
 % ---------------------------------------------------------------------
 % 1.6  ORGANIZAÇÃO DOS RESULTADOS                 -> fim da Metodologia
 % ---------------------------------------------------------------------
-\textcolor{red}{Os resultados são agrupados pelas características físicas da estação base: o tamanho do circuito de inversão ($16 \times 16$ ou $32 \times 32$), o número $M$ de antenas e o número $C$ de \textit{clusters}. Dentro de cada grupo, variam a modulação, $K$ e a IoTh. Assim, há três grupos: as configurações 1A--1H ($M = 128$, $C = 8$, circuito $16 \times 16$), 2A--2H ($M = 256$, $C = 8$, circuito $32 \times 32$) e 3A--3H ($M = 256$, $C = 16$, circuito $16 \times 16$).}
+The results are grouped according to the physical characteristics of the base station: the size of the inversion circuit ($16 \times 16$ or $32 \times 32$), the number of antennas $M$, and the number of clusters $C$. Within each group, the modulation, $K$, and IoTh vary. Thus, there are three groups: configurations 1A–1H ($M = 128$, $C = 8$, $16 \times 16$ circuit), 2A–2H ($M = 256$, $C = 8$, $32 \times 32$ circuit), and 3A–3H ($M = 256$, $C = 16$, $16 \times 16$ circuit).
 % ORIGEM: Análise bits.md, "hard-constraints" (M, C, tamanho do circuito) e
 %   "soft-constraints" (modulação, K, IoTh). Os nomes G1-G3 não vão para a tese.
 

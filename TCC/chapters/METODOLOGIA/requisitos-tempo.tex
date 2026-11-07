@@ -1,22 +1,21 @@
 This section calculates, based on the coherence time, the maximum number of cycles between two inversions under each test condition.
 
 % ---------------------------------------------------------------------
-\subsection{\texorpdfstring{Sample collection}{Coleta das amostras}}\label{subsec:pipeline}
+\subsection{\texorpdfstring{Sample collection}{Sample collection}}\label{subsec:pipeline}
 % ---------------------------------------------------------------------
 The receiver first collects the $N$ noise samples for each PRB. Some of these samples arrive only after the data symbol (Section~\ref{subsubsec:disponibilidade-amostras}). Therefore, this work assumes that the receiver buffers the data symbols until the $N$ samples have been received. Subsequently, it processes the samples and equalizes the buffered data. A new set of samples arrives every interval $T_c$, and the processing must keep pace with this rate.
 
 % ---------------------------------------------------------------------
 \subsection{Throughput}\label{subsec:restricao-vazao}
 % ---------------------------------------------------------------------
-A estimativa $\hat{\mathbf R}_{cc}$ é única por PRB em cada intervalo $T_c$ (Seção~\ref{subsubsec:disponibilidade-amostras}). A matriz $\mathbf G_c$ é invertida uma vez e serve a todas as iterações do BCD-MMSE (Seção~\ref{subsec:bcd}). Assim, cada DU faz uma inversão de $\mathbf G_c$ por PRB a cada $T_c$. Com $N_{\text{PRB}}$ PRBs, são $N_{\text{PRB}}$ inversões por DU a cada $T_c$. Este trabalho usa $N_{\text{PRB}} = 275$, o pior caso do 5G NR (Seção~\ref{subsec:simbolos}).
+The estimate $\hat{\mathbf R}_{cc}$ is unique per PRB within each interval $T_c$ (Section~\ref{subsubsec:disponibilidade-amostras}). The matrix $\mathbf G_c$ is inverted once and serves all iterations of the BCD-MMSE algorithm (Section~\ref{subsec:bcd}). Thus, each DU performs one inversion of $\mathbf G_c$ per PRB every $T_c$. With $N_{\text{PRB}}$ PRBs, this results in $N_{\text{PRB}}$ inversions per DU every $T_c$. This work uses $N_{\text{PRB}} = 275$, which is the worst-case scenario for 5G NR (Section~\ref{subsec:simbolos}).
 
-
-Para acompanhar a coleta de dados, o módulo precisa terminar as $N_{\text{PRB}}$ inversões dentro de $T_c$. Seja $T_{\text{inv}}$ o intervalo entre o início de duas inversões (Seção~\ref{subsubsec:latencia-intervalo}). Então:
+To track data collection, the module needs to complete the $N_{\text{PRB}}$ inversions within $T_c$. Let $T_{\text{inv}}$ be the interval between the start of two inversions (Section~\ref{subsubsec:latencia-intervalo}). Then:
 \begin{equation}
 {T_{\text{inv}} \leq \frac{T_c}{N_{\text{PRB}}}.}
-\label{eq:restricao-vazao}
+\label{eq:restriction-flow}
 \end{equation}
-Com o clock de 100~MHz (Seção~\ref{subsec:hw-ferramentas}), esse limite é dado em ciclos, arredondado para baixo. A Tabela~\ref{tab:limite-ciclos} mostra o limite de cada condição de teste.
+With a clock speed of 100 MHz (Section~\ref{subsec:hw-ferramentas}), this limit is given in cycles, rounded down. Table~\ref{tab:limite-ciclos} shows the limit for each test condition.
 
 \begin{table}[!ht]
 \caption{Maximum interval between inversions in each test condition.}
@@ -41,4 +40,4 @@ TDLB100-400 & 0.3125  & 1.1364  & 113 \\
 \legend{Source: the author. $T_c$ from Table~\ref{tab:tempo-coerencia}; $N_{\text{PRB}} = 275$.}
 \end{table}
 
-The hardware architectures in this work aim to meet this throughput limit under each test condition. The following are outside the scope: the delay between the arrival of a data symbol and its equalization; the throughput of the links between the DUs; and the other matrix inversions required by the BCD-MMSE algorithm—which the simulator performs using floating-point arithmetic (Section~\ref{subsubsec:simul-inversa}). The delay encompasses both the time spent waiting for samples and the latency of each inversion (i.e., the time elapsed from the start to the completion of an inversion).
+The hardware architectures in this work aim to meet this throughput limit under each test condition. The following are outside the scope: the delay between the arrival of a data symbol and its equalization; the throughput of the links between the DUs; and the other matrix inversions required by the BCD-MMSE algorithm, which the simulator performs using floating-point arithmetic (Section~\ref{subsubsec:simul-inversa}). The delay encompasses both the time spent waiting for samples and the latency of each inversion (i.e., the time elapsed from the start to the completion of an inversion).
