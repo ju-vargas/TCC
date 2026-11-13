@@ -1,0 +1,20 @@
+% ---------------------------------------------------------------------
+\subsection{Equalização}\label{subsec:equalization}
+% ---------------------------------------------------------------------
+
+
+\subsubsection{Detector de máxima verossimilhança}
+\subsubsection{Zero-forcing}
+\subsubsection{Covariância}
+\subsubsection{Filtro de Wiener}
+\subsubsection{Equalizador LMMSE}
+\subsubsection{Detecção e taxa de erro de símbolo}\label{subsubsec:ser}
+\textcolor{red}{Depois da equalização, cada entrada do vetor estimado $\hat{\mathbf{s}}$ é levada ao ponto mais próximo da constelação \cite{zhao2025jsac}. Essa é a regra do vizinho mais próximo \cite[p.~503]{tse-viswanath}. A detecção erra quando o ponto escolhido é diferente do símbolo transmitido. A taxa de erro de símbolo (SER, \textit{Symbol Error Rate}) é a probabilidade desse erro \cite[p.~503]{tse-viswanath}. Ela cai quando a SNR aumenta, e o desempenho de um equalizador é mostrado pela curva de SER em função da SNR \cite{zhao2025jsac}. Para comparar dois esquemas, é comum usar a diferença de SNR necessária para atingir a mesma probabilidade de erro, que é a distância horizontal entre as duas curvas \cite[p.~55]{tse-viswanath}.}
+% FONTE (2026-11-05): zhao2025jsac, paper.md:79 ("the detector quantizes each entry of
+%   s_MMSE to the nearest [constellation point]") e Fig. 6 ("SER performance versus SNR");
+%   tse-viswanath (books/Fundamentals of Wireless Communication.pdf), Apêndice A.2, p. 503
+%   ("choosing the nearest neighboring transmit symbol. The probability of making an
+%   error ..."); Seção 3.1, p. 55, nota 4 ("compare schemes based on the difference in the
+%   required SNR to attain the same error probability ... horizontal gap between the error
+%   probability versus SNR curves"). Código: dbp_sim/m8_metric.py (vizinho mais próximo).
+%   A nota da p. 55 também sustenta a métrica de perda (METODOLOGIA/formato.tex).

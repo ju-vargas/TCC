@@ -1,0 +1,45 @@
+% Criado em 2026-11-04 (reorganização pedida pela autora): junta o que define as condições
+%   de teste. Origens: RESULTADOS/setup_simulacao.tex (subsubseção "Test Conditions", texto da
+%   autora, e Tabela tab:condicoes_teste); METODOLOGIA/simulacao.tex (parágrafo do N);
+%   METODOLOGIA/formato.tex (TDLA30-5 e TDLA30-10 com as mesmas curvas).
+
+The simulated test conditions of Table~\ref{tab:n-maximo} define the carrier frequency and the number of noise samples in the Python simulator, as shown in Table~\ref{tab:condicoes_teste}. The simulation does not include a time axis, and the channel does not account for the Doppler effect, so only these two variables change between test conditions. A frequency of 3.5 GHz was used for FR1 conditions, within the n78 band (3300 to 3800 MHz, TDD), and 28 GHz was used for FR2 conditions, within the n257 band (26500 to 29500 MHz, TDD) \cite[Tabs.~5.2-1 and 5.2-2]{3gpp-ts38104}. In each realization, the channels at both frequencies use the same UE positions. % TODO: 3,5 GHz não tem fonte. Sugestão: citar uma referência que use 3,5 GHz como banda típica do 5G NR (ex.: livro 5G and Beyond), ou dizer só que é uma escolha deste trabalho.
+
+
+\begin{table}[htbp]
+\caption{Carrier frequency and number of noise samples in each test condition.}
+\label{tab:condicoes_teste}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Test condition} & \textbf{\shortstack{Frequency\\range}} & \textbf{\shortstack{Carrier\\frequency (GHz)}} & \textbf{\shortstack{Noise\\samples {\boldmath $N$}}} & \textcolor{red}{\textbf{\shortstack{UE speed\\(km/h)}}} \\
+\texttt{M1\_Driver.} & -- & \texttt{M1\_Driver.} & \texttt{M5\_Noise.} & -- \\
+\texttt{test\_conditions} & & \texttt{test\_conditions} & \texttt{n\_noise\_samples} & \\
+\midrule
+TDLA30-5 & FR1 & 3.5 & 192 & \textcolor{red}{1.5} \\
+TDLA30-10 & FR1 & 3.5 & 192 & \textcolor{red}{3.1} \\
+TDLA30-75 & FR2 & 28 & 192 & \textcolor{red}{2.9} \\
+TDLA30-300 & FR2 & 28 & 168 & \textcolor{red}{11.6} \\
+TDLC300-100 & FR1 & 3.5 & 132 & \textcolor{red}{30.8} \\
+TDLB100-400 & FR1 & 3.5 & 24 & \textcolor{red}{123.3} \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+% FONTE (velocidade): v = f_D c / f_c, Tse e Viswanath p. 70; f_D de TS 38.104 Tab. G.2.2-1/G.2.2-2; antes na Tabela tab:tempo-coerencia (retirada).
+\legend{Source: \citesp{3gpp-ts38104} and the author. \textcolor{red}{Speed from $v = f_D c/f_c$ \citesp{tse-viswanath}.}}
+\end{table}
+
+This work employs a double-symbol DM-RS, located at symbols 2, 3, 10, and 11 of each slot \cite[Tab.~6.4.1.1.3-4]{3gpp-ts38211}, as it enables the differentiation of DM-RS signals among $K = 8$ or 12 UEs (Section~\ref{subsubsec:disponibilidade-amostras}). The value of $N$ for each condition is taken from Table~\ref{tab:n-maximo}, with an upper limit of 192, the value used in \cite{zhao2025jsac}. This $N$ assumes that the receiver waits for samples arriving after the data symbol (Section~\ref{subsec:pipeline}). The HST350 and HST500 conditions were not simulated, as they correspond to $N = 0$.
+
+TDLA30-5 and TDLA30-10 share the same carrier frequency and the same $N$ value. Consequently, they exhibit identical SER curves, and the simulations cover 5 distinct test conditions. The only difference between them lies in the inversion cycle limit (Section~\ref{subsec:restricao-vazao}).
+
+The test conditions are grouped into two mobility profiles based on UE speed (Table~\ref{tab:condicoes_teste}). The low-mobility profile includes TDLA30-5, TDLA30-10, and TDLA30-75, with speeds up to 3.1 km/h. The high-mobility profile comprises TDLA30-300, TDLC300-100, and TDLB100-400, with speeds ranging from 11.6 to 123.3 km/h. The ITU-R uses 3 km/h for indoor and pedestrian users, and 30 and 120 km/h for users in vehicles \cite[Sec.~8.2 and Tab.~5]{itu-m2412}. In each profile, the fastest condition is the most demanding: it has the smallest $T_c$ and the smallest $N$. This condition is TDLA30-75 in the low-mobility profile and TDLB100-400 in the high-mobility profile.
+
+% FONTE ITU: Rep. ITU-R M.2412-0, Sec. 8.2 (p. 16): Indoor Hotspot "stationary and pedestrian",
+%   Dense Urban "pedestrian and vehicular", Rural "pedestrian, vehicular and high speed vehicular";
+%   Tab. 5a (p. 20): indoor 3 km/h; Tab. 5b (p. 23): indoor 3 km/h, in-car 30 km/h;
+%   Tab. 5c (p. 25): indoor 3 km/h, 120 km/h e 500 km/h. Arquivo: books/R-REP-M.2412-2017-PDF-E.pdf.

@@ -1,0 +1,1266 @@
+% =====================================================================
+% RASCUNHO AGRUPADO (2026-11-04, reorganizado no mesmo dia)
+% Junta os rascunhos que estavam soltos e o resumo TCC/Análise bits.md,
+% separados pelo capítulo para onde cada parte deve ir:
+%   PARTE 1 -- para a Metodologia
+%   PARTE 2 -- para os Resultados
+%   PARTE 3 -- fica na Fundamentação / Trabalhos Relacionados (referência)
+% Origens: rascunho-retirado-dos-resultados.tex; secoes/equalização.tex;
+%   secoes/modelo-de-ruído.tex; secoes/rascunho_filtros_covariancia.tex;
+%   TCC/Análise bits.md. Os esqueletos rascunho_backbone e 2-mimo-equalizacao
+%   foram removidos (desatualizados: viraram os arquivos de FUNDAMENTACAO/).
+% Não é incluído no 0main.tex (rótulos repetidos com os capítulos atuais).
+% =====================================================================
+
+% #####################################################################
+% PARTE 1 -- PARA A METODOLOGIA
+% #####################################################################
+
+
+% ---------------------------------------------------------------------
+% 1.1  N POR CONDIÇÃO DE TESTE   -> subsec:pipeline ou subsec:escopo-tempo
+% ORIGEM: rascunho-retirado-dos-resultados.tex
+% ---------------------------------------------------------------------
+
+% NOVO (2026-10-14)
+\label{subsubsec:setup_n}%
+\textcolor{red}{As amostras de ruído vêm dos REs de DM-RS (Seção~\ref{subsec:ruido-colorido}). Por isso, o número $N$ de cada condição de teste depende de quantos REs de DM-RS existem dentro de $T_c$.}
+
+\textcolor{red}{Cada UE alvo precisa de uma porta de DM-RS própria, ortogonal às dos outros. Pelo número de portas de cada configuração de DM-RS (Seção~\ref{subsubsec:disponibilidade-amostras}), $K = 8$ UEs exigem o DM-RS duplo de tipo~1, e $K = 12$ UEs exigem o DM-RS duplo de tipo~2. Nos dois casos, todos os grupos CDM ficam ocupados, e os 12 REs do PRB em um símbolo de DM-RS têm piloto \cite[Sec.~6.4.1.1.3, Tabs.~6.4.1.1.3-1 e 6.4.1.1.3-2]{3gpp-ts38211}. Cada símbolo de DM-RS dá, então, 12 amostras de ruído por PRB.}
+
+\textcolor{red}{Com DM-RS duplo, as posições dos símbolos de DM-RS no slot são fixas pela norma (Seção~\ref{subsubsec:disponibilidade-amostras}). Este trabalho considera o PUSCH com mapeamento tipo~A, ocupando os 14 símbolos do slot, com o primeiro DM-RS no símbolo 2 e um par adicional (\texttt{dmrs-AdditionalPosition} = \texttt{pos1}), que é o máximo para o DM-RS duplo. Os símbolos de DM-RS são, então, 2, 3, 10 e 11, o que dá 48 amostras por PRB em cada slot.}
+
+\textcolor{red}{Uma amostra só representa a covariância do ruído de um símbolo de dados se estiver dentro do mesmo tempo de coerência (Seção~\ref{subsec:bloco-coerencia}). Por isso, o número de amostras foi calculado para cada símbolo de dados do slot: é o maior número de REs de DM-RS em um intervalo de duração $T_c$ que contém esse símbolo, limitado a 192, o valor de \citeonline{zhao2025jsac}. O $N$ de cada condição de teste é o menor desses valores entre os 14 símbolos do slot. Assim, todo símbolo de dados tem pelo menos $N$ amostras dentro do próprio $T_c$, e o receptor pode usar esse $N$ em todos os símbolos. Foi considerado \textit{uplink} contínuo, ou seja, todos os slots têm PUSCH. As bandas n78 e n257 são TDD \cite[Tabs.~5.2-1 e 5.2-2]{3gpp-ts38104}, e com um padrão TDD real o $N$ seria menor nas condições em que $T_c$ dura mais de um slot. A Tabela~\ref{tab:n-condicao} mostra os valores.}
+
+\textcolor{red}{O número de amostras só muda de um símbolo para outro quando $T_c$ é menor que um slot, porque aí ele depende de onde o símbolo de dados está em relação aos pares de DM-RS. Na condição TDLB100-400, por exemplo, $T_c$ dura 8 símbolos. Os símbolos de 0 a 3 e de 10 a 13 alcançam dois pares de DM-RS e têm 48 amostras. Os símbolos 4 e 9 têm 36. Os símbolos de 5 a 8, no meio do slot, alcançam só um par e têm 24. O $N$ dessa condição é, então, 24. Usar 48 amostras em todos os símbolos exigiria, nos símbolos de 4 a 9, amostras de fora do seu $T_c$. Quando $T_c$ dura um slot ou mais, todo símbolo alcança o mesmo número de pares de DM-RS.}
+
+\begin{table}[htbp]
+\color{red}
+\caption{Amostras de ruído por PRB em cada condição de teste.}
+\label{tab:n-condicao}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|r|r|}
+\hline
+Condição de teste & Símbolos OFDM em $T_c$ & $N$ \\
+\hline
+TDLA30-5 (FR1)    & 700 & 192 \\
+TDLA30-10 (FR1)   & 350 & 192 \\
+TDLA30-75 (FR2)   & 186 & 192 \\
+TDLA30-300 (FR2)  & 46  & 168 \\
+TDLC300-100 (FR1) & 35  & 132 \\
+TDLB100-400 (FR1) & 8   & 24  \\
+HST350 (FR1)      & 1   & 0   \\
+HST500 (FR1)      & 1   & 0   \\
+\hline
+\end{tabular}
+\legend{\textcolor{red}{Fonte: a autora, com as posições de DM-RS de \citeonline[Tab.~6.4.1.1.3-4]{3gpp-ts38211} e os símbolos em $T_c$ da Tabela~\ref{tab:tempo-coerencia}. DM-RS duplo, mapeamento tipo~A, símbolos 2, 3, 10 e 11.}}
+\end{table}
+% CÁLCULO: para cada símbolo de dados t (0 a 13, slots repetidos), o maior número de
+%   símbolos de DM-RS em {2,3,10,11} dentro de uma janela de L símbolos que contém t,
+%   vezes 12, limitado a 192. L = símbolos em T_c (tab:tempo-coerencia). N = mínimo
+%   sobre t. TDLB100-400 por símbolo: 48,48,48,48,36,24,24,24,24,36,48,48,48,48.
+%   HST: só os 4 símbolos de DM-RS têm 12 amostras; os outros 10 têm 0.
+%   (Não usados, por não corresponderem a um receptor: máximo sobre t, 48 e 12; média
+%   sobre t, 39 e 3. params --n-case mean guarda a média só para consulta.)
+% FONTES: portas por tipo e duração do DM-RS: TS 38.211 v18.6.0, Tab. 6.4.1.1.3-5
+%   ("Basic": tipo 1 portas 0-3 simples, 0-7 duplo; tipo 2 portas 0-5 simples, 0-11 duplo).
+%   Posições do DM-RS duplo: Tab. 6.4.1.1.3-4 (d = 14, tipo A: pos0 -> l0; pos1 -> l0, 10;
+%   pos2 e pos3 não existem para o duplo). l0 = 2: dmrs-TypeA-Position = pos2 (escolha
+%   deste trabalho; pos3 daria 3, 4, 10 e 11). TDD: TS 38.104 v16.4.0, Tab. 5.2-1 (n78) e
+%   5.2-2 (n257). r << min(M, N): Zhao et al., L473.
+
+\textcolor{red}{Nas condições HST, $T_c$ dura um símbolo OFDM. Só os 4 símbolos de DM-RS do slot têm amostras dentro do próprio $T_c$, 12 cada um, e os outros 10 símbolos de dados não têm nenhuma. Então $N = 0$, e a estimação da covariância por tempo de coerência não é possível. Por isso, as condições HST não foram simuladas.}
+
+\textcolor{red}{As simulações usam, então, $N = 192$, 168, 132 e 24. \citeonline{zhao2025jsac} supõem que o número de interferentes é muito menor que o número de amostras, $r \ll \min(M, N)$. Com $r = 8$, essa hipótese vale bem para $N \ge 132$. Com $N = 24$, ela fica no limite, pois $N = 3r$.}
+
+% ---------------------------------------------------------------------
+% 1.2  UMA ESTIMATIVA POR PRB, REFEITA A CADA T_c   -> subsec:inversoes-por-tc
+% ORIGEM: secoes/modelo-de-ruído.tex
+% ---------------------------------------------------------------------
+
+\subsection{\texorpdfstring{\textcolor{red}{Uma estimativa por PRB}}{Uma estimativa por PRB}}\label{subsec:estimativa-prb}
+
+% SEPARAÇÃO (2026-11-04): o parágrafo "o PRB é a faixa em que o canal é constante; R_n
+%   depende de Hbar" saiu daqui: FUNDAMENTACAO/dbp-ruido.tex (Disponibilidade das
+%   amostras) já diz que o canal dos interferentes é constante no PRB e R_cc é única por PRB.
+% FONTE: paper.md:614 (definição de PRB); paper.md:113 (R depende de Hbar).
+% HIPÓTESE nossa: os interferentes têm o mesmo Doppler da condição de teste.
+
+\textcolor{red}{Como $\mathbf{R}_n$ fica constante dentro do PRB (Seção~\ref{subsubsec:disponibilidade-amostras}), este trabalho usa uma estimativa $\hat{\mathbf{R}}_n$ para cada PRB, feita com $N$ amostras do próprio PRB. Esse é o modelo das simulações do artigo base, em que cada realização do canal tem $N = 192$ amostras de ruído \cite{zhao2025jsac}. O simulador deste trabalho segue o mesmo modelo: a cada realização, ele gera um novo $\overline{\mathbf{H}}$ e $N$ novas amostras de ruído.}
+% FONTE: paper.md:577 (N = 192 por realização); simulador: dbp_sim/m1_driver.py:163-178
+%        (Hbar e noise_samples gerados dentro do laço de realizações).
+
+\textcolor{red}{A média ao longo da frequência, citada acima, seria uma alternativa: uma única estimativa para a banda inteira. Ela mudaria as curvas de SER, e por isso não é usada nos resultados.}
+% FONTE: nota 4, paper.md:821. Decisão da autora (2026-10-12): modelo B (por PRB).
+%        O modelo A fica como teste extra opcional (software/simulador_modelo_a).
+
+\textcolor{red}{No tempo, o bloco de coerência dura $T_c$ (Seção~\ref{subsec:bloco-coerencia}). As matrizes $\hat{\mathbf{R}}_n$, $\mathbf{G}_c$ e $\mathbf{W}$ são refeitas uma vez a cada $T_c$. Assim, $N_{\text{coh}}$ é o número de símbolos OFDM em $T_c$.}
+% FONTE: f_D: [R5] TS 38.104 v16.4.0, Anexo G, Tab. G.2.2-1, G.2.2-2 (p. 241), G.3-1 e
+%        G.3-2 (p. 252); T_c = 1/(4 D_s) = 1/(8 f_D): Tse e Viswanath, Eq. (2.44), p. 31.
+%        Refazer a cada T_c: decisão da autora, opção (b), apoiada em paper.md:614.
+%        Valores de T_c e símbolos por T_c: software/Restrições - Parâmetros.csv, linhas 17-24.
+
+% ---------------------------------------------------------------------
+% 1.3  INVERSÕES POR DU E POR T_c   -> subsec:modulos-inversao
+% ORIGEM: secoes/modelo-de-ruído.tex, "Estimação nas DUs"
+% ---------------------------------------------------------------------
+
+\textcolor{red}{Cada DU inverte $\hat{\mathbf{R}}_{cc}$, na inicialização, e $\mathbf{G}_c$, nas iterações. Como $\mathbf{G}_c$ usa $\hat{\mathbf{R}}_{cc}$, e não a sua inversa (Seção~\ref{subsec:bcd}), as duas inversões podem ser feitas em paralelo.}
+% SEPARAÇÃO (2026-11-04): a explicação de como o BCD-MMSE usa R_cc foi para FUNDAMENTACAO/bcd.tex.
+% FONTE: Algoritmo 3, paper.md:415 (W^0 pela Eq. 7); Eq. 7, paper.md:136-142 (R_cc^-1);
+%        Eq. 30, paper.md:504 (G_c com (1/N) sum n_c^i (n_c^i)^H).
+%        G_c^-1 é calculada uma vez por PRB e reutilizada nas T iterações (não muda com l).
+
+\textcolor{red}{Como há uma estimativa por PRB (Seção~{\hypersetup{linkcolor=red}\ref{subsec:estimativa-prb}}), cada DU calcula, a cada $T_c$, $N_{\text{PRB}}$ estimativas $\hat{\mathbf{R}}_{cc}$, $N_{\text{PRB}}$ inversões de $\hat{\mathbf{R}}_{cc}$ e $N_{\text{PRB}}$ inversões de $\mathbf{G}_c$. Com o pior caso do artigo base, $N_{\text{PRB}} = 275$ \cite{zhao2025jsac}.}
+% FONTE: N_PRB = 275: paper.md:640. Contagem: planilha, tabela "Carga por PRB" (linhas 56-66).
+
+% ---------------------------------------------------------------------
+% 1.4  CUSTO DO N, t_coleta E PIPELINE   -> subsec:pipeline
+% ORIGEM: secoes/modelo-de-ruído.tex
+% ---------------------------------------------------------------------
+
+\subsection{\texorpdfstring{\textcolor{red}{Custo do N}}{Custo do N}}
+
+% SEPARAÇÃO (2026-11-04): o parágrafo do custo de armazenamento e comunicação do N foi
+%   para FUNDAMENTACAO/bcd.tex.
+% FONTE: artigo base, paper.md:493 (N_c em C^{M_c x N} guardado na DU c); :130 (M x N);
+%        :471 (banda por iteração depende de N); :561 e :571 (termos divididos por N_coh).
+
+\textcolor{red}{Um $N$ maior leva mais tempo para ser juntado. Com 48 REs de DM-RS por PRB em cada slot (Seção~\ref{subsubsec:disponibilidade-amostras}), o tempo de coleta das $N$ amostras é}
+\begin{equation*}
+\textcolor{red}{t_{\text{coleta}} = \min\left(T_c;\ \left\lceil \frac{N}{48} \right\rceil \text{ slots}\right).}
+\end{equation*}
+\textcolor{red}{Com $N = 192$, são 4 slots: 2~ms em FR1, com slots de 0,5~ms, e 0,5~ms em FR2, com slots de 0,125~ms \cite[Tab.~4.3.2-1]{3gpp-ts38211}. Nas condições rápidas, as amostras ocupam o $T_c$ inteiro.}
+% FONTE: slot de 0,5 ms (mu = 1, 30 kHz) e 0,125 ms (mu = 3, 120 kHz): [R2] Tab. 4.3.2-1,
+%        p. 14. Regra de t_coleta: conta nossa; planilha, linhas 67-76.
+
+\textcolor{red}{A estimativa só fica pronta depois da coleta. Por isso, este trabalho considera um processamento em etapas (\textit{pipeline}). Enquanto junta as amostras de um bloco, a DU guarda os dados recebidos nesse bloco. Depois, calcula $\hat{\mathbf{R}}_n$, $\mathbf{G}_c$ e $\mathbf{W}$ e equaliza os dados guardados. Ao mesmo tempo, já junta as amostras do bloco seguinte. Assim, o cálculo de cada bloco precisa terminar em até $T_c$. O tempo total, da primeira amostra até o resultado, é $t_{\text{coleta}} + t_{\text{proc}}$, em que $t_{\text{proc}}$ é o tempo de cálculo.}
+% FONTE: decisão da autora (2026-10-12). Condições t_proc <= T_c e t_coleta + t_proc <= D:
+%        planilha, tabela "Fórmulas de latência". D fica só como fórmula (sem fonte).
+%        Os dados guardados seguem paper.md:561 (W reutilizado nos N_coh símbolos).
+
+% Partes 1.5 (escolha do formato) e 1.6 (organização dos resultados) movidas para
+%   METODOLOGIA/formato.tex e METODOLOGIA.tex em 2026-11-04.
+
+% #####################################################################
+% PARTE 2 -- PARA OS RESULTADOS
+% #####################################################################
+
+
+% ---------------------------------------------------------------------
+% 2.1  SETUP: JUSTIFICATIVAS DOS PARÂMETROS   -> Signal and Noise / Receiver / Evaluation
+% ORIGEM: rascunho-retirado-dos-resultados.tex (IoT -> IoTh, 9 a 12 -> 2A, 2E, 2B, 2F,
+%   citação ledoit-wolf incluída em 2026-11-04)
+% ---------------------------------------------------------------------
+
+% AUTORA (9-results.tex:163-164)
+Como os UEs ficam entre 50 e 100 m da BS, a perda de percurso varia muito entre eles. Nos canais gerados, a diferença de potência entre o UE mais forte e o mais fraco teve mediana de \textcolor{red}{13 a 16 dB, conforme $M$, $K$ e a portadora,} nas 100 realizações. Sem nenhum ajuste, a taxa de erro média fica dominada pelo UE mais fraco. Por isso cada coluna de $\mathbf{H}$ e $\overline{\mathbf{H}}$ foi normalizada para ter a mesma potência média, com $\mathbb{E}[|h_{mk}|^2] = 1$. Isso equivale a um controle de potência ideal no enlace de subida.
+% Medição deste trabalho: mediana 13,0 (M128 K8), 13,1 (M256 K8), 15,8 (M128 K12) a 3,5 GHz;
+%   13,7, 13,3 e 16,0 a 28 GHz (dados/channels_quadriga_*.npz, potência por UE). Saíram do texto: "foi o parâmetro que mais mudou o
+%   resultado", "o artigo não fala de controle de potência" e as razões de SER contra a
+%   Fig. 8(a) (0,56-0,65x / 0,8-7,5x). Se forem usadas, o lugar é a discussão dos
+%   resultados, não o setup. Fonte possível para controle de potência: bjornson-mimo,
+%   p. 311 (ver rascunho_bloco_canal.tex).
+
+% FONTES: modelo do ruído L113, L577; SNR L577; E_s e sigma^2 L577, L79.
+% beta: IoT definido em L577, N_0 nunca definido, lido como sigma^2 via [P] L207,
+%   e dividido por r para que a IoT medida por antena seja a IoT pedida.
+%   A fórmula com /r vale com a normalização por UE (média de diag(Hbar Hbar^H) = r).
+
+% NOVO
+A SNR é definida como $10\log_{10}(E_s/\sigma^2)$ \cite{zhao2025jsac}. Assim, só a razão entre $E_s$ e $\sigma^2$ importa. Por isso foi usado $E_s = 1$, com as constelações normalizadas para energia média unitária. Dessa forma, a potência do ruído térmico é $\sigma^2 = 10^{-\mathrm{SNR}/10}$.
+% FONTE: L577 (definição da SNR).
+% NOSSO (derivação): na eq. (3), multiplicar E_s e R pelo mesmo fator não muda W.
+%   Como beta é proporcional a sigma^2 (IoT), R é proporcional a sigma^2. Então só
+%   E_s/sigma^2 importa. Se a banca pedir, mostrar essa conta em uma linha.
+
+% NOVO
+A IoTh é definida como $10\log_{10}((\beta + N_0)/\sigma^2)$ \cite{zhao2025jsac}, em que $N_0$ é a potência do ruído térmico, $\sigma^2$. O parâmetro $\beta$ é a potência de cada interferente, mas cada antena recebe a soma dos $r$ interferentes. Por isso, $\beta$ foi dividido por $r$. Assim, a razão entre a interferência e o ruído térmico em cada antena fica igual à IoTh da configuração. Sem essa divisão, com IoTh de 10~dB e $r = 8$, essa razão seria de cerca de 18,6~dB. Essa forma de medir a interferência, pela média por antena, também é usada por \citeonline{tomasin-interference}.
+% FONTE: L577 (definição da IoT; N_0 não aparece em outro lugar do artigo).
+% TODO FONTE: N_0 = sigma^2 vem do artigo anterior do mesmo grupo (Zhao et al.,
+%   GLOBECOM 2021, L207: SNR medida como Es/N0). Chave já no .bib: zhao2021-globecom.
+% NOSSO (conta): com a normalização por UE, a média de diag(Hbar Hbar^H) é r.
+%   Sem dividir: 10*log10((10^1 - 1)*8 + 1) = 10*log10(73) = 18,6 dB.
+% FONTE: Tomasin et al., eq. (47), linha 515 de Estimation*.md: ROT = (tr R / N)/sigma^2 - 1.
+%   CUIDADO: o ROT deles é interferência/ruído; a IoT do artigo é
+%   (interferência + ruído)/ruído. IoT linear = 1 + ROT. Por isso o texto diz só
+%   "medir pela média por antena", não "IoT = ROT".
+
+% NOVO
+As amostras usadas para estimar $\hat{\mathbf{R}}$ vêm dos REs de piloto \cite{zhao2025jsac}. Por isso, o ruído dos símbolos de dados é sorteado de forma independente dessas amostras. Assim, o equalizador é testado com um ruído que não foi usado na estimação.
+% FONTE: L123 ("noise samples in N pilot resource elements").
+% NOSSO: a escolha (params.M5_Noise.data_noise_independent, status A/2B).
+%   (Zhao et al. não tratam disso; não citar como deles.)
+
+
+% ------------------------
+
+% NOVO
+Cada \textit{cluster} fica com antenas vizinhas. O primeiro fica com as antenas 1 a $M_c$, o segundo com as antenas $M_c+1$ a $2M_c$, e assim por diante. Essa divisão segue a notação em blocos $\mathbf{H}=[\mathbf{H}_1^T,\dots,\mathbf{H}_C^T]^T$ de \citeonline{zhao2025jsac}.
+% FONTE: L85 (divisão em C clusters); L96 (notação em blocos).
+% Outra fonte possível: o código de referência DBP-master (DBP_detector_sim.m:305)
+%   e o artigo dele (ref. [6] do artigo base, nota 3). Não está no .bib.
+
+% NOVO
+O equalizador $\mathbf{W}$ é calculado uma vez para cada realização de canal e cada ponto de SNR. Depois, ele é usado para todos os 480 símbolos. Uma mesma matriz de equalização pode ser usada para vários símbolos, enquanto o canal não muda \cite{zhao2025jsac}.
+% FONTE: L61, L561 (reuso da matriz de equalização).
+% Código: m1_driver.run_panel (W montado dentro do laço de SNR).
+
+
+
+% AUTORA (9-results.tex:333), tom ajustado e "soma" trocada por "média ponderada"
+% ATENÇÃO (não alterado): "soma à matriz um múltiplo da identidade" descreve a
+%   carga diagonal fixa, a alternativa rejeitada. O Ledoit-Wolf faz uma média
+%   ponderada: (1 - rho) R_hat + rho mu I (m5_noise.shrink). Decidir a redação.
+O equalizador LMMSE usa a inversa de $\hat{\mathbf{R}}$ \cite{zhao2025jsac}. Com $M = 256$ antenas e $N = 192$ amostras, $\hat{\mathbf{R}}$ não tem inversa. \textcolor{red}{Com $N = 24$, isso vale também para $M = 128$.} Por isso foi usado o \textit{shrinkage} de Ledoit--Wolf. Ele faz uma média ponderada entre $\hat{\mathbf{R}}$ e um múltiplo da identidade, e o peso dessa média é calculado a partir das próprias amostras. Assim não foi preciso escolher uma constante \cite{ledoit-wolf}.
+
+% NOVO
+No BCD-MMSE, cada DU inverte a matriz $E_s\mathbf{H}_c\mathbf{H}_c^H + \hat{\mathbf{R}}_{cc}$, de tamanho $M_c \times M_c$ \cite{zhao2025jsac}. \textcolor{red}{Nas configurações simuladas, $M_c \le 32$. Com $N = 192$, 168 ou 132, $M_c$ é menor que $N$. Com $N = 24$, isso vale para $M_c = 16$, mas não para $M_c = 32$ (configurações 2A a 2H). Quando $N < M_c$, o bloco $\hat{\mathbf{R}}_{cc}$ não tem inversa (Seção~\ref{subsec:ruido-colorido}). O simulador aplica o \textit{shrinkage} ao bloco $\hat{\mathbf{R}}_{cc}$ em todas as condições.}
+% FONTE: eq. (30), L504; tamanhos na Tabela tab:paineis.
+% Código: m7_equalizers.bcd_mmse -- den = Es*Hc*Hc^H + cond.covariance(Sc).
+% DECIDIR ANTES DE MANTER: o módulo alvo do constraints.csv inverte o R_cc sem
+%   ajuste. Duas saídas: (1) manter o shrinkage e dizer isso aqui; (2) rodar o BCD
+%   com --shrinkage none, para os resultados mostrarem o que o hardware vai receber.
+% SEM FONTE: dizer que o bloco "tem inversa" porque N > M_c precisa de referência
+%   (ligar à seção "Quantidade de amostras" do capítulo 1). Por isso a frase só
+%   compara os números.
+
+% NOVO
+O ZF centralizado é usado como referência \cite{zhao2025jsac}, na forma da Equação~\eqref{eq:zf_filter}.
+% FONTE: L581 (ZF citado sem fórmula). eq:zf_filter está em 1-noise-and-constraints.tex.
+
+
+% NOVO
+Cada ponto das curvas é a média da SER sobre 100 realizações de canal, com 480 símbolos em cada uma. A SNR varia de $-10$ a $10$~dB, com passo de 2~dB, como em \citeonline{zhao2025jsac}.
+% FONTE: L577 (100 x 480); faixa de SNR lida dos marcadores das Figs. 6 a 8
+%   (o passo não está escrito no artigo; ver params.M1_Driver.snr_db_grid).
+
+% NOVO
+Os símbolos são detectados pelo ponto mais próximo da constelação \cite{zhao2025jsac}. Antes da detecção, a estimativa de cada UE não passa por nenhuma correção de ganho.
+
+% ---------------------------------------------------------------------
+% 2.2  ESCOLHA DO FORMATO: RESULTADOS
+% ---------------------------------------------------------------------
+% ORIGEM: TCC/Análise bits.md, corrigido em 2026-11-04.
+\subsection{Escolha do formato de ponto fixo}
+
+\subsubsection{Varredura inicial}
+A varredura inicial resultou em 10 formatos: $\langle 14,6\rangle$, $\langle 16,6\rangle$, $\langle 18,8\rangle$, $\langle 20,8\rangle$, $\langle 22,12\rangle$, $\langle 24,12\rangle$, $\langle 26,12\rangle$, $\langle 28,12\rangle$, $\langle 28,14\rangle$ e $\langle 30,14\rangle$.
+% FONTE: software/testes/LEIAME.md (restricoes_varredura_4.csv da v2).
+% Dados da tabela do Análise bits.md (a autora não pretende usar a tabela no texto;
+%   valores medidos com a outra parte fixa: F = 32 na varredura de I, I = 14 na de F):
+%   I  estouro  perda  ocup.%  |  F  quantização  perda  ocup.%   -> formato
+%   6  SAT      1,58   5,5     |  8  RND_ZERO     0,52   1,4      -> <14,6>
+%   6  WRAP     1,9    5,8     | 10  RND_ZERO     0,22   1,6      -> <16,6>
+%   8  SAT      0      6       | 10  RND_ZERO     0,04   1,6      -> <18,8>
+%   8  SAT      0      6       | 12  RND_ZERO     0,03   1,9      -> <20,8>
+%  12  SAT      0,33   6,1     | 10  RND_ZERO     2,78   1,6      -> <22,12>
+%  12  SAT      0,55   6,1     | 12  RND_ZERO     0,19   1,9      -> <24,12>
+%  12  SAT      0      6,1     | 14  RND_ZERO     0,02   2        -> <26,12>
+%  12  SAT      0      6,1     | 16  TRN          0      3,1      -> <28,12>
+%  14  SAT      0      6,2     | 14  RND_ZERO     0,01   2        -> <28,14>
+%  14  SAT      0      6,2     | 16  TRN          0,01   3,1      -> <30,14>
+% ATENÇÃO: as linhas de I = 12 têm perdas diferentes (0,33 / 0,55 / 0) para o mesmo
+%   I e modo; conferir se são de classes diferentes (3 dB e 0,1 dB) ou erro de cópia.
+
+\subsubsection{Validação}
+% FIGURA: mapa de pior perda com modo fixo, até 3 dB, 1 iteração:
+%   software/testes/resultados/4_varredura_formatos/v4_formatos_juntos_16_configs/
+%   figuras/mapa_perda_modo_fixo_ate_3dB_iter1_escada_por_I_letras.pdf
+%   (variantes: ate_0.1dB; mapa_recurso_* para a ocupação). Primeira versão: só iter1;
+%   iter4 se houver tempo.
+% Lembrar: mapa (rodada [4] v4) e barras (rodada [5]) diferem até 0,07 dB.
+A Figura~\ref{fig:mapa-modo-fixo} mostra o resultado da validação. Cada coluna é uma configuração, e cada linha é um formato. Cada célula mostra a maior perda entre as 5 condições de teste. Quando, em alguma condição, a curva do formato não atinge $\mathrm{SER} = 10^{-2}$, a célula tem um $\times$ vermelho. Quando a perda passa de 0,1~dB, um símbolo amarelo marca a condição: vazado para perdas entre 0,1 e 3~dB, e cheio para perdas acima de 3~dB.
+% PENDENTE: o texto dos achados (qual formato entra em cada faixa, I = 12 como mínimo,
+%   N = 24 pede menos bits inteiros).
+% SE HOUVER TEMPO (versão com 4 iterações): o F necessário cresce com as iterações
+%   (memória tcc-formatos-ponto-fixo: F = 14 basta com T = 1; F = 16 com T = 4); mapas iter4.
+
+\subsection{Curvas de SER por grupo e formato}
+% FIGURAS do Análise bits.md (imagens 2 a 17). Arquivos de origem prováveis:
+%   software/testes/resultados/5_candidatos/modo_fixo_3dB/figuras/perfil_estacao/
+%   (perfil_por_cenario_<estação>[_16qam|_qpsk]_<W>-<I>) e analise_grupos/. CONFERIR.
+%   Os títulos e legendas das figuras vão ser encurtados (nota da autora).
+% Estrutura do Análise bits.md: circuitos 16x16 (1A-1H; 3A-3H) e 32x32 (2A-2H),
+%   uma figura por formato <22,12>, <24,12>, <28,14>; os highlights abaixo são os
+%   candidatos a ir para o texto.
+Nos três grupos, a condição TDLB100-400, que tem o menor número de amostras de ruído, tem a maior diferença entre as curvas das configurações.
+% Highlights por figura (a qual grupo cada uma se refere: CONFERIR nas imagens 14-17):
+%   imagem 14: maior diferença entre a versão aproximada e a referência em TDLC300-100;
+%   imagem 15: idem, TDLC300-100;
+%   imagem 16: idem, TDLA30-75 (no original, "TDLC30-75");
+%   imagem 17: idem, TDLA30-5 (no original, "TDLC30-5").
+%   Esta é outra medida (formato x float), diferente da dispersão entre configurações
+%   da frase acima; deixar claro no texto qual é qual.
+
+Nas configurações 1A, 1B, 1E e 1F ($M = 128$, $C = 8$, 16-QAM), o BCD-MMSE em ponto fixo fica perto da versão em ponto flutuante, mesmo com o menor número de bits. Com QPSK (1C, 1D, 1G e 1H), o formato com menos bits se afasta mais da versão em ponto flutuante. Com mais bits, o QPSK tem resultado melhor. Em geral, há pouca diferença entre $\langle 24,12\rangle$ e $\langle 28,14\rangle$ dentro de um mesmo grupo.
+
+Nas configurações 2A, 2B, 2E e 2F ($M = 256$, $C = 8$, $M_c = 32$), o BCD-MMSE com $\langle 24,12\rangle$ e $\langle 28,14\rangle$ fica muito perto da referência em ponto flutuante, e a referência fica muito perto do LMMSE. Nas configurações 3A, 3B, 3E e 3F ($M = 256$, $C = 16$, $M_c = 16$), o desempenho fica entre os dois outros grupos, tanto na SNR necessária quanto na dispersão entre as configurações.
+
+A condição TDLB100-400 é a mais exigente. Nela, o LMMSE tem os piores resultados, e o BCD-MMSE com a inversa em ponto fixo tem a maior dispersão em relação à versão em ponto flutuante.
+% A CONFERIR com os números (snr_necessaria_<cenário> em analise_grupos/): cada frase
+%   acima é leitura das figuras do Análise bits.md. "Mais fáceis/simples" do original
+%   foi retirado (sem critério definido).
+
+% ---------------------------------------------------------------------
+% 2.3  IMPLEMENTAÇÃO NO VIVADO
+% ---------------------------------------------------------------------
+\subsection{Implementação}
+% PENDENTE. Do Análise bits.md: agrupar as análises por circuito e versão de hardware
+%   (16x16 ou 32x32). Números do servidor (Vivado 2023.2):
+%   hardware/pacote_servidor_formatos/LEIAME.md e hardware/resultados_servidor/.
+
+% #####################################################################
+% PARTE 3 -- FICA NA FUNDAMENTAÇÃO OU EM TRABALHOS RELACIONADOS
+% CORREÇÃO (2026-11-04): FUNDAMENTACAO/equalizacao.tex é só um esqueleto. O texto de
+% equalização abaixo (ML, ZF, covariância, Wiener, LMMSE) é a ÚNICA versão escrita:
+% NÃO descartar. Já o ruído colorido (AWGN, assinatura espacial, construção de R_n,
+% estimação, condicionamento) tem versão mais nova em FUNDAMENTACAO/dbp-ruido.tex.
+% #####################################################################
+
+
+% ---------------------------------------------------------------------
+% 3.1  PARA TRABALHOS RELACIONADOS (Kalman, fora do escopo)
+% ORIGEM: secoes/rascunho_filtros_covariancia.tex, tópico 9
+% ---------------------------------------------------------------------
+
+% ---------------------------------------------------------------------
+% 9. Fora do escopo: métodos baseados no filtro de Kalman
+% ---------------------------------------------------------------------
+
+Trabalhos anteriores também trataram receptores MMSE com ruído colorido em sistemas distribuídos, usando um método baseado no filtro de Kalman \cite{zhao-lmmse}. Esses trabalhos consideram que o ruído colorido vem do erro de estimativa do canal. Além disso, assumem que a matriz de covariância é bloco-diagonal, e que cada nó conhece apenas a sua parte local \cite{zhao-lmmse}. Como a covariância considerada neste trabalho possui blocos fora da diagonal, esse método não entra no escopo.
+% FONTE: artigo base, Remark 1, paper.md:142 (referências [23] e [24] do artigo).
+
+% #####################################################################
+% ORIGEM: chapters/secoes/equalização.tex
+% #####################################################################
+
+
+\section[\texorpdfstring{\textcolor{red}{Equalização}}{Equalização}]{\textcolor{red}{Equalização}}
+\label{sec:equalization}
+% CONTEÚDO  Detector ML e por que é inviável; separação entre equalização e
+%           detecção; filtros lineares; detecção pelo ponto mais próximo; SER.
+% TEXTO     1-noise-and-constraints.tex, "Equalização" e "Filtros Lineares".
+% ESTADO    parcial (ZF, Wiener e LMMSE escritos; SER não definida)
+
+\subsection{Detector de máxima verossimilhança}
+\textcolor{red}{O método ótimo para recuperar os símbolos transmitidos em sistemas MIMO é o detector de máxima verossimilhança (\textit{Maximum Likelihood}, ML). O algoritmo estima os símbolos transmitidos encontrando o candidato que minimiza a distância euclidiana entre o sinal recebido $\mathbf{y}$ e $\mathbf{H}\mathbf{s}$:}
+
+\begin{equation}
+\hat{\textcolor{red}{\mathbf{s}}} = \underset{\textcolor{red}{\mathbf{s}} \in \mathcal{S}^{K}}{\arg\min}
+\left\|\mathbf{y} - \mathbf{H}\textcolor{red}{\mathbf{s}}\right\|_2^2
+\label{eq:ml}
+\end{equation}
+\textcolor{red}{em que $\mathcal{S}^{K}$ é o conjunto de todas as combinações possíveis de símbolos da constelação transmitidos pelos $K$ usuários, e $\left\|\cdot\right\|_2^2$ denota a soma dos quadrados das magnitudes de todos os elementos de um vetor (norma euclidiana ao quadrado). Como opera diretamente no espaço de busca discreto $\mathcal{S}^{K}$, o detector ML produz a decisão final dos símbolos em uma única etapa, sem separar as etapas de equalização e detecção definidas na Seção~\ref{sec:sysmodel}.}
+
+\textcolor{red}{Esse método atinge a menor taxa de erro de bit (\textit{Bit Error Rate}, BER) possível na ausência de codificação de canal, isto é, quando nenhum código de correção de erros é aplicado aos bits transmitidos antes da modulação. Porém, a detecção MIMO é um problema NP-difícil~\cite{zero-forcing}. Isso significa que não se conhece um algoritmo de tempo polinomial que a resolva de forma exata. A busca exaustiva em $\mathcal{S}^{K}$ é a única abordagem exata conhecida, e tem complexidade exponencial $\mathcal{O}(|\mathcal{S}|^K)$ em $K$. Assim, o detector ML se torna impraticável para sistemas com muitos usuários ou com modulações de ordem alta~\cite{bello2022algorithms}.}
+
+
+\subsection{Filtros Lineares}
+
+\textcolor{red}{Como o detector ML se torna impraticável com muitos usuários, este trabalho considera equalizadores lineares.}
+
+\subsection{\texorpdfstring{\textcolor{red}{Zero-Forcing}}{Zero-Forcing}}
+
+\textcolor{red}{O equalizador \textit{Zero-Forcing} (ZF) suprime a interferência entre usuários invertendo o canal, mas considera nula a componente de ruído do vetor de sinal recebido. Como consequência, o ZF amplifica o ruído presente no receptor, principalmente em canais mal condicionados. O equalizador ZF é dado por~\cite{zero-forcing}:}
+
+\begin{equation}
+\tilde{\textcolor{red}{\mathbf{s}}}_\text{ZF} =
+\mathbf{W}_\text{ZF}\mathbf{y}
+\label{eq:zf_estimate}
+\end{equation}
+\textcolor{red}{em que}
+
+\begin{equation}
+\mathbf{W}_\text{ZF}=
+\left(\mathbf{H}^H\mathbf{H}\right)^{-1}\mathbf{H}^H
+\label{eq:zf_filter}
+\end{equation}
+\textcolor{red}{e $\mathbf{H}^H$ denota a transposta conjugada de $\mathbf{H}$: cada elemento complexo $h_{mk}$ é substituído pelo seu complexo conjugado $h_{mk}^*$, e a matriz é transposta.}
+
+
+\textcolor{red}{Na etapa de detecção, $\mathcal{Q}$ é a função de quantização da modulação utilizada, que produz uma saída de decisão rígida (\textit{hard output}):}
+
+\begin{equation}
+\hat{\textcolor{red}{\mathbf{s}}}_\text{ZF}=
+\mathcal{Q}\left(\tilde{\textcolor{red}{\mathbf{s}}}_\text{ZF}\right)
+\label{eq:zf_detection}
+\end{equation}
+
+
+\subsection{\texorpdfstring{\textcolor{red}{Covariância}}{Covariância}}
+
+Covariância é uma medida estatística que descreve como duas variáveis aleatórias variam conjuntamente, permitindo identificar a relação entre suas variações em torno dos respectivos valores médios. Para um vetor aleatório, essas relações são organizadas em uma matriz de covariância, na qual os elementos da diagonal representam as variâncias de cada componente, enquanto os elementos fora da diagonal representam as covariâncias entre pares de componentes. A esperança matemática, denotada por $\mathbb{E}[\cdot]$, corresponde ao valor médio de uma variável aleatória considerando sua distribuição de probabilidade. Assim, para um vetor aleatório $\mathbf{x}$ de média zero, sua matriz de covariância pode ser expressa como
+
+
+\begin{equation}
+\operatorname{Cov}(\mathbf{x})=\mathbb{E}[\mathbf{x}\mathbf{x}^H].
+\label{eq:cov_definition}
+\end{equation}
+
+
+\subsection{Filtro de Wiener}
+
+Em processamento de sinais, filtro de Wiener é um método estatístico usado para obter, a partir de observações contaminadas por ruído, a melhor estimativa linear possível de um sinal de interesse segundo o critério de Erro Quadrático Médio (MSE). Dado um sinal desejado $\mathbf{x}$ e uma observação $\mathbf{y}$, busca-se um estimador linear $\hat{\mathbf{x}}=\mathbf{W}\mathbf{y}$ que minimize o MSE:
+
+\begin{equation}
+\mathbf{W}_{\text{opt}} = \underset{\mathbf{W}}{\arg\min}\;
+\mathbb{E}\left[\|\mathbf{x}-\mathbf{W}\mathbf{y}\|_2^2\right].
+\label{eq:wiener_opt}
+\end{equation}
+
+Para chegar ao resultado ótimo, o erro de estimação $\mathbf{e}=\mathbf{x}-\mathbf{W}_{\text{opt}}\mathbf{y}$ deve ser não correlacionado com a observação $\mathbf{y}$. Isto, é $\mathbb{E}[\mathbf{e}\mathbf{y}^H]=\mathbf{0}$. Isso significa que não é mais possível melhorar o estimador a partir dos dados observados e já se chegou na melhor solução. Com a expansão dessa solução [citar o livro que faz essa expansão] chega-se à equação de Wiener-Hopf
+
+
+\begin{equation}
+\mathbf{W}_{\text{opt}}\mathbf{R}_{yy} = \mathbf{R}_{xy}
+\quad\Rightarrow\quad
+\mathbf{W}_{\text{opt}} = \mathbf{R}_{xy}\mathbf{R}_{yy}^{-1},
+\label{eq:wiener_hopf}
+\end{equation}
+
+em que $\mathbf{R}_{xy}=\mathbb{E}[\mathbf{x}\mathbf{y}^H]$ é a correlação
+cruzada entre o sinal desejado e a observação, e
+$\mathbf{R}_{yy}=\mathbb{E}[\mathbf{y}\mathbf{y}^H]$ é a matriz de
+autocorrelação da observação. Para sinais de média zero, a correlação
+cruzada coincide com a covariância cruzada entre $\mathbf{x}$ e $\mathbf{y}$,
+isto é, $\mathbf{R}_{xy}=\operatorname{Cov}(\mathbf{x},\mathbf{y})$. Por
+minimizar o MSE por meio de um estimador linear, essa solução é chamada de
+Linear Minimum Mean-Square Error (LMMSE).
+
+\subsection{\texorpdfstring{\textcolor{red}{Equalizador LMMSE}}{Equalizador LMMSE}}
+
+\textcolor{red}{O equalizador de mínimo erro quadrático médio linear (\textit{Linear Minimum Mean Square Error}, LMMSE) contorna a limitação do ZF ao considerar explicitamente as estatísticas do ruído no projeto do equalizador. A estimativa $\tilde{\mathbf{s}}_\text{LMMSE}$ é obtida aplicando a matriz de equalização ao sinal recebido:}
+
+\begin{equation}
+\tilde{\textcolor{red}{\mathbf{s}}}_\text{LMMSE}=
+\mathbf{W}_\text{LMMSE}\mathbf{y}
+\label{eq:lmmse_estimate}
+\end{equation}
+
+
+\textcolor{red}{A sua matriz de filtro é obtida minimizando o erro quadrático esperado entre a saída do equalizador e o vetor de símbolos verdadeiro, isto é, a média de $\left\|\mathbf{W}\mathbf{y}-\mathbf{s}\right\|_2^2$ sobre todas as transmissões e realizações de ruído possíveis, denotada por $\mathbb{E}\left[\cdot\right]$:}
+
+\begin{equation}
+\min_{\mathbf{W}}
+\mathbb{E}
+\left[
+\left\|\mathbf{W}\mathbf{y}-\textcolor{red}{\mathbf{s}}\right\|_2^2
+\right]
+\label{eq:lmmse_opt}
+\end{equation}
+
+\textcolor{red}{Esse é o mesmo problema da Equação~{\hypersetup{linkcolor=red}\eqref{eq:wiener_opt}}, em que o sinal desejado é o vetor de símbolos transmitidos.}
+
+
+\textcolor{red}{Assumindo que a matriz de canal $\mathbf{H}$ é perfeitamente conhecida, a solução correspondente do equalizador LMMSE em um sistema MIMO centralizado é dada por~\cite{zhao2025jsac}:}
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(
+\mathbf{H}^H\mathbf{R}_n^{-1}\mathbf{H}
++
+\frac{1}{E_s}\mathbf{I}
+\right)^{-1}
+\mathbf{H}^H\mathbf{R}_n^{-1}
+\label{eq:lmmse_solution}
+\end{equation}
+\textcolor{red}{em que $\mathbf{n}$ é modelado como um vetor aleatório de média zero com matriz de covariância $\mathbf{R}_n = \mathbb{E}[\mathbf{n}\mathbf{n}^H]$, e $E_s$ denota a energia média por símbolo transmitido. Entre os detectores lineares, o LMMSE geralmente atinge a maior razão sinal-interferência-mais-ruído (\textit{Signal-to-Interference-plus-Noise Ratio}, SINR), superando o ZF no regime de sistemas de grande dimensão~\cite{jeon2019}.}
+
+
+\textcolor{red}{Essa solução pode ser obtida a partir do filtro de Wiener.}
+
+Para o modelo de recepção MIMO $\mathbf{y}=\mathbf{H}\mathbf{s}+\mathbf{n}$, com símbolos e ruído
+descorrelacionados e $\mathbb{E}[\mathbf{s}\mathbf{s}^H]=E_s\mathbf{I}$, em
+que $E_s$ denota a energia média por símbolo transmitido, as matrizes
+$\mathbf{R}_{sy}$ e $\mathbf{R}_{yy}$ tornam-se
+
+\begin{equation}
+\mathbf{R}_{sy}=E_s\mathbf{H}^H,
+\qquad
+\mathbf{R}_{yy}=E_s\mathbf{H}\mathbf{H}^H+\mathbf{R}_n,
+\label{eq:mimo_correlations}
+\end{equation}
+em que $\mathbf{R}_n=\mathbb{E}[\mathbf{n}\mathbf{n}^H]$ é a matriz de
+covariância do ruído. \textcolor{red}{Essa matriz é construída para o cenário com interferência na Seção~{\hypersetup{linkcolor=red}\ref{subsec:construcao-R}}.}
+Substituindo a Equação~\eqref{eq:mimo_correlations} na
+Equação~\eqref{eq:wiener_hopf} e aplicando a propriedade matemática do lema de inversão de matrizes,
+obtém-se a forma fechada do equalizador LMMSE para um sistema MIMO
+centralizado, assumindo conhecimento perfeito da matriz de canal $\mathbf{H}$:
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(\mathbf{H}^H\mathbf{R}_n^{-1}\mathbf{H}+\frac{1}{E_s}\mathbf{I}\right)^{-1}
+\mathbf{H}^H\mathbf{R}_n^{-1}.
+\label{eq:lmmse_from_wiener}
+\end{equation}
+
+\textcolor{red}{A Equação~{\hypersetup{linkcolo=red}\eqref{eq:lmmse_from_wiener}} é a mesma solução da Equação~{\hypersetup{linkcolor=red}\eqref{eq:lmmse_solution}}.}
+
+
+% #####################################################################
+% ORIGEM: chapters/secoes/modelo-de-ruído.tex
+% #####################################################################
+
+% Capítulo de fundamentação: equalização descentralizada sob ruído colorido.
+% Comentários CONTEÚDO/TEXTO/ESTADO vêm do esqueleto (rascunho_backbone.tex).
+
+\chapter{Equalização descentralizada sob ruído colorido}\label{chap:dbp-ruido}
+% Núcleo do trabalho: o ruído colorido, a estimação da sua covariância, a
+% arquitetura descentralizada, o BCD-MMSE e a matriz G_c que cada DU inverte,
+% e as técnicas para inverter essa matriz.
+% Roteiro T1-T6 de constraints/notas_redacao.md.
+
+\section{\texorpdfstring{\textcolor{red}{Modelo do ruído colorido}}{Modelo do ruído colorido}}
+\label{sec:ruido-colorido}
+% CONTEÚDO  Do AWGN ao ruído colorido: interferentes + ruído térmico;
+%           construção de R = beta Hbar Hbar^H + sigma^2 I; IoT; leitura de R.
+% TEXTO     1-noise-and-constraints.tex, "Modelo AWGN" e "Modelo do ruído
+%           colorido" (assinatura espacial, hipóteses, construção de R_n).
+% ESTADO    escrito até a construção de R; falta a IoT
+
+\textcolor{red}{O equalizador da Equação~{\hypersetup{linkcolor=red}\eqref{eq:lmmse_from_wiener}} depende da matriz de covariância do ruído. Esta seção descreve o ruído considerado neste trabalho e constrói essa matriz.}
+
+\subsection{\texorpdfstring{\textcolor{red}{Modelo AWGN}}{Modelo AWGN}}
+
+\textcolor{red}{No modelo AWGN, em que $\mathbf{R}_n = \sigma^2\mathbf{I}_M$, a covariância do ruído se torna proporcional à matriz identidade. Assim, a solução LMMSE pode ser simplificada definindo o parâmetro de regularização $\rho = \sigma^2/E_s$, que relaciona a potência do ruído com a energia média por símbolo transmitido. Nesse caso, a Equação~\eqref{eq:lmmse_solution} se reduz a~\cite{jeon2019}:}
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(
+\mathbf{H}^H\mathbf{H}
++
+\rho\mathbf{I}
+\right)^{-1}
+\mathbf{H}^H
+\label{eq:lmmse_awgn}
+\end{equation}
+
+
+\textcolor{red}{O equalizador LMMSE tem um pequeno aumento de complexidade computacional em relação ao ZF, pois também exige estimar a matriz de covariância do ruído $\mathbf{R}_n$ para calcular o filtro. Os dois equalizadores têm a mesma complexidade assintótica $\mathcal{O}(K^3)$, dominada pela inversão de matriz. Porém, o LMMSE geralmente oferece melhor desempenho de detecção, pois minimiza a degradação da BER~\cite{li-tradeofs}.}
+
+
+
+ 
+
+\subsection{\texorpdfstring{\textcolor{red}{Assinatura espacial e interferência}}{Assinatura espacial e interferência}}
+
+O sinal transmitido por um User Equipament (UE) chega em todas as antenas da mesma Estação Base, sendo multiplicado em cada antena pelo respectivo ganho do canal definido em [citar seção do modelo de canal]. O sinal recebido a partir de um único transmissor é escrito como $\mathbf{y}=\mathbf{h}s+\mathbf{n}$, em que o vetor $\mathbf{h}$ agrupa os ganhos de canal entre o UE e cada uma das antenas da Estação Base [ganho precisa ter sido definido antes]. Esse vetor é chamado assinatura espacial do sinal, porque descreve como o sinal se distribui no conjunto de antenas. 
+
+O sinal transmitido por um User Equipament não-alvo da estação base também chega a todas as antenas, com sua própia assinatura de canal em cada uma delas. Dessa forma, a mesma interferência ocorre simultaneamente em várias antenas, com ganhos distintos entre elas. Além dela, cada antena tem o seu próprio ruído térmico, independente entre antenas. \textcolor{red}{A soma dessa interferência com o ruído térmico é chamada, nesse trabalho, de ruído colorido.}
+
+Em cenários com interferência, a relação entre o sinal recebido e o ruído pode ser descrita como:
+
+\begin{equation*}
+\mathbf{y}=\mathbf{H s}+\underbrace{\mathbf{n}}_{\text{\textcolor{red}{ruído colorido}}}=\mathbf{H s}+\underbrace{\overline{\mathbf{H}} \overline{\mathbf{s}}}_{\text{\textcolor{red}{interferência}}}+\underbrace{\overline{\mathbf{n}}}_{\text {AWGN }}, \tag{5}
+\end{equation*}
+
+Na equação acima, $\overline{\mathbf{H}} \in \mathbb{C}^{M \times r}$ é a matriz de canal entre cada uma das $M$ antenas da estação base e os $r$ UEs (User Equipaments) não-alvo, cada um com uma antena. $\overline{\mathbf{s}} \in \mathcal{S}^{r \times 1}$ representa os símbolos transmitidos pelos $r$ UEs. Já $\overline{\mathbf{n}} \in \mathbb{C}^{M \times 1}$ representa o ruído térmico de fundo de cada antena da estação base, modelado como AWGN de distribuição $\mathcal{CN}(\mathbf{0}, \sigma^2\mathbf{I})$, com média zero e matriz de covariância $\sigma^2\mathbf{I}$.
+
+
+\begin{figure}[htbp]
+\centering
+\resizebox{0.7\textwidth}{!}{%
+\begin{tikzpicture}[
+cell/.style={draw, minimum size=1cm, inner sep=0pt, outer sep=0pt, thick},
+brace/.style={decorate, decoration={brace, amplitude=6pt, raise=3pt}, thick}
+]
+
+% ==================== Matriz H (M x r) ====================
+\begin{scope}[local bounding box=H]
+\foreach \row in {1,...,4} {
+\foreach \col in {1,...,3} {
+\node[cell, fill=cyan!30] (H-\row-\col) at (\col*1, -\row*1) {};
+}
+}
+\end{scope}
+\node[above=0.3cm of H] {\Large $\overline{\mathbf{H}} \in \mathbb{C}^{M \times r}$};
+
+% Chaves para H
+\draw[brace] ([xshift=-2pt]H.south west) -- ([xshift=-2pt]H.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]H.south east) -- ([yshift=-2pt]H.south west) node[midway, yshift=-18pt] {\Large $r$};
+
+% ==================== Vetor s (r x 1) ====================
+\begin{scope}[local bounding box=s, xshift=5cm, yshift=-0.5cm]
+\foreach \row in {1,...,3} {
+\node[cell, fill=orange!40] (s-\row) at (1, -\row*1) {};
+}
+\end{scope}
+\node[above=0.8cm of s] {\Large $\overline{\mathbf{s}} \in \mathcal{S}^{r \times 1}$};
+
+% Chaves para s
+\draw[brace] ([xshift=-2pt]s.south west) -- ([xshift=-2pt]s.north west) node[midway, xshift=-18pt] {\Large $r$};
+\draw[brace] ([yshift=-2pt]s.south east) -- ([yshift=-2pt]s.south west) node[midway, yshift=-18pt] {\Large $1$};
+
+% ==================== Vetor n (M x 1) ====================
+\begin{scope}[local bounding box=n, xshift=9.5cm]
+\foreach \row in {1,...,4} {
+\node[cell, fill=yellow!40] (n-\row) at (1, -\row*1) {};
+}
+\end{scope}
+\node[above=0.3cm of n] {\Large $\overline{\mathbf{n}} \in \mathbb{C}^{M \times 1}$};
+
+% Chaves para n
+\draw[brace] ([xshift=-2pt]n.south west) -- ([xshift=-2pt]n.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]n.south east) -- ([yshift=-2pt]n.south west) node[midway, yshift=-18pt] {\Large $1$};
+
+\end{tikzpicture}%
+}
+\caption{Representação das dimensões das matrizes do sistema.}
+\label{fig:matrizes}
+\end{figure}
+
+
+\subsection{\texorpdfstring{\textcolor{red}{Hipóteses do modelo}}{Hipóteses do modelo}}
+
+Considera-se que os $r$ UEs não-alvo transmitem de forma independente entre si, com potência $\beta$, de modo que 
+
+$$
+\mathbb{E}[\overline{\mathbf{s}}\overline{\mathbf{s}}^H]=\beta\mathbf{I}_r
+$$
+
+Assume-se também que o ruído térmico é espacialmente branco, tal que 
+$$\mathbb{E}[\overline{\mathbf{n}}\overline{\mathbf{n}}^H]=\sigma^2\mathbf{I}
+$$ 
+
+e que $\overline{\mathbf{s}}$ e $\overline{\mathbf{n}}$ são mutuamente independentes e possuem média nula. A matriz $\overline{\mathbf{H}}$ é considerada determinística, uma vez que permanece constante durante dado os mesmos parâmetros e entradas, isto é, no bloco de coerência,
+% conforme será explicado posteriormente.
+\textcolor{red}{conforme apresentado na Seção~{\hypersetup{linkcolor=red}\ref{subsec:bloco-coerencia}}.}
+
+\begin{figure}[htbp]
+\centering
+\resizebox{0.8\textwidth}{!}{%
+\begin{tikzpicture}[
+cell/.style={draw, minimum size=1.2cm, inner sep=0pt, outer sep=0pt, thick},
+brace/.style={decorate, decoration={brace, amplitude=6pt, raise=3pt}, thick}
+]
+
+% ==================== Matriz de Covariância de s (r x r) ====================
+\begin{scope}[local bounding box=covS]
+\foreach \row in {1,...,3} {
+\foreach \col in {1,...,3} {
+\ifnum\row=\col
+\node[cell, fill=orange!40] (covS-\row-\col) at (\col*1.2, -\row*1.2) {\Large $\beta$};
+\else
+\node[cell, fill=black!5] (covS-\row-\col) at (\col*1.2, -\row*1.2) {\large $0$};
+\fi
+}
+}
+\end{scope}
+\node[above=0.4cm of covS] {\Large $\mathbb{E}[\overline{\mathbf{s}}\overline{\mathbf{s}}^H] = \beta\mathbf{I}_r$};
+
+% Chaves para a matriz de s
+\draw[brace] ([xshift=-2pt]covS.south west) -- ([xshift=-2pt]covS.north west) node[midway, xshift=-18pt] {\Large $r$};
+\draw[brace] ([yshift=-2pt]covS.south east) -- ([yshift=-2pt]covS.south west) node[midway, yshift=-18pt] {\Large $r$};
+
+% ==================== Matriz de Covariância de n (M x M) ====================
+\begin{scope}[local bounding box=covN, xshift=7cm]
+\foreach \row in {1,...,4} {
+\foreach \col in {1,...,4} {
+\ifnum\row=\col
+\node[cell, fill=yellow!40] (covN-\row-\col) at (\col*1.2, -\row*1.2) {\Large $\sigma^2$};
+\else
+\node[cell, fill=black!5] (covN-\row-\col) at (\col*1.2, -\row*1.2) {\large $0$};
+\fi
+}
+}
+\end{scope}
+\node[above=0.4cm of covN] {\Large $\mathbb{E}[\overline{\mathbf{n}}\overline{\mathbf{n}}^H] = \sigma^2\mathbf{I}$};
+
+% Chaves para a matriz de n
+\draw[brace] ([xshift=-2pt]covN.south west) -- ([xshift=-2pt]covN.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]covN.south east) -- ([yshift=-2pt]covN.south west) node[midway, yshift=-18pt] {\Large $M$};
+
+\end{tikzpicture}%
+}
+\caption{Matrizes de covariância dos sinais não-alvo e do ruído térmico espacialmente branco.}
+\label{fig:covariancias}
+\end{figure}
+
+
+\subsection{\texorpdfstring{Construção de $\mathbf{R}_{\textcolor{red}{n}}$}{Construção de Rn}}\label{subsec:construcao-R}
+\textcolor{red}{Esta seção constrói, para o cenário com interferência, a matriz $\mathbf{R}_n$ do equalizador LMMSE da Equação~{\hypersetup{linkcolor=red}\eqref{eq:mimo_correlations}}.}
+
+Em uma transformação linear, em que um vetor aleatório $\mathbf{x}$ é obtido a partir de $\mathbf{z}$ por $\mathbf{x} = A\mathbf{z}$, com $A$ determinístico, a matriz de covariância de $\mathbf{x}$ pode ser obtida a partir da matriz de covariância de $\mathbf{z}$ por 
+
+$$
+\operatorname{Cov}(\mathbf{x}) = A\operatorname{Cov}(\mathbf{z})A^H,
+$$
+
+em que $A^H$ representa a transposta conjugada de $A$. Além disso, considerando duas variáveis aleatórias $\mathbf{u}$ e $\mathbf{v}$ independentes e de média zero, a matriz de covariância do vetor resultante da soma é dada por
+
+$$
+\operatorname{Cov}(\mathbf{u}+\mathbf{v})=\operatorname{Cov}(\mathbf{u})+\operatorname{Cov}(\mathbf{v}).
+$$
+
+A partir dessas hipóteses e do ruído colorido definido como $\mathbf{n}=\overline{\mathbf{H}}\overline{\mathbf{s}}+\overline{\mathbf{n}}$, as matrizes de covariância das parcelas $\overline{\mathbf{H}}\overline{\mathbf{s}}$ e $\overline{\mathbf{n}}$ podem ser somadas, pois são independentes e possuem média nula. Dessa forma,
+
+$$
+\mathbf{R}_{\textcolor{red}{n}}\triangleq\mathbb{E}[\mathbf{n}\mathbf{n}^H]
+=\operatorname{Cov}(\overline{\mathbf{H}}\overline{\mathbf{s}})
++\operatorname{Cov}(\overline{\mathbf{n}}).
+$$
+
+A covariância da primeira parcela pode ser obtida pela propriedade da transformação linear, considerando $A=\overline{\mathbf{H}}$ e $\mathbf{z}=\overline{\mathbf{s}}$. Assim,
+
+$$
+\operatorname{Cov}(\overline{\mathbf{H}}\overline{\mathbf{s}})
+=\overline{\mathbf{H}}\mathbb{E}[\overline{\mathbf{s}}\overline{\mathbf{s}}^H]\overline{\mathbf{H}}^H
+=\beta\overline{\mathbf{H}}\overline{\mathbf{H}}^H.
+$$
+
+Como $\operatorname{Cov}(\overline{\mathbf{n}})=\sigma^2\mathbf{I}$, obtém-se, portanto, a matriz de covariância do ruído colorido:
+
+$$
+\mathbf{R}_{\textcolor{red}{n}}=\beta\overline{\mathbf{H}}\overline{\mathbf{H}}^H+\sigma^2\mathbf{I}.
+$$
+
+\textcolor{red}{Assim, no cenário com interferência, a matriz $\mathbf{R}_{yy}$ da Equação~{\hypersetup{linkcolor=red}\eqref{eq:mimo_correlations}} fica}
+
+$$
+\textcolor{red}{\mathbf{R}_{yy}=E_s\mathbf{H}\mathbf{H}^H+\beta\overline{\mathbf{H}}\overline{\mathbf{H}}^H+\sigma^2\mathbf{I}.}
+$$
+
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    cell/.style={draw, minimum size=1cm, inner sep=0pt, outer sep=0pt, thick},
+    brace/.style={decorate, decoration={brace, amplitude=6pt, raise=3pt}, thick}
+]
+
+% ==================== Parêntese Esquerdo ====================
+\node[scale=6] at (0, -2.5) {$($};
+
+% ==================== 1. Matriz H (M x r) ====================
+\begin{scope}[local bounding box=Hbox, xshift=1cm]
+    \foreach \row in {1,...,4} {
+        \foreach \col in {1,...,3} {
+            \node[cell, fill=cyan!30] (H-\row-\col) at (\col*1, -\row*1) {};
+        }
+    }
+\end{scope}
+\node[above=0.4cm of Hbox] {\Large $\overline{\mathbf{H}}$};
+\draw[brace] ([xshift=-2pt]Hbox.south west) -- ([xshift=-2pt]Hbox.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]Hbox.south east) -- ([yshift=-2pt]Hbox.south west) node[midway, yshift=-18pt] {\Large $r$};
+
+% ==================== 2. Matriz Beta (r x r) ====================
+% xshift ajustado para 5.5cm (garante espaço perfeito para a chave esquerda)
+\begin{scope}[local bounding box=betaBox, xshift=5.5cm, yshift=-0.5cm]
+    \foreach \row in {1,...,3} {
+        \foreach \col in {1,...,3} {
+            \ifnum\row=\col
+                \node[cell, fill=orange!40] (B-\row-\col) at (\col*1, -\row*1) {\Large $\beta$};
+            \else
+                \node[cell, fill=black!5] (B-\row-\col) at (\col*1, -\row*1) {\large $0$};
+            \fi
+        }
+    }
+\end{scope}
+\node[above=0.4cm of betaBox] {\Large $\beta\mathbf{I}_r$};
+\draw[brace] ([xshift=-2pt]betaBox.south west) -- ([xshift=-2pt]betaBox.north west) node[midway, xshift=-18pt] {\Large $r$};
+\draw[brace] ([yshift=-2pt]betaBox.south east) -- ([yshift=-2pt]betaBox.south west) node[midway, yshift=-18pt] {\Large $r$};
+
+% ==================== 3. Matriz H^H (r x M) ====================
+% xshift ajustado para 10cm
+\begin{scope}[local bounding box=HHbox, xshift=10cm, yshift=-0.5cm]
+    \foreach \row in {1,...,3} {
+        \foreach \col in {1,...,4} {
+            \node[cell, fill=cyan!30] (HH-\row-\col) at (\col*1, -\row*1) {};
+        }
+    }
+\end{scope}
+\node[above=0.4cm of HHbox] {\Large $\overline{\mathbf{H}}^H$};
+\draw[brace] ([xshift=-2pt]HHbox.south west) -- ([xshift=-2pt]HHbox.north west) node[midway, xshift=-18pt] {\Large $r$};
+\draw[brace] ([yshift=-2pt]HHbox.south east) -- ([yshift=-2pt]HHbox.south west) node[midway, yshift=-18pt] {\Large $M$};
+
+% ==================== Parêntese Direito ====================
+\node[scale=6] at (15.5, -2.5) {$)$};
+
+% ==================== Operador de Soma (+) ====================
+\node at (17, -2.5) {\Huge $+$};
+
+% ==================== 4. Matriz de Ruído Térmico (M x M) ====================
+% xshift ajustado para 18cm
+\begin{scope}[local bounding box=covN, xshift=18cm]
+    \foreach \row in {1,...,4} {
+        \foreach \col in {1,...,4} {
+            \ifnum\row=\col
+                \node[cell, fill=yellow!40] (t2-\row-\col) at (\col*1, -\row*1) {\Large $\sigma^2$};
+            \else
+                \node[cell, fill=black!5] (t2-\row-\col) at (\col*1, -\row*1) {\large $0$};
+            \fi
+        }
+    }
+\end{scope}
+\node[above=0.4cm of covN] {\Large $\sigma^2\mathbf{I}$};
+\draw[brace] ([xshift=-2pt]covN.south west) -- ([xshift=-2pt]covN.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]covN.south east) -- ([yshift=-2pt]covN.south west) node[midway, yshift=-18pt] {\Large $M$};
+
+% ==================== Operador de Igualdade (=) ====================
+\node at (23.5, -2.5) {\Huge $=$};
+
+% ==================== 5. Matriz R (M x M) ====================
+% xshift ajustado para 24.5cm
+\begin{scope}[local bounding box=resultR, xshift=24.5cm]
+    \foreach \row in {1,...,4} {
+        \foreach \col in {1,...,4} {
+            \node[cell, fill=green!30] (R-\row-\col) at (\col*1, -\row*1) {};
+        }
+    }
+\end{scope}
+\node[above=0.4cm of resultR] {\Large $\mathbf{R}_{\textcolor{red}{n}}$};
+\draw[brace] ([xshift=-2pt]resultR.south west) -- ([xshift=-2pt]resultR.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]resultR.south east) -- ([yshift=-2pt]resultR.south west) node[midway, yshift=-18pt] {\Large $M$};
+
+\end{tikzpicture}%
+}
+\caption{Formação da matriz de covariância do ruído colorido $\mathbf{R}_{\textcolor{red}{n}}$ a partir de seus fatores aditivos e multiplicativos.}
+\label{fig:matriz_R}
+\end{figure}
+
+\subsection{Interferência sobre ruído térmico (IoT)}
+% Novo: definição da IoT; papel de beta.
+
+\subsection{\texorpdfstring{\textcolor{red}{O que $\mathbf{R}_n$ representa}}{O que Rn representa}}\label{subsec:o-que-R-representa}
+
+% [ressaltar que a matriz de ruido eh MxM]
+
+%% assim como tem a imagem das matrizes de covariancia e do ruido termico, mostrar como fica a matriz final, possivelmente fazer uma soma na figura dois 
+A matriz $\mathbf{R}_{\textcolor{red}{n}}$ é composta por duas contribuições com características distintas. O termo $\sigma^2\mathbf{I}$ representa o ruído térmico. Como sua matriz de covariância possui apenas elementos na diagonal, o ruído presente em diferentes cadeias de recepção não é correlacionado. Já o termo $\beta\overline{\mathbf{H}}\overline{\mathbf{H}}^H$ representa a contribuição dos sinais transmitidos pelos UEs não-alvo após sua propagação pelo canal. Como cada um desses sinais é recebido por múltiplas antenas, o mesmo sinal pode contribuir para diferentes componentes do vetor recebido, estabelecendo uma relação entre elas. Dessa forma, essa parcela pode apresentar elementos fora da diagonal e introduzir correlação entre as antenas.
+
+\section{\texorpdfstring{\textcolor{red}{Estimação de $\mathbf{R}_n$}}{Estimação de Rn}}
+\label{sec:estimacao-R}
+% CONTEÚDO  Roteiro T1: R não pode ser calculada; estimativa amostral com N
+%           amostras de piloto; posto de R-chapéu; quantidade e custo de N.
+% TEXTO     1-noise-and-constraints.tex, "Estimação de R_n" (subseções
+%           parciais); constraints/rascunho_filtros_covariancia.tex.
+% ESTADO    parcial
+
+\subsection{\texorpdfstring{\textcolor{red}{Por que estimar $\mathbf{R}_n$}}{Por que estimar Rn}}
+
+A matriz $\mathbf{R}_{\textcolor{red}{n}}$ descreve a matriz de covariância do ruído colorido completo, ou seja, a soma da interferência com o ruído térmico. Entretanto, não é possível obtê-la praticamente:  $\mathbb{E}[\cdot]$ é definida como uma média sobre infinitas realizações, desse modo, não é possível avaliar \textcolor{red}{$\mathbb{E}[\mathbf{n}\mathbf{n}^H]$} com um número finito de observações; além disso, $
+\mathbf{R}_{\textcolor{red}{n}}=\beta\overline{\mathbf{H}}\overline{\mathbf{H}}^H+\sigma^2\mathbf{I}
+$ depende das matrizes de canal $\overline{\mathbf{H}}$ das UEs não alvo, que não é estimada pelo receptor, assim como a potência $\beta$ de transmissão dos usuários não é. Dessa forma, $\mathbf{R}_{\textcolor{red}{n}}$ precisa ser estimada a partir de observações do próprio ruído. Essa estimativa é obtida através da média amostral
+
+$$\hat{\mathbf{R}}_{\textcolor{red}{n}}=\frac{1}{N}\sum_{i=1}^{N}\mathbf{n}^i(\mathbf{n}^i)^H$$
+
+em que \textcolor{red}{$N$} é o número de amostras de ruído disponíveis.
+
+\subsection{\texorpdfstring{\textcolor{red}{Como as amostras são obtidas}}{Como as amostras são obtidas}}
+% Absorve a seção "Pilotos" (vazia) do capítulo atual.
+
+As amostras de ruído são obtidas durante a etapa de símbolos piloto, sendo $\mathbf{n}^i \in \mathbb{C}^{M\times1}$ a amostra de ruído observada no $i$-ésimo elemento de recurso (RE) de piloto.  Nessa etapa, o sinal transmitido pelos UEs alvo é conhecido pelo receptor, e sua contribuição pode ser cancelada do sinal recebido. O que resta é o valor da interferência somada ao ruído térmico. 
+
+\textcolor{red}{Cada amostra $\mathbf{n}^i$ é um vetor com um valor de ruído colorido para cada antena \cite{zhao2025jsac}. Assim, cada amostra é uma realização do mesmo ruído descrito pela matriz $\mathbf{R}_n$.}
+% FONTE: artigo base, paper.md:123 (n^i em C^{M x 1}, amostra do i-ésimo RE de piloto).
+
+\subsection{\texorpdfstring{\textcolor{red}{Intervalo das amostras}}{Intervalo das amostras}}
+
+\textcolor{red}{Na frequência, a covariância do ruído permanece constante ao longo de um intervalo largo, e por isso pode ser estimada com uma média ao longo da frequência \cite{zhao2025jsac}. Assim, as amostras podem ser colhidas em REs de piloto de subportadoras diferentes. Para o canal, as respostas em frequências afastadas deixam de ser correlacionadas, e medir o canal em um conjunto suficiente de frequências permite estimar a sua covariância \cite{barriac-madhow}. Porém, é preciso haver subportadoras suficientes para que a estimativa se aproxime da covariância real \cite{barriac-madhow}.}
+% FONTE: artigo base, nota 4 (paper.md:821, chamada em :115), que cita [29].
+%        [29] Barriac e Madhow, pilot-estimation/Space*.md:96 e :109 (resultado para a
+%        covariância do CANAL; a transferência para o ruído é feita pelo artigo base).
+
+A média amostral é realizada uma vez por bloco de coerência e reutilizada ao longo dos $N_{\text{coh}}$ símbolos subsequentes, em que se assume que a covariância permanece estática.  
+
+\textcolor{red}{Nesse intervalo, o canal e a covariância do ruído são considerados estáticos, e ambos mudam a cada novo bloco de coerência \cite{zhao2025jsac}. A estimativa obtida com os pilotos é usada para processar os sinais de dados recebidos em seguida \cite{tomasin-interference}. Para isso, a covariância precisa variar devagar o suficiente para que a estimativa ainda seja válida quando for usada \cite{barriac-madhow}.}
+% FONTE: artigo base, paper.md:561; Tomasin et al. [22], pilot-estimation/Estimation*.md:68;
+%        Barriac e Madhow [29], pilot-estimation/Space*.md:109, item (i).
+
+\textcolor{red}{Dessa forma, as $N$ amostras são colhidas em REs de piloto dentro de um mesmo bloco de coerência. A estimativa $\hat{\mathbf{R}}_n$ obtida com elas vale para os $N_{\text{coh}}$ símbolos desse bloco.}
+% FONTE: síntese de paper.md:123 (REs de piloto) e :561 (tempo).
+
+
+\subsection{\texorpdfstring{\textcolor{red}{O que cada amostra contribui}}{O que cada amostra contribui}}
+
+\textcolor{red}{A Figura~{\hypersetup{linkcolor=red}\ref{fig:posto_unitario}} mostra a parcela $\mathbf{n}^i(\mathbf{n}^i)^H$ referente a uma única amostra de ruído.}
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    cell/.style={draw, minimum size=1.2cm, inner sep=0pt, outer sep=0pt, thick},
+    brace/.style={decorate, decoration={brace, amplitude=6pt, raise=3pt}, thick}
+]
+
+% ==================== 1. Vetor Coluna n^i (M x 1) ====================
+\begin{scope}[local bounding box=ni]
+    \foreach \row in {1,...,4} {
+        \node[cell, fill=yellow!40] (ni-\row) at (0, -\row*1.2) {\large $n_\row$};
+    }
+\end{scope}
+\node[above=0.4cm of ni] {\Large $\mathbf{n}^i$};
+
+\draw[brace] ([xshift=-2pt]ni.south west) -- ([xshift=-2pt]ni.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]ni.south east) -- ([yshift=-2pt]ni.south west) node[midway, yshift=-18pt] {\Large $1$};
+
+% ==================== 2. Vetor Linha (n^i)^H (1 x M) ====================
+\begin{scope}[local bounding box=nih, xshift=2cm]
+    \foreach \col in {1,...,4} {
+        % O vetor linha é centralizado verticalmente em relacao ao vetor coluna (y=-3.0 corresponde ao meio)
+        \node[cell, fill=yellow!40] (nih-\col) at (\col*1.2, -3.0) {\large $n_\col^*$}; 
+    }
+\end{scope}
+\node[above=0.4cm of nih] {\Large $(\mathbf{n}^i)^H$};
+
+\draw[brace] ([xshift=-2pt]nih.south west) -- ([xshift=-2pt]nih.north west) node[midway, xshift=-18pt] {\Large $1$};
+\draw[brace] ([yshift=-2pt]nih.south east) -- ([yshift=-2pt]nih.south west) node[midway, yshift=-18pt] {\Large $M$};
+
+% ==================== Operador de Igualdade (=) ====================
+\node at (8.0, -3.0) {\Huge $=$};
+
+% ==================== 3. Matriz Resultante (M x M) ====================
+\begin{scope}[local bounding box=ni_result, xshift=8.5cm]
+    \foreach \row in {1,...,4} {
+        \foreach \col in {1,...,4} {
+            \node[cell, fill=yellow!40] (res-\row-\col) at (\col*1.2, -\row*1.2) {\normalsize $n_\row n_\col^*$};
+        }
+    }
+\end{scope}
+\node[above=0.4cm of ni_result] {\Large $\mathbf{n}^i(\mathbf{n}^i)^H$};
+
+\draw[brace] ([xshift=-2pt]ni_result.south west) -- ([xshift=-2pt]ni_result.north west) node[midway, xshift=-18pt] {\Large $M$};
+\draw[brace] ([yshift=-2pt]ni_result.south east) -- ([yshift=-2pt]ni_result.south west) node[midway, yshift=-18pt] {\Large $M$};
+
+\end{tikzpicture}%
+}
+\caption{Dimensões do produto externo para a parcela da estimativa da matriz de covariância.}
+\label{fig:posto_unitario}
+\end{figure}
+
+Como cada celula representa
+% a interfencia de uma antena em outra,
+\textcolor{red}{o produto $n_a n_b^*$ entre o ruído observado na antena $a$ e o ruído observado na antena $b$ em uma mesma amostra, a média dessas células ao longo das $N$ amostras se aproxima do elemento correspondente de $\mathbf{R}_n$, que indica o quanto o ruído dessas duas antenas varia em conjunto.}
+
+O posto de uma matriz é o número máximo de linhas ou colunas linearmente independentes que essa matriz possui.  Cada parcela $\mathbf{n}^i(\mathbf{n}^i)^H$ é uma matriz de posto unitário, uma vez que todas as suas colunas são múltiplas do mesmo vetor $\mathbf{n}^i$.
+
+\textcolor{red}{Uma única amostra mostra apenas uma realização do ruído. Calcular o produto para várias realizações independentes e tirar a média desses produtos resulta em uma estimativa da correlação \cite[p.~229]{haykin-sistemas}. Essa estimativa se aproxima de $\mathbf{R}_n$ conforme o número de amostras cresce, mas essa convergência é lenta \cite{tomasin-interference}.}
+% FONTE: livro de probabilidade, Exemplo 5.16, p. 229; Tomasin et al. [22], Estimation*.md:109.
+
+\subsection{\texorpdfstring{\textcolor{red}{Quantidade de amostras}}{Quantidade de amostras}}
+% Posto de R-chapéu <= N: motiva o condicionamento (subseção seguinte).
+
+\textcolor{red}{O erro quadrático médio de cada elemento de $\hat{\mathbf{R}}_n$ diminui na proporção de $1/N$, considerando amostras gaussianas e independentes entre si \cite{tomasin-interference}. Assim, quanto maior o número de amostras, mais precisa é a estimativa. Por isso, o artigo base exige $N \gg K$, para garantir a acurácia da estimativa \cite{zhao2025jsac}. Quando $N$ é grande, o erro entre $\hat{\mathbf{R}}_n$ e $\mathbf{R}_n$ é pequeno \cite{zhao2025jsac}.}
+% FONTE: Tomasin et al. [22], eq. (21)-(23), Estimation*.md:242-259 (hipóteses em :57 e :246);
+%        artigo base, paper.md:123 (N >> K) e nota 5, paper.md:821.
+
+\textcolor{red}{Nas simulações, o artigo base usa $N = 192$ \cite{zhao2025jsac}. Um trabalho anterior dos mesmos autores cita 96 ou 192 como valores típicos de $N$ \cite{zhao2021-globecom}. Como as amostras vêm dos REs de piloto do PRB, $N$ também fica limitado ao número de REs de piloto que cabem em $T_c$.}
+% FONTE: paper.md:577 e :640 (N = 192); zhao2021_globecom, linha 54 ("typically 96 or 192").
+% NOTA: a última frase é dedução (paper.md:123 + :614).
+
+\subsection{\texorpdfstring{\textcolor{red}{REs de piloto disponíveis}}{REs de piloto disponíveis}}\label{subsec:res-piloto}
+
+\textcolor{red}{Neste trabalho, as amostras de ruído vêm dos REs do sinal de referência de demodulação (DM-RS). Um PRB tem 12 subportadoras \cite[Sec.~4.4.4.1]{3gpp-ts38211}, e um slot tem 14 símbolos OFDM \cite[Tab.~4.3.2-1]{3gpp-ts38211}. O DM-RS ocupa no máximo 4 símbolos por slot \cite[Tab.~6.4.1.1.3-3 e 6.4.1.1.3-4]{3gpp-ts38211}. Assim, cabem no máximo $4 \times 12 = 48$ REs de DM-RS por PRB em um slot. Para juntar $N = 192$ amostras, são precisos pelo menos 4 slots.}
+% FONTE: [R2] TS 38.211 v18.6.0: Sec. 4.4.4.1, p. 15 (12 subportadoras); Tab. 4.3.2-1,
+%        p. 14 (14 símbolos por slot); Tab. 6.4.1.1.3-3 e -4, p. 101 (até 4 símbolos de DM-RS).
+% HIPÓTESE nossa: contar só o DM-RS. O artigo diz apenas "pilot REs" (paper.md:123).
+%        O SRS poderia dar mais REs ([R2] Sec. 6.4.1.4.1, p. 109-110), mas não é usado.
+
+
+\subsection{Condicionamento da estimativa}\label{subsec:condicionamento-R}
+% CONTEÚDO  Quando N < M, o posto de R-chapéu é no máximo N e a matriz não
+%           tem inversa (M = 256, N = 192). O LMMSE precisa dessa inversa.
+%           Shrinkage de Ledoit-Wolf: R-chapéu vira (1 - rho) R-chapéu +
+%           rho (tr R-chapéu / M) I, com rho calculado a partir das próprias
+%           amostras (sem constante a escolher). Alternativa: carga diagonal
+%           fixa, que depende de um epsilon.
+% TEXTO     nenhum na fundamentação; parágrafo sobre Ledoit-Wolf em
+%           rascunho_setup_simulacao.tex (subseção Receptor);
+%           dbp_sim/params.py, M6_Covariance.shrinkage.
+% FONTE     Ledoit e Wolf (2004), J. Multivariate Analysis 88(2) -- falta
+%           no .bib; posto <= N: livro-texto de álgebra linear.
+% MÓDULO    M6 (Conditioner em dbp_sim/m5_noise.py)
+% ESTADO    a escrever
+
+% FONTE: posto unitário: parágrafo anterior desta seção; M_c = M/C com M = 128 ou 256 e
+%        C = 8 ou 16: paper.md:577; N >> K: paper.md:123; Ledoit-Wolf por bloco:
+%        dbp_sim/m5_noise.py:159-168 (Conditioner.covariance), dbp_sim/m7_equalizers.py:71,
+%        dbp_sim/params.py:334.
+% NOTA: quando N < M_c, o simulador não calcula rho no bloco; usa a intensidade calculada
+%        com a matriz de amostras inteira (m5_noise.py:154-157 e :166-167).
+
+
+\section{Definição Decentralizada}
+\label{sec:dbp}
+% CONTEÚDO  Arquitetura DBP: clusters, DUs, CU; estrela e daisy chain;
+%           roteiro T2 (o que cada DU alcança) e T3 (a bifurcação: descartar
+%           os blocos cruzados -> BDAC; mantê-los comprimidos -> BCD).
+% TEXTO     1-noise-and-constraints.tex, "Definição Decentralizada" (vazia)
+%           e "Estimação nas DUs" (2 linhas).
+% ESTADO    vazio
+
+
+
+\subsection{Arquitetura e particionamento das antenas}
+
+\subsection{\texorpdfstring{\textcolor{red}{Estimação nas DUs}}{Estimação nas DUs}}\label{subsec:estimacao-dus}
+
+\textcolor{red}{Conforme apresentado na Seção~{\hypersetup{linkcolor=red}\ref{subsec:o-que-R-representa}}, a parcela $\beta\overline{\mathbf{H}}\overline{\mathbf{H}}^H$ introduz correlação entre as antenas.}
+%% TIRAR DAQUI E DILUIR NO RESTO DO TESTO OU POR DEPOIS 
+Essa correlação tem uma consequência importante para a arquitetura considerada. Ao particionar as antenas em diferentes clusters associados às DUs, a matriz $\mathbf{R}_{\textcolor{red}{n}}$, em geral, não possui estrutura bloco-diagonal. Assim, os blocos fora da diagonal, dados por $\mathbf{R}_{mn}=\mathbb{E}[\mathbf{n}_m\mathbf{n}_n^H]$, representam a correlação entre os sinais de ruído observados por antenas pertencentes a DUs distintas. Para obter essas correlações diretamente a partir das amostras de ruído, seria necessário compartilhar informações entre as unidades, aumentando o tráfego de comunicação.
+
+\textcolor{red}{Cada amostra $\mathbf{n}^i$ pode ser dividida em partes $\mathbf{n}_c^i$, uma para cada cluster, e a DU $c$ guarda apenas as amostras das suas próprias antenas \cite{zhao2025jsac}. Com elas, a DU $c$ calcula, sem trocar dados, só o bloco da diagonal}
+\begin{equation*}
+\textcolor{red}{\hat{\mathbf{R}}_{cc}=\frac{1}{N}\sum_{i=1}^{N}\mathbf{n}_c^i(\mathbf{n}_c^i)^H,}
+\end{equation*}
+\textcolor{red}{de tamanho $M_c \times M_c$. Os blocos fora da diagonal precisariam de amostras de outras DUs \cite{zhao2025jsac}. Neste trabalho, cada DU aplica o encolhimento de Ledoit-Wolf ao seu próprio bloco (Seção~{\hypersetup{linkcolor=red}\ref{subsec:condicionamento-R}}).}
+% FONTE: paper.md:123-125 (n^i dividido em n_c^i, guardado no cluster c; R_mn = E[n_m n_n^H]);
+%        Fig. 3 e paper.md:128 (blocos fora da diagonal exigem troca de dados);
+%        LW por bloco: dbp_sim/m7_equalizers.py:71.
+
+% O que cada DU tem aceso
+
+% É iniciado como bloco diagonal
+
+\subsection{Aproximação bloco-diagonal (BDAC-MMSE)}
+
+\section{Equalizador BCD-MMSE}\label{sec:bcd}
+% CONTEÚDO  Roteiro T4 (formulação BCD), T5 (da eq. 26 à eq. 30) e T6 (o
+%           fator a inverter, G_c = E_s H_c H_c^H + R_cc, e suas
+%           propriedades: hermitiana, definida positiva).
+% TEXTO     constraints/notas_redacao.md (T4-T6);
+%           constraints/modelo_ruido_e_hipoteses.md, seção 10.
+% ESTADO    a escrever
+
+\subsection{Formulação por blocos}
+
+\subsection{Atualização de cada DU}
+
+\subsection{A matriz invertida em cada DU}\label{subsec:Gc}
+
+\section{Inversão de matrizes}
+% CONTEÚDO  Custo O(M_c^3); decomposição de Cholesky para matrizes
+%           hermitianas definidas positivas; substituições direta e reversa;
+%           série de Neumann e outras alternativas; por que Cholesky para G_c.
+% TEXTO     Proposta do TG1, "Matrix Inversion Techniques".
+% ESTADO    a escrever (traduzir e adaptar)
+
+\subsection{Decomposição de Cholesky}
+
+\subsection{Série de Neumann}
+
+\subsection{Comparação}
+
+\section{Extração de Parâmetros}
+
+
+% #####################################################################
+% ORIGEM: chapters/secoes/rascunho_filtros_covariancia.tex
+% #####################################################################
+
+% =====================================================================
+% RASCUNHO -- seção "Filtros de Covariância"
+% ---------------------------------------------------------------------
+% Onde entra: depois do parágrafo "Covariância é uma medida estatística..."
+% (primeiro parágrafo da seção Filtros de Covariância do capítulo).
+%
+% Chaves de citação NOVAS (ainda não estão no biblio.bib):
+%   zhao-lmmse, tse-viswanath, haykin-sistemas, tomasin-interference
+% As entradas estão em rascunho_referencias.bib, com os campos a conferir.
+%
+% Cada afirmação tem um comentário "% FONTE:" com a página ou a linha
+% exata, para conferência. O exemplo de duas antenas (tópicos 4 a 7) é
+% uma ilustração própria, não vem de nenhuma das fontes.
+%
+% Cuidado de posição: esta seção vem ANTES da eq. (5) e da construção de
+% R. Por isso o texto não usa H barra, beta nem sigma^2.
+% =====================================================================
+
+
+% ---------------------------------------------------------------------
+% 1. O equalizador e o critério do erro quadrático médio
+% ---------------------------------------------------------------------
+
+No \textit{uplink}, cada antena da estação base recebe uma combinação dos sinais transmitidos pelos UEs, somada ao ruído. Esse sinal recebido pode ser escrito como $\mathbf{y}=\mathbf{H}\mathbf{s}+\mathbf{n}$, em que $\mathbf{H}$ é a matriz de canal entre as $M$ antenas e os $K$ UEs alvo, $\mathbf{s}$ é o vetor de símbolos transmitidos e $\mathbf{n}$ é o ruído \cite{zhao-lmmse}.
+% FONTE: artigo base, eq. (1), paper.md:56-60.
+O equalizador aplica uma matriz $\mathbf{W}$ ao sinal recebido para obter a estimativa dos símbolos, $\hat{\mathbf{s}}=\mathbf{W}\mathbf{y}$ \cite{zhao-lmmse}.
+% FONTE: artigo base, paper.md:79.
+Cada linha de $\mathbf{W}$ possui um peso para cada antena. Assim, a estimativa de cada símbolo é uma combinação dos sinais de todas as antenas.
+% FONTE: consequência direta das dimensões de W (K x M) na eq. (3), paper.md:75.
+
+No equalizador LMMSE, os pesos são escolhidos para que o erro quadrático médio entre a estimativa e os símbolos transmitidos seja o menor possível \cite{zhao-lmmse}:
+
+$$
+\min_{\mathbf{W}}\ \mathbb{E}\left[\|\mathbf{W}\mathbf{y}-\mathbf{s}\|_2^2\right].
+$$
+% FONTE: artigo base, eq. (2), paper.md:63-67.
+
+A solução desse problema depende da matriz de covariância do ruído, $\mathbf{R}\triangleq\mathbb{E}[\mathbf{n}\mathbf{n}^H]$ \cite{zhao-lmmse}. Para entender por que essa matriz aparece na solução, é preciso ver o que ela diz sobre o ruído de cada antena.
+% FONTE: definição de R em paper.md:60; R^{-1} aparece na eq. (3), paper.md:75.
+
+
+% ---------------------------------------------------------------------
+% 2. Assinatura espacial
+% ---------------------------------------------------------------------
+
+Um sinal transmitido chega a todas as antenas da estação base. Em cada antena, ele é multiplicado pelo ganho do canal entre o transmissor e aquela antena. Para um único transmissor, o sinal recebido pode ser escrito como $\mathbf{y}=\mathbf{h}s+\mathbf{n}$, em que o vetor $\mathbf{h}$ reúne os ganhos do canal em cada antena \cite[p.~297]{tse-viswanath}. Esse vetor é chamado de assinatura espacial do sinal \cite[p.~297]{tse-viswanath}. Ele descreve o formato com que aquele sinal aparece no conjunto de antenas.
+% FONTE: Tse e Viswanath, seção 7.2, eq. (7.18), p. 297 ("spatial signature").
+
+
+% ---------------------------------------------------------------------
+% 3. Ruído independente e ruído correlacionado entre antenas
+% ---------------------------------------------------------------------
+
+Quando a covariância entre o ruído de duas antenas é zero, esses ruídos são descorrelacionados \cite[p.~202]{haykin-sistemas}. Se o ruído for gaussiano, eles também são independentes \cite[p.~222]{haykin-sistemas}. Para um vetor gaussiano, isso acontece quando a sua matriz de covariância é diagonal \cite[p.~499]{tse-viswanath}. Nesse caso, conhecer o ruído de uma antena não muda o que se sabe sobre o ruído da outra \cite[p.~196]{haykin-sistemas}. O ruído térmico costuma ser modelado dessa forma, com matriz de covariância diagonal \cite{zhao-lmmse}.
+% FONTE: livro de probabilidade, p. 202 (descorrelacionadas se e somente se a covariância é zero);
+%        p. 222, Propriedade 4 (gaussianas descorrelacionadas são independentes);
+%        p. 196 (independência: conhecer X não afeta a distribuição de Y).
+%        Tse e Viswanath, Apêndice A.1.2, item (b), p. 499 (componentes independentes
+%        exatamente quando a matriz de covariância é diagonal).
+%        Artigo base, paper.md:33 (AWGN com matriz de covariância diagonal).
+
+Já um sinal interferente, transmitido por um UE que não é alvo da estação base, também chega a todas as antenas com a sua própria assinatura espacial. Assim, a mesma interferência aparece ao mesmo tempo em várias antenas, com ganhos diferentes. Essa relação não vem de uma antena interferir na outra, e sim do mesmo sinal chegar a todas elas. Dessa forma, a matriz de covariância do ruído passa a ter elementos fora da diagonal \cite[p.~360]{tse-viswanath}, e o ruído das antenas deixa de ser independente \cite[p.~202]{haykin-sistemas}.
+% FONTE: Tse e Viswanath, eq. (8.64)-(8.65), p. 359-360: a covariância do ruído mais
+%        interferência é N0 I + soma de P_i h_i h_i^*.
+%        NOTA: no livro, a interferência vem dos outros fluxos de um enlace MIMO, não de
+%        UEs não-alvo. A álgebra é a mesma; o cenário físico é outro.
+%        Livro de probabilidade, p. 202: independentes implica descorrelacionadas; logo,
+%        covariância diferente de zero implica que não são independentes.
+
+
+% ---------------------------------------------------------------------
+% 4. Exemplo com duas antenas (ILUSTRAÇÃO PRÓPRIA)
+% ---------------------------------------------------------------------
+
+Para ilustrar essa ideia, considere uma estação base com duas antenas, um UE alvo e um UE interferente. O UE alvo transmite o símbolo $s$ com assinatura espacial $\mathbf{h}=[1\;\;1]^T$. O interferente transmite o símbolo $\overline{s}$ com assinatura espacial $\overline{\mathbf{h}}=[1\;\;2]^T$. Cada antena também recebe o seu próprio ruído térmico, $w_1$ e $w_2$. Assim, os sinais recebidos nas duas antenas são
+
+$$
+y_1 = s + \overline{s} + w_1, \qquad y_2 = s + 2\overline{s} + w_2.
+$$
+% NOTA: w_1 e w_2 são o ruído térmico. No resto do capítulo ele é o vetor n barra;
+%       decidir se unifica a notação aqui.
+
+Como o ganho do interferente na antena 2 é o dobro do ganho na antena 1, a interferência na antena 2 é sempre o dobro da interferência na antena 1. A Tabela~\ref{tab:interferencia_duas_antenas} mostra essa relação em três instantes.
+
+\begin{table}[htbp]
+\caption{Interferência recebida nas duas antenas do exemplo, em três instantes.}
+\label{tab:interferencia_duas_antenas}
+\centering
+\begin{tabular}{cccc}
+\hline
+Instante & $\overline{s}$ & Interferência na antena 1 & Interferência na antena 2 \\
+\hline
+1 & $3$ & $3$ & $6$ \\
+2 & $-1$ & $-1$ & $-2$ \\
+3 & $0{,}5$ & $0{,}5$ & $1$ \\
+\hline
+\end{tabular}
+\legend{Fonte: elaborado pela autora.}
+\end{table}
+
+Considerando potência 1 para o interferente e potência $0{,}1$ para o ruído térmico de cada antena, a matriz de covariância do ruído desse exemplo é
+
+$$
+\mathbf{R}=
+\underbrace{\begin{bmatrix} 1\cdot 1 & 1\cdot 2 \\ 2\cdot 1 & 2\cdot 2 \end{bmatrix}}_{\text{interferente}}
++
+\underbrace{\begin{bmatrix} 0{,}1 & 0 \\ 0 & 0{,}1 \end{bmatrix}}_{\text{ruído térmico}}
+=
+\begin{bmatrix} 1{,}1 & 2 \\ 2 & 4{,}1 \end{bmatrix}.
+$$
+% FONTE da forma "potência x h h^H + ruído térmico x I": Tse e Viswanath, eq. (8.65), p. 360.
+% Números: próprios (conferidos em Python).
+
+Os elementos da diagonal são a potência do ruído em cada antena. Na antena 1, a interferência contribui com 1 e o ruído térmico com $0{,}1$. Na antena 2, a interferência contribui com 4, porque o seu ganho é 2. Já os elementos fora da diagonal valem 2 e vêm apenas do interferente, porque o ruído térmico das duas antenas é independente. Esses elementos mostram o quanto o ruído das duas antenas varia em conjunto.
+
+
+% ---------------------------------------------------------------------
+% 5. Primeiro extremo: anular a interferência
+% ---------------------------------------------------------------------
+
+Como a interferência na antena 2 é sempre o dobro da interferência na antena 1, o receptor pode eliminá-la. Para isso, basta combinar as duas antenas com os pesos 2 e $-1$:
+
+$$
+2y_1 - y_2 = (2-1)\,s + (2-2)\,\overline{s} + (2w_1 - w_2) = s + (2w_1 - w_2).
+$$
+
+A interferência desaparece porque os pesos anulam a assinatura do interferente, já que $2\cdot 1 - 1\cdot 2 = 0$. O sinal do UE alvo permanece porque a sua assinatura é diferente, e $2\cdot 1 - 1\cdot 1 = 1$. Esse receptor projeta o sinal recebido na direção ortogonal à assinatura do interferente, e é chamado de \textit{decorrelator} ou \textit{interference nuller} \cite[p.~81--82]{tse-viswanath}.
+% FONTE: Tse e Viswanath, seção 3.3, eq. (3.99) e Fig. 3.13, p. 81 (projeção ortogonal
+%        a h_2 elimina a interferência da antena 2); p. 82 ("interference nuller,
+%        zero-forcing receiver or the decorrelator"; duas antenas podem anular um
+%        usuário interferente).
+%        NOTA: o livro diz "projetar"; "combinar com pesos" é a mesma operação escrita
+%        antena por antena.
+
+
+% ---------------------------------------------------------------------
+% 6. O custo de cada extremo
+% ---------------------------------------------------------------------
+
+Anular a interferência tem um custo. No exemplo, o ruído térmico passa a ser $2w_1 - w_2$, e a sua potência sobe para $4\cdot 0{,}1 + 0{,}1 = 0{,}5$. Além disso, se a assinatura do UE alvo fosse parecida com a do interferente, o sinal desejado também seria quase anulado \cite[p.~81]{tse-viswanath}. Dessa forma, esse receptor elimina a interferência sem considerar quanto do sinal desejado é perdido \cite[p.~358]{tse-viswanath}.
+% FONTE: Tse e Viswanath, p. 81 (se a componente de h_1 perpendicular a h_2 é pequena,
+%        a recepção piora: "the price paid for nulling out the interference");
+%        p. 358 ("without any regard to how much energy of the stream of interest is lost").
+
+No outro extremo, o receptor pode somar as antenas na direção da assinatura do UE alvo. Essa é a melhor escolha quando o ruído é branco \cite[p.~359]{tse-viswanath}, e preserva a energia do sinal desejado \cite[p.~358]{tse-viswanath}. Porém, no exemplo, com os pesos 1 e 1 a interferência não é reduzida:
+
+$$
+y_1 + y_2 = 2s + 3\overline{s} + (w_1 + w_2).
+$$
+% FONTE: Tse e Viswanath, p. 359 ("If the noise is white, we know that it is optimal to
+%        project y onto the direction along h"); p. 358 (matched filter preserva a
+%        energia do fluxo de interesse).
+
+
+% ---------------------------------------------------------------------
+% 7. O equilíbrio do equalizador LMMSE
+% ---------------------------------------------------------------------
+
+O receptor LMMSE busca o equilíbrio entre esses dois extremos, entre combater a interferência e combater o ruído térmico \cite[p.~358]{tse-viswanath}. Para isso, ele calcula os pesos a partir da inversa da matriz de covariância do ruído. Para um único sinal com assinatura $\mathbf{h}$, os pesos são $\mathbf{v}=\mathbf{R}^{-1}\mathbf{h}$ \cite[p.~359]{tse-viswanath}. Quando a interferência é fraca, esse receptor se aproxima da soma na direção do sinal. Quando a interferência é forte, ele se aproxima do receptor que anula a interferência \cite[p.~360]{tse-viswanath}.
+% FONTE: Tse e Viswanath, p. 358 (receptor linear que equilibra interferência e ruído);
+%        eq. (8.61), p. 359 (v_mmse = K_z^{-1} h, que também minimiza o erro quadrático
+%        médio); p. 360 (baixa potência: matched filter; alta: decorrelator).
+%        NOTA: no livro a matriz se chama K_z; aqui foi chamada de R para seguir o artigo.
+
+No exemplo, $\mathbf{R}^{-1}\mathbf{h}$ é proporcional aos pesos $2{,}1$ e $-0{,}9$. Esses pesos são próximos de 2 e $-1$, porque a interferência é forte. A Tabela~\ref{tab:comparacao_receptores} compara os três receptores pela razão entre a potência do sinal e a soma das potências de interferência e de ruído, chamada de SINR \cite[p.~358]{tse-viswanath}.
+% FONTE dos números: próprios (conferidos em Python). O valor de SINR do LMMSE
+%        coincide com a expressão h^* R^{-1} h, eq. (8.62), p. 359.
+
+\begin{table}[htbp]
+\caption{Comparação dos três receptores no exemplo de duas antenas.}
+\label{tab:comparacao_receptores}
+\centering
+\begin{tabular}{lccccc}
+\hline
+Receptor & Pesos & Sinal & Interferência & Ruído térmico & SINR \\
+\hline
+Soma das antenas & $1$ e $1$ & $4$ & $9$ & $0{,}2$ & $0{,}43$ \\
+Anulação da interferência & $2$ e $-1$ & $1$ & $0$ & $0{,}5$ & $2{,}00$ \\
+LMMSE & $2{,}1$ e $-0{,}9$ & $1{,}44$ & $0{,}09$ & $0{,}52$ & $2{,}35$ \\
+\hline
+\end{tabular}
+\legend{Fonte: elaborado pela autora.}
+\end{table}
+
+O receptor LMMSE deixa passar uma pequena parte da interferência, mas mantém mais sinal que o receptor que anula a interferência. Assim, a sua SINR é maior que a dos dois extremos.
+
+
+% ---------------------------------------------------------------------
+% 8. Onde a matriz de covariância entra
+% ---------------------------------------------------------------------
+
+O receptor não conhece a assinatura do interferente nem o símbolo que ele transmite. Mesmo assim, ele consegue calcular os pesos, porque a matriz de covariância do ruído guarda o formato dessa assinatura. No exemplo, na parte da matriz causada pelo interferente, a segunda linha é o dobro da primeira, o mesmo formato de $\overline{\mathbf{h}}=[1\;\;2]^T$.
+% FONTE: leitura própria do exemplo; a forma h h^H vem de Tse e Viswanath, eq. (8.65).
+
+Com vários UEs alvo, o equalizador LMMSE é dado por
+
+$$
+\mathbf{W}=\left(\mathbf{H}^H\mathbf{R}^{-1}\mathbf{H}+\frac{1}{E_s}\mathbf{I}\right)^{-1}\mathbf{H}^H\mathbf{R}^{-1},
+$$
+
+em que $E_s$ é a energia média por símbolo \cite{zhao-lmmse}. Essa expressão não é igual à do exemplo, porque considera ao mesmo tempo os $K$ UEs alvo e a energia dos símbolos. Porém, ela também usa a inversa da matriz de covariância do ruído para ponderar as antenas.
+% FONTE: artigo base, eq. (3), paper.md:71-79 (cita Kay [28] como origem).
+%        NOTA: v = R^{-1} h (Tse) é um vetor para um único sinal; W da eq. (3) é uma
+%        matriz K x M. Não apresentar as duas como a mesma fórmula.
+
+Por isso, a matriz de covariância usada no equalizador precisa representar bem o ruído. A estimativa da correlação da interferência é usada para processar os sinais recebidos e diminuir o efeito da interferência \cite{tomasin-interference}. Além disso, erros nessa estimativa afetam a taxa de dados de forma não linear \cite{tomasin-interference}.
+% FONTE: Tomasin et al. [22], pilot-estimation/Estimation*.md:68 ("used to process the
+%        forthcoming received signals ... and mitigate the effects of interference");
+%        :624 ("the impact of correlation matrix estimation errors is not linear on the
+%        data rates").
+% LIGAÇÃO: remeter a esta seção em "O que R representa", "O que cada amostra contribui"
+%          e "Quantidade de amostras".

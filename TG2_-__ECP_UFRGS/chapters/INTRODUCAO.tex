@@ -1,0 +1,72 @@
+\chapter{Introduction}\label{chap:introducao}
+% Funnel structure — start broad, end at the specific research gap.
+%
+% 1. Technological/academic/scientific context
+%    - 5G high data rates; 6G even higher demands
+%    - MIMO and Massive MIMO as key enabling technologies
+%    - High computational cost of Massive MIMO signal processing
+%
+% 2. Narrowing toward the core problem
+%    - Linear equalizers (LMMSE) achieve near-ML spectral efficiency
+%    - Closed-form solution requires matrix inversion: \mathcal{O}(N^3) complexity
+%    - Under colored noise (e.g., antenna coupling), \mathbf{R}_n^{-1} cannot be
+%      avoided or trivially decomposed as in AWGN
+%    - Real-time detection requirement creates a processing bottleneck
+%
+% 3. Research gap and objective
+%    - Decentralized architectures reduce per-cluster matrix size, but
+%      inversion cost remains relevant
+%    - Zhao et al. (2025) propose BCD-MMSE, the first decentralized LMMSE
+%      equalizer under colored noise; its per-DU coherence-block inversion
+%      (Eq. 30) has no hardware implementation
+%    - This work proposes an FPGA module for that inversion step,
+%      evaluated on BER, LUT usage, and power consumption
+
+The evolution toward fifth-generation (5G) and sixth-generation (6G) wireless
+systems demands ever-increasing spectral efficiency and data throughput, driving
+the adoption of Massive Multi-User Multiple-Input Multiple-Output (MU-MIMO) as
+a key enabling technology~\cite{decentralized2017}. By equipping base stations
+with hundreds of antenna elements serving tens of users simultaneously, Massive
+MU-MIMO achieves fine-grained spatial multiplexing that small-scale MIMO systems
+cannot provide. Among the available uplink detection strategies, Linear Minimum
+Mean-Square Error (LMMSE) equalization is widely adopted for its near-optimal
+performance~\cite{zhao2025jsac}. Its closed-form solution, however, requires a
+matrix inversion whose complexity grows cubically with the number of antennas,
+and for a base station with 256 antennas operating at 80~MHz bandwidth with
+12-bit converters, the raw fronthaul data rate approaches 1~Tbps, far beyond
+the capacity of existing interconnect standards such as the Common Public Radio
+Interface (CPRI)~\cite{li2019cd}.
+
+Decentralized Baseband Processing (DBP) architectures address both bottlenecks
+by partitioning the base-station antenna array into clusters of $M_c$ antennas, each served by a local
+Distributed Unit (DU) that performs baseband processing independently. This
+reduces per-cluster matrix dimensions and eliminates the need to transfer raw
+antenna data to a centralized processor~\cite{jeon2019}. Existing decentralized
+LMMSE methods, however, almost universally assume that receiver noise follows an ideal
+Additive White Gaussian Noise (AWGN) model with a diagonal covariance matrix,
+an assumption that typically does not hold in practice, where interference from neighboring
+cells produces colored noise with a non-diagonal covariance
+structure~\cite{zhao2025jsac}. Under colored noise, the standard
+inversion-avoidance techniques used by AWGN-based methods lose their convergence
+guarantees~\cite{wang2023bdnsepa}, and all known decentralized LMMSE solutions
+for this regime require an explicit matrix inversion
+ 
+The Block Coordinate Descent
+MMSE (BCD-MMSE) algorithm was recently proposed~\cite{zhao2025jsac} as the first decentralized LMMSE equalizer to operate
+under colored noise. In BCD-MMSE, each DU performs a local $M_c \times M_c$
+Hermitian matrix inversion once per coherence block, reusing the result across
+all received symbols. Despite its algorithmic completeness, no hardware
+implementation of this inversion has been reported: the work
+of~\cite{zhao2025jsac} provides neither hardware resource use, nor power, nor latency
+figures for any target platform. Field-Programmable Gate Arrays (FPGAs) are
+a promising target for this operation, offering higher energy efficiency and
+lower latency than GPU-based solutions at the power budgets required by
+distributed base-station nodes~\cite{jeon2019,li2019cd}.
+
+This work proposes and evaluates an FPGA accelerator for the $M_c \times M_c$
+Hermitian matrix inversion required by each DU in the BCD-MMSE algorithm. The
+accelerator is based on Cholesky decomposition, an exact inversion method
+applicable under a non-diagonal noise covariance. The contributions are
+evaluated in terms of detection quality (Bit Error Rate - BER), resource usage
+(LUT count and DSP blocks), and power consumption.
+

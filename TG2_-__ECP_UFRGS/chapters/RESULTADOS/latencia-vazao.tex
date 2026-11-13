@@ -1,0 +1,52 @@
+% =====================================================================
+% RASCUNHO (2026-11-06): discussão de vazão e atraso, para a autora trabalhar.
+%   Vem depois da seção de arquiteturas de hardware (RESULTADOS/hardware.tex).
+% DADOS: hardware/resultados_servidor/atraso_por_bloco.xlsx (fórmulas) e
+%   latencia_por_bloco.csv, gerados por hardware/latencia_por_bloco.py e
+%   hardware/atraso_por_bloco_xlsx.py a partir dos logs xsim do servidor (Vivado 2023.2).
+%   Os logs têm só 3 lotes (ou 20 matrizes); o intervalo sai de 2 (ou 19) medidas.
+% A tabela mostra só <24,12>. Os outros formatos estão na planilha:
+%   - a 455 passa de T_c de +3,2 % (<18,8>) a +11,5 % (<30,14>);
+%   - a 152 passa de T_c por cerca de 21,5 % em todos;
+%   - a folga da 606 cai de 11 % (<18,8>) para 3 % (<30,14>).
+% =====================================================================
+\section{\texorpdfstring{\textcolor{red}{Vazão e atraso}}{Vazão e atraso}}\label{sec:resultados-atraso}
+
+% 2026-11-13: subseções Vazão e Atraso juntas. A vazão só confirmava o limite de ciclos, que já
+%   está em subsec:resultados-recursos; ela virou uma frase no parágrafo depois da tabela.
+\textcolor{red}{As arquiteturas foram feitas para o limite de vazão, e atender um limite de atraso ficou fora do escopo (Seção~\ref{subsec:restricao-vazao}). Esta seção mostra o atraso que resulta delas e por que ele não atende a latência prevista para o 5G. O atraso vai da chegada da primeira amostra de um bloco até a última inversão desse bloco. A primeira parte é a coleta das $N$ amostras (Seção~\ref{subsec:pipeline}). Com 48 REs de DM-RS por PRB e por slot, ela leva $\lceil N/48 \rceil$ slots, limitada a $T_c$. A segunda é o tempo para inverter o bloco (Equação~\ref{eq:fim-tarefas}). A Tabela~\ref{tab:atraso-bloco} mostra essas duas partes no formato $\langle 24, 12\rangle$.}
+
+\begin{table}[!ht]
+\caption{\textcolor{red}{Throughput and delay of one block of $N_{\text{PRB}} = 275$ inversions, format $\langle 24, 12\rangle$.}}
+\label{tab:atraso-bloco}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\color{red}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+\begin{tabular}[c]{@{}c@{}}\textbf{Test}\\\textbf{condition}\end{tabular} & \begin{tabular}[c]{@{}c@{}}{\boldmath $T_c$}\\\textbf{(ms)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Block input}\\\textbf{(ms)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Block end}\\\textbf{(ms)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Collection}\\\textbf{(ms)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Total delay}\\\textbf{(ms)}\end{tabular} \\
+\midrule
+TDLA30-5    & 25.000 & 20.884 & 20.884 & 2.000 & 22.884 \\
+TDLA30-10   & 12.500 & 8.305  & 8.354  & 2.000 & 10.354 \\
+TDLA30-75   & 1.667  & 1.391  & 1.543  & 0.500 & 2.043 \\
+TDLC300-100 & 1.250  & 1.159  & 1.336  & 1.250 & 2.586 \\
+TDLA30-300  & 0.417  & 0.369  & 0.506  & 0.417 & 0.923 \\
+TDLB100-400 & 0.313  & 0.184  & 0.265  & 0.313 & 0.578 \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{\textcolor{red}{Source: the author, from the netlist simulation at 100~MHz. Block input: time to accept the 275 matrices. Block end: time until the last inversion of the block. Total delay: collection plus block end.}}
+\end{table}
+
+\textcolor{red}{Como todas as arquiteturas atendem o limite de ciclos (Seção~\ref{sec:resultados-hardware}), o bloco inteiro entra no módulo antes de $T_c$, e não se forma fila. Nas condições TDLC300-100 e TDLA30-300, a última inversão do bloco termina depois de $T_c$. Esse excesso não se acumula, pois o bloco seguinte já entra no módulo a tempo. Ele é um atraso fixo, de cerca de uma latência de batch, e não uma perda de vazão. Além disso, cada PRB só precisa da sua própria inversão: os primeiros PRBs ficam prontos cerca de uma latência de batch depois da chegada do bloco, e o atraso da tabela é o do último PRB.}
+
+\textcolor{red}{A ITU-R prevê que o IMT-2020 possa oferecer latência de 1~ms pela interface aérea \cite[p.~14]{itu-m2083}. Essa latência é a contribuição da rede de rádio para o tempo entre o envio e a recepção de um pacote \cite[p.~13]{itu-m2083}. O processamento na BS é uma das parcelas da latência do plano de usuário \cite[Sec.~7.2.6 e Tab.~3]{itu-m2412}. Só nas condições TDLA30-300 e TDLB100-400 o atraso fica abaixo de 1~ms. Nas outras, o atraso vai de 2,0 a 22,9~ms.}
+
+\textcolor{red}{Parte desse atraso vem do método de estimação, e não do hardware. Com $N = 192$ em FR1, a coleta leva 4 slots de 0,5~ms, ou 2~ms, e já passa de 1~ms antes de qualquer inversão. A outra parte vem da escolha de projeto. As arquiteturas das condições de baixa mobilidade distribuem as 275 inversões por quase todo o $T_c$. Com isso, elas gastam menos área e potência (Seção~\ref{sec:resultados-hardware}), mas o último PRB fica pronto mais tarde. Uma arquitetura mais rápida reduziria essa parte do atraso, com mais área e potência. A arquitetura da TDLB100-400, por exemplo, termina um bloco em 0,27~ms.}
+
+\textcolor{red}{A coleta também depende do PUSCH. O DM-RS só é transmitido junto com o PUSCH, e o PUSCH só ocupa os slots em que os UEs alvo foram escalonados (Seção~\ref{subsec:simbolos}). Este trabalho supõe que todo slot leva PUSCH. As bandas n78 e n257 usam TDD \cite[Tabs.~5.2-1 e 5.2-2]{3gpp-ts38104}, e só os slots de uplink levam o PUSCH. Com um padrão TDD real, os slots de uplink ficam mais espaçados. A coleta das $N$ amostras leva mais tempo ou, se passar de $T_c$, o número de amostras disponível diminui.}
+% TODO: padrão TDD típico (sem fonte local). Se for usado um número, buscar a fonte.
+% TODO: o valor de 4 ms para eMBB está no Rep. ITU-R M.2410-0, que não está em books/.

@@ -1,0 +1,92 @@
+% =====================================================================
+\chapter{Trabalhos Relacionados}\label{chap:relatedwork}
+% =====================================================================
+
+%\input{chapters/TRABALHOS_RELACIONADOS/trabalhos_decentralizado.tex/}
+
+
+%\section{Related Work}
+Related works found in the literature can be divided into: (a) works that implement Cholesky-based inversion in FPGA or ASIC in the context of MIMO technology and (b) works that implement decentralized equalization in FPGA.
+
+\section{Cholesky-Based Inversion in MIMO Hardware}
+The TL-BD-INSA detector of ~\cite{wang2021tlbdinsa}  implements Cholesky-based inversion
+of Hermitian block-diagonal sub-matrices on a Virtex-7 XC7VX980T FPGA
+and a TSMC 45~nm ASIC. The FPGA implementation targets a $128 \times 8$ MIMO configuration with 64-QAM. The
+inversion module uses a triangular systolic array for the Cholesky
+factorization, followed by parallel forward and backward substitution
+units, one per user equipment. This architecture is the closest available
+hardware reference for the $M_c \times M_c$ inversion required by
+BCD-MMSE, differing only in that TL-BD-INSA operates under AWGN and
+inverts block-diagonal sub-matrices of the Gram matrix, whereas BCD-MMSE
+inverts the full local noise-weighted matrix under colored noise.
+
+Table~\ref{tab:hw_cholesky} reports the implementation metrics for the
+complete TL-BD-INSA detector pipeline, which includes matched filtering,
+Gram matrix computation, the Cholesky inversion module, and symbol
+estimation~\cite{wang2021tlbdinsa}. These figures therefore represent
+an upper bound on the resources attributable to the inversion step alone;
+the paper does not provide a per-module area or resource breakdown.
+
+\begin{table}[h]
+\centering
+\caption{TL-BD-INSA full detector pipeline hardware results
+($128 \times 8$, 64-QAM). FPGA: Virtex-7 XC7VX980T.
+ASIC: TSMC 45~nm(~\cite{wang2021tlbdinsa}).}
+\label{tab:hw_cholesky}
+\begin{tabular}{lcc}
+\hline
+\textbf{Metric} & \textbf{FPGA} & \textbf{ASIC} \\
+\hline
+Gate count / LUT slices     & 13,640 LUT  & 572 kGE       \\
+Flip-flop slices            & 19,460 FF   & ---           \\
+DSP48 units                 & 277         & ---           \\
+Clock frequency [MHz]       & 310         & 1,000         \\
+Throughput                  & 57.3 Mbps   & 185 Mbps      \\
+Power [W]                   & ---         & 0.144         \\
+Energy efficiency           & 1,731 bps/slice & 1.28 Gbps/W \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Decentralized Detection on FPGA}
+The FD-LAMA detector of~\cite{li2019fdlama}, implemented on a
+Virtex-7 XC7VX690T using High-Level Synthesis (HLS) for a $128 \times 8$
+system with QPSK and i.i.d. Rayleigh fading, achieves 22.2~Mb/s
+throughput at 429~MHz with 11,673 LUTs and 213 DSP48 blocks for
+$C = 1$ cluster. Resource utilization scales roughly linearly with $C$,
+while throughput degrades only slightly, reaching 17.8~Mb/s at
+$C = 4$~\cite{li2019fdlama}. This work assumes AWGN and does not
+include a matrix inversion module: FD-LAMA avoids explicit inversion
+entirely, operating only on local Gram matrix-vector products within
+each cluster.
+
+The decentralized Newton-method detector of~\cite{kulkarni2021newton},
+implemented on a Virtex-7 XC7VX690T for a $128 \times 8$ system with
+$C = 4$ clusters in a ring topology, is architecturally equivalent to
+the BCD-MMSE daisy-chain in its inter-DU communication pattern. It
+achieves 253~Mbps throughput at 340~MHz, consuming 100,733 LUTs,
+1,280 DSP48 blocks, and 7.248~W on-chip power for 16-QAM with
+$T = 3$ iterations~\cite{kulkarni2021newton}. The ring topology
+maintains constant interconnect bandwidth as the MIMO configuration
+scales, a property shared by the BCD-MMSE daisy-chain. As with all
+other decentralized hardware works, this implementation assumes AWGN
+and provides no inversion metrics specific to the colored-noise regime.
+\section{Gap Synthesis}
+
+Algorithmic papers also explicitly identify FPGA or ASIC
+implementation as future work: \cite{jeon2019} states that decentralized
+solutions are expected to be deployed on FPGA or ASIC clusters for higher
+computing efficiency and lower transfer latency, and~\cite{li2019cd} notes
+that multi-FPGA and multi-ASIC designs are left for future work to reduce
+power relative to GPU baselines.
+
+None of the surveyed hardware works simultaneously addresses the three
+conditions that define the gap motivating this work: (1)~colored noise
+with a non-diagonal local covariance $\hat{\mathbf{R}}_{cc}$;
+(2)~decentralized LMMSE equalization under the BCD-MMSE framework; and
+(3)~FPGA implementation with measured resource metrics. The algorithmic
+solution exists in~\cite{zhao2025jsac}, which proves optimality within the decentralized constraint and
+near-centralized BER performance for BCD-MMSE but provides no LUT count,
+power, or latency figures for any target platform. This work fills that
+gap by providing the first hardware analysis of the $M_c \times M_c$
+Hermitian Cholesky inversion at the core of the BCD-MMSE update.

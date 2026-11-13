@@ -1,0 +1,67 @@
+% ---------------------------------------------------------------------
+\subsection{Equalizador BCD-MMSE}\label{subsec:bcd}
+% ---------------------------------------------------------------------
+
+
+
+O equalizador BCD-MMSE \textcolor{red}{(\textit{Block Coordinate Descent}--\textit{Minimum Mean Square Error}) \cite{zhao2025jsac}}, por sua vez, emprega atualizações distribuídas para tratar o acoplamento entre os blocos do sistema, mantendo a necessidade de definir quais informações devem ser compartilhadas entre as unidades.
+
+No BCD-MMSE considerado neste trabalho, a estimativa local $\hat{\mathbf R}_{cc}$ participa da inicialização do equalizador e da construção da matriz utilizada nas atualizações da DU. Em particular, a matriz local a ser invertida é definida por:
+
+\[
+\mathbf G_c=
+E_s\mathbf H_c\mathbf H_c^H+
+\hat{\mathbf R}_{cc},
+\]
+
+em que $\mathbf H_c$ representa a parcela da matriz de canal associada ao cluster $c$. Dessa forma, a estimação e o condicionamento da covariância local afetam diretamente a viabilidade das operações matriciais necessárias à equalização.
+
+% SEPARAÇÃO (2026-11-04): propriedades do algoritmo trazidas do rascunho (Partes 1.3 e 1.4)
+%   e de METODOLOGIA/simulacao.tex.
+\textcolor{red}{A DU $c$ usa $\hat{\mathbf R}_{cc}$ de duas formas. Na inicialização, usa a inversa $\hat{\mathbf R}_{cc}^{-1}$, pois o BCD-MMSE começa pela aproximação bloco-diagonal \cite{zhao2025jsac}. Nas iterações, usa $\mathbf G_c$, que soma $\hat{\mathbf R}_{cc}$ ao termo do canal \cite{zhao2025jsac}. Assim, $\mathbf G_c$ usa $\hat{\mathbf R}_{cc}$, e não a sua inversa. Além disso, $\mathbf G_c$ não depende da iteração \cite{zhao2025jsac}. Ela é formada e invertida uma vez, e a inversa é usada em todas as iterações.}
+% FONTE: Algoritmo 3, paper.md:415 (W^0 pela Eq. 7); Eq. 7, paper.md:136-142 (R_cc^-1);
+%   Eq. 30, paper.md:504 (G_c sem índice de iteração).
+
+\textcolor{red}{O número $N$ de amostras também tem um custo de armazenamento e de comunicação. Cada DU guarda as $N$ amostras de ruído das suas antenas \cite{zhao2025jsac}. Trocar essas amostras entre as DUs exigiria transferir dados de tamanho $M \times N$ \cite{zhao2025jsac}. No BCD-MMSE, a banda de comunicação em cada iteração também depende de $N$ \cite{zhao2025jsac}. Como a estimativa só muda a cada bloco de coerência, esse custo é pago uma vez a cada $N_{\text{coh}}$ símbolos \cite{zhao2025jsac}.}
+% FONTE: paper.md:493 (N_c em C^{M_c x N} na DU c); :130 (M x N); :471 (banda por
+%   iteração depende de N); :561 e :571 (termos divididos por N_coh).
+
+
+\subsubsection{Complexidade}\label{subsubsec:bcd-complexidade}
+\textcolor{red}{No artigo base, o pré-processamento de cada DU tem complexidade $\mathcal{O}(M_c^3 + N M_c^2)$, e cada iteração do BCD-MMSE tem complexidade $\mathcal{O}(NMK + M M_c K)$ no total \cite{zhao2025jsac}. A Tabela~\ref{tab:bcd-complexidade} mostra o número de multiplicações complexas de cada parte do algoritmo em uma DU, por PRB e por $T_c$. Várias partes dependem de $N$, que muda com a condição de teste (Tabela~\ref{tab:condicoes_teste}). Neste trabalho, só a inversa de $\mathbf G_c$ é calculada em ponto fixo (Seção~\ref{sec:simulador}).}
+
+\begin{table}[htbp]
+\caption{\textcolor{red}{Multiplicações complexas por PRB e por $T_c$ em cada DU.}}
+\label{tab:bcd-complexidade}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|l|l|}
+\toprule
+\textbf{Parte} & \textbf{Multiplicações complexas} \\
+\midrule
+Estimar $\hat{\mathbf R}_{cc}$ e aplicar Ledoit-Wolf & $N M_c^2 + N M_c + M_c^2$ \\
+\hline
+Inicialização, com a inversa de $\hat{\mathbf R}_{cc}$ & $M_c^3 + M_c^2 K + M_c K^2 + 2K^2 M_c + N K M_c$ \\
+\hline
+Formar $\mathbf G_c$ & $M_c^2 K$ \\
+\hline
+Inverter $\mathbf G_c$ & $M_c^3$ \\
+\hline
+Cada iteração & $2NKM_c + 3K^2 M_c + K M_c^2$ \\
+\hline
+Inverter a matriz $K \times K$ (só na DU $C$) & $K^3$ \\
+\hline
+Filtro, por símbolo de dados & $12 K M_c$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+% FONTE: software/Restrições - Parâmetros.csv, linhas 56-65 (modelo B).
+%        Estimar R_cc: paper.md:554 (O(M_c^3 + N M_c^2) por DU). Inicialização (R_cc^-1, X_c, H_c^H X_c,
+%        W_c^0, A^0, b^0): paper.md:136-142 (Eq. 7) e :410-418. G_c: paper.md:504. Iteração (Eqs. 28-30):
+%        paper.md:556 (O(NMK + M M_c K) no total), :443-449, :504. Filtro: paper.md:430-434.
+% 2026-11-09: tirados os valores numéricos (vários N) e a coluna dos módulos de inversão (só G_c
+%        é invertida em ponto fixo). A inversão de R_cc (M_c^3) entrou na linha da inicialização.

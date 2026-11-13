@@ -1,0 +1,942 @@
+\documentclass[12pt]{article}
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage[utf8]{inputenc}
+\usepackage[american]{babel}
+\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{makecell}
+%\usepackage[latin1]{inputenc}  
+     
+\sloppy
+\title{Hardware Accelerator for Matrix Inversion in Decentralized Massive MU-MIMO LMMSE Equalization Under Colored Noise}
+\author{Juliana R. de Vargas\inst{1}}
+\address{Instituto de Informática -- Universidade Federal do Rio Grande do Sul
+  (UFRGS)\\
+  Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
+  \email{\{jrvargas\}@inf.ufrgs.br}
+}
+
+\begin{document} 
+\maketitle
+
+% -----------------------------------------------------------------------
+\begin{abstract}
+% TODO: Write after all sections are complete (max 10 lines).
+% Cover: context (5G/6G Massive MIMO and decentralized baseband processing),
+% problem (the BCD-MMSE algorithm of Zhao et al. (2025) requires a local
+% M_c x M_c matrix inversion at each DU per coherence block — Eq. (30) —
+% but provides no hardware implementation), proposed solution (FPGA
+% accelerator for that specific inversion step), and expected contributions
+% (BER quality metrics + hardware implementation metrics: LUT count and power).
+
+Fifth-generation (5G) wireless systems and the emerging sixth-generation
+(6G) are driving demand for increasingly higher spectral efficiency and
+data throughput in mobile networks. Massive Multi-User Multiple-Input
+Multiple-Output (MU-MIMO) technology is a key enabler of these demands,
+but its high-performance detection algorithms require matrix inversion
+operations whose computational cost poses a significant implementation
+challenge. Decentralized processing architectures have been proposed to
+distribute this cost across multiple processing units, each handling a
+smaller portion of the antenna array. However, existing decentralized
+methods rely on simplifying noise assumptions that do not hold in
+interference-limited environments, and more realistic approaches
+unavoidably require local matrix inversions at each processing unit.
+This work proposes an FPGA-based hardware accelerator for this matrix
+inversion step, targeting a recently proposed decentralized equalizer
+designed for practical interference scenarios. The accelerator is
+evaluated in terms of detection quality, resource utilization, and
+power consumption.
+\end{abstract}
+
+% -----------------------------------------------------------------------
+\section{Introduction}
+\label{sec:introduction}
+% Funnel structure — start broad, end at the specific research gap.
+%
+% 1. Technological/academic/scientific context
+%    - 5G high data rates; 6G even higher demands
+%    - MIMO and Massive MIMO as key enabling technologies
+%    - High computational cost of Massive MIMO signal processing
+%
+% 2. Narrowing toward the core problem
+%    - Linear equalizers (LMMSE) achieve near-ML spectral efficiency
+%    - Closed-form solution requires matrix inversion: \mathcal{O}(N^3) complexity
+%    - Under colored noise (e.g., antenna coupling), \mathbf{R}_n^{-1} cannot be
+%      avoided or trivially decomposed as in AWGN
+%    - Real-time detection requirement creates a processing bottleneck
+%
+% 3. Research gap and objective
+%    - Decentralized architectures reduce per-cluster matrix size, but
+%      inversion cost remains relevant
+%    - Zhao et al. (2025) propose BCD-MMSE, the first decentralized LMMSE
+%      equalizer under colored noise; its per-DU coherence-block inversion
+%      (Eq. 30) has no hardware implementation
+%    - This work proposes an FPGA module for that inversion step,
+%      evaluated on BER, LUT usage, and power consumption
+
+The evolution toward fifth-generation (5G) and sixth-generation (6G) wireless
+systems demands ever-increasing spectral efficiency and data throughput, driving
+the adoption of Massive Multi-User Multiple-Input Multiple-Output (MU-MIMO) as
+a key enabling technology~\cite{decentralized2017}. By equipping base stations
+with hundreds of antenna elements serving tens of users simultaneously, Massive
+MU-MIMO achieves fine-grained spatial multiplexing that small-scale MIMO systems
+cannot provide. Among the available uplink detection strategies, Linear Minimum
+Mean-Square Error (LMMSE) equalization is widely adopted for its near-optimal
+performance~\cite{zhao2025jsac}. Its closed-form solution, however, requires a
+matrix inversion whose complexity grows cubically with the number of antennas,
+and for a base station with 256 antennas operating at 80~MHz bandwidth with
+12-bit converters, the raw fronthaul data rate approaches 1~Tbps, far beyond
+the capacity of existing interconnect standards such as the Common Public Radio
+Interface (CPRI)~\cite{li2019cd}.
+
+Decentralized Baseband Processing (DBP) architectures address both bottlenecks
+by partitioning the base-station antenna array into clusters of $M_c$ antennas, each served by a local
+Distributed Unit (DU) that performs baseband processing independently. This
+reduces per-cluster matrix dimensions and eliminates the need to transfer raw
+antenna data to a centralized processor~\cite{jeon2019}. Existing decentralized
+LMMSE methods, however, almost universally assume that receiver noise follows an ideal
+Additive White Gaussian Noise (AWGN) model with a diagonal covariance matrix,
+an assumption that typically does not hold in practice, where interference from neighboring
+cells produces colored noise with a non-diagonal covariance
+structure~\cite{zhao2025jsac}. Under colored noise, the standard
+inversion-avoidance techniques used by AWGN-based methods lose their convergence
+guarantees~\cite{wang2023bdnsepa}, and all known decentralized LMMSE solutions
+for this regime require an explicit matrix inversion
+ 
+The Block Coordinate Descent
+MMSE (BCD-MMSE) algorithm was recently proposed~\cite{zhao2025jsac} as the first decentralized LMMSE equalizer to operate
+under colored noise. In BCD-MMSE, each DU performs a local $M_c \times M_c$
+Hermitian matrix inversion once per coherence block, reusing the result across
+all received symbols. Despite its algorithmic completeness, no hardware
+implementation of this inversion has been reported: the work
+of~\cite{zhao2025jsac} provides neither hardware resource use, nor power, nor latency
+figures for any target platform. Field-Programmable Gate Arrays (FPGAs) are
+a promising target for this operation, offering higher energy efficiency and
+lower latency than GPU-based solutions at the power budgets required by
+distributed base-station nodes~\cite{jeon2019,li2019cd}.
+
+This work proposes and evaluates an FPGA accelerator for the $M_c \times M_c$
+Hermitian matrix inversion required by each DU in the BCD-MMSE algorithm. The
+accelerator is based on Cholesky decomposition, an exact inversion method
+applicable under a non-diagonal noise covariance. The contributions are
+evaluated in terms of detection quality (Bit Error Rate - BER), resource usage
+(LUT count and DSP blocks), and power consumption.
+
+
+% -----------------------------------------------------------------------
+\section{Literature Review}
+\label{sec:review}
+
+% -----------------------------------------------------------------------
+\subsection{Uplink System Model}
+\label{sec:sysmodel}
+% Introduce the uplink model y = Hx + n, define each term, state the
+% detection objective, introduce LMMSE in optimization and closed-form
+% (AWGN and colored-noise variants), note O(N^3) complexity.
+% NOTE: Consider a table comparing ZF, MRC, LMMSE detectors.
+
+In the \textit{uplink} of a Massive MU-MIMO communication system, $K$ users
+with a single antenna transmit data through an $\mathbf{H}$ channel to
+a base station equipped with $M$ antennas. The uplink data transmission
+can be modeled by:
+
+\begin{equation}
+\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}
+\label{eq:systemmodel}
+\end{equation}
+where $\mathbf{y} \in \mathbb{C}^{M\times1}$ is the vector of signals received at the
+antennas of the base station, $\mathbf{x} \in \mathbb{C}^{K\times1}$ is the vector of
+symbols transmitted by the $K$ users, $\mathbf{H} \in \mathbb{C}^{M\times K}$
+is the complex matrix representing the channel modeling attenuation, fading
+and phase shift in the signals, and $\mathbf{n}$ represents the noise vector
+received at the station base~\cite{rodriguezsanchez2020}. During the coherence interval $T_{coh}$, the characteristics of the
+transmission channel $\mathbf{H}$ remain approximately constant so that the maximum number of
+consecutive symbols $N_\text{coh}$ can be processed at the receiver with reuse
+of calculations ~\cite{zhao2025jsac}. The value of $N_\text{coh}$ depends on the
+carrier frequency and the mobility of the users: higher carrier frequencies
+and faster-moving users produce shorter coherence intervals and therefore
+smaller values of $N_\text{coh}$ \cite{coherence-time}.
+
+Eq.~\eqref{eq:systemmodel} can be represented in matrix form as:
+
+\begin{equation}
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_M
+\end{bmatrix}
+=
+\begin{bmatrix}
+h_{11} & h_{12} & \cdots & h_{1K} \\
+h_{21} & h_{22} & \cdots & h_{2K} \\
+\vdots & \vdots & \ddots & \vdots \\
+h_{M1} & h_{M2} & \cdots & h_{MK}
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_K
+\end{bmatrix}
++
+\begin{bmatrix}
+n_1 \\
+n_2 \\
+\vdots \\
+n_M
+\end{bmatrix}
+\end{equation}
+
+Each received element $y_m$ corresponds to the linear combination of the $K$ symbols
+transmitted by all users, weighted by the coefficients of the channel matrix $\mathbf{H}$ of antenna $m$, plus the noise contribution $n_m$.
+
+Each antenna of the base station observes a superposition of the signals transmitted
+by the users, which makes it necessary to use equalization techniques
+to recover the originally transmitted symbols. Subsequently, the detection stage transforms the received symbols into bits according to the adopted encoding. The goal of equalization is to estimate the vector $\mathbf{x}$ from $\mathbf{y}$ minimizing the detection error.
+
+The noise $\mathbf{n}$ is generally modeled as Additive White Gaussian Noise
+(AWGN), a complex vector with covariance matrix $\sigma_n^2
+\mathbf{I}_M$~\cite{rodriguezsanchez2020, li2019cd, li2023iotj,
+wang2023bdnsepa}. This model neglects the spatial correlation between the noise received at the different antennas. In practical scenarios, sources of interference introduce correlation between the inputs of $\mathbf{n}$. In this case, the noise is modeled as colored noise, characterized by a
+covariance matrix $\mathbf{R}_n$ that is Hermitian positive-definite with a non-diagonal structure~\cite{zhao2025jsac}. A Hermitian positive-definite matrix is equal to its own conjugate transpose ($\mathbf{R}_n =
+\mathbf{R}_n^H$) with all positive eigenvalues.
+
+
+
+% -----------------------------------------------------------------------
+% System model — uplink equation (y = Hx + n)
+% [DUPLICATE GROUP B] Four sources define the same model; keep the most
+% suitable formulation. Note: GW-EP (Li IoT-J 2023) uses AWGN despite
+% being a colored-noise work; Zhao 2025 defines the colored-noise version.
+% -----------------------------------------------------------------------
+
+% -----------------------------------------------------------------------
+
+% -----------------------------------------------------------------------
+\subsection{Equalization}
+\label{sec:equalization}
+
+The optimal method for recovering transmitted symbols in MIMO systems is the
+Maximum Likelihood (ML) detector. The algorithm estimates the transmitted
+symbols by finding
+the candidate that minimizes the Euclidean distance between the received
+signal $\mathbf{y}$ and $\mathbf{H}\mathbf{x}$:
+
+\begin{equation}
+\hat{\mathbf{x}} = \underset{\mathbf{x} \in \mathcal{S}^{K}}{\arg\min}
+\left\|\mathbf{y} - \mathbf{H}\mathbf{x}\right\|_2^2
+\label{eq:ml}
+\end{equation}
+where $\mathcal{S}^{K}$ is the set of all possible combinations of
+constellation symbols transmitted by the $K$ users, and
+$\left\|\cdot\right\|_2^2$ denotes the sum
+of the squared magnitudes of all entries of a vector (squared Euclidean norm). By operating directly in
+the discrete search space $\mathcal{S}^{K}$, the ML detector produces a final
+symbol decision in a single step, without requiring a separation between the
+equalization and detection stages defined in Section~\ref{sec:sysmodel}.
+
+This method achieves the minimum possible Bit Error Rate (BER) in the absence
+of channel coding, that is, when no error-correction code is applied to the
+transmitted bits before modulation. However, MIMO detection is known to be NP-hard~\cite{zero-forcing},  meaning that no
+polynomial-time algorithm is known to solve it exactly.  Exhaustive search over
+$\mathcal{S}^{K}$ is the only known exact approach and implies exponential complexity $\mathcal{O}(|\mathcal{S}|^K)$
+in $K$, making the ML detector impractical for systems with a large number of
+users or high-order modulation schemes~\cite{bello2022algorithms}.
+
+Linear equalizers are suboptimal alternatives to the ML detector whose
+complexity is independent of the constellation scheme employed. These
+techniques estimate a continuous-valued approximation $\tilde{\mathbf{x}}$
+(soft-output) of $\mathbf{x}$ by applying a matrix filter $\mathbf{W}$ to
+the received signal vector $\mathbf{y}$~\cite{rodriguezsanchez2020}.
+
+The Zero-Forcing (ZF) equalizer suppresses inter-user interference by
+inverting the channel, but assumes the noise component of the received signal
+vector to be zero. As a consequence, ZF amplifies the noise present at the
+receiver, particularly in poorly conditioned channels. The ZF equalizer is
+given by~\cite{zero-forcing}:
+
+\begin{equation}
+\tilde{\mathbf{x}}_\text{ZF} =
+\mathbf{W}_\text{ZF}\mathbf{y}
+\label{eq:zf_estimate}
+\end{equation}
+where
+
+\begin{equation}
+\mathbf{W}_\text{ZF}=
+\left(\mathbf{H}^H\mathbf{H}\right)^{-1}\mathbf{H}^H
+\label{eq:zf_filter}
+\end{equation}
+and $\mathbf{H}^H$ denotes the conjugate transpose of $\mathbf{H}$:
+each complex entry $h_{mk}$ is replaced by its complex conjugate
+$h_{mk}^*$, and the matrix is transposed.
+
+
+For the detection stage, $\mathcal{Q}$ is the quantization function for the
+given modulation scheme that produces a hard output:
+
+\begin{equation}
+\hat{\mathbf{x}}_\text{ZF}=
+\mathcal{Q}\left(\tilde{\mathbf{x}}_\text{ZF}\right)
+\label{eq:zf_detection}
+\end{equation}
+
+The Linear Minimum Mean Square Error (LMMSE) equalizer addresses the ZF
+limitation by explicitly accounting for the noise statistics during equalizer
+design. The estimate $\tilde{\mathbf{x}}_\text{LMMSE}$ is obtained by applying the
+equalization matrix to the received signal:
+
+\begin{equation}
+\tilde{\mathbf{x}}_\text{LMMSE}=
+\mathbf{W}_\text{LMMSE}\mathbf{y}
+\label{eq:lmmse_estimate}
+\end{equation}
+
+
+Its filter matrix is obtained by minimizing the expected squared error
+between the equalizer output and the true symbol vector, that is, the
+average of $\left\|\mathbf{W}\mathbf{y}-\mathbf{x}\right\|_2^2$ over
+all possible transmissions and noise realizations, denoted
+$\mathbb{E}\left[\cdot\right]$:
+
+\begin{equation}
+\min_{\mathbf{W}}
+\mathbb{E}
+\left[
+\left\|\mathbf{W}\mathbf{y}-\mathbf{x}\right\|_2^2
+\right]
+\label{eq:lmmse_opt}
+\end{equation}
+
+Assuming that the channel matrix $\mathbf{H}$ is perfectly known, the
+corresponding solution for the LMMSE equalizer in a centralized MIMO system
+is given by~\cite{zhao2025jsac}:
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(
+\mathbf{H}^H\mathbf{R}_n^{-1}\mathbf{H}
++
+\frac{1}{E_s}\mathbf{I}
+\right)^{-1}
+\mathbf{H}^H\mathbf{R}_n^{-1}
+\label{eq:lmmse_solution}
+\end{equation}
+where $\mathbf{n}$ is modeled as a zero-mean random vector with covariance
+matrix $\mathbf{R}_n = \mathbb{E}[\mathbf{n}\mathbf{n}^H]$, and $E_s$
+denotes the average energy per transmitted symbol. Among linear detectors,
+LMMSE generally achieves the highest signal-to-interference-plus-noise ratio
+(SINR), outperforming ZF in the large-system regime~\cite{jeon2019}.
+
+
+Under the AWGN model, where $\mathbf{R}_n = \sigma_n^2\mathbf{I}_M$, the
+noise covariance becomes proportional to the identity matrix and the LMMSE
+solution can be simplified by defining the regularization parameter
+$\rho = N_0/E_s$ that relates the noise power to
+the average transmitted symbol energy. In this case, Eq.~\eqref{eq:lmmse_solution} reduces
+to~\cite{jeon2019}:
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(
+\mathbf{H}^H\mathbf{H}
++
+\rho\mathbf{I}
+\right)^{-1}
+\mathbf{H}^H
+\label{eq:lmmse_awgn}
+\end{equation}
+
+The LMMSE equalizer leads to a slight increase in computational complexity
+compared with ZF, as it additionally requires estimating the noise covariance matrix $\mathbf{R}_n$ to compute the filter. Both equalizers share the same asymptotic complexity
+$\mathcal{O}(K^3)$, dominated by the matrix inversion, but the LMMSE
+generally provides superior detection performance by minimizing the BER
+performance degradation~\cite{li-tradeofs}.
+
+Channel State Information (CSI) is assumed to remain approximately constant
+over $N_\text{coh}$ consecutive symbols. In this case, the equalization
+matrix $\mathbf{W}$ is computed only once per coherence block and reused for
+each received symbol, reducing the average computational cost per symbol by a
+factor of $1/N_\text{coh}$. The complexity of the equalization process is
+$\mathcal{O}(K^3)$, dominated by the matrix inversion in
+Eq.~\eqref{eq:lmmse_solution}, in contrast to the exponential complexity
+$\mathcal{O}(|\mathcal{S}|^K)$ of the ML detector~\cite{bello2022algorithms}.
+This coherence-block reuse property is fundamental for the efficient
+utilization of dedicated hardware accelerators targeting the matrix inversion
+step.
+
+Methods that avoid matrix inversion, such as the decentralized conjugate
+gradient method and the decentralized coordinate descent
+method~\cite{li2019cd}, are described in the literature. However, their
+per-iteration calculations must be repeated for every received symbol, not exploiting the coherence-block reuse~\cite{li-tradeofs}.
+Furthermore, the convergence of most inversion-avoidance methods relies on
+structural properties of the Gram matrix $\mathbf{G} = \mathbf{H}^H\mathbf{H}$
+that hold only under white noise,
+and performance degrades substantially as channel correlation
+increases~\cite{wang2023bdnsepa}.
+
+
+% -----------------------------------------------------------------------
+\subsection{Decentralized MIMO Architectures}
+% Motivate decentralization; describe cluster-based approach; explain why
+% AWGN decomposes cleanly across clusters while colored noise does not;
+% cite recent colored-noise decentralized works.
+
+Data detection algorithms based on ZF or LMMSE are generally built on
+traditional Massive MIMO systems, where equalization occurs in centralized
+processing at the base station. For a system with 256 antennas operating at
+80~MHz bandwidth with 12-bit converters, the raw data rate between the antenna
+array and the processing unit approaches 1~Tbps, exceeding the capacity of
+standard fronthaul interfaces such as the Common Public Radio Interface
+(CPRI)~\cite{li2019cd}. Together with the $\mathcal{O}(K^3)$ complexity that
+grows with the number of antennas, this leads to limiting requirements in
+computing capacity, excessive interconnections, and I/O data rates~\cite{jeon2019}.
+
+
+To address this issue, the Decentralized Baseband Processing (DBP) architecture was introduced in~\cite{decentralized2017, bertilsson2018distributed}. In DBP, the $M$ base-station antennas are partitioned into $C$ clusters with $M_c$ antennas, each cluster with a Distributed Unit (DU) with local radio-frequency circuitry and baseband processing fabric such as custom ASICs, FPGAs, or DSPs \cite{decentralized2017}. 
+
+The uplink system model for a $C$ cluster becomes:
+
+\begin{equation}
+    \mathbf{y}_c = \mathbf{H}_c\mathbf{x} + \mathbf{n}_c,
+\end{equation}
+where $\mathbf{y}_c \in \mathbb{C}^{M_c \times 1}$,
+$\mathbf{H}_c \in \mathbb{C}^{M_c \times K}$, and $\mathbf{n}_c$ is the
+local noise vector, with ~\cite{jeon2019}:
+
+\begin{equation}
+M = \sum_{c=1}^{C} M_c    
+\end{equation}
+
+Two main topologies have been studied in the literature: (a) the \emph{star} architecture, in which all DUs are connected to a Central Unit (CU), and (b) daisy-chain architecture, in which DUs are connected via unidirectional links and process data sequentially. In (a) each DU compresses local data and transmits it to the CU in parallel for the final equalization step. In (b) intermediate data is passed from one DU to the next. While the star architecture requires higher fronthaul bandwidth between the CU and the DUs, the daisy-chain architecture reduces this requirement at the cost of added processing latency.
+
+For these topologies, two equalization strategies have been proposed. The Partial Decentralization (PD) approach computes the local Gram matrix
+$\mathbf{G}_c = \mathbf{H}_c^H\mathbf{H}_c$ and the local Matched-Filter
+(MF) vector $\mathbf{y}_c^{\text{MRC}} = \mathbf{H}_c^H\mathbf{y}_c$
+at each DU, then aggregates them at the CU for a single $K \times K$
+inversion~\cite{jeon2019}.
+The Full Decentralization (FD) approach performs equalization locally at each
+DU and combines the resulting estimates through a weighted fusion, avoiding the
+transmission of Gram matrices at the cost of a small Signal-to-Interference-plus-Noise
+Ratio (SINR) loss~\cite{jeon2019}.
+
+It is possible to trace the evolution of DBP equalization algorithms through the literature. The fundamental architecture was established
+in~\cite{decentralized2017}, which introduced DBP with the Alternating Direction
+Method of Multipliers (ADMM) and Conjugate Gradient (CG) solvers, performing
+inversion implicitly within each consensus round under an Additive White Gaussian
+Noise (AWGN) model. Subsequently, the PD and FD architectures were formalized
+in~\cite{jeon2019}, demonstrating throughput exceeding 1~Gb/s for a
+$256 \times 16$ configuration under perfect channel state information and AWGN.
+
+With the architecture established, subsequent works explored strategies to reduce
+the cost of explicit matrix inversion under AWGN. A trade-off analysis between
+explicit and implicit Cholesky factorization was provided in~\cite{li-tradeofs},
+showing that the dominant $U^3$ coefficient is reduced by a factor of five when
+the factorization is reused across the coherence block. A recursive MMSE chain
+with an $M_c \times M_c$ inversion per cluster was proposed in~\cite{zheng2022},
+achieving centralized-MMSE equivalence under AWGN. The Groupwise Recursive
+Least Squares (GRLS) algorithm was introduced in~\cite{chen2024grls}, reducing
+fronthaul bandwidth by 78\% relative to prior Recursive Least Squares (RLS)
+approaches, still under AWGN.
+
+A parallel line of work pursued inversion-avoidance strategies, also under AWGN.
+A daisy-chain coordinate-descent algorithm that avoids inversion entirely through
+gradient descent was proposed in~\cite{rodriguezsanchez2020}. The Bayesian
+Distributed Kaczmarz algorithm was introduced in~\cite{croisfelt2021} under a
+diagonal noise covariance $\sigma^2\mathbf{I}_M$, the closest prior approach to
+accounting for noise structure while still restricted to the white-noise regime.
+The Block-Diagonal Neumann-Series Expectation Propagation Approximation
+(BD-NS-EPA) algorithm was proposed in~\cite{wang2023bdnsepa}, providing an
+Application-Specific Integrated Circuit (ASIC) Cholesky baseline as a reference.
+The Groupwise Expectation Propagation (GW-EP) algorithm for both star and
+daisy-chain topologies was developed in~\cite{li2023iotj}, operating
+inversion-free under a white Gaussian noise assumption.
+
+Most recently, spatial correlation and imperfect Channel State Information (CSI) were addressed in~\cite{zhuang2025} under a white Gaussian noise model, without providing hardware metrics.
+
+All the articles cited above assume a diagonal noise covariance matrix. Under the AWGN noise model, the covariance  $\mathbf{R}_n = \sigma_n^2\mathbf{I}_M$ decomposes
+naturally into block-diagonal submatrices that align with the cluster structure,
+enabling the local estimation of noise statistics at each DU independently.
+Under colored noise the full covariance $\mathbf{R}_n$ (defined in
+Section~\ref{sec:equalization}) is non-diagonal. Therefore, only the local diagonal block
+$\mathbf{R}_{cc}$ can be estimated at cluster $c$, while the off-diagonal blocks
+$\mathbf{R}_{mn}$, $m \neq n$, are inaccessible without cross-cluster
+communication~\cite{zhao2025jsac}.
+
+The colored noise regime invalidates the application of inversion-avoidance
+techniques, since their convergence guarantees require $\mathbf{R}_n$ to be
+a scaled identity matrix (one whose diagonal entries are all equal to
+a single noise power $\sigma_n^2$ and whose off-diagonal entries are zero),
+a condition that does not hold under colored noise~\cite{wang2023bdnsepa}.
+
+
+To the best of our
+current knowledge, only two works simultaneously address colored noise and
+decentralized LMMSE equalization ~\cite{zhao2021globecom,zhao2025jsac}. The Block Coordinate Descent MMSE (BCD-MMSE) algorithm for daisy-architecture introduced in ~\cite{zhao2021globecom} requires a local $M_c \times M_c$ Hermitian matrix inversion
+at each DU per BCD iteration. The framework was extended in ~\cite{zhao2025jsac}, with the introduction of the sDR-MMSE and cDR-MMSE algorithms alongside BCD-MMSE. The work established that near-centralized LMMSE BER performance is achievable with a fronthaul bandwidth independent of $M$. Neither work provides hardware implementation metrics,  such as LUT counting, power measurement, or latency, for any of the algorithms. 
+
+
+\subsubsection{BCD-MMSE Algorithm}
+\label{sec:bcdmmse}
+% Describe Zhao et al. 2025 BCD-MMSE: local M_c x M_c inversion per DU,
+% once per coherence block, reused for all N_coh symbols.
+
+The decentralized LMMSE equalization proposed in~\cite{zhao2025jsac} is
+likewise formulated as a minimization problem and achieves BER performance
+close to that of the centralized LMMSE after 4 to 5 iterations. Among the
+algorithms proposed in that work, BCD-MMSE, designed for the daisy-chain
+architecture, is the only one for which convergence to the global minimum
+of the decentralized objective is guaranteed, as proven in Theorem~2
+of~\cite{zhao2025jsac}. The DR-based methods (sDR-MMSE and cDR-MMSE),
+proposed for the star architecture, operate on a compressed representation
+of the received data and converge to a suboptimal solution by construction.
+
+The BCD-MMSE algorithm partitions the global equalization matrix
+$\mathbf{W} \in \mathbb{C}^{K \times M}$ into $C$ local blocks
+$\mathbf{W}_c \in \mathbb{C}^{K \times M_c}$, one per DU, and minimizes
+the MSE objective by updating each block sequentially while the others are
+held fixed. The update at DU $c$ for the $l$-th iteration is
+given by~\cite{zhao2025jsac}:
+%
+\begin{multline}
+  \mathbf{W}_c^l = \left(
+    E_s \left(\mathbf{I}_K - \mathbf{A}_{c-1}^l
+    + \mathbf{W}_c^{l-1}\mathbf{H}_c\right)\mathbf{H}_c^H
+    - \frac{1}{N}\sum_{i=1}^{N}
+      \left(\mathbf{b}_{c-1,i}^l - \mathbf{W}_c^{l-1}\mathbf{n}_c^i\right)
+      \left(\mathbf{n}_c^i\right)^H
+  \right) \\
+  \times
+  \underbrace{
+    \left(E_s \mathbf{H}_c \mathbf{H}_c^H
+    + \hat{\mathbf{R}}_{cc}\right)^{-1}
+  }_{\text{local } M_c \times M_c \text{ inversion}},
+  \label{eq:bcd_update}
+\end{multline}
+%
+where $\mathbf{A}_{c-1}^l \in \mathbb{C}^{K \times K}$ and
+$\{\mathbf{b}_{c-1,i}^l \in \mathbb{C}^{K \times 1}\}_{i=1}^{N}$
+are interaction variables received from the previous DU, and
+$\hat{\mathbf{R}}_{cc}$ is the local noise covariance estimate at cluster
+$c$, defined in~\eqref{eq:Rcc_est} below. All terms in~\eqref{eq:bcd_update}
+are either local or received from the immediately preceding DU, so no
+global data collection is required. After updating $\mathbf{W}_c^l$,
+DU $c$ computes the updated interaction variables
+%
+\begin{align}
+  \mathbf{A}_c^l &= \mathbf{A}_{c-1}^l
+    - \mathbf{W}_c^{l-1}\mathbf{H}_c
+    + \mathbf{W}_c^{l}\mathbf{H}_c, \label{eq:A_update} \\
+  \mathbf{b}_{c,i}^l &= \mathbf{b}_{c-1,i}^l
+    - \mathbf{W}_c^{l-1}\mathbf{n}_c^i
+    + \mathbf{W}_c^{l}\mathbf{n}_c^i, \quad i = 1,\ldots,N,
+  \label{eq:b_update}
+\end{align}
+%
+and forwards them to DU $c+1$. The data transfer size per link depends
+only on $K$ and $N$, and is independent of the total number of BS
+antennas $M$~\cite{zhao2025jsac}.
+
+The local noise covariance $\hat{\mathbf{R}}_{cc}$ is estimated from $N$
+noise samples $\{\mathbf{n}_c^i\}_{i=1}^{N}$ stored at DU $c$, collected
+during pilot resource elements of the coherence block~\cite{zhao2021globecom}:
+%
+\begin{equation}
+  \hat{\mathbf{R}}_{cc} = \frac{1}{N} \sum_{i=1}^{N}
+  \mathbf{n}_c^i \left(\mathbf{n}_c^i\right)^H.
+  \label{eq:Rcc_est}
+\end{equation}
+%
+The BCD-MMSE~(LRD) variant of~\cite{zhao2025jsac} reduces the per-iteration
+bandwidth by replacing the $N$ samples with a rank-$r$ approximation, but
+the matrix being inverted in~\eqref{eq:bcd_update} remains $M_c \times M_c$
+Hermitian in both cases. The inversion therefore constitutes a computational
+bottleneck common to the entire BCD-MMSE family: it carries the dominant
+$\mathcal{O}(M_c^3)$ cost, while all remaining operations in~\eqref{eq:bcd_update}
+involve matrix-vector products of at most $\mathcal{O}(M_c K)$ per iteration.
+Because $\mathbf{H}_c$ and $\hat{\mathbf{R}}_{cc}$ depend only on channel
+and noise statistics that remain constant across the coherence block, this
+inversion is computed once per coherence block and reused for all
+$N_\text{coh}$ received symbols.
+
+Despite its convergence guarantees and near-centralized BER performance,
+no hardware implementation of BCD-MMSE has been reported in the literature. This work addresses that gap by
+proposing an FPGA accelerator for the $M_c \times M_c$ Hermitian matrix
+inversion in~\eqref{eq:bcd_update}.
+
+
+
+% -----------------------------------------------------------------------
+\subsection{Matrix Inversion Techniques}
+\label{sec:inversion}
+% -----------------------------------------------------------------------
+% Survey Cholesky decomposition and Neumann-series approximation on FPGA;
+% discuss applicability, hardware metrics, and MIMO context for each.
+% Conclude by identifying viable candidates for the colored-noise case.
+Computing the inverse of $E_s\mathbf{H}_c\mathbf{H}_c^H +
+\hat{\mathbf{R}}_{cc}$ in~\eqref{eq:bcd_update} is equivalent to solving
+$M_c$ linear systems of the form $\mathbf{A}\mathbf{x}_i = \mathbf{e}_i$,
+where $\mathbf{e}_i$ is the $i$-th column of the identity matrix and
+$\mathbf{A} \in \mathbb{C}^{M_c \times M_c}$ is Hermitian positive-definite.
+Two classes of methods exist for this problem: iterative approximation via
+the Neumann series, and direct factorization via Cholesky decomposition.
+
+\subsubsection{Neumann Series Approximation}
+
+The Neumann series approximation (NSA) expresses the inverse of a matrix
+$\mathbf{A}$ as an infinite power series~\cite{wang2023bdnsepa}:
+%
+\begin{equation}
+  \mathbf{A}^{-1} = \sum_{n=0}^{\infty}
+  \left(\mathbf{I} - \mathbf{D}^{-1}\mathbf{A}\right)^n \mathbf{D}^{-1},
+  \label{eq:neumann}
+\end{equation}
+%
+where $\mathbf{D}$ is a diagonal approximation of $\mathbf{A}$.
+The series converges when all eigenvalues of
+$\left(\mathbf{I} - \mathbf{D}^{-1}\mathbf{A}\right)$ are strictly less
+than one in magnitude, a condition that holds when the off-diagonal entries
+of $\mathbf{A}$ are small relative to its diagonal: that is, when
+$\mathbf{A}$ is diagonally dominant. Under AWGN, where
+$\mathbf{A} = \mathbf{G} + \rho \mathbf{I}$ with $\rho$ as defined in Section~\ref{sec:equalization}, diagonal dominance is satisfied and the
+series converges reliably~\cite{wang2023bdnsepa}.
+
+Under colored noise, however, the matrix to be inverted
+in~\eqref{eq:bcd_update} is
+$\mathbf{A} = E_s\mathbf{H}_c\mathbf{H}_c^H + \hat{\mathbf{R}}_{cc}$,
+where $\hat{\mathbf{R}}_{cc}$ has non-negligible off-diagonal entries that
+destroy diagonal dominance. The convergence condition is therefore no
+longer guaranteed. Empirically, NSA-based detectors degrade substantially
+as noise correlation increases, becoming far worse than the exact MMSE
+solution~\cite{wang2023bdnsepa}. The NSA is therefore not a viable
+candidate for the colored-noise inversion required by BCD-MMSE.
+
+\subsubsection{Cholesky Decomposition}
+Cholesky decomposition factors a Hermitian positive-definite matrix
+$\mathbf{A} \in \mathbb{C}^{M_c \times M_c}$ into the product
+$\mathbf{A} = \mathbf{L}\mathbf{L}^H$, where $\mathbf{L}$ is a lower
+triangular matrix (one whose entries above the main diagonal are all
+zero). Because $\mathbf{L}$ is triangular, each linear system
+$\mathbf{A}\mathbf{x}_i = \mathbf{e}_i$ can be solved in two sequential
+steps: first resolving $\mathbf{L}\mathbf{z} = \mathbf{e}_i$ from top to
+bottom (forward substitution), then resolving $\mathbf{L}^H\mathbf{v} =
+\mathbf{z}$ from bottom to top (backward substitution)~\cite{li-tradeofs}.
+Unlike the Neumann series, this process introduces no approximation error:
+the result is the exact inverse of $\mathbf{A}$, regardless of the
+magnitude of its off-diagonal entries. As established in
+Section~\ref{sec:bcdmmse}, the matrix $E_s\mathbf{H}_c\mathbf{H}_c^H +
+\hat{\mathbf{R}}_{cc}$ is Hermitian positive-definite and computed once per
+coherence block, making Cholesky decomposition directly applicable
+regardless of the structure of $\hat{\mathbf{R}}_{cc}$.
+
+There are two implementation strategies. Explicit Cholesky calculates $\mathbf{A}^{-1}$ directly and stores it for repeated matrix-by-vector multiplication;
+implicit Cholesky retains only the factor $\mathbf{L}$
+and solves the two-step triangular system again for each received symbol,
+reducing the dominant coefficient $M_c^3$ by a factor of
+five~\cite{li-tradeofs}. For hardware implementations, the triangular structure of $\mathbf{L}$ naturally maps into a systolic arrangement,
+making Cholesky suitable for acceleration in FPGAs
+~\cite{wang2023bdnsepa}.
+
+Since Cholesky decomposition is exact and imposes no restriction on the
+off-diagonal structure of $\hat{\mathbf{R}}_{cc}$, it is a suitable
+inversion method for the BCD-MMSE update under colored noise, and is
+adopted as the basis for the FPGA accelerator proposed in this work.
+
+\section{Related Work}
+\label{sec:relatedwork}
+Related works found in the literature can be divided into: (a) works that implement Cholesky-based inversion in FPGA or ASIC in the context of MIMO technology and (b) works that implement decentralized equalization in FPGA.
+
+\subsection{Cholesky-Based Inversion in MIMO Hardware}
+The TL-BD-INSA detector of ~\cite{wang2021tlbdinsa}  implements Cholesky-based inversion
+of Hermitian block-diagonal sub-matrices on a Virtex-7 XC7VX980T FPGA
+and a TSMC 45~nm ASIC. The FPGA implementation targets a $128 \times 8$ MIMO configuration with 64-QAM. The
+inversion module uses a triangular systolic array for the Cholesky
+factorization, followed by parallel forward and backward substitution
+units, one per user equipment. This architecture is the closest available
+hardware reference for the $M_c \times M_c$ inversion required by
+BCD-MMSE, differing only in that TL-BD-INSA operates under AWGN and
+inverts block-diagonal sub-matrices of the Gram matrix, whereas BCD-MMSE
+inverts the full local noise-weighted matrix under colored noise.
+
+Table~\ref{tab:hw_cholesky} reports the implementation metrics for the
+complete TL-BD-INSA detector pipeline, which includes matched filtering,
+Gram matrix computation, the Cholesky inversion module, and symbol
+estimation~\cite{wang2021tlbdinsa}. These figures therefore represent
+an upper bound on the resources attributable to the inversion step alone;
+the paper does not provide a per-module area or resource breakdown.
+
+\begin{table}[h]
+\centering
+\caption{TL-BD-INSA full detector pipeline hardware results
+($128 \times 8$, 64-QAM). FPGA: Virtex-7 XC7VX980T.
+ASIC: TSMC 45~nm(~\cite{wang2021tlbdinsa}).}
+\label{tab:hw_cholesky}
+\begin{tabular}{lcc}
+\hline
+\textbf{Metric} & \textbf{FPGA} & \textbf{ASIC} \\
+\hline
+Gate count / LUT slices     & 13,640 LUT  & 572 kGE       \\
+Flip-flop slices            & 19,460 FF   & ---           \\
+DSP48 units                 & 277         & ---           \\
+Clock frequency [MHz]       & 310         & 1,000         \\
+Throughput                  & 57.3 Mbps   & 185 Mbps      \\
+Power [W]                   & ---         & 0.144         \\
+Energy efficiency           & 1,731 bps/slice & 1.28 Gbps/W \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Decentralized Detection on FPGA}
+The FD-LAMA detector of~\cite{li2019fdlama}, implemented on a
+Virtex-7 XC7VX690T using High-Level Synthesis (HLS) for a $128 \times 8$
+system with QPSK and i.i.d. Rayleigh fading, achieves 22.2~Mb/s
+throughput at 429~MHz with 11,673 LUTs and 213 DSP48 blocks for
+$C = 1$ cluster. Resource utilization scales roughly linearly with $C$,
+while throughput degrades only slightly, reaching 17.8~Mb/s at
+$C = 4$~\cite{li2019fdlama}. This work assumes AWGN and does not
+include a matrix inversion module: FD-LAMA avoids explicit inversion
+entirely, operating only on local Gram matrix-vector products within
+each cluster.
+
+The decentralized Newton-method detector of~\cite{kulkarni2021newton},
+implemented on a Virtex-7 XC7VX690T for a $128 \times 8$ system with
+$C = 4$ clusters in a ring topology, is architecturally equivalent to
+the BCD-MMSE daisy-chain in its inter-DU communication pattern. It
+achieves 253~Mbps throughput at 340~MHz, consuming 100,733 LUTs,
+1,280 DSP48 blocks, and 7.248~W on-chip power for 16-QAM with
+$T = 3$ iterations~\cite{kulkarni2021newton}. The ring topology
+maintains constant interconnect bandwidth as the MIMO configuration
+scales, a property shared by the BCD-MMSE daisy-chain. As with all
+other decentralized hardware works, this implementation assumes AWGN
+and provides no inversion metrics specific to the colored-noise regime.
+\subsection{Gap Synthesis}
+
+Algorithmic papers also explicitly identify FPGA or ASIC
+implementation as future work: \cite{jeon2019} states that decentralized
+solutions are expected to be deployed on FPGA or ASIC clusters for higher
+computing efficiency and lower transfer latency, and~\cite{li2019cd} notes
+that multi-FPGA and multi-ASIC designs are left for future work to reduce
+power relative to GPU baselines.
+
+None of the surveyed hardware works simultaneously addresses the three
+conditions that define the gap motivating this work: (1)~colored noise
+with a non-diagonal local covariance $\hat{\mathbf{R}}_{cc}$;
+(2)~decentralized LMMSE equalization under the BCD-MMSE framework; and
+(3)~FPGA implementation with measured resource metrics. The algorithmic
+solution exists in~\cite{zhao2025jsac}, which proves optimality within the decentralized constraint and
+near-centralized BER performance for BCD-MMSE but provides no LUT count,
+power, or latency figures for any target platform. This work fills that
+gap by providing the first hardware analysis of the $M_c \times M_c$
+Hermitian Cholesky inversion at the core of the BCD-MMSE update.
+
+% -----------------------------------------------------------------------
+\section{Methodology}
+\label{sec:methodology}
+%
+% 1. Requirements elicitation (matrix dimensions, coherence time, BER target,
+%    arithmetic precision)
+% 2. Algorithm selection and architecture definition
+% 3. FPGA implementation (target device, HDL/HLS, datapath integration)
+% 4. Validation (functional verification, BER evaluation)
+% 5. Hardware metrics collection (LUT, DSP, BRAM, power, latency, throughput)
+% 6. Scalability analysis
+
+
+This section describes the steps planned to design, implement, and
+evaluate the proposed FPGA accelerator for the $M_c \times M_c$ Hermitian
+matrix inversion required by each DU in the BCD-MMSE algorithm.
+
+\subsection{Obtaining Requirements}
+
+The design requirements are derived directly from the BCD-MMSE operating
+conditions established in~\cite{zhao2025jsac}. The target matrix dimension
+ranges from $M_c = 8$ to $M_c = 16$ antennas per cluster, with $C \in
+\{8, 16\}$ clusters and $N = 192$ noise samples per coherence block;
+configurations up to $B_c = 32$ antennas per cluster are also reported
+in~\cite{jeon2019}, illustrating the broader range of practical deployments.
+The worst-case timing budget is set by the 5G NR mmWave parameters adopted
+in~\cite{zhao2025jsac}: a subcarrier spacing of 120~kHz with $N_u = 3300$
+subcarriers per symbol yields an OFDM symbol duration of
+$T_\text{OFDM} \approx 8.33\,\mu\text{s}$, within which the
+$\mathcal{O}(M_c^3)$ inversion in~\eqref{eq:bcd_update} must complete
+for each subcarrier. Arithmetic precision and fixed-point word length
+will be defined during this phase.
+
+\subsection{Architecture Definition}
+
+Based on the requirements above and the analysis of
+Section~\ref{sec:inversion}, Cholesky decomposition is adopted as the
+inversion algorithm. The proposed architecture consists of three pipeline
+stages: (i)~a triangular systolic array for the Cholesky factorization
+$\mathbf{A} = \mathbf{L}\mathbf{L}^H$; (ii)~a forward substitution unit
+that solves $\mathbf{L}\mathbf{z}_i = \mathbf{e}_i$ for each column of
+the identity matrix; and (iii)~a backward substitution unit that solves
+$\mathbf{L}^H\mathbf{v}_i = \mathbf{z}_i$. Because the matrix
+$E_s\mathbf{H}_c\mathbf{H}_c^H + \hat{\mathbf{R}}_{cc}$ is recomputed
+only once per coherence block, the factorization stage operates at
+coherence-block rate, while the substitution stages are reused for each
+received symbol within the block.
+
+\subsection{FPGA Implementation}
+
+The accelerator will be first described using High Level Synthesis (HLS) with Xilinx Vivado HLS, which facilitates parametric reconfiguration of matrix dimensions and word lengths. The meeting of timing and resource requirements will determine the synthesizable RTL implementation in Verilog or SystemVerilog. The target device is a Xilinx/AMD FPGA device compatible with
+those used in the reference works of Section~\ref{sec:relatedwork}
+(Virtex-7 family or equivalent). Resource-constrained fixed-point
+arithmetic will be used throughout, with word lengths determined during
+the requirements phase. Synthesis and place-and-route will be performed
+using Vivado Design Suite to obtain post-implementation LUT count,
+DSP48 block usage, Block RAM utilization, maximum clock frequency, and power estimates.
+
+\subsection{Functional Verification and BER Evaluation}
+
+Functional correctness will be verified by comparing the fixed-point
+RTL output against a floating-point software reference for a set of
+randomized $M_c \times M_c$ Hermitian positive-definite matrices. BER
+performance will be evaluated by integrating the hardware inversion module
+into a full BCD-MMSE simulation chain, using the QuaDRiGa channel model \cite{quadriga} 
+and the system parameters of~\cite{zhao2025jsac} ($M \in \{128, 256\}$,
+$K = 8$, $C \in \{8, 16\}$, 16-QAM, Interference over Thermal(IoT) $= 10$~dB,  where IoT measures the intensity of interference
+relative to background noise). BER curves will be
+compared against the centralized LMMSE reference and the floating-point
+BCD-MMSE baseline to quantify the precision-induced performance loss.
+
+
+\subsection{Hardware Metrics Collection and Comparison}
+
+Post-implementation hardware metrics (LUT count, DSP48 blocks,
+power, clock frequency, and throughput) will be collected and compared
+against the reference works \cite{wang2021tlbdinsa, kulkarni2021newton, li2019fdlama},  with
+explicit notation that all prior works operate under AWGN while this
+work targets the colored-noise regime. A scalability analysis will assess
+how resource usage and latency vary with $M_c$ across the range $\{8,
+16, 32\}$ to characterize the design's applicability to broader DBP
+deployments.
+
+
+
+% -----------------------------------------------------------------------
+\section{Schedule}
+% TODO: Fill in with actual dates/weeks.
+%
+% Activity                                               Weeks
+% -------------------------------------------------------
+% Literature review and requirements elicitation   2
+% Algorithm selection and architecture definition  2
+% RTL/HLS implementation                           4
+% Functional verification                          2
+% BER and hardware metrics evaluation              2
+% Scalability experiments                          1
+% Writing and revision                             3
+% -------------------------------------------------------
+% Total                                            ~16
+% -----------------------------------------------------------------------
+\vspace{0.1cm}
+\renewcommand{\arraystretch}{1.3}
+\newcommand{\X}{\cellcolor{gray!70}}
+\newcommand{\E}{\cellcolor{white}}
+
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}
+  *{13}{>{\centering\arraybackslash}m{0.55cm}}}
+\hline
+\rowcolor{gray!20}
+\textbf{Activity}
+  & \multicolumn{2}{c}{\textbf{Jun}}
+  & \multicolumn{2}{c}{\textbf{Jul}}
+  & \multicolumn{2}{c}{\textbf{Aug}}
+  & \multicolumn{2}{c}{\textbf{Sep}}
+  & \multicolumn{2}{c}{\textbf{Oct}}
+  & \multicolumn{2}{c}{\textbf{Nov}}
+  & \multicolumn{1}{c}{\textbf{Dec}} \\
+\rowcolor{gray!20}
+  & \textbf{1}&\textbf{2}
+  & \textbf{3}&\textbf{4}
+  & \textbf{5}&\textbf{6}
+  & \textbf{7}&\textbf{8}
+  & \textbf{9}&\textbf{10}
+  & \textbf{11}&\textbf{12}
+  & \textbf{13} \\
+\hline
+Literature review
+  &\X&\X&\X&\E&\E&\E&\E&\E&\E&\E&\E&\E&\E \\
+Software modelling
+  &\E&\X&\X&\X&\E&\E&\E&\E&\E&\E&\E&\E&\E \\
+Algorithm selection
+  &\E&\E&\X&\X&\E&\E&\E&\E&\E&\E&\E&\E&\E \\
+HDL/HLS design
+  &\E&\E&\E&\X&\X&\X&\X&\E&\E&\E&\E&\E&\E \\
+Functional verification
+  &\E&\E&\E&\E&\E&\X&\X&\X&\E&\E&\E&\E&\E \\
+FPGA synthesis
+  &\E&\E&\E&\E&\E&\E&\E&\X&\X&\X&\E&\E&\E \\
+BER analysis and results
+  &\E&\E&\E&\E&\E&\E&\E&\E&\E&\X&\X&\X&\E \\
+Writing
+  &\E&\E&\X&\X&\X&\X&\X&\X&\X&\X&\X&\X&\X \\
+Revision and submission
+  &\E&\E&\E&\E&\E&\E&\E&\E&\E&\E&\E&\X&\X \\
+\hline
+\end{tabular}%
+}
+\vskip 0.2cm
+{\small \colorbox{gray!70}{\phantom{xx}}\ Planned execution period.
+Each column represents a two-week interval.
+The work is scheduled for presentation in the first half of December~2026.}
+
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: Write after all sections are complete.
+% Summarize: problem, proposed approach, expected contributions,
+% and significance to 5G/6G Massive MIMO systems.
+
+
+This work addresses the hardware implementation gap at the intersection
+of three conditions that no prior work has simultaneously satisfied:
+colored receiver noise with a non-diagonal covariance matrix, decentralized
+LMMSE equalization under the BCD-MMSE framework, and FPGA implementation
+with measured resource metrics.
+
+The BCD-MMSE algorithm~\cite{zhao2025jsac} provides the
+first decentralized LMMSE equalizer whose convergence to the global minimum is mathematically guaranteed under colored noise,
+achieving near-centralized BER performance with fronthaul bandwidth
+independent of the total number of base-station antennas. Its per-DU
+computational bottleneck is the $M_c \times M_c$ Hermitian matrix
+inversion in Eq.~\eqref{eq:bcd_update}, which must be completed once
+per coherence block under the tight timing constraints of 5G NR mmWave
+deployments. This inversion has no existing hardware implementation.
+
+
+
+
+This work proposes an FPGA accelerator for this specific operation, based on Cholesky decomposition, the only exact method among the inversion approaches surveyed in Section~\ref{sec:inversion} that is applicable when $\hat{\mathbf{R}}_{cc}$is non-diagonal. The
+accelerator is designed to meet the BER and timing requirements derived
+from~\cite{zhao2025jsac} and will be evaluated against the hardware
+reference works of Section~\ref{sec:relatedwork} in terms of LUT count,
+DSP48 usage, on-chip power, and detection quality. The results are expected to provide the first quantitative hardware characterization of decentralized LMMSE equalization under colored noise.
+% -----------------------------------------------------------------------
+
+
+\begin{equation}
+\min_{\mathbf{W}}
+\mathbb{E}
+\left[
+\left\|\mathbf{W}\mathbf{Hs}+ \mathbf{W}\mathbf{n}-\mathbf{s}\right\|_2^2
+\right]
+\label{eq:lmmse_opt}
+\end{equation}
+
+\begin{equation}
+    \lVert \textit{v} \rVert^2 = \textit{v}^H \textit{v}
+
+\end{equation}
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}

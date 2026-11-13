@@ -1,0 +1,7 @@
+\textcolor{red}{Um trabalho futuro pode incluir um prazo de atraso no dimensionamento do hardware e medir quanto ele custa em área e potência. Também pode considerar um padrão TDD real, que muda o tempo de coleta e o número de amostras disponível. Outras extensões são levar ao hardware as outras inversões do BCD-MMSE, que hoje ficam em ponto flutuante, e avaliar mais de uma iteração do algoritmo.}
+
+% FONTE: software/testes/medir_gc_snr.py (resultados/6_gc_por_snr, 2026-11-09). O circuito não
+%   reescala a entrada (simulador/dbp_sim/hw_inverse.py); G_c = E_s H_c H_c^H + R_cc, com R_cc
+%   proporcional a sigma^2 = 1/SNR.
+\textcolor{red}{Também fica para um trabalho futuro reescalar $\mathbf G_c$ antes da inversão. Hoje, a entrada do módulo não é reescalada, e os elementos de $\mathbf G_c$ crescem quando a SNR cai. Por isso, QPSK e IoTh de 20~dB pedem mais bits inteiros (Seção~\ref{sec:resultados-curvas}).}
+% Ver memória: a primeira versão usa só T = 1 iteração; 4 iterações só se houver tempo.

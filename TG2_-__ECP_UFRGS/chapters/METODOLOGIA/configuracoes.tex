@@ -1,0 +1,71 @@
+The uplink of the massive MIMO system was investigated using two types of parameters. Hard constraints refer to the physical characteristics of the base station: $M = 128$ or 256 antennas, $C = 8$ or 16 clusters, and the size $M_c = M/C$ of the inversion module. Soft constraints depend on the UEs being served and the level of interference: $K = 8$ or 12 UEs, QPSK or 16-QAM modulation, and an IoTh ratio of 10 dB as a baseline case, or 20 dB representing an extreme, high-interference scenario. These configurations were adapted from \cite{zhao2025jsac}. Table~\ref{tab:paineis} presents these configurations.
+
+
+Each configuration is identified by a label consisting of a number and a letter. The number denotes the hard constraints: 1 for $M = 128$ and $C = 8$; 2 for $M = 256$ and $C = 8$; and 3 for $M = 256$ and $C = 16$. The letter indicates the soft constraints and remains consistent across all three groups.
+
+\begin{table}[htbp]
+\caption{Simulated configurations.}
+\label{tab:paineis}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+% sem espaço em volta das linhas do booktabs, para as bordas verticais não terem falhas
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\toprule
+\multirow{2}{*}{\textbf{Configuration}} & \multicolumn{3}{c|}{\textbf{Hard constraints}} & \multicolumn{3}{c|}{\textbf{Soft constraints}} \\
+\cline{2-7}
+ & {\boldmath $M$} & {\boldmath $C$} & {\boldmath $M_c$} & \textbf{IoTh (dB)} & \textbf{Modulation} & {\boldmath $K$} \\
+-- & \texttt{M} & \texttt{C} & -- & \texttt{iot\_db} & \texttt{modulation} & \texttt{K} \\
+\midrule
+1A & \multirow{8}{*}{128} & \multirow{8}{*}{8} & \multirow{8}{*}{16} & \multirow{4}{*}{10} & \multirow{2}{*}{16-QAM} & 8 \\
+1B & & & & & & 12 \\
+\cline{6-7}
+1C & & & & & \multirow{2}{*}{QPSK} & 8 \\
+1D & & & & & & 12 \\
+\cline{5-7}
+1E & & & & \multirow{4}{*}{20} & \multirow{2}{*}{16-QAM} & 8 \\
+1F & & & & & & 12 \\
+\cline{6-7}
+1G & & & & & \multirow{2}{*}{QPSK} & 8 \\
+1H & & & & & & 12 \\
+\midrule
+2A & \multirow{8}{*}{256} & \multirow{8}{*}{8} & \multirow{8}{*}{32} & \multirow{4}{*}{10} & \multirow{2}{*}{16-QAM} & 8 \\
+2B & & & & & & 12 \\
+\cline{6-7}
+2C & & & & & \multirow{2}{*}{QPSK} & 8 \\
+2D & & & & & & 12 \\
+\cline{5-7}
+2E & & & & \multirow{4}{*}{20} & \multirow{2}{*}{16-QAM} & 8 \\
+2F & & & & & & 12 \\
+\cline{6-7}
+2G & & & & & \multirow{2}{*}{QPSK} & 8 \\
+2H & & & & & & 12 \\
+\midrule
+3A & \multirow{8}{*}{256} & \multirow{8}{*}{16} & \multirow{8}{*}{16} & \multirow{4}{*}{10} & \multirow{2}{*}{16-QAM} & 8 \\
+3B & & & & & & 12 \\
+\cline{6-7}
+3C & & & & & \multirow{2}{*}{QPSK} & 8 \\
+3D & & & & & & 12 \\
+\cline{5-7}
+3E & & & & \multirow{4}{*}{20} & \multirow{2}{*}{16-QAM} & 8 \\
+3F & & & & & & 12 \\
+\cline{6-7}
+3G & & & & & \multirow{2}{*}{QPSK} & 8 \\
+3H & & & & & & 12 \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\legend{Source: 1A, 1B, 1C, 1E, 2A and 3A adapted from \citesp{zhao2025jsac}; the others, the author. $r = 8$ in all configurations. Second header row: field names of \texttt{Panel} in the code.}
+
+\end{table}
+
+% AUTORA (9-results.tex:245) -- parágrafo retirado do texto (tom); o conteúdo ficou em comentário.
+% Configurações 1, 9, 13, 3, 2, 5 = painéis (a), (b), (c), (e), (f), (g) da Fig. 8 de Zhao et al.
+% O painel (d) não aparece no artigo. Na configuração 3 (painel e), r = 8 foi
+% mantido; L577 liga r a K, então r = 12 também seria defensável.
+
+

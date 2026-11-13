@@ -1,0 +1,49 @@
+\chapter{Methodology}\label{chap:metodologia}
+This chapter describes the tools used and the tests performed for this work. The uplink transmission of a massive MIMO system with decentralized processing (Section~\ref{subsec:uplink}) was simulated to analyze the effect of the approximation used in the inversion module of the BCD-MMSE algorithm. Based on this analysis, the fixed-point formats for the inversion module, implemented on an FPGA, are selected. The chapter begins by presenting the simulation workflow (Section~\ref{sec:simulador}) and the hardware tools (Section~\ref{sec:setup-hardware}). It then covers test configurations and conditions (Section~\ref{sec:configuracoes}), timing constraints for the inversion process (Section~\ref{sec:requisitos-tempo}), the selection of the numerical format (Section~\ref{sec:formato}), the hardware architectures, the matrices used to test them and the power estimation (Section~\ref{sec:testes-hardware}), and the organization of the results (Section~\ref{sec:organizacao-resultados}).
+
+
+
+% =====================================================================
+\section{\texorpdfstring{Simulation workflow}{Simulation workflow}}\label{sec:simulador}
+% =====================================================================
+\input{chapters/METODOLOGIA/simulacao.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Hardware setup}{Hardware setup}}\label{sec:setup-hardware}
+% =====================================================================
+\input{chapters/METODOLOGIA/setup-hardware.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Configurations and test conditions}{Configurations and test conditions}}\label{sec:configuracoes}
+% =====================================================================
+\subsection{\texorpdfstring{Base station configurations}{Base station configurations}}\label{subsec:configuracoes-bs}
+\input{chapters/METODOLOGIA/configuracoes.tex}
+
+\subsection{Test conditions}\label{subsec:setup_condicoes}
+\input{chapters/METODOLOGIA/condicoes-teste.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Inversion cycle limit}{Inversion cycle limit}}\label{sec:requisitos-tempo}
+% =====================================================================
+\input{chapters/METODOLOGIA/requisitos-tempo.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Selection of the fixed-point format}{Selection of the fixed-point format}}\label{sec:formato}
+% =====================================================================
+\input{chapters/METODOLOGIA/formato.tex}
+
+% =====================================================================
+\section{\texorpdfstring{Hardware architectures, test matrices and power}{Hardware architectures, test matrices and power}}\label{sec:testes-hardware}
+% =====================================================================
+\input{chapters/METODOLOGIA/arquiteturas-hardware.tex}
+
+% =====================================================================
+% \section{\texorpdfstring{Organization of the results}{Organization of the % results}}\label{sec:organizacao-resultados}
+% =====================================================================
+
+
+% ---------------------------------------------------------------------
+% 1.6  ORGANIZAÇÃO DOS RESULTADOS                 -> fim da Metodologia
+% ---------------------------------------------------------------------
+% The results are grouped according to the physical characteristics of the base station: the size of the inversion circuit ($16 \times 16$ or $32 \times 32$), the number of antennas $M$, and the number of clusters $C$. Within each group, the modulation, $K$, and IoTh vary. Thus, there are three groups: configurations 1A–1H ($M = 128$, $C = 8$, $16 \times 16$ circuit), 2A–2H ($M = 256$, $C = 8$, $32 \times 32$ circuit), and 3A–3H ($M = 256$, $C = 16$, $16 \times 16$ circuit). \textcolor{red}{Os mapas de aumento de SNR, as curvas, as barras e os perfis de mobilidade são apresentados por grupo (Seção~\ref{sec:resultados-formato}). Os resultados de hardware, de vazão e de atraso são apresentados por condição de teste (Seção~\ref{sec:resultados-hardware}).}
+

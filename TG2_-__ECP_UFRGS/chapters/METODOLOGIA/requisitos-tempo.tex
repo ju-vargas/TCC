@@ -1,0 +1,43 @@
+This section calculates, based on the coherence time, the maximum number of cycles between two inversions under each test condition.
+
+% ---------------------------------------------------------------------
+\subsection{\texorpdfstring{Sample collection}{Sample collection}}\label{subsec:pipeline}
+% ---------------------------------------------------------------------
+The receiver first collects the $N$ noise samples for each PRB. Some of these samples arrive only after the data symbol (Section~\ref{subsubsec:disponibilidade-amostras}). Therefore, this work assumes that the receiver buffers the data symbols until the $N$ samples have been received. Subsequently, it processes the samples and equalizes the buffered data. A new set of samples arrives every interval $T_c$, and the processing must keep pace with this rate.
+
+% ---------------------------------------------------------------------
+\subsection{Throughput}\label{subsec:restricao-vazao}
+% ---------------------------------------------------------------------
+The estimate $\hat{\mathbf R}_{cc}$ is unique per PRB within each interval $T_c$ (Section~\ref{subsubsec:disponibilidade-amostras}). The matrix $\mathbf G_c$ is inverted once and serves all iterations of the BCD-MMSE algorithm (Section~\ref{subsec:bcd}). Thus, each DU performs one inversion of $\mathbf G_c$ per PRB every $T_c$. With $N_{\text{PRB}}$ PRBs, this results in $N_{\text{PRB}}$ inversions per DU every $T_c$. This work uses $N_{\text{PRB}} = 275$, which is the worst-case scenario for 5G NR (Section~\ref{subsec:simbolos}).
+
+To track data collection, the module needs to complete the $N_{\text{PRB}}$ inversions within $T_c$. Let $T_{\text{inv}}$ be the interval between the start of two inversions (Section~\ref{subsubsec:latencia-intervalo}). Then:
+\begin{equation}
+{T_{\text{inv}} \leq \frac{T_c}{N_{\text{PRB}}}.}
+\label{eq:restriction-flow}
+\end{equation}
+With a clock speed of 100 MHz (Section~\ref{subsec:hw-ferramentas}), this limit is given in cycles, rounded down. Table~\ref{tab:limite-ciclos} shows the limit for each test condition.
+
+\begin{table}[!ht]
+\caption{Maximum interval between inversions in each test condition.}
+\label{tab:limite-ciclos}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Test condition} & {\boldmath $T_c$} \textbf{(ms)} & {\boldmath $T_c/N_{\text{PRB}}$} \textbf{(\textmu s)} & \textbf{Limit at 100 MHz (cycles)} \\
+\midrule
+TDLA30-5    & 25.0000 & 90.9091 & 9090 \\
+TDLA30-10   & 12.5000 & 45.4545 & 4545 \\
+TDLA30-75   & 1.6667  & 6.0606  & 606 \\
+TDLA30-300  & 0.4167  & 1.5152  & 151 \\
+TDLC300-100 & 1.2500  & 4.5455  & 454 \\
+TDLB100-400 & 0.3125  & 1.1364  & 113 \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{Source: the author. $T_c$ from Table~\ref{tab:n-maximo}; $N_{\text{PRB}} = 275$.}
+\end{table}
+
+The hardware architectures in this work aim to meet this throughput limit under each test condition. The following are outside the scope: the delay between the arrival of a data symbol and its equalization; the throughput of the links between the DUs; and the other matrix inversions required by the BCD-MMSE algorithm, which the simulator performs using floating-point arithmetic (Section~\ref{subsubsec:simul-inversa}). The delay encompasses both the time spent waiting for samples and the latency of each inversion (i.e., the time elapsed from the start to the completion of an inversion).

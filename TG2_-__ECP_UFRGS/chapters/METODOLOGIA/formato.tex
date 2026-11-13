@@ -1,0 +1,142 @@
+% ---------------------------------------------------------------------
+% 1.5  ESCOLHA DO FORMATO DE PONTO FIXO          -> nova seção da Metodologia
+% ---------------------------------------------------------------------
+% ORIGEM: TCC/Análise bits.md (resumo da autora), com as correções de 2026-11-04:
+%   nomes 1A-3D no lugar das letras A-P; IoTh; "condição de teste" no lugar de
+%   "cenário"; critério de escolha lexicográfico (não a razão perda/ocupação);
+%   5 formatos finais (não 3); AP_TRN_ZERO corrigido; tabela de velocidades
+%   retirada (já está em FUNDAMENTACAO/modelo-de-canal.tex).
+
+\subsection{\texorpdfstring{SNR increase}{SNR increase}}\label{subsec:aumento-snr}
+
+To select the $\langle W, I\rangle$ format (Section~\ref{subsubsec:ponto-fixo}), the BCD-MMSE algorithm was simulated using both fixed-point and 64-bit floating-point matrix inversion. Only the inversion of $\mathbf G_c$ differs between the two simulations; however, the SNR and SER are measured for the entire uplink. Each format was evaluated based on the SNR increase, that is, the additional SNR required by the uplink to achieve an $\mathrm{SER} = 10^{-2}$ compared to the floating-point case. This increase corresponds to the horizontal distance between the two SER curves, which is the standard method for comparing two schemes \cite[p.~55]{tse-viswanath}.
+
+% grade de SNR: params.M1_Driver.snr_db_grid (-10 a 10, passo 2); QPSK a partir de -20 dB:
+%   curvas_qpsk_256 (grupos 2 e 3) e curvas_qpsk_128 (grupo 1), referencia_qpsk_256.py
+\textcolor{red}{As curvas de SER foram simuladas de $-10$ a 10~dB, com passo de 2~dB. Com QPSK, a grade começa em $-20$~dB, porque algumas curvas já atingem $\mathrm{SER} = 10^{-2}$ antes de $-10$~dB: quase todas as do LMMSE no grupo 1 e todas as do LMMSE e do BCD-MMSE nos grupos 2 e 3.}
+
+Two thresholds were employed. A 0.1~dB threshold represents a near-ideal format, where the SER curve is virtually identical to that of the floating-point implementation. A 3~dB threshold serves as the maximum acceptable increase. An increase of 3~dB is equivalent to doubling the power \cite[p.~73]{tse-viswanath}. Consequently, at this threshold, each UE would need to transmit with twice the energy per symbol to compensate for the error introduced by the matrix inversion (Section~\ref{subsec:snr}).
+
+
+
+\subsection{\texorpdfstring{Initial sweep}{Initial sweep}}
+The first stage involved varying the integer and fractional parts separately, while keeping the other part fixed (Table~\ref{tab:varredura-inicial}). Each size was tested across 35 combinations of quantization and overflow modes (Table~\ref{tab:modos-apfixed}), using the BCD-MMSE algorithm with both 1 and 4 iterations.
+
+\begin{table}[htbp]
+\caption{Sizes tested in the initial sweep.}
+\label{tab:varredura-inicial}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lll}
+\toprule
+\textbf{Sweep} & \textbf{Integer bits} ({\boldmath $I$}) & \textbf{Fractional bits} ({\boldmath $F$}) \\
+\midrule
+Integer part & 6, 8, 10, 12, 14, 16, 20, 24, 32 & 32 \\
+Fractional part & 14 & 4, 6, 8, 10, 12, 16, 20, 24, 32 \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{Source: the author.}
+\end{table}
+% NOTA: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas
+%   varreduras: 17 tamanhos por varredura de configuração e condição.
+
+\subsection{\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}
+The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.
+
+
+The selection process relied on the $\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\ref{tab:gc-ponto-operacao}).
+
+
+These configurations also span the extremes of precision requirements. With a limited number of bits, the rounding error in matrix inversion increases with the condition number \cite[p.~1603]{osinsky2023}. When the smallest eigenvalue is very small, the matrix approaches a singular state, making the result more dependent on the fractional part (Section~\ref{subsubsec:ponto-fixo}). Configurations 2E and 2F exhibit the highest condition numbers (at the 99th percentile), whereas configuration 1A features the smallest eigenvalues (at the 1st percentile).
+
+
+\begin{table}[htbp]
+\caption{$\mathbf{G}_c$ at the operating point of the initial-sweep configurations.}
+\label{tab:gc-ponto-operacao}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccccccc}
+\toprule
+ & \multicolumn{2}{c}{\textbf{SNR (dB)}} & \multicolumn{2}{c}{\textbf{Largest} {\boldmath $|$}\textbf{part}{\boldmath $|$}} & \multicolumn{2}{c}{\textbf{Condition number}} & \multicolumn{2}{c}{\textbf{Smallest eigenvalue}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+\textbf{Configuration} & \textbf{192; 3.5} & \textbf{168; 28} & \textbf{192; 3.5} & \textbf{168; 28} & \textbf{192; 3.5} & \textbf{168; 28} & \textbf{192; 3.5} & \textbf{168; 28} \\
+\midrule
+1A & $-2.6$ & $-2.4$ & 63   & 66   & 57  & 58  & 1.9  & 1.9 \\
+1G & $-9.3$ & $-9.1$ & 2266 & 2383 & 187 & 169 & 22.4 & 24.1 \\
+1H & $-8.7$ & $-8.6$ & 2470 & 2385 & 195 & 172 & 22.1 & 24.7 \\
+2E & $-5.8$ & $-5.6$ & 962  & 999  & 286 & 254 & 8.8  & 9.7 \\
+2F & $-5.6$ & $-5.5$ & 983  & 987  & 282 & 285 & 8.8  & 9.5 \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{Source: the author. Subcolumns: $N$; carrier in GHz.}
+
+\end{table}
+
+\subsection{\texorpdfstring{Synthesis and selection of formats for validation}{Synthesis and selection of formats for validation}}
+
+The sizes and modes of the initial sweep were also synthesized in Vitis HLS to measure resource occupancy (LUT, DSP, FF, and BRAM). The occupancy of each circuit is that of the most used resource in the FPGA. In each configuration and test condition, the integer and fractional parts with the lowest occupancy were chosen, with an SNR increase of up to 3 dB and of up to 0.1 dB, in 1 and in 4 iterations. Combining the two parts resulted in 10 formats (Table~\ref{tab:formatos-origem}).
+
+
+\begin{table}[htbp]
+\caption{Configurations in which each format was chosen in the initial sweep.}
+\label{tab:formatos-origem}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{ccccc}
+\toprule
+ & \multicolumn{2}{c}{\textbf{1 iteration}} & \multicolumn{2}{c}{\textbf{4 iterations}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+\textbf{Format} & \textbf{Up to 3~dB} & \textbf{Up to 0.1~dB} & \textbf{Up to 3~dB} & \textbf{Up to 0.1~dB} \\
+\midrule
+$\langle 14,6\rangle$  & 1A         & --                       & --             & --                       \\
+$\langle 16,6\rangle$  & --         & --                       & 1A             & --                       \\
+$\langle 18,8\rangle$  & --         & 1A                       & --             & --                       \\
+$\langle 20,8\rangle$  & --         & --                       & --             & 1A                       \\
+$\langle 22,12\rangle$ & 1H, 2E, 2F & --                       & --             & --                       \\
+$\langle 24,12\rangle$ & 1G         & 2E, 2F                   & 1G, 1H, 2E, 2F & --                       \\
+$\langle 26,12\rangle$ & --         & 1G$^{a}$, 1H$^{a}$       & --             & 2E, 2F                   \\
+$\langle 28,12\rangle$ & --         & --                       & --             & 1G$^{a}$, 1H$^{a}$       \\
+$\langle 28,14\rangle$ & --         & 1G$^{b}$, 1H$^{b}$       & --             & --                       \\
+$\langle 30,14\rangle$ & --         & --                       & --             & 1G$^{b}$, 1H$^{b}$       \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{Source: the author. Columns: SNR increase. No mark: all 5 test conditions. $^{a}$Only TDLB100-400. $^{b}$The other 4 conditions.}
+\end{table}
+
+
+
+\subsection{\texorpdfstring{Validation}{Validation}}\label{subsec:validacao}
+The initial sweep fixed one part of the word while varying the other, and used only 5 configurations. This can change the most used resource and the best mode. Therefore, the 10 formats were simulated again, with the 35 mode combinations, in the 24 configurations and 5 test conditions.
+
+In this step, BCD-MMSE used only 1 iteration. The 4 iterations of the initial sweep had already helped to choose the formats of the most demanding cases: $\langle 16,6\rangle$, $\langle 20,8\rangle$, $\langle 28,12\rangle$ and $\langle 30,14\rangle$ only appeared with 4 iterations (Table~\ref{tab:formatos-origem}). With 1 iteration, BCD-MMSE already has a good result in SER. Furthermore, the inverse of $\mathbf G_c$ is calculated once and used in all iterations, so the number of inversions does not change (Section~\ref{subsec:bcd}).
+
+The circuit has only one mode. Therefore, each format received a fixed mode in each group of configurations (Section~\ref{sec:configuracoes}). All configurations in a group use the same circuit. The mode was chosen according to the following criteria, in this order:
+
+\begin{enumerate}
+
+\item the mode that leaves more pairs (configuration, test condition) with an increase in SNR of up to 3~dB. A pair that does not reach $\mathrm{SER} = 10^{-2}$ counts as out of bounds;
+\item the lowest resource occupancy, by the most used resource in the synthesis;
+\item  the quantization \texttt{AP\_RND\_ZERO}, which never uses more resources than the other tied modes;
+
+\item the smallest increase in SNR in the worst pair;
+\item the order of the modes in the list.
+
+\end{enumerate}
+
+% FONTE: grade curta = varredura_formatos.grade_perto (--snr-perto, extra_direita 2), [4] v4 e
+%   v5; grade inteira = rodadas [5] (modo_fixo_3dB, _iot10, _qpsk_128, _qpsk_256) e
+%   rodada6_mapa_grade_inteira.sh (modo_fixo_mapa, 2026-11-08), semente 0 como a referência.
+\textcolor{red}{Nessa etapa, a simulação em ponto fixo usou só as SNRs em volta do ponto de operação, com passo de 2~dB. Elas começam no ponto da grade logo abaixo da SNR em que o BCD-MMSE em ponto flutuante atinge $\mathrm{SER} = 10^{-2}$ e vão de 4 a 7~dB além dela. Depois de escolhido o modo fixo, cada formato foi simulado de novo, só com esse modo, na grade inteira de SNR (Seção~\ref{subsec:aumento-snr}). Essas simulações usam a mesma semente da simulação em ponto flutuante. A escolha dos três formatos de cada grupo e os resultados da Seção~\ref{sec:resultados-formato} vêm delas.}
+
+% ANTIGO: Then, with the fixed mode, three formats were chosen in each group. The first is the smallest format in which all configurations and conditions of the group reach $\mathrm{SER} = 10^{-2}$, with any increase in SNR. The second and third are the smallest, where all reach this point with an increase of up to 3 dB and up to 0.1 dB, respectively. These formats were implemented in Vivado and are in the Section \ref{sec:resultados-formato}.
+\textcolor{red}{Depois, com o modo fixo, foram escolhidos dois formatos em cada grupo: o menor em que todas as configurações e condições do grupo atingem $\mathrm{SER} = 10^{-2}$ com aumento de SNR de até 3~dB, e o menor com aumento de até 0,1~dB. O aumento é arredondado em duas casas decimais. O menor formato que só atinge $\mathrm{SER} = 10^{-2}$, com qualquer aumento, não foi usado como critério, porque esse aumento chega a mais de 10~dB (Seção~\ref{sec:resultados-formato}). Esses formatos foram implementados no Vivado e estão na Seção~\ref{sec:resultados-formato}.}

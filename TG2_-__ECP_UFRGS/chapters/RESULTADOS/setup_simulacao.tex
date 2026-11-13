@@ -1,0 +1,120 @@
+% =====================================================================
+% RASCUNHO -- seção "Setup de simulação" reorganizada por módulo do simulador
+% ---------------------------------------------------------------------
+% Incluído em 9-results.tex por \input{chapters/rascunho_setup_simulacao}.
+% Substitui o setup antigo (cópia em rascunho_setup_antigo.tex) e
+% rascunho_setup_tabelas.tex (as tabelas estão copiadas aqui).
+% A entrada tomasin-interference precisa ir para o biblio.bib.
+%
+% Marcas:
+%   % AUTORA (9-results.tex:NNN)  -> texto seu, sem alteração, só mudou de lugar
+%   % NOVO                        -> texto proposto; cada frase tem FONTE ou SEM FONTE
+%
+% Chaves de citação: zhao2025jsac (já existe); tomasin-interference (em
+% constraints/rascunho_referencias.bib). ATENÇÃO: rascunho_bloco_canal.tex
+% usa a chave antiga zhao-lmmse; trocar por zhao2025jsac se for aproveitado.
+% "Lnnn" = linha do paper.md do artigo base.
+% =====================================================================
+
+\section{Simulation setup}
+The simulation parameters are organized as the simulation flow of Figure~\ref{fig:fluxo_simulacao}. The base station configurations are inputs of both parts of the flow. The channels are generated before the simulation, by a MATLAB script that runs QuaDRiGa (Section~\ref{subsec:setup_canal}). The Python simulator reads the stored channels and sets the other parameters: test conditions, signal and noise, receiver and evaluation (Section~\ref{subsec:setup_python}). In the tables, the source column gives the reference of each value, and the name in the code gives the variable that sets it. \textcolor{red}{The parameter tables are in Appendix~\ref{ap:parametros}.}
+
+
+
+% TOM: Zhao et al. é a referência do modelo, não objeto de reprodução.
+
+
+% Subseção "Base Stations Configurations" (texto e Tabela tab:paineis) movida para
+%   METODOLOGIA/configuracoes.tex em 2026-11-04, para os nomes 1A-3D serem definidos
+%   antes de serem usados na Metodologia.
+
+% ---------------------------------------------------------------------
+\subsection{Channel Generation in QuaDRiGa}\label{subsec:setup_canal}
+% ---------------------------------------------------------------------
+
+Table~\ref{tab:param_canal} shows the parameters of the MATLAB script that generates the channel matrices $\mathbf{H}$ and $\overline{\mathbf{H}}$. The remaining QuaDRiGa parameters were kept at their default values \cite{quadriga-manual}.
+
+The BS features a uniform linear array (ULA) of $M$ antennas, with a standard spacing of half a wavelength ($\lambda/2$) of the operating signal. The antennas at both the BS and the UEs are omnidirectional, meaning they provide the same gain in all directions.
+
+For each realization, the script randomly determines the positions of the $K$ target UEs and the $r$ interferers. The distance is sampled such that the UE density remains uniform across the entire area. The random seed used for this sampling is always the realization number. Based on these positions, QuaDRiGa generates the frequency-domain channel response between each BS antenna and each UE within the propagation scenario.
+
+
+
+
+
+In this work, the \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMa\_\allowbreak{}NLOS} propagation scenario was used, which represents an urban macrocell (UMa) with no line-of-sight (NLoS) between the base station (BS) and the user equipment (UEs). Table~\ref{tab:cenario_uma} presents the valid range for the UMa propagation scenario and the values selected. The system model assumes a flat-fading channel, in which all subcarriers within a physical resource block (PRB) experience the same channel conditions.
+
+
+
+
+
+
+
+
+% ---------------------------------------------------------------------
+\subsection{Python Simulator}\label{subsec:setup_python}
+% ---------------------------------------------------------------------
+
+The Python simulator reads the stored channels and runs the rest of the simulation flow. Its parameters are grouped as in Figure~\textcolor{red}{\ref{fig:fluxo_python}}: test conditions, signal and noise, receiver and evaluation. \textcolor{red}{The test conditions are described in Section~\ref{subsec:setup_condicoes}.}
+
+% MOVIDO (2026-11-04): a subsubseção "Test Conditions" (texto da autora e Tabela
+%   tab:condicoes_teste) foi para METODOLOGIA/condicoes-teste.tex, junto com a escolha do N.
+
+
+% ---------------------------------------------------------------------
+\subsubsection{Signal and Noise}\label{subsec:setup_ruido}
+% ---------------------------------------------------------------------
+
+% NOVO
+Table~\ref{tab:param_ruido} shows the parameters used to read the channels and to generate the transmitted symbols and the noise.
+
+
+The SNR depends solely on the ratio between the symbol energy $E_s$ and the thermal noise power $\sigma^2$, as defined by the parameter \texttt{M5\_\allowbreak{}Noise.\allowbreak{}snr\_\allowbreak{}definition}. Accordingly, the constellations were normalized to have unit average energy (parameter \texttt{M4\_\allowbreak{}Source.\allowbreak{}unit\_\allowbreak{}energy\_\allowbreak{}constellation}), and the symbol energy was set to $E_s = 1$ (parameter \texttt{M4\_\allowbreak{}Source.\allowbreak{}Es}). Thus, the power $\sigma^2$ could be calculated based on the SNR to be simulated.
+
+Furthermore, the power of the UEs was adjusted via channel normalization, defined by the parameter \texttt{M2\_\allowbreak{}Channel.\allowbreak{}normalization}, ensuring that signals from UEs located at varying distances arrived at the BS with the same average power.
+
+With the channel normalized, each of the $r$ interferers reaches every BS antenna with the same average power. In this scenario, the interference received at each antenna is scaled by the number of interferers, $r$. To ensure that the ratio of interference to thermal noise at each antenna equals the IoTh value specified in the configuration (parameter \texttt{M5\_\allowbreak{}Noise.\allowbreak{}iot\_\allowbreak{}db}), the power $\beta$ of each interferer is divided by $r$. This convention is governed by the parameter \texttt{M5\_\allowbreak{}Noise.\allowbreak{}beta\_\allowbreak{}convention} and follows the approach of averaging interference at each antenna, a method also employed in \cite{tomasin-interference}.
+
+The parameter \texttt{M5\_\allowbreak{}Noise.\allowbreak{}data\_\allowbreak{}noise\_\allowbreak{}independent} specifies that the noise affecting the data symbols is drawn independently from the $N$ noise samples used to estimate the covariance matrix $\hat{\mathbf{R}}$. The parameter \texttt{M5\_\allowbreak{}Noise.\allowbreak{}resample\_\allowbreak{}noise\_\allowbreak{}per\_\allowbreak{}realization} specifies that the $N$ samples are re-drawn for each channel realization and each SNR point. This mimics the real behavior of the system, where samples come from the pilot REs and the data occupies other REs.
+
+\subsubsection{Receiver}\label{subsec:setup_receptor}
+% ---------------------------------------------------------------------
+
+Table~\ref{tab:param_receptor} shows the parameters for antenna partitioning, covariance estimation, and the equalizers.
+
+% FONTES: M_c = M/C L577, L85; N L577, L640; covariância eq. (6) L119 e L125;
+%   H perfeito L63 e nota 2 (L817); equalizadores L581 e Figura 8;
+%   iterações e posto L587, L591; Gauss-Seidel L398, nota 6 (L450);
+%   L = K L150, L184, L593; W reaproveitado L61, L561; ZF citado em L581 sem fórmula.
+% CORREÇÃO em relação à tabela antiga: W e as amostras de ruído são refeitos a
+%   cada ponto de SNR, não só a cada realização (m1_driver.run_panel).
+% LEMBRETE: o Ledoit-Wolf também é aplicado no R_cc do BCD (m7_equalizers.bcd_mmse).
+%   Com N = 192 o bloco M_c x M_c tem inversa; com N = 12 (HST) não tem, pois
+%   N < M_c. O módulo alvo do constraints.csv inverte o R_cc sem ajuste.
+% N e portadora por condição: params.M1_Driver.test_conditions; run_figure8.py --conditions.
+
+
+Each cluster is assigned neighboring antennas (parameter \texttt{M3\_\allowbreak{}Clustering.\allowbreak{}mapping}). The first cluster is assigned antennas 1 to $M_c$, the second is assigned antennas $M_c+1$ to $2M_c$, and so on. All clusters have the same number of antennas (parameter \texttt{M3\_\allowbreak{}Clustering.\allowbreak{}equal\_\allowbreak{}cluster\_\allowbreak{}size}).
+
+The equalizers receive the true $\mathbf{H}$ channel, without channel estimation (parameter \texttt{M7\_\allowbreak{}Equalizers.\allowbreak{}perfect\_\allowbreak{}csi}), as in \cite{zhao2025jsac}. The BCD-MMSE was simulated with 1 iteration (parameter \texttt{M7\_\allowbreak{}Equalizers.\allowbreak{}bcd\_\allowbreak{}iterations}). The DUs update sequentially, from $c = 1$ to $C$, and each one uses the result of the previous one (parameter \texttt{M7\_\allowbreak{}Equalizers.\allowbreak{}bcd\_\allowbreak{}update\_\allowbreak{}rule}) \cite{zhao2025jsac}.
+
+% FONTE: L63, nota 2 (L817).
+
+% FONTE: paper.md:590-591 (Fig. 8 com 1 iteração); Gauss-Seidel L398, nota 6 (L450).
+% DECISÃO da autora (2026-11-04): a primeira versão usa só 1 iteração. As rodadas [1], [4]
+%   e [5] também têm 4 iterações (mapas iter4); podem entrar depois, se houver tempo.
+%   Nesse caso, este parágrafo vira "1 e 4 iterações".
+
+
+
+
+
+% ---------------------------------------------------------------------
+\subsubsection{Evaluation}\label{subsec:setup_avaliacao}
+% ---------------------------------------------------------------------
+
+
+Table~\ref{tab:param_avaliacao} shows how the results are measured.
+The random number generator seed was set to 0, so that the results can be replicated.
+
+
