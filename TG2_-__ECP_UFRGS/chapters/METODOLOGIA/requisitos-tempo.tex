@@ -10,7 +10,7 @@ The receiver first collects the $N$ noise samples for each PRB. Some of these sa
 % ---------------------------------------------------------------------
 The estimate $\hat{\mathbf R}_{cc}$ is unique per PRB within each interval $T_c$ (Section~\ref{subsubsec:disponibilidade-amostras}). The matrix $\mathbf G_c$ is inverted once and serves all iterations of the BCD-MMSE algorithm (Section~\ref{subsec:bcd}). Thus, each DU performs one inversion of $\mathbf G_c$ per PRB every $T_c$. With $N_{\text{PRB}}$ PRBs, this results in $N_{\text{PRB}}$ inversions per DU every $T_c$. This work uses $N_{\text{PRB}} = 275$, which is the worst-case scenario for 5G NR (Section~\ref{subsec:simbolos}).
 
-To track data collection, the module needs to complete the $N_{\text{PRB}}$ inversions within $T_c$. Let $T_{\text{inv}}$ be the interval between the start of two inversions (Section~\ref{subsubsec:latencia-intervalo}). Then:
+\textcolor{red}{To keep up with the sample collection}, the module needs to complete the $N_{\text{PRB}}$ inversions within $T_c$. Let $T_{\text{inv}}$ be the interval between the start of two inversions (Section~\ref{subsubsec:latencia-intervalo}). Then:
 \begin{equation}
 {T_{\text{inv}} \leq \frac{T_c}{N_{\text{PRB}}}.}
 \label{eq:restriction-flow}

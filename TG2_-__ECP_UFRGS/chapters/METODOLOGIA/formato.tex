@@ -1,19 +1,7 @@
-% ---------------------------------------------------------------------
-% 1.5  ESCOLHA DO FORMATO DE PONTO FIXO          -> nova seção da Metodologia
-% ---------------------------------------------------------------------
-% ORIGEM: TCC/Análise bits.md (resumo da autora), com as correções de 2026-11-04:
-%   nomes 1A-3D no lugar das letras A-P; IoTh; "condição de teste" no lugar de
-%   "cenário"; critério de escolha lexicográfico (não a razão perda/ocupação);
-%   5 formatos finais (não 3); AP_TRN_ZERO corrigido; tabela de velocidades
-%   retirada (já está em FUNDAMENTACAO/modelo-de-canal.tex).
 
 \subsection{\texorpdfstring{SNR increase}{SNR increase}}\label{subsec:aumento-snr}
 
-To select the $\langle W, I\rangle$ format (Section~\ref{subsubsec:ponto-fixo}), the BCD-MMSE algorithm was simulated using both fixed-point and 64-bit floating-point matrix inversion. Only the inversion of $\mathbf G_c$ differs between the two simulations; however, the SNR and SER are measured for the entire uplink. Each format was evaluated based on the SNR increase, that is, the additional SNR required by the uplink to achieve an $\mathrm{SER} = 10^{-2}$ compared to the floating-point case. This increase corresponds to the horizontal distance between the two SER curves, which is the standard method for comparing two schemes \cite[p.~55]{tse-viswanath}.
-
-% grade de SNR: params.M1_Driver.snr_db_grid (-10 a 10, passo 2); QPSK a partir de -20 dB:
-%   curvas_qpsk_256 (grupos 2 e 3) e curvas_qpsk_128 (grupo 1), referencia_qpsk_256.py
-\textcolor{red}{Com QPSK, a grade de SNR começa em $-20$~dB, e não em $-10$~dB (Seção~\ref{subsubsec:simul-python}), porque algumas curvas já atingem $\mathrm{SER} = 10^{-2}$ em $-10$~dB: quase todas as do LMMSE e a do BCD-MMSE da configuração 1E na TDLA30-5 e TDLA30-10, no grupo 1, e todas as do LMMSE e do BCD-MMSE nos grupos 2 e 3.}
+To select the $\langle W, I\rangle$ format (Section~\ref{subsubsec:ponto-fixo}), the BCD-MMSE algorithm was simulated using both fixed-point and 64-bit floating-point matrix inversion. Only the inversion of $\mathbf G_c$ differs between the two simulations; however, the SNR and SER are measured for the entire uplink. Each format was evaluated based on the SNR increase, that is, the additional SNR required by the uplink to achieve an $\mathrm{SER} = 10^{-2}$ compared to the floating-point case. This increase corresponds to the horizontal distance between the two SER curves, which is the standard method for comparing two schemes \cite[p.~55]{tse-viswanath}. The increase is rounded to two decimal places.
 
 Two thresholds were employed. A 0.1~dB threshold represents a near-ideal format, where the SER curve is virtually identical to that of the floating-point implementation. A 3~dB threshold serves as the maximum acceptable increase. An increase of 3~dB is equivalent to doubling the power \cite[p.~73]{tse-viswanath}. Consequently, at this threshold, each UE would need to transmit with twice the energy per symbol to compensate for the error introduced by the matrix inversion (Section~\ref{subsec:snr}).
 
@@ -40,7 +28,7 @@ Fractional part & 14 & 4, 6, 8, 10, 12, 16, 20, 24, 32 \\
 \vspace{4pt}
 \legend{Source: the author.}
 \end{table}
-% NOTA: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas
+% FONTE: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas
 %   varreduras: 17 tamanhos por varredura de configuração e condição.
 
 \subsection{\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}
@@ -136,6 +124,4 @@ The circuit has only one mode. Therefore, each format received a fixed mode in e
 % FONTE: grade curta = varredura_formatos.grade_perto (--snr-perto, extra_direita 2), [4] v4 e
 %   v5; grade inteira = rodadas [5] (modo_fixo_3dB, _iot10, _qpsk_128, _qpsk_256) e
 %   rodada6_mapa_grade_inteira.sh (modo_fixo_mapa, 2026-11-08), semente 0 como a referência.
-\textcolor{red}{Nessa etapa, a simulação em ponto fixo não usou a grade de SNR inteira, só as SNRs em volta do ponto de operação, onde o BCD-MMSE em ponto flutuante atinge $\mathrm{SER} = 10^{-2}$: da SNR da grade logo abaixo desse ponto até 4 a 7~dB acima dele. Depois de escolhido o modo, cada formato foi simulado de novo só com esse modo, na grade inteira (Seção~\ref{subsec:aumento-snr}) e com a mesma semente da simulação em ponto flutuante.}
-
-\textcolor{red}{Com essas simulações, foram escolhidos em cada grupo o menor formato em que todas as configurações e condições têm aumento de até 3~dB e o menor com aumento de até 0,1~dB, com o aumento arredondado em duas casas decimais. A mesma escolha foi feita só com as configurações com IoTh de 10~dB. Esses formatos foram implementados no Vivado e estão na Seção~\ref{sec:resultados-formato}.}
+When selecting the mode, the fixed-point simulation did not use the entire SNR grid, only the SNR values around the operating point, where the floating-point BCD-MMSE reaches $\mathrm{SER} = 10^{-2}$: from the grid SNR just below this point up to 4--7~dB above it. Subsequently, each format was re-simulated using only its corresponding mode across the entire SNR grid (Section~\ref{subsec:aumento-snr}). With these results, the smallest format with all pairs within 3~dB and the smallest with all within 0.1~dB were chosen in each group, also with only the configurations with an IoTh of 10~dB (Section~\ref{sec:resultados-formato}).

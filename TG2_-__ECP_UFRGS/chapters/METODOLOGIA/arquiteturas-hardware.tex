@@ -1,18 +1,18 @@
-% Separado de setup-hardware.tex em 2026-11-04: as ferramentas e o módulo ficam antes
-%   (ferramentas); as arquiteturas, as matrizes de teste e a potência vêm depois do formato.
-The chosen formats were synthesized using Vitis HLS. In all versions, the automatic loop pipelining feature was disabled \cite[p.~42]{ug1399}. The first version, without loop optimizations, was implemented for both $16 \times 16$ and $32 \times 32$ matrix sizes. In this version, the iterations of each loop execute sequentially, and the $N_{\text{PRB}} = 275$ matrices within a block are inverted one by one. Consequently, the interval between inversions exceeds the limits defined for all test conditions (Table~\ref{tab:limite-ciclos}), and the module does not track the arrival of the matrices at each $T_c$.
+The chosen formats were synthesized using Vitis HLS. \textcolor{red}{Besides the formats chosen in Section~\ref{sec:resultados-formato}, $\langle 20,8\rangle$ in \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP} and $\langle 18,8\rangle$ in \texttt{AP\_TRN}/\texttt{AP\_SAT} were also synthesized, and they appear in the hardware results and in the trade-off (Section~\ref{subsec:resultados-compromisso}).}
+% FONTE: hardware/pacote_servidor_formatos_18_20/LEIAME.md (pedido da autora, 2026-11-03).
+ In all versions, the automatic loop pipelining feature was disabled \cite[p.~42]{ug1399}. The first version, without loop optimizations, was implemented for both $16 \times 16$ and $32 \times 32$ matrix sizes. In this version, the iterations of each loop execute sequentially, and the $N_{\text{PRB}} = 275$ matrices within a block are inverted one by one. Consequently, the interval between inversions exceeds the limits defined for all test conditions (Table~\ref{tab:limite-ciclos}), and the module does not track the arrival of the matrices at each $T_c$.
 
 To meet the cycle limits for each test condition, a specific architecture was developed for every case, only in $16 \times 16$, with Vitis HLS directives that reduce the interval between inversions. All versions were implemented in Vivado, tested using $\mathbf G_c$ matrices obtained from the simulator (Section~\ref{subsec:hw-matrizes}), and evaluated for power consumption and energy per inversion (Section~\ref{subsec:hw-potencia}). Each version produces the same inverse as the non-optimized implementation, a result verified bit-for-bit against the C-language code.
 % FONTE: hardware/viabilidade_32x32/LEIAME.md (síntese C, HLS 2026.1 local, 2026-11-02, <24,12>).
-\textcolor{red}{As arquiteturas otimizadas não foram implementadas em $32 \times 32$. Uma síntese C de teste das seis, em $32 \times 32$ e no formato $\langle 24,12\rangle$, estimou intervalos acima do limite de ciclos de todas as condições de teste. Nas sistólicas, o intervalo cresce 4 vezes, com o quadrado do tamanho da matriz. A da TDLB100-400 também não caberia no FPGA. Para atender os limites em $32 \times 32$, seria preciso outra arquitetura, com mais área, e isso não foi testado.}
+The optimized architectures were implemented only in $16 \times 16$ because the inversion in $32 \times 32$ is more demanding: in the Vitis HLS synthesis, even with the proposed optimizations, it took more cycles than the limits allow.
 
 \subsection{\texorpdfstring{Hardware architectures}{Hardware architectures}}\label{subsec:hw-arquiteturas}
 % ---------------------------------------------------------------------
 All optimized architectures employ pipelining (Section~\ref{subsubsec:latencia-intervalo}). Every $T_c$, the DU inverts 275 matrices $\mathbf G_c$, one for each PRB (Section~\ref{sec:requisitos-tempo}). For the 9,090 and 4,545-cycle limits, the module inverts one matrix at a time. For tighter limits, it inverts the matrices in batches of $n$. In all cases, the module must receive the 275 matrices for a given block within the duration $T_c$.
 
-The matrices within a batch are independent of one another. Consequently, \textcolor{red}{some of these matrices} are computed in the same cycle using loop unrolling, which creates a copy of the loop body for each iteration. The loop that iterates over \textcolor{red}{these} matrices is nested within a pipelined loop, and the HLS tool performs the unrolling automatically \cite[pp.~41, 372, and 428]{ug1399}. When \textcolor{red}{the number of matrices per cycle} is less than $n$, groups of \textcolor{red}{these} matrices are processed in alternating cycles. Each copy has its own dedicated memory bank, though it may share operators with the others.
+The matrices within a batch are independent of one another. Consequently, some of these matrices are computed in the same cycle using loop unrolling, which creates a copy of the loop body for each iteration. The loop that iterates over these matrices is nested within a pipelined loop, and the HLS tool performs the unrolling automatically \cite[pp.~41, 372, and 428]{ug1399}. When the number of matrices per cycle is less than $n$, groups of these matrices are processed in alternating cycles. Each copy has its own dedicated memory bank, though it may share operators with the others.
 
-The values for $n$ and \textcolor{red}{the number of matrices per cycle} were determined through trial and error and are presented in Table~\ref{tab:hw-arquiteturas}. \textcolor{red}{O objetivo foi ficar abaixo do limite de ciclos, e não chegar exatamente nele.}
+The values for $n$ and the number of matrices per cycle were determined through trial and error and are presented in Table~\ref{tab:hw-arquiteturas}. The goal was to stay below the cycle limit, not to reach it exactly.
  
 
 \begin{table}[htbp]
@@ -125,7 +125,7 @@ static void etapa_fs(G, G_inv) {
 \subsubsection{\texorpdfstring{Matrix batches}{Matrix batches}}\label{subsubsec:hw-lotes}
 
 
-Within the 606 and 454 cycle limits, the steps form a dataflow, as in the 4,545 cycle limit. The copies read different matrices in the same cycle, but a BRAM memory only allows access to two addresses per cycle. Therefore, the batch memory is divided into \textcolor{red}{one BRAM bank per copy}, using the directive \texttt{\#pragma HLS array\_partition cyclic} and \textcolor{red}{a factor equal to the number of matrices per cycle. Thus, matrix $m$ is located in bank $m \bmod 6$ within the 606-cycle limit and $m \bmod 8$ within the 454-cycle limit} \cite[pp.~87--88]{kastner-hls}.
+Within the 606 and 454 cycle limits, the steps form a dataflow, as in the 4,545 cycle limit. The copies read different matrices in the same cycle, but a BRAM memory only allows access to two addresses per cycle. Therefore, the batch memory is divided into one BRAM bank per copy, using the directive \texttt{\#pragma HLS array\_partition cyclic} and a factor equal to the number of matrices per cycle. Thus, matrix $m$ is located in bank $m \bmod 6$ within the 606-cycle limit and $m \bmod 8$ within the 454-cycle limit \cite[pp.~87--88]{kastner-hls}.
 
 Figure~\ref{fig:hw-lotes} shows the architecture of the 606 cycle limit. Since the two groups of 6 matrices alternate in each cycle, one iteration does not wait for the result of the previous one. Each copy has its own multipliers, but there is a single divider in each step, shared by the copies. It receives one matrix of the batch per cycle and, since it has a pipeline, it also does not wait for the previous division.
 
@@ -163,7 +163,7 @@ for (k = column; k < n; k++)
 % ---------------------------------------------------------------------
 \subsubsection{\texorpdfstring{Systolic arrays}{Systolic arrays}}\label{subsubsec:hw-sistolico}
 
-Within the 151 and 113-cycle limits, the steps also form a dataflow, with each copy featuring its own divider. LU decomposition, forward substitution, and inversion utilize systolic arrays: the $k$-loop, which iterates over a row or a summation, is nested within a pipelined loop, which HLS unrolls into \textcolor{red}{$M_c = 16$} processing elements (PEs)\textcolor{red}{, one per element of the row,} (Section~\ref{subsubsec:arranjo-sistolico}). Each step employs an array structure per copy, resulting in \textcolor{red}{three arrays per copy} within the module.
+Within the 151 and 113-cycle limits, the steps also form a dataflow, with each copy featuring its own divider. LU decomposition, forward substitution, and inversion utilize systolic arrays: the $k$-loop, which iterates over a row or a summation, is nested within a pipelined loop, which HLS unrolls into $M_c = 16$ processing elements (PEs) (Section~\ref{subsubsec:arranjo-sistolico}). Each copy has one array in each of these three steps.
 
 In forward substitution and inversion, each PE adds a term and passes the partial sum to the next PE, following the same sequence as the unoptimized version, with each cycle computing a complete sum. In the LU decomposition, each cycle updates an entire row, with one element assigned to each PE. To achieve this, each row element is stored in its own dedicated register, configured using the \texttt{\#pragma HLS array\_partition complete} directive \cite[p.~87]{kastner-hls}.
 
@@ -220,11 +220,7 @@ The testbench inverts 20 matrices randomly selected from this sample. In the $16
 Power was estimated from the switching activity of the routed design: the version without optimizations under the 5 test conditions, and each optimized architecture only under its own. Vivado generates a functional netlist, which is simulated with the testbench. The simulation checks the inverses byte by byte against the C code and records how many times each signal changes value in a SAIF (Switching Activity Interchange Format) file. Vivado then reads this file and reports the power.
 
 Energy per inversion is defined as the dynamic power multiplied by the average time required for an inversion. This duration is calculated as the interval between two inversions, measured during the netlist simulation, multiplied by the 10~ns clock period. In architectures that employ batch processing, the interval between two batches is divided by $n$.
-\textcolor{red}{A potência estática é a potência total menos a dinâmica.}
-% Retirado em 2026-11-13 (a figura potencia_media_condicao saiu dos Resultados em 2026-11-09):
-%   A potência média no ritmo exigido de cada condição de teste soma a potência estática e a
-%   energia de 275 inversões dividida por T_c. Ela supõe que, depois de inverter as 275 matrizes
-%   do bloco, o módulo fica parado até o próximo bloco e só gasta a potência estática.
+Static power is the total power minus the dynamic power.
 % FONTE: memória tcc-pacote-servidor-2023 (convenção da energia). Intervalo tirado do
 %   xsim_<cenário>.log do servidor, não do ciclos_medios do potencia.csv, que inclui o
 %   enchimento do pipeline do primeiro lote.

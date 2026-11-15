@@ -1,17 +1,9 @@
-% =====================================================================
-% SETUP DE HARDWARE (Metodologia) -- rascunho de 2026-11-04
-% Ainda não incluído no METODOLOGIA.tex. Para incluir:
-%   \section{Hardware Setup}\label{sec:setup-hardware}
-%   \input{chapters/METODOLOGIA/setup-hardware.tex}
-% Fontes do projeto (conferidas em 2026-11-04):
+% FONTE (conferidas em 2026-11-04):
 %   hardware/pacote_servidor_formatos/{LEIAME.md, vivado.tcl, potencia.py, rodar.sh}
 %   hardware/pacote_servidor_2023/LEIAME.md
 %   hardware/testes/{AMOSTRAGEM.md, LEIAME.md}
 %   hardware/cholesky_hardware/{hls_config_sintese_24_12*.cfg, tb_potencia.cpp}
 %   hardware/cholesky_hardware_diretivas*/LEIAME.md; acompanhamento_experimentos.csv
-% Nomes das configurações: mapa LETRAS de software/testes/mapa_cenarios_v4.py
-%   (antigos 1-8 = 1A,1E,1B,1F,1C,1G,1D,1H; 9-12 = 2A,2E,2B,2F).
-% =====================================================================
 
 % ---------------------------------------------------------------------
 \subsection{\texorpdfstring{Tools and target device}{Tools and target device}}\label{subsec:hw-ferramentas}
@@ -38,7 +30,7 @@ The module consists of six steps, each implemented as a C++ function (Figure~\re
 \legend{Source: the author.}
 \end{figure}
 
-Additions, multiplications, and divisions utilize \texttt{ap\_fixed} type operators. Complex multiplication and division operations are explicitly implemented in the code, with a specific type defined for each intermediate value; thus, the bit-width of every intermediate value is explicitly set within the code. The addition of two $N$-bit numbers requires $N+1$ bits, while their product requires $2N$ bits \cite[pp.~72--73]{kastner-hls}. When using \texttt{ap\_fixed} types, the result of an operation inherently possesses a sufficient number of bits; overflow only occurs when this result is assigned to a type with a smaller bit-width \cite[p.~74]{kastner-hls}. Consequently, intermediate values employ types with greater bit-widths than the $\langle W, I\rangle$ format (Table~\ref{tab:tipos-intermediarios}), with the result reverting to the specified format only at the output of each step. Square root calculations are performed using the \texttt{hls::sqrt} function from Vitis HLS, operating directly within the defined format.
+Additions, multiplications, and divisions utilize \texttt{ap\_fixed} type operators. Complex multiplication and division operations are explicitly implemented in the code, with a specific type defined for each intermediate value; thus, the bit-width of every intermediate value is explicitly set within the code. \textcolor{red}{The addition of two $b$-bit numbers requires $b+1$ bits, while their product requires $2b$ bits} \cite[pp.~72--73]{kastner-hls}. When using \texttt{ap\_fixed} types, the result of an operation inherently possesses a sufficient number of bits; overflow only occurs when this result is assigned to a type with a smaller bit-width \cite[p.~74]{kastner-hls}. Consequently, intermediate values employ types with greater bit-widths than the $\langle W, I\rangle$ format (Table~\ref{tab:tipos-intermediarios}), with the result reverting to the specified format only at the output of each step. Square root calculations are performed using the \texttt{hls::sqrt} function from Vitis HLS, operating directly within the defined format.
 
 \begin{table}[!ht]
 \caption{Types of the values in the inversion module, for the format $\langle W, I\rangle$ with $F = W - I$ fractional bits.}

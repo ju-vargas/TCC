@@ -7,7 +7,7 @@ The format depends on the group and on the SNR increase limit. With all configur
 
 % FONTE: hardware.tex (tab:recursos-faixa, tab:potencia-dinamica, fig:energia-inversao,
 %   subsec:resultados-etapas).
-All architectures meet the cycle limit of their test condition at 100~MHz (Section~\ref{subsec:resultados-recursos}). Resource usage and dynamic power follow the parallelism. The dynamic power stays below 1.1~W with loop pipelining, dataflow, and matrix batching, and reaches up to 4.7~W with systolic arrays (Section~\ref{subsec:resultados-potencia}). The energy per inversion, however, is higher in the architectures with less parallelism, those of TDLA30-5 and TDLA30-10. In all architectures, the LU decomposition and the forward substitution, which contain the dividers, account for most of the resources and power (Section~\ref{subsec:resultados-etapas}).
+All architectures \textcolor{red}{that fit in the FPGA} meet the cycle limit of their test condition at 100~MHz (Section~\ref{subsec:resultados-recursos}). Resource usage and dynamic power follow the parallelism. The dynamic power stays below 1.1~W with loop pipelining, dataflow, and matrix batching, and reaches up to 4.7~W with systolic arrays (Section~\ref{subsec:resultados-potencia}). The energy per inversion, however, is higher in the \textcolor{red}{optimized} architectures with less parallelism, those of TDLA30-5 and TDLA30-10. In all architectures, the LU decomposition and the forward substitution, which contain the dividers, account for most of the resources and power (Section~\ref{subsec:resultados-etapas}). \textcolor{red}{In $32 \times 32$ (group 2), only the version without optimizations was implemented, and its interval between inversions is above all the cycle limits (Section~\ref{subsec:resultados-recursos}).}
 
 % FONTE: compromisso.tex (tab:escolha-condicao, fig:quadrantes-g1/g3). TDLB100-400 sem <30,14>
 %   (hardware.tex); <28,14> fica em 0,13 dB nessa condição.
@@ -15,4 +15,6 @@ In the trade-off with the SNR increase, the format changes power and energy less
 
 % FONTE: latencia-vazao.tex (tab:atraso-bloco, ITU 1 ms, outras tarefas da BS).
 The architectures were sized by throughput rather than by delay. Under low-mobility conditions, they distribute the inversions over the coherence time and use less area and power, but the last inversion of a block finishes later. The collection of the $N$ noise samples, required by the estimation method, also adds delay. With data collection and inversion, only TDLA30-300 and TDLB100-400 stay below the 1~ms latency expected by the ITU-R (Section~\ref{sec:resultados-atraso}), without counting the other BS tasks.
+
+\textcolor{red}{Thus, in $16 \times 16$, the fixed-point inversion of $\mathbf G_c$ fits in the XCU50 and meets the throughput of all test conditions, with formats within 3~dB and within 0.1~dB of the floating-point SER. The only exception is the 0.1~dB limit in TDLB100-400 of group 3, with an IoTh of 20~dB.}
 
