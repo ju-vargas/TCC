@@ -53,6 +53,7 @@ from figuras_modo_fixo import PASTA, pasta_referencia    # noqa: E402
 from mapa_cenarios_v4 import LETRAS                      # noqa: E402
 
 SAIDA = PASTA / "figuras" / "analise_grupos"
+DPI = 250   # PNG; scripts de figuras do texto podem subir (o PDF é vetorial)
 SUFIXO = []   # com --configs: as letras no fim do nome, para não gravar em cima das 16
 SERVIDOR = AQUI.parent.parent / "hardware" / "resultados_servidor"
 BCD1 = "BCD-MMSE (iter 1)"
@@ -116,6 +117,16 @@ def num(v: float, casas: int = 2) -> str:
     return f"{v:.{casas}f}".replace(".", ",")
 
 
+def legenda_quadro(fig, ax_direita, handles, y=0.0, **kw):
+    """Legenda das figuras do TCC: num quadro com borda fina, embaixo, com a borda direita
+    alinhada à do painel ax_direita (como o quadro da legenda nos mapas). Chamar depois do
+    tight_layout/subplots_adjust, para a posição do painel já estar certa."""
+    return fig.legend(handles=handles, loc="lower right",
+                      bbox_to_anchor=(ax_direita.get_position().x1, y), frameon=True,
+                      facecolor=SURFACE, edgecolor=INK_MUTED, framealpha=1, fancybox=False,
+                      labelcolor=INK_SECONDARY, alignment="left", borderpad=0.6, **kw)
+
+
 def eixos(ax, grade_x=True, grade_y=False):
     ax.set_facecolor(SURFACE)
     for lado in ("top", "right"):
@@ -132,7 +143,7 @@ def eixos(ax, grade_x=True, grade_y=False):
 
 def salvar(fig, nome: str, linhas: list[list], cabecalho: list[str]) -> None:
     SAIDA.mkdir(parents=True, exist_ok=True)
-    fig.savefig(SAIDA / f"{nome}.png", dpi=250, facecolor=SURFACE, bbox_inches="tight")
+    fig.savefig(SAIDA / f"{nome}.png", dpi=DPI, facecolor=SURFACE, bbox_inches="tight")
     fig.savefig(SAIDA / f"{nome}.pdf", facecolor=SURFACE, bbox_inches="tight")
     plt.close(fig)
     with open(SAIDA / f"{nome}_data.csv", "w", newline="") as f:

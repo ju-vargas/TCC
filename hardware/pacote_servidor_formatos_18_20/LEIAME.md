@@ -112,8 +112,26 @@ Tabela completa em ../resultados_servidor/resultados_vivado_servidor.csv.
   tabela usa a do TDLA30-5.
 - 114_sistolico: 94% a 95% das redes casadas no SAIF, como nos outros
   formatos.
-- 32 x 32 sem otimizacao: Vivado pronto (timing fechado, WNS de 1,675 a 1,971
-  ns); potencia ainda rodando.
+
+## Resultados (32 x 32 sem otimizacao, 2026-11-05)
+
+Potencia terminou no servidor em 2026-11-05 01:32 (rodar.log). Copiado para
+../resultados_servidor/ em 2026-11-14.
+
+| Formato | LUT | FF | DSP | BRAM_18K | Caminho critico | Dinamica (W) | Total (W) | Intervalo (ciclos) | Energia (uJ) |
+|---|---|---|---|---|---|---|---|---|---|
+| <18,8> | 4.162 | 2.268 | 87 | 9 | 8,294 ns | 0,035 | 2,248 | 138.894 | 48,6 |
+| <18,8> TRN/SAT | 4.984 | 2.328 | 83 | 9 | 8,325 ns | 0,038 | 2,251 | 138.959 | 52,8 |
+| <20,8> | 4.667 | 2.865 | 87 | 18 | 8,029 ns | 0,038 | 2,251 | 159.086 | 60,5 |
+
+- Timing fechado a 100 MHz (WNS de 1,675 a 1,971 ns).
+- Dinamica e total do TDLA30-5. Nos 5 cenarios: <18,8> 0,035 a 0,036 W;
+  <18,8> TRN/SAT 0,038 a 0,039 W; <20,8> 0,038 W em todos.
+- Intervalo: a diferenca mais comum entre as marcas do log do xsim, a mesma
+  nos 5 cenarios. As outras diferencas ficam ate 72 ciclos abaixo e 3 acima.
+- 100% das redes casadas no SAIF, confianca High, 0 erros nos logs do xsim.
+- Contra a 16 x 16 do mesmo formato: 5,2 vezes os ciclos e 5,7 a 5,9 vezes a
+  energia. Area quase igual (mesmo DSP).
 
 ## Como rodar
 

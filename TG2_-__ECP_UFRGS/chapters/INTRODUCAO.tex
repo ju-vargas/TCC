@@ -49,8 +49,8 @@ cells produces colored noise with a non-diagonal covariance
 structure~\cite{zhao2025jsac}. Under colored noise, the standard
 inversion-avoidance techniques used by AWGN-based methods lose their convergence
 guarantees~\cite{wang2023bdnsepa}, and all known decentralized LMMSE solutions
-for this regime require an explicit matrix inversion
- 
+for this regime require an explicit matrix inversion\textcolor{red}{.}
+
 The Block Coordinate Descent
 MMSE (BCD-MMSE) algorithm was recently proposed~\cite{zhao2025jsac} as the first decentralized LMMSE equalizer to operate
 under colored noise. In BCD-MMSE, each DU performs a local $M_c \times M_c$
@@ -63,10 +63,14 @@ a promising target for this operation, offering higher energy efficiency and
 lower latency than GPU-based solutions at the power budgets required by
 distributed base-station nodes~\cite{jeon2019,li2019cd}.
 
-This work proposes and evaluates an FPGA accelerator for the $M_c \times M_c$
-Hermitian matrix inversion required by each DU in the BCD-MMSE algorithm. The
-accelerator is based on Cholesky decomposition, an exact inversion method
-applicable under a non-diagonal noise covariance. The contributions are
-evaluated in terms of detection quality (Bit Error Rate - BER), resource usage
-(LUT count and DSP blocks), and power consumption.
+% ANTIGO: This work proposes and evaluates an FPGA accelerator for the $M_c \times M_c$
+% Hermitian matrix inversion required by each DU in the BCD-MMSE algorithm. The
+% accelerator is based on Cholesky decomposition, an exact inversion method
+% applicable under a non-diagonal noise covariance. The contributions are
+% evaluated in terms of detection quality (Bit Error Rate - BER), resource usage
+% (LUT count and DSP blocks), and power consumption.
+% 2026-11-15: atualizado a partir dos Resultados (SER, e não BER; energia, vazão e atraso).
+\textcolor{red}{Este trabalho propõe e avalia um acelerador em FPGA para a inversão da matriz Hermitiana $M_c \times M_c$ que cada DU faz no BCD-MMSE. O acelerador usa a decomposição de Cholesky, um método de inversão exato que funciona com covariância de ruído não diagonal. Primeiro, um simulador em Python escolhe o formato de ponto fixo pelo aumento de SNR em relação ao ponto flutuante, medido nas curvas de taxa de erro de símbolo (SER). Depois, o módulo de inversão é implementado com uma arquitetura para cada condição de teste, de baixa e de alta mobilidade. Cada arquitetura é avaliada pelo uso de recursos, pela potência, pela energia por inversão, pela vazão e pelo atraso.}
+
+\textcolor{red}{O texto está organizado da seguinte forma. O Capítulo~\ref{chap:relatedwork} apresenta os trabalhos relacionados, e o Capítulo~\ref{chap:fundamentacao}, a fundamentação teórica. O Capítulo~\ref{chap:metodologia} descreve o simulador, a escolha dos formatos e as arquiteturas de hardware. O Capítulo~\ref{chap:resultados} mostra os resultados, e o Capítulo~\ref{chap:conclusao} traz as conclusões e os trabalhos futuros.}
 

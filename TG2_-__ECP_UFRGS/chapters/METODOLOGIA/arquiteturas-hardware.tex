@@ -10,9 +10,9 @@ To meet the cycle limits for each test condition, a specific architecture was de
 % ---------------------------------------------------------------------
 All optimized architectures employ pipelining (Section~\ref{subsubsec:latencia-intervalo}). Every $T_c$, the DU inverts 275 matrices $\mathbf G_c$, one for each PRB (Section~\ref{sec:requisitos-tempo}). For the 9,090 and 4,545-cycle limits, the module inverts one matrix at a time. For tighter limits, it inverts the matrices in batches of $n$. In all cases, the module must receive the 275 matrices for a given block within the duration $T_c$.
 
-The matrices within a batch are independent of one another. Consequently, $c$ of these matrices are computed in the same cycle using loop unrolling, which creates a copy of the loop body for each iteration. The loop that iterates over the $c$ matrices is nested within a pipelined loop, and the HLS tool performs the unrolling automatically \cite[pp.~41, 372, and 428]{ug1399}. When $c$ is less than $n$, groups of $c$ matrices are processed in alternating cycles. Each copy has its own dedicated memory bank, though it may share operators with the others.
+The matrices within a batch are independent of one another. Consequently, \textcolor{red}{some of these matrices} are computed in the same cycle using loop unrolling, which creates a copy of the loop body for each iteration. The loop that iterates over \textcolor{red}{these} matrices is nested within a pipelined loop, and the HLS tool performs the unrolling automatically \cite[pp.~41, 372, and 428]{ug1399}. When \textcolor{red}{the number of matrices per cycle} is less than $n$, groups of \textcolor{red}{these} matrices are processed in alternating cycles. Each copy has its own dedicated memory bank, though it may share operators with the others.
 
-The values for $n$ and $c$ were determined through trial and error and are presented in Table~\ref{tab:hw-arquiteturas}.
+The values for $n$ and \textcolor{red}{the number of matrices per cycle} were determined through trial and error and are presented in Table~\ref{tab:hw-arquiteturas}. \textcolor{red}{O objetivo foi ficar abaixo do limite de ciclos, e não chegar exatamente nele.}
  
 
 \begin{table}[htbp]
@@ -26,7 +26,7 @@ The values for $n$ and $c$ were determined through trial and error and are prese
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Test condition} & \begin{tabular}[c]{@{}c@{}}\textbf{Limit per}\\\textbf{matrix (cycles)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Matrices per}\\\textbf{batch} ({\boldmath $n$})\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Copies}\\({\boldmath $c$})\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Batches}\\\textbf{per block}\end{tabular} \\
+\textbf{Test condition} & \begin{tabular}[c]{@{}c@{}}\textbf{Limit per}\\\textbf{matrix (cycles)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Matrices per}\\\textbf{batch} ({\boldmath $n$})\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Matrices per}\\\textbf{cycle}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Batches}\\\textbf{per block}\end{tabular} \\
 \midrule
 Without optimizations & --    & 1  & 1 & 275 \\
 TDLA30-5    & 9090 & 1  & 1 & 275 \\
@@ -47,11 +47,11 @@ TDLB100-400 & 113   & 32 & 4 & 9 \\
 % ---------------------------------------------------------------------
 \subsubsection{\texorpdfstring{Loop pipelining}{Loop pipelining}}\label{subsubsec:hw-pipeline-lacos}
 
-The module consists of six sequential stages (Figure~\ref{fig:modulo-inversao}): LU decomposition, extraction of the diagonal $\mathbf D$, calculation of the square root $\mathbf D^{1/2}$, computation of $\mathbf F$, forward substitution, and inversion. For the 9,090-cycle limit, the internal loops of these stages are annotated with the \texttt{\#pragma HLS pipeline II=1} directive. The \texttt{D\_extraction} stage is the only one without this directive, as it merely copies the diagonal from $\mathbf U$ to $\mathbf D$ and requires significantly fewer cycles than the other stages.
+The module consists of six sequential steps (Figure~\ref{fig:modulo-inversao}): LU decomposition, extraction of the diagonal $\mathbf D$, calculation of the square root $\mathbf D^{1/2}$, computation of $\mathbf F$, forward substitution, and inversion. For the 9,090-cycle limit, the internal loops of these steps are annotated with the \texttt{\#pragma HLS pipeline II=1} directive. The \texttt{D\_extraction} step is the only one without this directive, as it merely copies the diagonal from $\mathbf U$ to $\mathbf D$ and requires significantly fewer cycles than the other steps.
 
 This directive enables loop pipelining, specifying that a new iteration should begin every cycle, that is, an initiation interval (II) of 1 cycle (Section~\ref{subsubsec:latencia-intervalo}). If data dependencies or resource constraints prevent this, the HLS tool will automatically use a larger II \cite[p.~45]{kastner-hls}.
 
-Figure~\ref{fig:hw-pipeline-lacos} illustrates a loop from the LU decomposition process, both without and with pipelining. The individual stages and loops for a given matrix are executed sequentially. Consequently, the next inversion process cannot begin until the current one has finished; in this case, the interval between inversions is equal to the latency \cite[p.~114]{kastner-hls}.
+Figure~\ref{fig:hw-pipeline-lacos} illustrates a loop from the LU decomposition process, both without and with pipelining. The individual steps and loops for a given matrix are executed sequentially. Consequently, the next inversion process cannot begin until the current one has finished; in this case, the interval between inversions is equal to the latency \cite[p.~114]{kastner-hls}.
 
 \begin{figure}[!ht]
 \caption{Loop pipelining in the LU decomposition. The code is simplified.}
@@ -80,9 +80,9 @@ for (line = column + 1; line < n; line++)
 \end{figure}
 
 % ---------------------------------------------------------------------
-\subsubsection{\texorpdfstring{Dataflow between stages}{Dataflow between stages}}\label{subsubsec:hw-dataflow}
+\subsubsection{\texorpdfstring{Dataflow between steps}{Dataflow between steps}}\label{subsubsec:hw-dataflow}
 
-The architecture of the 4,545-cycle limit maintains the loop pipeline and combines the six steps into four: LU decomposition, calculation of $\mathbf F$ (\texttt{D\_extraction}, \texttt{D\_square\_root} and \texttt{G\_decomposition}), forward substitution, and inversion. The \texttt{\#pragma HLS dataflow} directive, applied to the top-level function, implements a task-level pipeline across the four stages, with each stage assigned to a specific matrix (Section~\ref{subsubsec:pipeline-tarefas}). Each step carries the directive \texttt{\#pragma HLS inline off}, which keeps it as a separate function \cite[p.~52]{kastner-hls}. In Figure~\ref{fig:hw-dataflow}, the latency of a matrix is the sum of the four steps, and the interval is the duration of the longest step.
+The architecture of the 4,545-cycle limit maintains the loop pipeline and combines the six steps into four: LU decomposition, calculation of $\mathbf F$ (\texttt{D\_extraction}, \texttt{D\_square\_root} and \texttt{G\_decomposition}), forward substitution, and inversion. The \texttt{\#pragma HLS dataflow} directive, applied to the top-level function, implements a task-level pipeline across the four steps, with each step assigned to a specific matrix (Section~\ref{subsubsec:pipeline-tarefas}). Each step carries the directive \texttt{\#pragma HLS inline off}, which keeps it as a separate function \cite[p.~52]{kastner-hls}. In Figure~\ref{fig:hw-dataflow}, the latency of a matrix is the sum of the four steps, and the interval is the duration of the longest step.
 
 % FONTE: cholesky_hardware_diretivas_4545/cholesky_top.cpp (etapa_lu, etapa_g, etapa_fs,
 %   etapa_inv; dataflow em cholesky_inverse, linha 68). Kastner p. 52 (inline off mantém a
@@ -90,7 +90,7 @@ The architecture of the 4,545-cycle limit maintains the loop pipeline and combin
 %   Intervalo = etapa mais longa: Kastner p. 115 (na Fundamentação).
 
 \begin{figure}[!ht]
-\caption{Dataflow between the stages of the inversion. The code is simplified.}
+\caption{Dataflow between the steps of the inversion. The code is simplified.}
 \label{fig:hw-dataflow}
 \vspace{4pt}
 \centering
@@ -125,7 +125,7 @@ static void etapa_fs(G, G_inv) {
 \subsubsection{\texorpdfstring{Matrix batches}{Matrix batches}}\label{subsubsec:hw-lotes}
 
 
-Within the 606 and 454 cycle limits, the steps form a dataflow, as in the 4,545 cycle limit. The $c$ copies read different matrices in the same cycle, but a BRAM memory only allows access to two addresses per cycle. Therefore, the batch memory is divided into $c$ BRAM banks, one per copy, using the directive \texttt{\#pragma HLS array\_partition cyclic} and factor $c$. Thus, matrix $m$ is located in bank $m \bmod c$ \cite[pp.~87--88]{kastner-hls}.
+Within the 606 and 454 cycle limits, the steps form a dataflow, as in the 4,545 cycle limit. The copies read different matrices in the same cycle, but a BRAM memory only allows access to two addresses per cycle. Therefore, the batch memory is divided into \textcolor{red}{one BRAM bank per copy}, using the directive \texttt{\#pragma HLS array\_partition cyclic} and \textcolor{red}{a factor equal to the number of matrices per cycle. Thus, matrix $m$ is located in bank $m \bmod 6$ within the 606-cycle limit and $m \bmod 8$ within the 454-cycle limit} \cite[pp.~87--88]{kastner-hls}.
 
 Figure~\ref{fig:hw-lotes} shows the architecture of the 606 cycle limit. Since the two groups of 6 matrices alternate in each cycle, one iteration does not wait for the result of the previous one. Each copy has its own multipliers, but there is a single divider in each step, shared by the copies. It receives one matrix of the batch per cycle and, since it has a pipeline, it also does not wait for the previous division.
 
@@ -163,15 +163,15 @@ for (k = column; k < n; k++)
 % ---------------------------------------------------------------------
 \subsubsection{\texorpdfstring{Systolic arrays}{Systolic arrays}}\label{subsubsec:hw-sistolico}
 
-Within the 151 and 113-cycle limits, the stages also form a dataflow, with each copy featuring its own divider. LU decomposition, forward substitution, and inversion utilize systolic arrays: the $k$-loop, which iterates over a row or a summation, is nested within a pipelined loop, which HLS unrolls into 16 processing elements (PEs) (Section~\ref{subsubsec:arranjo-sistolico}). Each stage employs an array structure per copy, resulting in a total of $3c$ such arrays within the module.
+Within the 151 and 113-cycle limits, the steps also form a dataflow, with each copy featuring its own divider. LU decomposition, forward substitution, and inversion utilize systolic arrays: the $k$-loop, which iterates over a row or a summation, is nested within a pipelined loop, which HLS unrolls into \textcolor{red}{$M_c = 16$} processing elements (PEs)\textcolor{red}{, one per element of the row,} (Section~\ref{subsubsec:arranjo-sistolico}). Each step employs an array structure per copy, resulting in \textcolor{red}{three arrays per copy} within the module.
 
 In forward substitution and inversion, each PE adds a term and passes the partial sum to the next PE, following the same sequence as the unoptimized version, with each cycle computing a complete sum. In the LU decomposition, each cycle updates an entire row, with one element assigned to each PE. To achieve this, each row element is stored in its own dedicated register, configured using the \texttt{\#pragma HLS array\_partition complete} directive \cite[p.~87]{kastner-hls}.
 
-In both LU decomposition and forward substitution, each step reads rows that were written during the previous step, with a cycle offset corresponding to the step size. During the final steps of the LU decomposition and the initial steps of the forward substitution, which are relatively short, the required row might still be within the pipeline. Consequently, these steps are padded with empty cycles until they reach a minimum duration (Figure~\ref{fig:hw-sistolico}). Since HLS cannot automatically infer this from the source code, the \texttt{\#pragma HLS dependence ... dependent=false} directive is used to specify that the iterations are independent of one another \cite[p.~149]{kastner-hls}.
+In both LU decomposition and forward substitution, each iteration reads rows that were written during the previous iteration, with a cycle offset corresponding to the iteration size. During the final iterations of the LU decomposition and the initial iterations of the forward substitution, which are relatively short, the required row might still be within the pipeline. Consequently, these iterations are padded with empty cycles until they reach a minimum duration (Figure~\ref{fig:hw-sistolico}). Since HLS cannot automatically infer this from the source code, the \texttt{\#pragma HLS dependence ... dependent=false} directive is used to specify that the iterations are independent of one another \cite[p.~149]{kastner-hls}.
 
 
 \begin{figure}[!ht]
-\caption{Systolic array of the forward substitution and minimum step of the LU decomposition. The code is simplified.}
+\caption{Systolic array of the forward substitution and minimum iteration of the LU decomposition. The code is simplified.}
 \label{fig:hw-sistolico}
 \vspace{4pt}
 \centering

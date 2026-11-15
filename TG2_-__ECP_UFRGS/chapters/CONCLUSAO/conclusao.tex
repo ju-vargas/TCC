@@ -1,14 +1,18 @@
-% =====================================================================
-% RASCUNHO (2026-11-06): texto da conclusão, para a autora trabalhar.
-%   Os números de formato e de hardware devem ser conferidos com os Resultados quando
-%   eles estiverem escritos. Trechos marcados com [completar] dependem deles.
-% =====================================================================
+This work studied the BCD-MMSE algorithm in the uplink of a massive MIMO system with decentralized processing and colored noise. The focus was on the inversion of the matrix $\mathbf G_c$ at each DU, performed in fixed-point arithmetic on an FPGA. A Python-based simulator was used to assess the impact of the numerical format on the SER curves. Subsequently, the inversion module was implemented in hardware, with one architecture for each test condition.
 
-\textcolor{red}{Este trabalho estudou o BCD-MMSE no \textit{uplink} de um sistema MIMO massivo com processamento descentralizado e ruído colorido. O foco foi a inversão da matriz $\mathbf G_c$ em cada DU, feita em ponto fixo em um FPGA. Um simulador em Python mediu o efeito do formato de ponto fixo nas curvas de SER. Depois, o módulo de inversão foi implementado em hardware, com uma arquitetura para cada condição de teste.}
+% FONTE: Tabela tab:formatos-escolhidos e Seções sec:resultados-formato, subsec:perfis-mobilidade,
+%   sec:resultados-curvas (formatos.tex). Mobilidade: formatos.tex, "little impact on the SNR
+%   increase"; só com baixa mobilidade, 2 bits a menos em dois casos (G2 3 dB, G3 0,1 dB).
+The format depends on the group and on the SNR increase limit. With all configurations, the 3~dB limit requires $\langle 24,12\rangle$ in groups 1 and 3, and $\langle 28,14\rangle$ in group 2, while the 0.1~dB limit requires $\langle 26,12\rangle$ in group 1 and $\langle 30,14\rangle$ in groups 2 and 3 (Table~\ref{tab:formatos-escolhidos}). Without the configurations with an IoTh of 20~dB, the formats have 2 to 6 fewer bits. QPSK is the modulation most sensitive to the format, as it operates at a lower SNR, where the elements of $\mathbf G_c$ overflow the integer part (Section~\ref{sec:resultados-curvas}). With 16-QAM, the effect of the format is almost negligible, and the difference from LMMSE comes almost entirely from decentralization (Section~\ref{sec:resultados-formato}). For the same format, the mobility profile has little effect on the SNR increase. Only in two cases would the low-mobility conditions alone allow a format 2 bits smaller, so the high-mobility profile defines the format (Section~\ref{subsec:perfis-mobilidade}).
 
-\textcolor{red}{[completar] Formatos escolhidos para cada grupo de configurações e aumento de SNR de cada um, em relação ao ponto flutuante (Seção~\ref{sec:resultados-formato}).}
+% FONTE: hardware.tex (tab:recursos-faixa, tab:potencia-dinamica, fig:energia-inversao,
+%   subsec:resultados-etapas).
+All architectures meet the cycle limit of their test condition at 100~MHz (Section~\ref{subsec:resultados-recursos}). Resource usage and dynamic power follow the parallelism. The dynamic power stays below 1.1~W with loop pipelining, dataflow, and matrix batching, and reaches up to 4.7~W with systolic arrays (Section~\ref{subsec:resultados-potencia}). The energy per inversion, however, is higher in the architectures with less parallelism, those of TDLA30-5 and TDLA30-10. In all architectures, the LU decomposition and the forward substitution, which contain the dividers, account for most of the resources and power (Section~\ref{subsec:resultados-etapas}).
 
-\textcolor{red}{[completar] Recursos e potência das arquiteturas. Todas atendem o limite de vazão da sua condição de teste.}
+% FONTE: compromisso.tex (tab:escolha-condicao, fig:quadrantes-g1/g3). TDLB100-400 sem <30,14>
+%   (hardware.tex); <28,14> fica em 0,13 dB nessa condição.
+In the trade-off with the SNR increase, the format changes power and energy less than the architecture does (Section~\ref{subsec:resultados-compromisso}). Since this analysis is done for each test condition and each IoTh, a format smaller than the one of the group is sometimes sufficient. The exception is TDLB100-400 in group 3, with an IoTh of 20~dB: the $\langle 30,14\rangle$ format does not fit in the FPGA, and no smaller format stays within 0.1~dB.
 
-\textcolor{red}{As arquiteturas foram dimensionadas pela vazão, e não pelo atraso. Nas condições de baixa mobilidade, elas distribuem as inversões ao longo do tempo de coerência e gastam menos área e potência. Em troca, o atraso até a última inversão de um bloco fica maior. Parte do atraso vem do próprio método de estimação, pois juntar as $N$ amostras de ruído leva tempo.}
+% FONTE: latencia-vazao.tex (tab:atraso-bloco, ITU 1 ms, outras tarefas da BS).
+The architectures were sized by throughput rather than by delay. Under low-mobility conditions, they distribute the inversions over the coherence time and use less area and power, but the last inversion of a block finishes later. The collection of the $N$ noise samples, required by the estimation method, also adds delay. With data collection and inversion, only TDLA30-300 and TDLB100-400 stay below the 1~ms latency expected by the ITU-R (Section~\ref{sec:resultados-atraso}), without counting the other BS tasks.
 

@@ -27,7 +27,7 @@ Before the Vivado workflow, each version went through the Vitis HLS C synthesis.
 % ---------------------------------------------------------------------
 The module receives the $M_c \times M_c$ matrix $\mathbf{G}_c$ and returns its inverse. It calculates the inverse using Cholesky decomposition (Section~\ref{sec:inversao}). Two sizes for $\mathbf{G}_c$, corresponding to the configurations described in Section~\ref{subsec:configuracoes-bs}, have been implemented: $16 \times 16$ and $32 \times 32$. The input, output, and internal values use the \texttt{ap\_fixed} data type, following the formats selected in Section~\ref{sec:formato}.
 
-The module consists of six stages, each implemented as a C++ function (Figure~\ref{fig:modulo-inversao}). These stages are executed sequentially, with each stage passing its output to the next.
+The module consists of six steps, each implemented as a C++ function (Figure~\ref{fig:modulo-inversao}). These steps are executed sequentially, with each step passing its output to the next.
 \begin{figure}[!ht]
 \caption{Steps of the inversion module. Each block is one C++ function of the HLS code.}
 \label{fig:modulo-inversao}
@@ -38,7 +38,7 @@ The module consists of six stages, each implemented as a C++ function (Figure~\r
 \legend{Source: the author.}
 \end{figure}
 
-Additions, multiplications, and divisions utilize \texttt{ap\_fixed} type operators. Complex multiplication and division operations are explicitly implemented in the code, with a specific type defined for each intermediate value; thus, the bit-width of every intermediate value is explicitly set within the code. The addition of two $N$-bit numbers requires $N+1$ bits, while their product requires $2N$ bits \cite[pp.~72--73]{kastner-hls}. When using \texttt{ap\_fixed} types, the result of an operation inherently possesses a sufficient number of bits; overflow only occurs when this result is assigned to a type with a smaller bit-width \cite[p.~74]{kastner-hls}. Consequently, intermediate values employ types with greater bit-widths than the $\langle W, I\rangle$ format (Table~\ref{tab:tipos-intermediarios}), with the result reverting to the specified format only at the output of each stage. Square root calculations are performed using the \texttt{hls::sqrt} function from Vitis HLS, operating directly within the defined format.
+Additions, multiplications, and divisions utilize \texttt{ap\_fixed} type operators. Complex multiplication and division operations are explicitly implemented in the code, with a specific type defined for each intermediate value; thus, the bit-width of every intermediate value is explicitly set within the code. The addition of two $N$-bit numbers requires $N+1$ bits, while their product requires $2N$ bits \cite[pp.~72--73]{kastner-hls}. When using \texttt{ap\_fixed} types, the result of an operation inherently possesses a sufficient number of bits; overflow only occurs when this result is assigned to a type with a smaller bit-width \cite[p.~74]{kastner-hls}. Consequently, intermediate values employ types with greater bit-widths than the $\langle W, I\rangle$ format (Table~\ref{tab:tipos-intermediarios}), with the result reverting to the specified format only at the output of each step. Square root calculations are performed using the \texttt{hls::sqrt} function from Vitis HLS, operating directly within the defined format.
 
 \begin{table}[!ht]
 \caption{Types of the values in the inversion module, for the format $\langle W, I\rangle$ with $F = W - I$ fractional bits.}

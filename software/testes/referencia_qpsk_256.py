@@ -13,6 +13,7 @@ Os resultados das 16 configurações não são tocados.
 
 Uso (com o Python do simulador):
     ../simulador/.venv/bin/python referencia_qpsk_256.py [-j 8] [--min -20]
+        [--configuracoes g,15,14,16 --saida resultados/1_referencia_float/curvas_qpsk_128]
 """
 
 import argparse
@@ -55,20 +56,26 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("-j", "--jobs", type=int, default=os.cpu_count())
     parser.add_argument("--min", type=int, default=-20, help="SNR mais baixa da grade (dB)")
+    parser.add_argument("--configuracoes", default=None,
+                        help="rótulos (params.TCC_CONFIGURATION); padrão: QPSK_256_PANELS")
+    parser.add_argument("--saida", default=str(SAIDA))
     args = parser.parse_args()
     for var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
         os.environ[var] = "1"
     from dbp_sim.params import QPSK_256_PANELS
+    rotulos = (args.configuracoes.split(",") if args.configuracoes
+               else [p.label for p in QPSK_256_PANELS])
+    saida = Path(args.saida)
     grade = tuple(range(args.min, 11, 2))
     grupos = pares()
-    tarefas = [(p.label, n, fc, grade) for (n, fc) in grupos for p in QPSK_256_PANELS]
+    tarefas = [(r, n, fc, grade) for (n, fc) in grupos for r in rotulos]
     resultados = {}
     with ProcessPoolExecutor(args.jobs) as ex:
         for rotulo, n, fc, ser, s in ex.map(rodar, tarefas):
             resultados.setdefault((n, fc), {})[rotulo] = ser
             print(f"{rotulo} N = {n} {fc / 1e9:g} GHz: {s:.0f} s", flush=True)
     for (n, fc), por_rotulo in resultados.items():
-        pasta = SAIDA / f"{'+'.join(grupos[(n, fc)])}_N{n}_{fc / 1e9:g}GHz"
+        pasta = saida / f"{'+'.join(grupos[(n, fc)])}_N{n}_{fc / 1e9:g}GHz"
         pasta.mkdir(parents=True, exist_ok=True)
         (pasta / "bcd_iterations_results.json").write_text(
             json.dumps({"snr_db": list(grade), **por_rotulo}, indent=1))

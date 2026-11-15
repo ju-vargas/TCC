@@ -1,0 +1,256 @@
+
+
+================================================================
+== Vitis HLS Report for 'cholesky_inverse'
+================================================================
+* Date:           Fri Nov 13 16:57:24 2026
+
+* Version:        2026.1 (Build 6493734 on Jun 16 2026)
+* Project:        w
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: virtexuplusHBM
+* Target device:  xcu50-fsvh2104-2-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  7.208 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+----------+------+-------+----------+
+    |  Latency (cycles) |  Latency (absolute)  |   Interval   | Pipeline |
+    |   min   |   max   |    min    |    max   |  min |  max  |   Type   |
+    +---------+---------+-----------+----------+------+-------+----------+
+    |     6570|    28531|  65.700 us|  0.285 ms|  3072|  12677|  dataflow|
+    +---------+---------+-----------+----------+------+-------+----------+
+
+    + Detail: 
+        * Instance: 
+        +----------------+-------------+---------+---------+-----------+-----------+------+-------+-----------------------------------------+
+        |                |             |  Latency (cycles) |   Latency (absolute)  |   Interval   |                 Pipeline                |
+        |    Instance    |    Module   |   min   |   max   |    min    |    max    |  min |  max  |                   Type                  |
+        +----------------+-------------+---------+---------+-----------+-----------+------+-------+-----------------------------------------+
+        |lote_ler_U0     |lote_ler     |     3080|     3080|  30.800 us|  30.800 us|  3072|   3072|  loop auto-rewind stp (delay=0 cycle(s))|
+        |lote_lu_U0      |lote_lu      |      707|    11612|   7.070 us|   0.116 ms|   707|  11612|                                       no|
+        |lote_g_U0       |lote_g       |      680|     1160|   6.800 us|  11.600 us|   680|   1160|                                       no|
+        |lote_fs_U0      |lote_fs      |     2100|    12676|  21.000 us|   0.127 ms|  2100|  12676|                                       no|
+        |lote_inv_U0     |lote_inv     |     3029|     3029|  30.290 us|  30.290 us|  3029|   3029|                                       no|
+        |lote_gravar_U0  |lote_gravar  |     3080|     3080|  30.800 us|  30.800 us|  3072|   3072|  loop auto-rewind stp (delay=0 cycle(s))|
+        +----------------+-------------+---------+---------+-----------+-----------+------+-------+-----------------------------------------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+--------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT  | URAM|
++---------------------+---------+------+---------+--------+-----+
+|DSP                  |        -|     -|        -|       -|    -|
+|Expression           |        -|     -|        0|      22|    -|
+|FIFO                 |        -|     -|        -|       -|    -|
+|Instance             |       24|   372|    37864|   55538|    0|
+|Memory               |      216|     -|      192|     198|    0|
+|Multiplexer          |        -|     -|        0|      45|    -|
+|Register             |        -|     -|        5|       -|    -|
++---------------------+---------+------+---------+--------+-----+
+|Total                |      240|   372|    38061|   55803|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available SLR        |     1344|  2976|   871680|  435840|  320|
++---------------------+---------+------+---------+--------+-----+
+|Utilization SLR (%)  |       17|    12|        4|      12|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available            |     2688|  5952|  1743360|  871680|  640|
++---------------------+---------+------+---------+--------+-----+
+|Utilization (%)      |        8|     6|        2|       6|    0|
++---------------------+---------+------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +----------------+-------------+---------+-----+-------+-------+-----+
+    |    Instance    |    Module   | BRAM_18K| DSP |   FF  |  LUT  | URAM|
+    +----------------+-------------+---------+-----+-------+-------+-----+
+    |lote_fs_U0      |lote_fs      |        0|  144|  16538|  21194|    0|
+    |lote_g_U0       |lote_g       |        0|   12|   1135|   6325|    0|
+    |lote_gravar_U0  |lote_gravar  |        0|    0|   1183|    870|    0|
+    |lote_inv_U0     |lote_inv     |        0|   96|   1879|   6281|    0|
+    |lote_ler_U0     |lote_ler     |        0|    0|    360|    488|    0|
+    |lote_lu_U0      |lote_lu      |       24|  120|  16769|  20380|    0|
+    +----------------+-------------+---------+-----+-------+-------+-----+
+    |Total           |             |       24|  372|  37864|  55538|    0|
+    +----------------+-------------+---------+-----+-------+-------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    +-------------------+----------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |       Memory      |           Module           | BRAM_18K| FF | LUT| URAM| Words| Bits| Banks| W*Bits*Banks|
+    +-------------------+----------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |A_ch_M_real_U      |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_real_1_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_real_2_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_real_3_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_real_4_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_real_5_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_imag_U      |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_imag_1_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_imag_2_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_imag_3_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_imag_4_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |A_ch_M_imag_5_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_real_U         |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_real_1_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_real_2_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_real_3_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_real_4_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_real_5_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_imag_U         |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_imag_1_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_imag_2_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_imag_3_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_imag_4_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |L_M_imag_5_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_real_U         |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_real_1_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_real_2_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_real_3_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_real_4_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_real_5_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_imag_U         |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_imag_1_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_imag_2_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_imag_3_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_imag_4_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_M_imag_5_U       |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_real_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_real_1_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_real_2_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_real_3_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_real_4_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_real_5_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_imag_U    |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_imag_1_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_imag_2_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_imag_3_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_imag_4_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |Inv_ch_M_imag_5_U  |A_ch_M_real_RAM_AUTO_1R1W   |        4|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_real_U     |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_real_1_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_real_2_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_real_3_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_real_4_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_real_5_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_imag_U     |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_imag_1_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_imag_2_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_imag_3_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_imag_4_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |G_inv_M_imag_5_U   |G_inv_M_real_RAM_AUTO_1R1W  |        2|   0|   0|    0|   512|   18|     1|         9216|
+    |Ud_M_real_U        |Ud_M_real_RAM_AUTO_1R1W     |        0|  32|  33|    0|    32|   18|     1|          576|
+    |Ud_M_real_1_U      |Ud_M_real_RAM_AUTO_1R1W     |        0|  32|  33|    0|    32|   18|     1|          576|
+    |Ud_M_real_2_U      |Ud_M_real_RAM_AUTO_1R1W     |        0|  32|  33|    0|    32|   18|     1|          576|
+    |Ud_M_real_3_U      |Ud_M_real_RAM_AUTO_1R1W     |        0|  32|  33|    0|    32|   18|     1|          576|
+    |Ud_M_real_4_U      |Ud_M_real_RAM_AUTO_1R1W     |        0|  32|  33|    0|    32|   18|     1|          576|
+    |Ud_M_real_5_U      |Ud_M_real_RAM_AUTO_1R1W     |        0|  32|  33|    0|    32|   18|     1|          576|
+    +-------------------+----------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |Total              |                            |      216| 192| 198|    0| 30912| 1188|    66|       556416|
+    +-------------------+----------------------------+---------+----+----+-----+------+-----+------+-------------+
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |             Variable Name             | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |ap_channel_done_A_ch_M_imag_5          |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_G_M_imag_5             |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_G_inv_M_imag_5         |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_Inv_ch_M_imag_5        |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_Ud_M_real_5            |       and|   0|  0|   2|           1|           1|
+    |ap_idle                                |       and|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_A_ch_M_imag_5    |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_G_M_imag_5       |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_G_inv_M_imag_5   |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_Inv_ch_M_imag_5  |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_Ud_M_real_5      |        or|   0|  0|   2|           1|           1|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |Total                                  |          |   0|  0|  22|          11|          11|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------------------------+----+-----------+-----+-----------+
+    |                    Name                   | LUT| Input Size| Bits| Total Bits|
+    +-------------------------------------------+----+-----------+-----+-----------+
+    |ap_sync_reg_channel_write_A_ch_M_imag_5    |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_G_M_imag_5       |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_G_inv_M_imag_5   |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_Inv_ch_M_imag_5  |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_Ud_M_real_5      |   9|          2|    1|          2|
+    +-------------------------------------------+----+-----------+-----+-----------+
+    |Total                                      |  45|         10|    5|         10|
+    +-------------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------------------------+---+----+-----+-----------+
+    |                    Name                   | FF| LUT| Bits| Const Bits|
+    +-------------------------------------------+---+----+-----+-----------+
+    |ap_sync_reg_channel_write_A_ch_M_imag_5    |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_G_M_imag_5       |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_G_inv_M_imag_5   |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_Inv_ch_M_imag_5  |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_Ud_M_real_5      |  1|   0|    1|          0|
+    +-------------------------------------------+---+----+-----+-----------+
+    |Total                                      |  5|   0|    5|          0|
+    +-------------------------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------+-----+-----+------------+------------------+--------------+
+|     RTL Ports     | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++-------------------+-----+-----+------------+------------------+--------------+
+|ap_clk             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_rst             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_start           |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_done            |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_ready           |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_idle            |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|A_matrix_address0  |  out|   12|   ap_memory|          A_matrix|         array|
+|A_matrix_ce0       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_d0        |  out|   36|   ap_memory|          A_matrix|         array|
+|A_matrix_q0        |   in|   36|   ap_memory|          A_matrix|         array|
+|A_matrix_we0       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_address1  |  out|   12|   ap_memory|          A_matrix|         array|
+|A_matrix_ce1       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_d1        |  out|   36|   ap_memory|          A_matrix|         array|
+|A_matrix_q1        |   in|   36|   ap_memory|          A_matrix|         array|
+|A_matrix_we1       |  out|    1|   ap_memory|          A_matrix|         array|
+|inverse_address0   |  out|   12|   ap_memory|           inverse|         array|
+|inverse_ce0        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_d0         |  out|   36|   ap_memory|           inverse|         array|
+|inverse_q0         |   in|   36|   ap_memory|           inverse|         array|
+|inverse_we0        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_address1   |  out|   12|   ap_memory|           inverse|         array|
+|inverse_ce1        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_d1         |  out|   36|   ap_memory|           inverse|         array|
+|inverse_q1         |   in|   36|   ap_memory|           inverse|         array|
+|inverse_we1        |  out|    1|   ap_memory|           inverse|         array|
++-------------------+-----+-----+------------+------------------+--------------+
+

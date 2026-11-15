@@ -1,0 +1,107 @@
+<design_size title="Design Size Report">
+    <item name="Total Instructions per Compilation Phase">
+        <table>
+            <keys size="4">Phase, Step, Instructions, Description</keys>
+            <column name="Compile/Link">,  36123, After all functions are compiled and linked into a single design</column>
+            <column name="">, , </column>
+            <column name="Unroll/Inline">, , After user unroll and inline pragmas are applied</column>
+            <column name="">(1) unroll, 165513 *, user unroll pragmas are applied</column>
+            <column name="">(2) simplification,  66359, simplification of applied user unroll pragmas</column>
+            <column name="">(3) inline,  53801, user inline pragmas are applied</column>
+            <column name="">(4) simplification,  50547, simplification of applied user inline pragmas</column>
+            <column name="">, , </column>
+            <column name="Array/Struct">, , After user array partition and struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(1) array partition, 186608 *, user array partition pragmas are applied</column>
+            <column name="">(2) simplification,  55949, simplification of applied user array partition &amp; struct aggregate/disaggregate pragmas</column>
+            <column name="">(3) aggregate/disaggregate,  56021, user struct aggregate/disaggregate pragmas are applied</column>
+            <column name="">(4) array reshape,  55990, apply array reshape pragmas</column>
+            <column name="">(5) access patterns,  55990, array access pattern optmizations</column>
+            <column name="">, , </column>
+            <column name="Performance">, , After transformations are applied to meet performance pragma targets</column>
+            <column name="">(1) loop simplification,  55456, loop and instruction simplification</column>
+            <column name="">(2) parallelization,  51252, loops are unrolled or pipelined to meet performance targets</column>
+            <column name="">(3) array partition,  46572, arrays are partitioned to meet performance targets</column>
+            <column name="">(4) simplification,  46564, simplification of design after performance transformations</column>
+            <column name="">, , </column>
+            <column name="HW Transforms">, , After hardware transfomations</column>
+            <column name="">(1) lowering,  46592, initial conversion to HW specific instructions</column>
+            <column name="">(2) optimizations,  46653, high level synthesis optimizations</column>
+        </table>
+    </item>
+    <item name="Instructions per Function for each Compilation Phase">
+        <hiertable>
+            <header size="7" col0="Function" col1="Location" col2="Compile/Link" col3="Unroll/Inline" col4="Array/Struct" col5="Performance" col6="HW Transforms"/>
+            <rows>
+                <row id="0" col0="cholesky_inverse" col1="cholesky_top.cpp:338" col2="36123" col3="50547" col4="55990" col5="46564" col6="46653">
+                    <row id="3" col0="lote_ler" col1="cholesky_top.cpp:63" col2="53" col3="52" col4="519" col5="695" col6="706"/>
+                    <row id="2" col0="lote_lu" col1="cholesky_top.cpp:89" col2="9582" col3="14233" col4="15769" col5="14209" col6="">
+                        <row id="9" col0="lu_passo" col1="cholesky_top.cpp:40" col2="20" col2_disp="    20 (2 calls)" col3="" col4="" col5="" col6="">
+                            <row id="6" col0="maior" col1="cholesky_top.cpp:35" col2="12" col2_disp="    12 (2 calls)" col3="" col4="" col5="" col6=""/>
+                        </row>
+                        <row id="17" col0="cdiv&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:65" col2="4667" col3="600" col3_disp="   600 (4 calls)" col4="600" col4_disp="   600 (4 calls)" col5="" col6="">
+                            <row id="7" col0="conj_t&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:13" col2="225" col3="" col4="" col5="" col6=""/>
+                            <row id="10" col0="cmul&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:41" col2="1957" col3="" col4="" col5="" col6="">
+                                <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                    <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                                </row>
+                            </row>
+                            <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                            </row>
+                        </row>
+                        <row id="10" col0="cmul&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:41" col2="1957" col3="4032" col3_disp=" 4,032 (64 calls)" col4="4032" col4_disp=" 4,032 (64 calls)" col5="" col6="">
+                            <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                            </row>
+                        </row>
+                    </row>
+                    <row id="12" col0="lote_g" col1="cholesky_top.cpp:175" col2="11320" col3="14599" col4="15835" col5="12787" col6="12810">
+                        <row id="18" col0="cmul&lt;ap_fixed&lt;18, 8, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;18, 8, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;18, 8, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:41" col2="4066" col2_disp=" 4,066 (2 calls)" col3="8804" col3_disp=" 8,804 (124 calls)" col4="8804" col4_disp=" 8,804 (124 calls)" col5="" col6="">
+                            <row id="16" col0="cmul_parts&lt;ap_fixed&lt;18, 8, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;18, 8, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="2714" col2_disp=" 2,714 (2 calls)" col3="" col4="" col5="" col6="">
+                                <row id="15" col0="mul_operand&lt;ap_fixed&lt;18, 8, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="16" col2_disp="    16 (16 calls)" col3="" col4="" col5="" col6=""/>
+                            </row>
+                        </row>
+                        <row id="8" col0="sqrt_fixed&lt;18, 8&gt;" col1="hls_sqrt_apfixed.h:19" col2="" col3="3480" col3_disp=" 3,480 (4 calls)" col4="3400" col4_disp=" 3,400 (4 calls)" col5="" col6=""/>
+                    </row>
+                    <row id="11" col0="lote_fs" col1="cholesky_top.cpp:227" col2="10466" col3="10254" col4="10852" col5="8650" col6="8655">
+                        <row id="4" col0="fs_passo" col1="cholesky_top.cpp:49" col2="20" col2_disp="    20 (2 calls)" col3="" col4="" col5="" col6="">
+                            <row id="6" col0="maior" col1="cholesky_top.cpp:35" col2="12" col2_disp="    12 (2 calls)" col3="" col4="" col5="" col6=""/>
+                        </row>
+                        <row id="10" col0="cmul&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:41" col2="1957" col3="4160" col3_disp=" 4,160 (64 calls)" col4="4160" col4_disp=" 4,160 (64 calls)" col5="" col6="">
+                            <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                            </row>
+                        </row>
+                        <row id="17" col0="cdiv&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:65" col2="4667" col3="600" col3_disp="   600 (4 calls)" col4="600" col4_disp="   600 (4 calls)" col5="" col6="">
+                            <row id="7" col0="conj_t&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:13" col2="225" col3="" col4="" col5="" col6=""/>
+                            <row id="10" col0="cmul&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:41" col2="1957" col3="" col4="" col5="" col6="">
+                                <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                    <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                                </row>
+                            </row>
+                            <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                            </row>
+                        </row>
+                    </row>
+                    <row id="13" col0="lote_inv" col1="cholesky_top.cpp:288" col2="4587" col3="11308" col4="11172" col5="8204" col6="8215">
+                        <row id="7" col0="conj_t&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:13" col2="225" col3="1664" col3_disp=" 1,664 (64 calls)" col4="1664" col4_disp=" 1,664 (64 calls)" col5="" col6=""/>
+                        <row id="10" col0="cmul&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:41" col2="1957" col3="4160" col3_disp=" 4,160 (64 calls)" col4="4160" col4_disp=" 4,160 (64 calls)" col5="" col6="">
+                            <row id="5" col0="cmul_parts&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt;, ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:29" col2="1293" col3="" col4="" col5="" col6="">
+                                <row id="1" col0="mul_operand&lt;ap_fixed&lt;36, 16, (ap_q_mode)5, (ap_o_mode)0, 0&gt; &gt;" col1="cholesky_ops.h:23" col2="8" col2_disp="     8 (8 calls)" col3="" col4="" col5="" col6=""/>
+                            </row>
+                        </row>
+                    </row>
+                    <row id="14" col0="lote_gravar" col1="cholesky_top.cpp:320" col2="53" col3="52" col4="84" col5="68" col6="83"/>
+                </row>
+            </rows>
+            <notes/>
+        </hiertable>
+    </item>
+    <item name="Design Size Message Settings">
+        <table>
+            <keys size="3">Message Setting, Value, Description</keys>
+            <column name="config_compile -design_size_maximum_warning">100000, Show a warning when total design instructions exceeds this value</column>
+        </table>
+    </item>
+</design_size>

@@ -1,0 +1,185 @@
+
+
+================================================================
+== Vitis HLS Report for 'cholesky_inverse'
+================================================================
+* Date:           Fri Nov 13 17:03:44 2026
+
+* Version:        2026.1 (Build 6493734 on Jun 16 2026)
+* Project:        w
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: virtexuplusHBM
+* Target device:  xcu50-fsvh2104-2-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  7.280 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+----------+------+------+----------+
+    |  Latency (cycles) |  Latency (absolute)  |   Interval  | Pipeline |
+    |   min   |   max   |    min    |    max   |  min |  max |   Type   |
+    +---------+---------+-----------+----------+------+------+----------+
+    |     2371|    12511|  23.710 us|  0.125 ms|  1501|  6518|  dataflow|
+    +---------+---------+-----------+----------+------+------+----------+
+
+    + Detail: 
+        * Instance: 
+        +--------------+-----------+---------+---------+-----------+-----------+------+------+---------+
+        |              |           |  Latency (cycles) |   Latency (absolute)  |   Interval  | Pipeline|
+        |   Instance   |   Module  |   min   |   max   |    min    |    max    |  min |  max |   Type  |
+        +--------------+-----------+---------+---------+-----------+-----------+------+------+---------+
+        |etapa_lu_U0   |etapa_lu   |      446|     5306|   4.460 us|  53.060 us|   446|  5306|       no|
+        |etapa_g_U0    |etapa_g    |      446|      686|   4.460 us|   6.860 us|   446|   686|       no|
+        |etapa_fs_U0   |etapa_fs   |     1477|     6517|  14.770 us|  65.170 us|  1477|  6517|       no|
+        |etapa_inv_U0  |etapa_inv  |     1500|     1500|  15.000 us|  15.000 us|  1500|  1500|       no|
+        +--------------+-----------+---------+---------+-----------+-----------+------+------+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+--------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT  | URAM|
++---------------------+---------+------+---------+--------+-----+
+|DSP                  |        -|     -|        -|       -|    -|
+|Expression           |        -|     -|        0|      14|    -|
+|FIFO                 |        -|     -|        -|       -|    -|
+|Instance             |        5|    98|    37463|   35910|    0|
+|Memory               |       14|     -|        0|       0|    0|
+|Multiplexer          |        -|     -|        0|      27|    -|
+|Register             |        -|     -|        3|       -|    -|
++---------------------+---------+------+---------+--------+-----+
+|Total                |       19|    98|    37466|   35951|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available SLR        |     1344|  2976|   871680|  435840|  320|
++---------------------+---------+------+---------+--------+-----+
+|Utilization SLR (%)  |        1|     3|        4|       8|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available            |     2688|  5952|  1743360|  871680|  640|
++---------------------+---------+------+---------+--------+-----+
+|Utilization (%)      |       ~0|     1|        2|       4|    0|
++---------------------+---------+------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +--------------+-----------+---------+----+-------+-------+-----+
+    |   Instance   |   Module  | BRAM_18K| DSP|   FF  |  LUT  | URAM|
+    +--------------+-----------+---------+----+-------+-------+-----+
+    |etapa_fs_U0   |etapa_fs   |        0|  40|  18438|  15520|    0|
+    |etapa_g_U0    |etapa_g    |        1|   2|    522|   4096|    0|
+    |etapa_inv_U0  |etapa_inv  |        0|  16|    296|    990|    0|
+    |etapa_lu_U0   |etapa_lu   |        4|  40|  18207|  15304|    0|
+    +--------------+-----------+---------+----+-------+-------+-----+
+    |Total         |           |        5|  98|  37463|  35910|    0|
+    +--------------+-----------+---------+----+-------+-------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    +----------------+----------------------------+---------+---+----+-----+------+-----+------+-------------+
+    |     Memory     |           Module           | BRAM_18K| FF| LUT| URAM| Words| Bits| Banks| W*Bits*Banks|
+    +----------------+----------------------------+---------+---+----+-----+------+-----+------+-------------+
+    |G_inv_M_real_U  |G_inv_M_real_RAM_AUTO_1R1W  |        2|  0|   0|    0|   256|   20|     1|         5120|
+    |G_inv_M_imag_U  |G_inv_M_real_RAM_AUTO_1R1W  |        2|  0|   0|    0|   256|   20|     1|         5120|
+    |L_M_real_U      |L_M_real_RAM_AUTO_1R1W      |        2|  0|   0|    0|   256|   20|     1|         5120|
+    |L_M_imag_U      |L_M_real_RAM_AUTO_1R1W      |        2|  0|   0|    0|   256|   20|     1|         5120|
+    |U_M_real_U      |L_M_real_RAM_AUTO_1R1W      |        2|  0|   0|    0|   256|   20|     1|         5120|
+    |G_M_real_U      |L_M_real_RAM_AUTO_1R1W      |        2|  0|   0|    0|   256|   20|     1|         5120|
+    |G_M_imag_U      |L_M_real_RAM_AUTO_1R1W      |        2|  0|   0|    0|   256|   20|     1|         5120|
+    +----------------+----------------------------+---------+---+----+-----+------+-----+------+-------------+
+    |Total           |                            |       14|  0|   0|    0|  1792|  140|     7|        35840|
+    +----------------+----------------------------+---------+---+----+-----+------+-----+------+-------------+
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +------------------------------------+----------+----+---+----+------------+------------+
+    |            Variable Name           | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +------------------------------------+----------+----+---+----+------------+------------+
+    |ap_channel_done_G_M_imag            |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_G_inv_M_imag        |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_U_M_real            |       and|   0|  0|   2|           1|           1|
+    |ap_idle                             |       and|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_G_M_imag      |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_G_inv_M_imag  |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_U_M_real      |        or|   0|  0|   2|           1|           1|
+    +------------------------------------+----------+----+---+----+------------+------------+
+    |Total                               |          |   0|  0|  14|           7|           7|
+    +------------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +----------------------------------------+----+-----------+-----+-----------+
+    |                  Name                  | LUT| Input Size| Bits| Total Bits|
+    +----------------------------------------+----+-----------+-----+-----------+
+    |ap_sync_reg_channel_write_G_M_imag      |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_G_inv_M_imag  |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_U_M_real      |   9|          2|    1|          2|
+    +----------------------------------------+----+-----------+-----+-----------+
+    |Total                                   |  27|          6|    3|          6|
+    +----------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +----------------------------------------+---+----+-----+-----------+
+    |                  Name                  | FF| LUT| Bits| Const Bits|
+    +----------------------------------------+---+----+-----+-----------+
+    |ap_sync_reg_channel_write_G_M_imag      |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_G_inv_M_imag  |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_U_M_real      |  1|   0|    1|          0|
+    +----------------------------------------+---+----+-----+-----------+
+    |Total                                   |  3|   0|    3|          0|
+    +----------------------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------+-----+-----+------------+------------------+--------------+
+|     RTL Ports     | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++-------------------+-----+-----+------------+------------------+--------------+
+|ap_clk             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_rst             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_start           |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_done            |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_ready           |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_idle            |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|A_matrix_address0  |  out|    8|   ap_memory|          A_matrix|         array|
+|A_matrix_ce0       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_d0        |  out|   40|   ap_memory|          A_matrix|         array|
+|A_matrix_q0        |   in|   40|   ap_memory|          A_matrix|         array|
+|A_matrix_we0       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_address1  |  out|    8|   ap_memory|          A_matrix|         array|
+|A_matrix_ce1       |  out|    1|   ap_memory|          A_matrix|         array|
+|A_matrix_d1        |  out|   40|   ap_memory|          A_matrix|         array|
+|A_matrix_q1        |   in|   40|   ap_memory|          A_matrix|         array|
+|A_matrix_we1       |  out|    1|   ap_memory|          A_matrix|         array|
+|inverse_address0   |  out|    8|   ap_memory|           inverse|         array|
+|inverse_ce0        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_d0         |  out|   40|   ap_memory|           inverse|         array|
+|inverse_q0         |   in|   40|   ap_memory|           inverse|         array|
+|inverse_we0        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_address1   |  out|    8|   ap_memory|           inverse|         array|
+|inverse_ce1        |  out|    1|   ap_memory|           inverse|         array|
+|inverse_d1         |  out|   40|   ap_memory|           inverse|         array|
+|inverse_q1         |   in|   40|   ap_memory|           inverse|         array|
+|inverse_we1        |  out|    1|   ap_memory|           inverse|         array|
++-------------------+-----+-----+------------+------------------+--------------+
+

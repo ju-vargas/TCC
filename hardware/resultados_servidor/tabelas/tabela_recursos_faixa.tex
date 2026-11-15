@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\caption{\textcolor{red}{Menor e maior uso de recursos, caminho crítico e intervalo entre inversões de cada arquitetura, entre os formatos.}}
+\label{tab:recursos-faixa}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\color{red}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Test condition} & \textbf{LUT (\%)} & \textbf{FF (\%)} & \textbf{DSP (\%)} & \textbf{BRAM (\%)} & \begin{tabular}[c]{@{}c@{}}\textbf{Critical}\\\textbf{path (ns)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Interval}\\\textbf{(cycles)}\end{tabular} & \begin{tabular}[c]{@{}c@{}}\textbf{Limit}\\\textbf{(cycles)}\end{tabular} \\
+\midrule
+TDLA30-5 & 2.5--6.6 & 1.2--3.2 & 1.7--3.7 & 0.4--0.6 & 7.24--9.03 & 7,081--8,627 & 9,090 \\
+TDLA30-10 & 2.5--6.5 & 1.2--3.3 & 1.7--3.7 & 0.5--0.9 & 7.54--8.36 & 2,765--3,320 & 4,545 \\
+TDLA30-75 & 3.7--9.0 & 1.6--4.0 & 6.3--13.5 & 3.6--6.7 & 7.87--8.98 & 483.9--528.9 & 606 \\
+TDLC300-100 & 4.0--9.7 & 1.6--4.0 & 7.7--16.9 & 4.8--8.9 & 7.79--9.37 & 387.3--421.1 & 454 \\
+TDLA30-300 & 11.0--27.2 & 3.7--8.5 & 28.6--63.1 & 20.0--35.0 & 8.73--9.66 & 128 & 151 \\
+TDLB100-400 & 27.6--51.0 & 8.0--15.9 & 57.1--72.4 & 10.0--20.2 & 9.38--9.74 & 64 & 113 \\
+\midrule
+Without opt., 16 $\times$ 16 & 0.5--1.0 & 0.1--0.2 & 1.4--3.1 & 0.3--0.5 & 7.80--9.15 & 26,702--38,567 & -- \\
+Without opt., 32 $\times$ 32 & 0.5--1.0 & 0.1--0.3 & 1.4--3.1 & 0.3--0.7 & 7.72--8.58 & 159,086--194,367 & -- \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{\textcolor{red}{Fonte: a autora. Recursos em porcentagem do XCU50. Em quase todos os casos, o menor valor vem do $\langle 18,8\rangle$ e o maior, do $\langle 30,14\rangle$ ($\langle 28,14\rangle$ na TDLB100-400). O caminho crítico não segue essa ordem. Em $32 \times 32$, sem o intervalo do $\langle 18,8\rangle$ e do $\langle 20,8\rangle$, que não foram medidos.}}
+\end{table}

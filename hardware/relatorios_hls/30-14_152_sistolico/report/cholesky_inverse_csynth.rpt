@@ -1,0 +1,498 @@
+
+
+================================================================
+== Vitis HLS Report for 'cholesky_inverse'
+================================================================
+* Date:           Fri Nov 13 17:40:00 2026
+
+* Version:        2026.1 (Build 6493734 on Jun 16 2026)
+* Project:        w
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: virtexuplusHBM
+* Target device:  xcu50-fsvh2104-2-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  |  10.00 ns|  7.199 ns|     2.70 ns|
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+------+------+----------+
+    |  Latency (cycles) |   Latency (absolute)  |   Interval  | Pipeline |
+    |   min   |   max   |    min    |    max    |  min |  max |   Type   |
+    +---------+---------+-----------+-----------+------+------+----------+
+    |     9683|     9683|  96.830 us|  96.830 us|  4096|  4096|  dataflow|
+    +---------+---------+-----------+-----------+------+------+----------+
+
+    + Detail: 
+        * Instance: 
+        +----------------+-------------+---------+---------+-----------+-----------+------+------+-------------------------------------------+
+        |                |             |  Latency (cycles) |   Latency (absolute)  |   Interval  |                  Pipeline                 |
+        |    Instance    |    Module   |   min   |   max   |    min    |    max    |  min |  max |                    Type                   |
+        +----------------+-------------+---------+---------+-----------+-----------+------+------+-------------------------------------------+
+        |lote_ler_U0     |lote_ler     |     4098|     4098|  40.980 us|  40.980 us|  4096|  4096|    loop auto-rewind stp (delay=0 cycle(s))|
+        |lote_lu_U0      |lote_lu      |     2454|     2454|  24.540 us|  24.540 us|  2354|  2354|    loop auto-rewind stp (delay=0 cycle(s))|
+        |lote_g_U0       |lote_g       |      525|      525|   5.250 us|   5.250 us|   525|   525|                                         no|
+        |lote_fs_U0      |lote_fs      |     2603|     2603|  26.030 us|  26.030 us|  2602|  2602|  loop auto-rewind stp (delay=102 cycle(s))|
+        |lote_inv_U0     |lote_inv     |     4103|     4103|  41.030 us|  41.030 us|  4096|  4096|    loop auto-rewind stp (delay=0 cycle(s))|
+        |lote_gravar_U0  |lote_gravar  |     4098|     4098|  40.980 us|  40.980 us|  4096|  4096|    loop auto-rewind stp (delay=0 cycle(s))|
+        +----------------+-------------+---------+---------+-----------+-----------+------+------+-------------------------------------------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+--------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT  | URAM|
++---------------------+---------+------+---------+--------+-----+
+|DSP                  |        -|     -|        -|       -|    -|
+|Expression           |        -|     -|        0|      22|    -|
+|FIFO                 |        -|     -|        -|       -|    -|
+|Instance             |      128|  3756|   123817|  214578|    0|
+|Memory               |      628|     -|     1028|    1090|    0|
+|Multiplexer          |        -|     -|        0|      45|    -|
+|Register             |        -|     -|        5|       -|    -|
++---------------------+---------+------+---------+--------+-----+
+|Total                |      756|  3756|   124850|  215735|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available SLR        |     1344|  2976|   871680|  435840|  320|
++---------------------+---------+------+---------+--------+-----+
+|Utilization SLR (%)  |       56|   126|       14|      49|    0|
++---------------------+---------+------+---------+--------+-----+
+|Available            |     2688|  5952|  1743360|  871680|  640|
++---------------------+---------+------+---------+--------+-----+
+|Utilization (%)      |       28|    63|        7|      24|    0|
++---------------------+---------+------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +----------------+-------------+---------+------+-------+-------+-----+
+    |    Instance    |    Module   | BRAM_18K|  DSP |   FF  |  LUT  | URAM|
+    +----------------+-------------+---------+------+-------+-------+-----+
+    |lote_fs_U0      |lote_fs      |        0|  1224|  51299|  72514|    0|
+    |lote_g_U0       |lote_g       |        0|   120|   4106|  29775|    0|
+    |lote_gravar_U0  |lote_gravar  |        0|     0|     56|    310|    0|
+    |lote_inv_U0     |lote_inv     |        0|  1152|  11840|  35921|    0|
+    |lote_ler_U0     |lote_ler     |        0|     0|     56|    310|    0|
+    |lote_lu_U0      |lote_lu      |      128|  1260|  56460|  75748|    0|
+    +----------------+-------------+---------+------+-------+-------+-----+
+    |Total           |             |      128|  3756| 123817| 214578|    0|
+    +----------------+-------------+---------+------+-------+-------+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    +-------------------+-----------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |       Memory      |            Module           | BRAM_18K| FF | LUT| URAM| Words| Bits| Banks| W*Bits*Banks|
+    +-------------------+-----------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |A_ch_M_real_U      |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_U      |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_1_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_1_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_2_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_2_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_3_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_3_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_4_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_4_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_5_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_5_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_6_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_6_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_7_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_7_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_8_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_8_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_9_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_9_U    |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_10_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_10_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_11_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_11_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_12_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_12_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_13_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_13_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_14_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_14_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_15_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_15_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_16_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_16_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_17_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_17_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_18_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_18_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_19_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_19_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_20_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_20_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_21_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_21_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_22_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_22_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_23_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_23_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_24_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_24_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_25_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_25_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_26_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_26_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_27_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_27_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_28_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_28_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_29_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_29_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_30_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_30_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_real_31_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |A_ch_M_imag_31_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_U     |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_1_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_2_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_3_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_4_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_5_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_6_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_7_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_8_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_9_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_10_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_11_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_12_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_13_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_14_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_15_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_16_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_17_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_18_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_19_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_20_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_21_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_22_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_23_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_24_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_25_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_26_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_27_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_28_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_29_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_30_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_real_31_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_U     |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_1_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_2_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_3_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_4_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_5_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_6_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_7_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_8_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_9_U   |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_10_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_11_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_12_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_13_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_14_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_15_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_16_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_17_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_18_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_19_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_20_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_21_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_22_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_23_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_24_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_25_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_26_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_27_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_28_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_29_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_30_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_inv_M_imag_31_U  |A_ch_M_real_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_15_U      |G_M_imag_15_RAM_AUTO_1R1W    |        0|   2|  17|    0|   256|    1|     1|          256|
+    |G_M_imag_31_U      |G_M_imag_15_RAM_AUTO_1R1W    |        0|   2|  17|    0|   256|    1|     1|          256|
+    |G_M_real_15_U      |G_M_real_15_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   23|     1|         5888|
+    |G_M_real_31_U      |G_M_real_15_RAM_AUTO_1R1W    |        2|   0|   0|    0|   256|   23|     1|         5888|
+    |Inv_ch_M_real_U    |Inv_ch_M_real_RAM_AUTO_1R1W  |       32|   0|   0|    0|  4096|   30|     1|       122880|
+    |Inv_ch_M_real_1_U  |Inv_ch_M_real_RAM_AUTO_1R1W  |       32|   0|   0|    0|  4096|   30|     1|       122880|
+    |Inv_ch_M_imag_U    |Inv_ch_M_real_RAM_AUTO_1R1W  |       32|   0|   0|    0|  4096|   30|     1|       122880|
+    |Inv_ch_M_imag_1_U  |Inv_ch_M_real_RAM_AUTO_1R1W  |       32|   0|   0|    0|  4096|   30|     1|       122880|
+    |L_M_real_U         |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_1_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_2_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_3_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_4_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_5_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_6_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_7_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_8_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_9_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_10_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_11_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_12_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_13_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_14_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_15_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_16_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_17_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_18_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_19_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_20_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_21_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_22_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_23_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_24_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_25_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_26_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_27_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_28_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_real_29_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_U         |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_1_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_2_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_3_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_4_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_5_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_6_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_7_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_8_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_9_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_10_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_11_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_12_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_13_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_14_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_15_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_16_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_17_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_18_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_19_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_20_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_21_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_22_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_23_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_24_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_25_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_26_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_27_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_28_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |L_M_imag_29_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_U         |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_1_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_2_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_3_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_4_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_5_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_6_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_7_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_8_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_9_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_10_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_11_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_12_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_13_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_14_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_16_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_17_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_18_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_19_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_20_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_21_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_22_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_23_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_24_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_25_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_26_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_27_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_28_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_29_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_real_30_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_U         |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_1_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_2_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_3_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_4_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_5_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_6_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_7_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_8_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_9_U       |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_10_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_11_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_12_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_13_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_14_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_16_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_17_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_18_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_19_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_20_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_21_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_22_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_23_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_24_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_25_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_26_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_27_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_28_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_29_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |G_M_imag_30_U      |L_M_real_RAM_AUTO_1R1W       |        2|   0|   0|    0|   256|   30|     1|         7680|
+    |Ud_M_real_U        |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_1_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_2_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_3_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_4_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_5_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_6_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_7_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_8_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_9_U      |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_10_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_11_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_12_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_13_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_14_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_15_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_16_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_17_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_18_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_19_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_20_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_21_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_22_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_23_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_24_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_25_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_26_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_27_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_28_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_29_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_30_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    |Ud_M_real_31_U     |Ud_M_real_RAM_AUTO_1R1W      |        0|  32|  33|    0|    16|   30|     1|          480|
+    +-------------------+-----------------------------+---------+----+----+-----+------+-----+------+-------------+
+    |Total              |                             |      628|1028|1090|    0| 81408| 8568|   288|      2423808|
+    +-------------------+-----------------------------+---------+----+----+-----+------+-----+------+-------------+
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |             Variable Name             | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |ap_channel_done_A_ch_M_imag_31         |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_G_M_imag_31            |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_G_inv_M_imag_31        |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_Inv_ch_M_imag_1        |       and|   0|  0|   2|           1|           1|
+    |ap_channel_done_Ud_M_real_31           |       and|   0|  0|   2|           1|           1|
+    |ap_idle                                |       and|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_A_ch_M_imag_31   |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_G_M_imag_31      |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_G_inv_M_imag_31  |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_Inv_ch_M_imag_1  |        or|   0|  0|   2|           1|           1|
+    |ap_sync_channel_write_Ud_M_real_31     |        or|   0|  0|   2|           1|           1|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |Total                                  |          |   0|  0|  22|          11|          11|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------------------------+----+-----------+-----+-----------+
+    |                    Name                   | LUT| Input Size| Bits| Total Bits|
+    +-------------------------------------------+----+-----------+-----+-----------+
+    |ap_sync_reg_channel_write_A_ch_M_imag_31   |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_G_M_imag_31      |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_G_inv_M_imag_31  |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_Inv_ch_M_imag_1  |   9|          2|    1|          2|
+    |ap_sync_reg_channel_write_Ud_M_real_31     |   9|          2|    1|          2|
+    +-------------------------------------------+----+-----------+-----+-----------+
+    |Total                                      |  45|         10|    5|         10|
+    +-------------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------------------------+---+----+-----+-----------+
+    |                    Name                   | FF| LUT| Bits| Const Bits|
+    +-------------------------------------------+---+----+-----+-----------+
+    |ap_sync_reg_channel_write_A_ch_M_imag_31   |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_G_M_imag_31      |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_G_inv_M_imag_31  |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_Inv_ch_M_imag_1  |  1|   0|    1|          0|
+    |ap_sync_reg_channel_write_Ud_M_real_31     |  1|   0|    1|          0|
+    +-------------------------------------------+---+----+-----+-----------+
+    |Total                                      |  5|   0|    5|          0|
+    +-------------------------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++---------------------+-----+-----+------------+------------------+--------------+
+|      RTL Ports      | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++---------------------+-----+-----+------------+------------------+--------------+
+|ap_clk               |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_rst               |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_start             |   in|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_done              |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_ready             |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|ap_idle              |  out|    1|  ap_ctrl_hs|  cholesky_inverse|  return value|
+|A_matrix_0_address0  |  out|   12|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_ce0       |  out|    1|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_d0        |  out|   60|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_q0        |   in|   60|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_we0       |  out|    1|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_address1  |  out|   12|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_ce1       |  out|    1|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_d1        |  out|   60|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_q1        |   in|   60|   ap_memory|        A_matrix_0|         array|
+|A_matrix_0_we1       |  out|    1|   ap_memory|        A_matrix_0|         array|
+|A_matrix_1_address0  |  out|   12|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_ce0       |  out|    1|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_d0        |  out|   60|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_q0        |   in|   60|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_we0       |  out|    1|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_address1  |  out|   12|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_ce1       |  out|    1|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_d1        |  out|   60|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_q1        |   in|   60|   ap_memory|        A_matrix_1|         array|
+|A_matrix_1_we1       |  out|    1|   ap_memory|        A_matrix_1|         array|
+|inverse_0_address0   |  out|   12|   ap_memory|         inverse_0|         array|
+|inverse_0_ce0        |  out|    1|   ap_memory|         inverse_0|         array|
+|inverse_0_d0         |  out|   60|   ap_memory|         inverse_0|         array|
+|inverse_0_q0         |   in|   60|   ap_memory|         inverse_0|         array|
+|inverse_0_we0        |  out|    1|   ap_memory|         inverse_0|         array|
+|inverse_0_address1   |  out|   12|   ap_memory|         inverse_0|         array|
+|inverse_0_ce1        |  out|    1|   ap_memory|         inverse_0|         array|
+|inverse_0_d1         |  out|   60|   ap_memory|         inverse_0|         array|
+|inverse_0_q1         |   in|   60|   ap_memory|         inverse_0|         array|
+|inverse_0_we1        |  out|    1|   ap_memory|         inverse_0|         array|
+|inverse_1_address0   |  out|   12|   ap_memory|         inverse_1|         array|
+|inverse_1_ce0        |  out|    1|   ap_memory|         inverse_1|         array|
+|inverse_1_d0         |  out|   60|   ap_memory|         inverse_1|         array|
+|inverse_1_q0         |   in|   60|   ap_memory|         inverse_1|         array|
+|inverse_1_we0        |  out|    1|   ap_memory|         inverse_1|         array|
+|inverse_1_address1   |  out|   12|   ap_memory|         inverse_1|         array|
+|inverse_1_ce1        |  out|    1|   ap_memory|         inverse_1|         array|
+|inverse_1_d1         |  out|   60|   ap_memory|         inverse_1|         array|
+|inverse_1_q1         |   in|   60|   ap_memory|         inverse_1|         array|
+|inverse_1_we1        |  out|    1|   ap_memory|         inverse_1|         array|
++---------------------+-----+-----+------------+------------------+--------------+
+

@@ -1,61 +1,16 @@
-% Aumento de SNR x potência (Resultados), separado de hardware.tex em 2026-11-09 para fechar o
-%   capítulo, como a última pergunta do roteiro da autora.
-% =====================================================================
-\section{\texorpdfstring{\textcolor{red}{Aumento de SNR e potência}}{Aumento de SNR e potência}}\label{subsec:resultados-compromisso}
-% =====================================================================
+\clearpage
+\section{\texorpdfstring{Trade-off between SNR increase, power and energy}{Trade-off between SNR increase, power and energy}}\label{subsec:resultados-compromisso}
+\suppressfloats[t]
 % FONTE: analise_potencia_qualidade.py (quadrantes_cond_g1/_g3 e _data.csv,
 %   tabela_escolha_condicao, escolha_cond). Qualidade: grade_inteira.py (mesmos dados das barras
 %   e curvas). TDLA30-10 usa a simulação da TDLA30-5. Pior caso A-H = pior caso E-H em todos os
 %   pontos dos grupos 1 e 3 (conferido no script). G1, <26,12>, TDLA30-5 e -10: 0,104 dB.
-
-\textcolor{red}{As Figuras~\ref{fig:quadrantes-g1} e \ref{fig:quadrantes-g3} juntam o aumento de SNR e a potência dinâmica nos grupos 1 e 3. Cada ponto é um formato numa condição de teste. No eixo x, está o pior aumento de SNR entre as configurações do grupo com o IoTh do gráfico, naquela condição: 10~dB (A a D) à esquerda e 20~dB (E a H) à direita. No gráfico da direita, o pior caso é o mesmo de todo o grupo (A a H). No eixo y, está a potência dinâmica do formato na arquitetura da condição, e a linha horizontal marca a potência estática.}
-
-
-\textcolor{red}{Só os grupos 1 e 3 aparecem, porque eles usam o circuito $16 \times 16$. No grupo 2 ($32 \times 32$), só a versão sem otimização foi implementada, e ela não atende nenhum limite. A potência foi medida só com matrizes do grupo 1 (Seção~\ref{subsec:hw-matrizes}), e isso é uma limitação para o grupo 3. Mas os dados de entrada parecem mudar pouco a potência: na versão sem otimização do $\langle 18,8\rangle$, medida com as matrizes de cada uma das 5 condições de teste, a potência dinâmica ficou entre 0,031 e 0,032~W.}
-
-
-\begin{figure}[!ht]
-\caption{\textcolor{red}{Aumento de SNR e potência dinâmica de cada formato nas condições de teste, grupo 1.}}
-\label{fig:quadrantes-g1}
-\vspace{4pt} % a classe zera o espaço entre a caption e a figura
-\centering
-\includegraphics[width=\textwidth]{Images/RESULTADOS/quadrantes_cond_g1.pdf}
-\vspace{4pt}
-\legend{\textcolor{red}{Fonte: a autora. Linha tracejada: baixa mobilidade; cheia: alta mobilidade. As linhas ligam os formatos que nenhum outro supera ao mesmo tempo em aumento de SNR e em potência.}}
-\end{figure}
-
-\begin{figure}[!ht]
-\caption{\textcolor{red}{Aumento de SNR e potência dinâmica de cada formato nas condições de teste, grupo 3.}}
-\label{fig:quadrantes-g3}
-\vspace{4pt} % a classe zera o espaço entre a caption e a figura
-\centering
-\includegraphics[width=\textwidth]{Images/RESULTADOS/quadrantes_cond_g3.pdf}
-\vspace{4pt}
-\legend{\textcolor{red}{Fonte: a autora. Linha tracejada: baixa mobilidade; cheia: alta mobilidade. As linhas ligam os formatos que nenhum outro supera ao mesmo tempo em aumento de SNR e em potência.}}
-\end{figure}
-
-\textcolor{red}{Como a potência muda mais com a arquitetura do que com o formato (Seção~\ref{subsec:resultados-potencia}), cada condição forma uma faixa de altura própria nas figuras. A Tabela~\ref{tab:escolha-condicao} mostra o formato escolhido em cada condição de teste: o menor que cabe na arquitetura e fica dentro do limite.}
-
-
-\textcolor{red}{No grupo 1, com IoTh de 20~dB, o limite de 3~dB fica no $\langle 24,12\rangle$ em quase todas as condições. Na TDLA30-75, o $\langle 22,12\rangle$ já basta, com 2,97~dB. Para 0,1~dB, todas as condições usam o $\langle 26,12\rangle$. Na TDLA30-5 e na TDLA30-10, ele fica em 0,104~dB, que arredonda para 0,10~dB. Passar de 3~dB para 0,1~dB aumenta a potência dinâmica de 6\% (TDLA30-300) a 30\% (TDLA30-75).}
-
-
-\textcolor{red}{Na TDLB100-400, o $\langle 24,12\rangle$ fica 0,47~dB acima do BCD-MMSE em ponto flutuante. Esse aumento pede que cada UE transmita 11\% mais energia por símbolo (Seção~\ref{subsec:aumento-snr}). O $\langle 26,12\rangle$ tira essa diferença com 0,39~W a mais de potência dinâmica no FPGA.}
-
-
-\textcolor{red}{No grupo 3, com IoTh de 20~dB, o limite de 3~dB fica no $\langle 24,12\rangle$ em todas as condições. O de 0,1~dB fica no $\langle 28,14\rangle$, com 10 a 30\% mais potência dinâmica. Na TDLB100-400, nenhum formato que cabe no FPGA atende 0,1~dB. O $\langle 28,14\rangle$ fica em 0,13~dB, e o $\langle 30,14\rangle$ não cabe.}
-
-
-\textcolor{red}{Com IoTh de 10~dB, os formatos ficam menores e só mudam entre as condições no grupo 1, para 0,1~dB: na TDLA30-5, na TDLA30-10 e na TDLA30-300, basta o $\langle 22,12\rangle$.}
-
-
 \begin{table}[htbp]
-\caption{\textcolor{red}{Formato escolhido em cada condição de teste, com o pior aumento de SNR, em dB, e a potência dinâmica, em W.}}
+\caption{Best trade-off format in each test condition, with the worst SNR increase, in dB, and the dynamic power, in W.}
 \label{tab:escolha-condicao}
-\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\vspace{4pt}
 \centering
 \scriptsize
-\color{red}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{2.2pt}
 \begin{tabular}{lcccccccccccc}
@@ -88,5 +43,35 @@
 \bottomrule
 \end{tabular}
 \vspace{4pt}
-\legend{\textcolor{red}{Fonte: a autora. Menor formato que cabe na arquitetura da condição de teste e cujo pior aumento de SNR, entre as configurações com aquele IoTh, fica até o limite. Modo \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}. --: nenhum formato que cabe no FPGA atende o limite.}}
+\legend{Source: the author. Mode \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}. --: no format that fits in the FPGA stays within the limit.}
 \end{table}
+
+\begin{figure}[!t]
+\caption{SNR increase, dynamic power and energy per inversion of each format in the test conditions, group 1.}
+\label{fig:quadrantes-g1}
+\vspace{4pt}
+\centering
+\includegraphics[width=\textwidth]{Images/RESULTADOS/quadrantes_cond_g1.pdf}
+\vspace{4pt}
+\legend{Source: the author.}
+\end{figure}
+
+\begin{figure}[!t]
+\caption{SNR increase, dynamic power and energy per inversion of each format in the test conditions, group 3.}
+\label{fig:quadrantes-g3}
+\vspace{4pt}
+\centering
+\includegraphics[width=\textwidth]{Images/RESULTADOS/quadrantes_cond_g3.pdf}
+\vspace{4pt}
+\legend{Source: the author.}
+\end{figure}
+
+This section concludes the analysis of formats and hardware with the trade-off between the SNR increase, power, and energy. An SNR increase requires each UE to transmit more energy per symbol (Section~\ref{subsec:aumento-snr}). To reduce this increase, the format needs more bits, and the FPGA consumes more power and energy per inversion. Section~\ref{sec:resultados-formato} selected one format per group, which meets all test conditions. Here, the analysis is performed on each test condition within the group, with the architecture of that condition. Therefore, in some conditions, a smaller format is sufficient.
+
+Figures~\ref{fig:quadrantes-g1} and \ref{fig:quadrantes-g3} show this relationship for groups 1 and 3. Group 2 is not included because the optimized architectures were not implemented in $32 \times 32$ (Section~\ref{sec:testes-hardware}). Each point represents a format in a test condition. The x-axis shows the worst-case SNR increase among the configurations with the IoTh of the column: 10~dB, or 20~dB, the extreme case. The y-axis represents dynamic power (top) and energy per inversion (bottom), both on a logarithmic scale. The horizontal line indicates the average static power, while the colored background regions mark the 0.1~dB and 3~dB limits.
+
+The circles mark the format with the lowest power within each limit (Table~\ref{tab:escolha-condicao}). Since the x-axis represents the worst-case configuration, this format meets all configurations with that IoTh. In TDLB100-400 of group 3, with an IoTh of 20~dB, no format that fits in the FPGA stays within 0.1~dB.
+
+Energy has a different distribution than power. For power, each test condition appears at a distinct level. For energy, the four conditions with matrix batching and systolic arrays nearly overlap, with only TDLA30-5 and TDLA30-10 above them (Section~\ref{subsec:resultados-potencia}). Nevertheless, the circles are the same for both metrics, because the format with the lowest power within the limit also has the lowest energy.
+
+\FloatBarrier

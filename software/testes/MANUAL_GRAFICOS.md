@@ -56,6 +56,9 @@ Criado em 2026-11-02. Já seguem tudo: `figuras_descentralizacao.py`, `figuras_p
 A faixa do BCD-MMSE é hachurada porque se sobrepõe à do LMMSE: duas faixas preenchidas
 gerariam uma cor de mistura.
 
+Na legenda das curvas, os rótulos dizem "LMMSE in float" e "ZF in float", e as três faixas
+(LMMSE, ZF, BCD-MMSE) ficam uma abaixo da outra na primeira coluna (`ncol=2`; pedido de 2026-11-09).
+
 **Amarelo forte = BCD-MMSE; degradê azul = aumento de SNR do formato** (decidido com a autora em
 2026-11-02). As curvas do BCD-MMSE e a parte float das barras ficam em amarelo forte `#eda100` (lavanda
 e cinza foram recusados); o degradê do
@@ -95,12 +98,30 @@ papel (seção 4), então a rampa não sai do estudo de iterações.
 | IoTh | 10 dB `#2a78d6`, 20 dB `#eb6834` | — |
 | K | — (sem cor) | 8 `o`, 12 `s` |
 | Grupo | G1 `#2a78d6`, G2 `#eb6834`, G3 `#4a3aa7` | G1 `o`, G2 `s`, G3 `D` |
-| Cenário | TDLA30-5 `#52514e`, TDLA30-75 `#35bcd9`, TDLA30-300 `#eb6834`, TDLC300-100 `#4a3aa7`, TDLB100-400 `#d64ad6` | `o`, `s`, `D`, `^`, `v` |
+| Cenário | TDLA30-5 `#52514e`, TDLA30-10 marrom `#8c5a2e`, TDLA30-75 `#35bcd9`, TDLA30-300 `#eb6834`, TDLC300-100 `#4a3aa7`, TDLB100-400 `#d64ad6` | `o`, `s`, `D`, `^`, `v` |
 | Perfil de mobilidade (`figuras_perfis.py`) | preto `INK_PRIMARY`, sem borda (amarelo e rosa recusados), sobre o fundo no degradê do mapa: lento vazado, rápido cheio, sobre o fundo no degradê do mapa (`DEGRADE`/`NORMA`) | lento `o` vazado, rápido `o` cheio |
+| Recurso do FPGA (`recursos_faixa_arquitetura`) | LUT `#2a78d6`, FF `#eda100`, DSP `#e87ba4`, BRAM cinza `#7a7974` (diferente do cinza da TDLA30-5); validada em 2026-11-13 (`--pairs all`: CVD 9,3, normal 17,0; cinza falha no croma, como previsto) | inicial escrita sobre cada barra (L, F, D, B), porque amarelo e rosa têm contraste abaixo de 3:1 |
+| Etapa da inversão (`figura_etapas.py`, `etapas_dominantes`) | rampa ordinal violeta na ordem do pipeline: LU `#2b1f6b`, D and F `#4d3db5`, Forward subst. `#7b6cdc`, Inversion `#a79cec`; restante cinza `#d3d1ca`; validada em 2026-11-13 com `--ordinal` (passa tudo) | porcentagem escrita no segmento (a partir de 9%), branca nos três escuros |
 | Formato (série de pontos ou de custo) | rampa de um azul, do menor para o maior W: `#86b6ef`, `#3987e5`, `#256abf`, `#184f95`, `#0d366b` | `v`, `^`, `s`, `D`, `o` |
+| Formato no plano potência x aumento de SNR (`analise_potencia_qualidade.py`, `quadrantes_cond_g*`) | a cor fica com a condição de teste | um marcador por formato, todos bem diferentes entre si (sem pares como `v`/`^` ou `s`/`D`): `<18,8>` `*`, `<20,8>` `^`, `<22,12>` `s`, `<24,12>` `d`, `<26,12>` `o`, `<28,14>` `P`, `<30,14>` `X`; a estrela e as cruzes com área maior |
+| Perfil de mobilidade nas curvas por condição | cor da condição | linha tracejada = low mobility (TDLA30-5, -10, -75), cheia = high mobility (TDLC300-100, TDLA30-300, TDLB100-400); na legenda, uma coluna por perfil com o nome do perfil no topo |
 
 Uma figura usa no máximo uma categoria por cor. Se precisar de duas (por exemplo, grupo e
 IoTh), uma vai na cor e a outra no marcador.
+
+## 6a. Plano potência x aumento de SNR (`quadrantes_cond_g*`)
+
+| Item | Regra |
+|---|---|
+| Painéis | um PNG por grupo; IoTh 10 dB à esquerda e IoTh 20 dB à direita, mesmo eixo x e y |
+| Ponto | um formato numa condição de teste: x = pior configuração do grupo com aquele IoTh, naquela condição; y = potência dinâmica do formato na arquitetura da própria condição. Sem diferenciar QPSK e 16-QAM |
+| Eixo x | log, "SNR increase over BCD-MMSE float [dB]", marcas 0.01, 0.1, 1, 3, 10; piso "≤ 0.001" para aumentos menores; grade menor em 2 e 5 |
+| Eixo y | linear (nada de log para W), o mesmo em todos os grupos; números a cada 0,5 W, marca e grade menor a cada 0,25 W |
+| Fundo | as faixas de perda da seção 6 (as mesmas de `compromisso_formatos`): até 0,1 dB cinza `#e6e5e0`, de 0,1 a 3 dB amarelo `#fde3a7`, acima de 3 dB vermelho `#f4c6c6`; linha preta em 0,1 dB e na potência estática média (divide como um political compass) |
+| Rótulos das regiões | "≤ 0.1 dB", "0.1 to 3 dB" e "> 3 dB" no topo; "dynamic > static" e "dynamic < static" girados à direita; "static power, a to b W" sobre a linha |
+| Curvas | frente de Pareto de cada condição, na cor dela, espessura 1,4 (a mesma das linhas de energia_potencia_recursos) |
+| Nomes dos pontos | sem texto nem traço até o ponto; o formato vai no marcador |
+| Legendas | em quadros com borda fina (`frameon`, borda `INK_MUTED`, fundo `SURFACE`), embaixo, lado a lado e alinhados à direita (borda direita na do painel da direita); formatos em duas colunas, nunca todos numa linha |
 
 ## 6. Faixas de perda (fundos e mapas)
 
@@ -110,6 +131,19 @@ IoTh), uma vai na cor e a outra no marcador.
 | de 0,1 a 3 dB | amarelo claro `#fde3a7` |
 | acima de 3 dB | vermelho claro `#f4c6c6` |
 | não chega a 10⁻² | `×` vermelho `#d03b3b` |
+
+Rótulos das linhas do mapa de aumento de SNR (`mapa_snr_grupo*`, aprovado em 2026-11-09):
+
+- o formato numa linha só, no tamanho dos números das células, sem negrito;
+- o modo mais comum (RND_Z/WRAP) sai do rótulo e vai para a legenda da figura no texto
+  ("Modo RND_ZERO/WRAP, exceto onde indicado abaixo do formato");
+- os outros modos ficam embaixo do formato, um pouco menores (0,85 do formato), em
+  `INK_SECONDARY`;
+- nomes das configurações (1A a 1H) no tamanho dos números das células;
+- IoTh, Modulation e K, embaixo do mapa, no mesmo tamanho do formato.
+- título do eixo y: "Fixed-point format", sem "(ap_fixed)".
+- barra de cores: números no tamanho dos números das células, com um vão de 0,14 pol a mais
+  entre ela e o mapa.
 
 ## 7. O que ainda está fora do padrão
 

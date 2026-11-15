@@ -114,7 +114,8 @@ def caminho(saida: Path, cond: str, config: int, fmt) -> Path:
 def rodar_formato(tarefa):
     """Todas as (configuração, condição) de um formato e modo, no mesmo processo, para
     reaproveitar os servidores do hardware. Devolve uma linha de log por rodada."""
-    fmt, rodadas, saida, rapido, grades = tarefa
+    fmt, rodadas, saida, rapido, grades, *resto = tarefa
+    grade_inteira = resto[0] if resto else None
     from dbp_sim import hls_inverse
     from dbp_sim.m1_driver import SimConfig, run_panel
     from dbp_sim.params import PANELS_BY_LABEL as paineis, M1_Driver, TCC_CONFIGURATION
@@ -130,6 +131,8 @@ def rodar_formato(tarefa):
         extra = dict(n_realizations=3, n_symbols=200, snr_db_grid=(-10, -6, -4, -2, 0)) \
             if rapido else {}
         ref = None
+        if grade_inteira:
+            extra["snr_db_grid"] = grade_inteira
         if grades:
             extra["snr_db_grid"] = grades[(rotulo, cond)]
             ref = json.loads(caminho_ref(saida, cond, k).read_text())
@@ -184,6 +187,9 @@ def main():
     parser.add_argument("--referencia", default=str(REFERENCIA),
                         help="Pasta da referência float que escolhe as SNRs (com --snr-perto; "
                              "padrão: resultados/1_referencia_float/curvas)")
+    parser.add_argument("--snr-min", type=int, default=None,
+                        help="Sem --snr-perto: grade inteira de SNR-MIN a 10 dB, passo 2 "
+                             "(a da referência curvas_qpsk_256 com -20; mesma semente)")
     parser.add_argument("--rapido", action="store_true",
                         help="3 realizações x 200 símbolos, 5 SNRs (teste)")
     args = parser.parse_args()
@@ -207,13 +213,16 @@ def main():
     grades = ({(r, c): grade_perto(r, c, args.extra_direita, Path(args.referencia))
                for r, c in rodadas}
               if args.snr_perto else None)
+    inteira = (tuple(range(args.snr_min, 11, 2))
+               if args.snr_min is not None and not args.snr_perto else None)
     tarefas = [((I, F, q, o), [(r, c) for r2, c in rodadas if r2 == r], saida, args.rapido,
-                grades)
+                grades, inteira)
                for (q, o), (I, F) in itertools.product(modos, formatos)
                for r in dict.fromkeys(r for r, _ in rodadas)]
     (saida / "parametros.json").write_text(json.dumps({
         "formatos": formatos, "modos": modos, "rodadas": rodadas, "rapido": args.rapido,
         "snr_perto": args.snr_perto, "extra_direita": args.extra_direita,
+        "grade_inteira": inteira,
         "grades": {f"{r}|{c}": g for (r, c), g in grades.items()} if grades else None,
         "referencia": ("simulada junto, nas mesmas SNRs (referencias/)" if grades else
                        "software/testes/resultados/1_referencia_float (float64)")}, indent=1))

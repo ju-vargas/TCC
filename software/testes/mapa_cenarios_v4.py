@@ -146,12 +146,13 @@ def faixas(valores):
     return trechos
 
 
-def modo_fixo(p, occ_k, configs, linhas, limite):
+def modo_fixo(p, occ_k, configs, linhas, limite, p_celulas=None):
     """Um modo por formato e por circuito (16 x 16 e 32 x 32), com o critério de
     perda_ocupacao somado nas configurações do circuito: mais pares (configuração, cenário)
     dentro do limite (× conta como fora); depois a menor ocupação, AP_RND_ZERO, a menor pior
     perda e a ordem dos modos. Devolve as células (pior perda ou None se o modo tem × em algum cenário, perdas
-    nos 5 cenários, ocupação) e {circuito: modo} de cada formato."""
+    nos 5 cenários, ocupação) e {circuito: modo} de cada formato. Com p_celulas, o modo é
+    escolhido com p e as células saem de p_celulas (a grade inteira, grade_inteira.Perdas)."""
     celulas, modos = [], []
     for I, F in linhas:
         escolha = {}
@@ -169,7 +170,8 @@ def modo_fixo(p, occ_k, configs, linhas, limite):
         linha = []
         for k in configs:
             m = escolha[next(n for n, ks in CIRCUITOS.items() if k in ks)]
-            vs = [p[(k, c, I, F, *m)] for c in CENARIOS]
+            vs = [(p_celulas if p_celulas is not None else p)[(k, c, I, F, *m)]
+                  for c in CENARIOS]
             linha.append((None if None in vs else max(vs), vs, occ_k[k][(I, F, *m)]))
         celulas.append(linha)
         modos.append(escolha)
@@ -251,9 +253,23 @@ def base(configs, linhas, por, titulo, rotulos=None):
         chaves = list(zip(*(valores for _, valores in attrs[:r + 1])))
         for a, b, chave in faixas(chaves):
             # retângulo reto, um pouco mais justo ao texto
+            # LAYOUT["faixa_borda"]: faixa com fundo da figura e borda fina, como o quadro
+            # da legenda, em vez do fundo cinza
+            # LAYOUT["faixa_chave"]: em vez da faixa, o texto em cima de uma linha fina com
+            # as pontas dobradas para cima (chave), que mostra até onde vai o grupo
+            borda = LAYOUT.get("faixa_borda", False)
+            if LAYOUT.get("faixa_chave", False):
+                x0, x1, y = xs[a] - 0.5 + 0.08, xs[b] + 0.5 - 0.08, r + 0.22
+                leg.plot([x0, x0, x1, x1], [y - 0.16, y, y, y - 0.16], color=INK_MUTED,
+                         linewidth=0.9, solid_joinstyle="miter")
+                leg.text((xs[a] + xs[b]) / 2, r - 0.08, chave[-1], ha="center", va="center",
+                         fontsize=7.5 if ESTREITO else 8.5, color=INK_PRIMARY)
+                continue
             leg.add_patch(FancyBboxPatch((xs[a] - 0.5 + 0.05, r - 0.3), xs[b] - xs[a] + 1 - 0.1, 0.6,
                                          boxstyle="square,pad=0",
-                                         facecolor=FAIXA, edgecolor="none"))
+                                         facecolor=SURFACE if borda else FAIXA,
+                                         edgecolor=INK_MUTED if borda else "none",
+                                         linewidth=0.8 if borda else None))
             leg.text((xs[a] + xs[b]) / 2, r, chave[-1], ha="center", va="center",
                      fontsize=7.5 if ESTREITO else 8.5,
                      color=INK_PRIMARY)
@@ -300,7 +316,9 @@ def mapa_perda(celulas, ordem, configs, por, titulo, nota, limite):
     pintar(ax, xs, valores, cmap=DEGRADE, norm=NORMA)
     ax.set_xlim(-0.5, xs[-1] + 0.5)
     ax.set_ylim(len(valores) - 0.5, -0.5)
-    dy = -0.17
+    # posição do número e dos símbolos na célula (frações da célula); o TCC aproxima os dois
+    dy = LAYOUT.get("dy_numero", -0.17)
+    dy_simbolo = LAYOUT.get("dy_simbolo", 0.24)
     for i, linha in enumerate(celulas):
         for jj, (v, vs, *_) in enumerate(linha):
             j = xs[jj]
@@ -318,7 +336,7 @@ def mapa_perda(celulas, ordem, configs, por, titulo, nota, limite):
                 for c, (marca, vc) in enumerate(zip(SIMBOLOS, vs)):
                     if (e := estado(vc, cheio(limite))) == 0:
                         continue
-                    ax.scatter(j + 0.17 * (c - 2), i + 0.24, s=11 if ESTREITO else 20,
+                    ax.scatter(j + 0.17 * (c - 2), i + dy_simbolo, s=11 if ESTREITO else 20,
                                marker=marca, facecolors=FORA if e == 2 else "none",
                                edgecolors=FORA, linewidths=0.9 if ESTREITO else 1.1)
     # sem nota de rodapé: o × e a definição do aumento de SNR ficam no texto do TCC
@@ -341,10 +359,14 @@ def mapa_perda(celulas, ordem, configs, por, titulo, nota, limite):
     rotulos += ["above 0.1 dB", f"above {texto_limite(cheio(limite))}"]
     if ESTREITO:
         # embaixo, numa linha só
-        fig.legend(alcas, rotulos, loc="lower center", bbox_to_anchor=(0.5, 0.01),
+        # LAYOUT["legenda_x"]: legenda alinhada à direita, com a borda direita nesse x
+        x = LAYOUT.get("legenda_x")
+        fig.legend(alcas, rotulos, loc="lower center" if x is None else "lower right",
+                   bbox_to_anchor=(0.5 if x is None else x, 0.01),
                    ncol=LAYOUT.get("ncol", len(alcas)), frameon=False, fontsize=7, labelcolor=INK_SECONDARY,
                    handlelength=1.2, handletextpad=0.35, columnspacing=1.0,
-                   title="Test conditions above the limit", title_fontsize=8)
+                   title="Test conditions above the limit", title_fontsize=8,
+                   alignment="center" if x is None else "right")
         return fig
     fig.legend(alcas, rotulos, loc="upper left", bbox_to_anchor=(0.808, ax.get_position().y0),
                frameon=False, fontsize=8, labelcolor=INK_SECONDARY, handletextpad=0.4,
