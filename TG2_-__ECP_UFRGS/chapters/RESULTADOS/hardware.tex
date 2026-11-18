@@ -68,13 +68,13 @@ Figure~\ref{fig:recursos-faixa-arquitetura} shows, for each architecture, the ra
 In the unoptimized version and in TDLB100-400, the most used resource is the DSP. In TDLA30-5 and TDLA30-10, it is the LUT, because of the dividers (Section~\ref{subsubsec:resultados-pipeline-lacos}). In TDLA30-75, TDLC300-100 and TDLA30-300, the most used resource changes with the format (Table~\ref{tab:recurso-mais-usado}, Appendix~\ref{ap:recursos}).
 
 \begin{figure}[!ht]
-\caption{Usage of each XCU50 resource per architecture, across the formats.}
+\caption[Usage of each XCU50 resource per architecture, across the formats.]{Usage of each XCU50 resource per architecture, across the formats. $16 \times 16$ circuit. In the DSP of TDLB100-400, the arrow indicates that $\langle 30,14\rangle$ exceeds the capacity of the XCU50: the HLS estimate is 126\% (7,512 DSPs, out of 5,952).}
 \label{fig:recursos-faixa-arquitetura}
 \vspace{4pt}
 \centering
 \includegraphics[width=\textwidth]{Images/RESULTADOS/recursos_faixa_arquitetura.pdf}
 \vspace{4pt}
-\legend{Source: the author. $16 \times 16$ circuit. In the DSP of TDLB100-400, the arrow indicates that $\langle 30,14\rangle$ exceeds the capacity of the XCU50: the HLS estimate is 126\% (7,512 DSPs, out of 5,952).}
+\legend{Source: the author.}
 \end{figure}
 
 % FONTE: tab:recurso-mais-usado (Apêndice). Ocupação formato a formato: TDLA30-5 -> TDLA30-10
@@ -84,7 +84,7 @@ Resource usage follows the architecture, not the cycle limit. Moving from TDLA30
 In Table~\ref{tab:recursos-faixa}, the interval between inversions remains below the cycle limit across all test conditions and \textcolor{red}{all formats that fit in the FPGA}. In systolic arrays, this interval is the same in all formats, while in other architectures, it increases with the format. All designs meet the 100~MHz clock constraint, with the longest critical path measuring 9.74~ns in TDLB100-400. For the $32 \times 32$ case, the unoptimized version uses roughly the same amount of resources as the $16 \times 16$ version (Table~\ref{tab:recursos-sem-otimizacao}, Appendix~\ref{ap:recursos}); however, the interval is approximately 5 times longer.
 
 \begin{table}[htbp]
-\caption{Shortest and longest critical path and interval between inversions of each architecture, across the formats.}
+\caption[Shortest and longest critical path and interval between inversions of each architecture, across the formats.]{Shortest and longest critical path and interval between inversions of each architecture, across the formats. The test conditions use only the $16 \times 16$ circuit (Section~\ref{sec:testes-hardware}). The values of each format are in Appendix~\ref{ap:recursos}.}
 \label{tab:recursos-faixa}
 \vspace{4pt}
 \centering
@@ -107,7 +107,7 @@ Without opt., 32 $\times$ 32 & 7.72--8.58 & 138,894--194,367 & -- \\
 \bottomrule
 \end{tabular}
 \vspace{4pt}
-\legend{Source: the author. The test conditions use only the $16 \times 16$ circuit (Section~\ref{sec:testes-hardware}). The values of each format are in Appendix~\ref{ap:recursos}.}
+\legend{Source: the author.}
 \end{table}
 
 \subsection{\texorpdfstring{Dominant steps}{Dominant steps}}\label{subsec:resultados-etapas}
@@ -126,13 +126,13 @@ Without opt., 32 $\times$ 32 & 7.72--8.58 & 138,894--194,367 & -- \\
 Figure~\ref{fig:etapas-dominantes} shows the percentage of LUTs, DSPs, and dynamic power used by each inversion \textcolor{red}{step}. The values for each format are in Tables~\ref{tab:etapas-lut}, \ref{tab:etapas-dsp}, and \ref{tab:etapas-potencia} (Appendix~\ref{ap:recursos}). The D and F bar combines the \texttt{D\_extraction}, \texttt{D\_square\_root}, and \texttt{G\_decomposition} \textcolor{red}{steps} (Figure~\ref{fig:modulo-inversao}). In all architectures, the LU and forward substitution, which have the dividers (Section~\ref{subsubsec:resultados-pipeline-lacos}), use the majority of resources and power. In $32 \times 32$, the unoptimized version divides the LUTs and DSPs between \textcolor{red}{steps} as in $16 \times 16$. In systolic arrays, the memories between \textcolor{red}{steps} use 12 to 19\% of the dynamic power, compared to 10\% or less in the other test conditions. In these architectures, each memory is divided into 32 or 64 banks, so that the PEs read it in the same cycle (Section~\ref{subsubsec:resultados-sistolico}).
 
 \begin{figure}[!ht]
-\caption{Percentage of LUTs, DSPs and dynamic power used by each inversion step, per architecture.}
+\caption[Percentage of LUTs, DSPs and dynamic power used by each inversion step, per architecture.]{Percentage of LUTs, DSPs and dynamic power used by each inversion step, per architecture. Routed design in Vivado. Average across the formats; from one format to another, the percentage of a step changes by less than 10 percentage points. The BRAMs are not shown because most of them (60 to 100\%) are in the memories between steps. Dynamic power in the test condition of each architecture (TDLA30-5 for the version without optimization), without the $32 \times 32$ and without $\langle 30,14\rangle$ in TDLB100-400.}
 \label{fig:etapas-dominantes}
 \vspace{4pt}
 \centering
 \includegraphics[width=\textwidth]{Images/RESULTADOS/etapas_dominantes.pdf}
 \vspace{4pt}
-\legend{Source: the author. Routed design in Vivado. Average across the formats; from one format to another, the percentage of a step changes by less than 10 percentage points. The BRAMs are not shown because most of them (60 to 100\%) are in the memories between steps. Dynamic power in the test condition of each architecture (TDLA30-5 for the version without optimization), without the $32 \times 32$ and without $\langle 30,14\rangle$ in TDLB100-400.}
+\legend{Source: the author.}
 \end{figure}
 
 \subsection{\texorpdfstring{Power and energy}{Power and energy}}\label{subsec:resultados-potencia}
@@ -143,13 +143,13 @@ Figure~\ref{fig:etapas-dominantes} shows the percentage of LUTs, DSPs, and dynam
 %   Potência dinâmica: pipeline/dataflow 0,151-0,496 W; lotes 0,369-1,037 W; sistólicos 1,368-4,703 W.
 
 \begin{figure}[!ht]
-\caption{Energy per inversion per format and test condition, and in the version without optimization.}
+\caption[Energy per inversion per format and test condition, and in the version without optimization.]{Energy per inversion per format and test condition, and in the version without optimization. Logarithmic y-axis. Optimized architectures in $16 \times 16$. Without TRN/SAT in the label, the format uses \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}.}
 \label{fig:energia-inversao}
 \vspace{4pt}
 \centering
 \includegraphics[width=\textwidth]{Images/RESULTADOS/energia_inversao.pdf}
 \vspace{4pt}
-\legend{Source: the author. Logarithmic y-axis. Optimized architectures in $16 \times 16$. Without TRN/SAT in the label, the format uses \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}.}
+\legend{Source: the author.}
 \end{figure}
 
 Power and energy per inversion depend on the architecture of each test condition. High-mobility conditions have lower cycle limits (Table~\ref{tab:limite-ciclos}) and, consequently, require architectures with a greater degree of hardware parallelism. Table~\ref{tab:potencia-dinamica} presents the dynamic power, which increases with each technique. With loop pipelining (TDLA30-5), dataflow (TDLA30-10), and matrix batching (TDLA30-75 and TDLC300-100), the power remains below 1.1~W. With systolic arrays (TDLA30-300 and TDLB100-400), it reaches 4.7~W. Although TDLC300-100 belongs to the high-mobility profile, it employs batching because its cycle limit is close to that of TDLA30-75. The data format has less impact than the architecture: \textcolor{red}{from the smallest to the largest format, the dynamic power grows at most 2.5 times.}
@@ -157,7 +157,7 @@ Power and energy per inversion depend on the architecture of each test condition
  Static power remains approximately 2.2~W in all cases.
 
 \begin{table}[htbp]
-\caption{Dynamic power, in W, per format and architecture.}
+\caption[Dynamic power, in W, per format and architecture.]{Dynamic power, in W, per format and architecture. Architecture of each test condition in $16 \times 16$. $^{*}$\texttt{AP\_TRN}/\texttt{AP\_SAT}; the others, \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}. --: does not fit in the FPGA.}
 \label{tab:potencia-dinamica}
 \vspace{4pt}
 \centering
@@ -180,7 +180,7 @@ Without opt., 32 $\times$ 32 & 0.035 & 0.038 & 0.038 & 0.040 & 0.046 & 0.051 & 0
 \bottomrule
 \end{tabular}
 \vspace{4pt}
-\legend{Source: the author. Architecture of each test condition in $16 \times 16$. $^{*}$\texttt{AP\_TRN}/\texttt{AP\_SAT}; the others, \texttt{AP\_RND\_ZERO}/\texttt{AP\_WRAP}. --: does not fit in the FPGA.}
+\legend{Source: the author.}
 \end{table}
 
 % FONTE: resultados_vivado_servidor.csv, formato a formato. Energia com lote 1,75 a 4,59 uJ;
@@ -197,13 +197,13 @@ Figure~\ref{fig:energia-inversao} shows the energy per inversion, and Table~\ref
 Figure~\ref{fig:potencia-recursos} combines the utilization of the most used resource and the dynamic power. The two grow together. With loop pipelining, dataflow, and matrix batching, the dynamic power is less than half of the static power. With systolic arrays, it approaches or surpasses the static power. The unoptimized version is close to zero in both graphs, for both $16 \times 16$ and $32 \times 32$.
 
 \begin{figure}[!ht]
-\caption{Usage of the most used XCU50 resource (left) and dynamic power (right), per format and test condition, and in the version without optimization.}
+\caption[Usage of the most used XCU50 resource (left) and dynamic power (right), per format and test condition, and in the version without optimization.]{Usage of the most used XCU50 resource (left) and dynamic power (right), per format and test condition, and in the version without optimization. Optimized architectures in $16 \times 16$. On the right, the labels give the dynamic power as a percentage of the static power, from the smallest to the largest format; the last label applies to both versions without optimization. For $\langle 30,14\rangle$ in TDLB100-400, the usage is the HLS estimate.}
 \label{fig:potencia-recursos}
 \vspace{4pt}
 \centering
 \includegraphics[width=\textwidth]{Images/RESULTADOS/potencia_recursos.pdf}
 \vspace{4pt}
-\legend{Source: the author. Optimized architectures in $16 \times 16$. On the right, the labels give the dynamic power as a percentage of the static power, from the smallest to the largest format; the last label applies to both versions without optimization. For $\langle 30,14\rangle$ in TDLB100-400, the usage is the HLS estimate.}
+\legend{Source: the author.}
 \end{figure}
 
 Thus, the dynamic power follows the parallelism of the architecture, and, \textcolor{red}{among the optimized architectures}, the energy per inversion is higher in \textcolor{red}{those} with less parallelism (TDLA30-5 and TDLA30-10).

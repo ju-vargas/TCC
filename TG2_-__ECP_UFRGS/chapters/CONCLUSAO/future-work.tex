@@ -2,3 +2,9 @@ Future work could incorporate a delay deadline into the hardware sizing and quan
 
 In hardware, optimized $32 \times 32$ architectures are still needed to evaluate the power and the trade-off of group 2 (Section~\ref{subsec:resultados-compromisso}). Further extensions are to implement in hardware the other BCD-MMSE inversions, which are currently computed in floating point, and to evaluate \textcolor{red}{the SER with more than one iteration of the algorithm, which does not change the number of inversions of $\mathbf G_c$}.
 
+
+\textcolor{red}{Outra extensão é implementar a inversão de $\mathbf G_c$ com outros algoritmos, como os que evitam raízes quadradas. A fatoração LDL não precisa de raiz quadrada e usa só $M_c$ recíprocos para uma matriz $M_c \times M_c$ \cite{ingemarsson2016ldl}. Também há métodos que retiram as raízes quadradas e trocam divisões por deslocamentos \cite{yu2015inversion}. A comparação com a Cholesky mostraria o efeito dessas escolhas na área, na potência e no número de bits.}
+% FONTE: Ingemarsson e Gustafsson 2016 (referencias/Cholesky/Hardware_architecture...md, L25: R^H D R,
+%   "requires no square roots, and only N reciprocal operations"). Yu et al. 2015 (referencias/Cholesky/
+%   Low_complexity_complex_matrix_inversion...md, L257: "square root operations were avoided, and division
+%   operations were replaced by shift operations").

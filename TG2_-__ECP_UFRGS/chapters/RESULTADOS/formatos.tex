@@ -1,4 +1,4 @@
-\section{\texorpdfstring{\textcolor{red}{Selection and analysis of word format}}{Selection and analysis of word format}}\label{sec:resultados-formato}
+\section{\texorpdfstring{Selection and analysis of word format}{Selection and analysis of word format}}\label{sec:resultados-formato}
 
 This section presents the results of the validation of the 10 formats (Section~\ref{subsec:validacao}). The results are grouped by the number of the configuration, which sets $M$, $C$ and the size of the inversion circuit (Section~\ref{subsec:configuracoes-bs}): group 1 ($M = 128$, $C = 8$, $16 \times 16$ circuit), group 2 ($M = 256$, $C = 8$, $32 \times 32$ circuit) and group 3 ($M = 256$, $C = 16$, $16 \times 16$ circuit). All configurations of a group use the same circuit, and only the modulation, $K$ and IoTh change between them.
 
@@ -7,13 +7,13 @@ For each group, the section presents the effect of the format on the SNR increas
 \subsection{\texorpdfstring{Group 1: $M = 128$, $C = 8$}{Group 1: M = 128, C = 8}}\label{subsec:resultados-grupo1}\label{subsec:mapas-perda}
 
 \begin{figure}[!htb]
-\caption{Largest SNR increase, in dB, of each format in group 1 (configurations 1A to 1H).}
+\caption[Largest SNR increase, in dB, of each format in group 1 (configurations 1A to 1H).]{Largest SNR increase, in dB, of each format in group 1 (configurations 1A to 1H). Below each format, the quantization and overflow modes, without the AP\_ prefix.}
 \label{fig:mapa-grupo1}
 \vspace{4pt}
 \centering
 \includegraphics[width=\textwidth]{Images/RESULTADOS/mapa_snr_grupo1.pdf}
 \vspace{4pt}
-\legend{Source: the author. Below each format, the quantization and overflow modes, without the AP\_ prefix.}
+\legend{Source: the author.}
 \end{figure}
 
 Figure~\ref{fig:mapa-grupo1} shows, on a logarithmic color scale, the largest SNR increase of each format (rows) in each configuration (columns), among the 5 simulated test conditions (Section~\ref{subsec:setup_condicoes}). Below the value, unfilled symbols mark the test conditions above 0.1~dB, and filled symbols, those above 3~dB. The circle stands for TDLA30-5 and TDLA30-10, which share the same SER curves. A $\times$ marks a cell where some test condition does not reach $\mathrm{SER} = 10^{-2}$. The maps of groups 2 and 3 follow the same layout.
@@ -100,7 +100,7 @@ Thus, across the three groups, the primary factor driving the divergence between
 \FloatBarrier
 \subsection{\texorpdfstring{Chosen formats}{Chosen formats}}\label{subsec:formatos-escolhidos}
 \begin{table}[htbp]
-\caption{Chosen formats in each group of configurations.}
+\caption[Chosen formats in each group of configurations.]{Chosen formats in each group of configurations. Below each format, the quantization and overflow modes.}
 \label{tab:formatos-escolhidos}
 \vspace{4pt}
 \centering
@@ -123,7 +123,7 @@ Increase up to 0.1~dB & \begin{tabular}[c]{@{}c@{}}$\langle 24,12\rangle$\\ \tex
 \bottomrule
 \end{tabular}
 \vspace{4pt}
-\legend{Source: the author. Below each format, the quantization and overflow modes.}
+\legend{Source: the author.}
 \end{table}
 
 Table~\ref{tab:formatos-escolhidos} presents the formats selected across the three groups, both with all configurations and with only the 10~dB IoTh configurations (A through D). Excluding the 20~dB IoTh configurations results in formats that are 2 to 6 bits smaller, with the 0.1~dB format becoming $\langle 24,12\rangle$ in all three groups. Since some formats overlap, there are three distinct formats to synthesize for groups 1 and 3, and four for group 2 (Section~\ref{sec:resultados-hardware}).
@@ -135,13 +135,13 @@ Figure~\ref{fig:perfis-formatos} shows the largest SNR increase of each of the 1
 For most formats, the data points for both profiles are close to one another, with the high-mobility point appearing either to the right of or directly atop the low-mobility point. In other words, the mobility profile has little impact on the SNR increase. However, under low-mobility conditions alone, the selected format would be 2 bits smaller in two instances: $\langle 26,12\rangle$ instead of $\langle 28,14\rangle$ in group 2, with the 3~dB limit, and $\langle 28,14\rangle$ instead of $\langle 30,14\rangle$ in group 3, with the 0.1~dB limit. In all other cases, both profiles select the same format. Consequently, the high-mobility profile determines the format. Appendix~\ref{ap:perfis-configuracao} presents the SNR increase of each configuration with the selected formats.
 
 \begin{figure}[!htb]
-\caption{Largest SNR increase, in dB, of each format in each mobility profile, in the three groups.}
+\caption[Largest SNR increase, in dB, of each format in each mobility profile, in the three groups.]{Largest SNR increase, in dB, of each format in each mobility profile, in the three groups. Each format uses the same mode as in the SNR increase maps (Figures~\ref{fig:mapa-grupo1} to \ref{fig:mapa-grupo3}): RND\_ZERO/WRAP, except $\langle 14,6\rangle$ in RND\_MIN\_INF/SAT in group 1 and RND\_MIN\_INF/WRAP in groups 2 and 3; $\langle 16,6\rangle$ in TRN/SAT in group 1 and RND\_MIN\_INF/WRAP in groups 2 and 3; $\langle 18,8\rangle$ in TRN/SAT in group 3; and $\langle 30,14\rangle$ in TRN/SAT in all three groups.}
 \label{fig:perfis-formatos}
 \vspace{4pt}
 \centering
 \includegraphics[width=\textwidth]{Images/RESULTADOS/perfis_mobilidade_formatos.pdf}
 \vspace{4pt}
-\legend{Source: the author. Each format uses the same mode as in the SNR increase maps (Figures~\ref{fig:mapa-grupo1} to \ref{fig:mapa-grupo3}): RND\_ZERO/WRAP, except $\langle 14,6\rangle$ in RND\_MIN\_INF/SAT in group 1 and RND\_MIN\_INF/WRAP in groups 2 and 3; $\langle 16,6\rangle$ in TRN/SAT in group 1 and RND\_MIN\_INF/WRAP in groups 2 and 3; $\langle 18,8\rangle$ in TRN/SAT in group 3; and $\langle 30,14\rangle$ in TRN/SAT in all three groups.}
+\legend{Source: the author.}
 \end{figure}
 
 \FloatBarrier

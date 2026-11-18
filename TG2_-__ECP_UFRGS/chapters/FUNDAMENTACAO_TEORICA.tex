@@ -1,21 +1,47 @@
-\chapter{Fundamentação Teórica}\label{chap:fundamentacao}
+\chapter{Background}\label{chap:fundamentacao}
 
 
 % =====================================================================
-\section{Sistemas MIMO}\label{sec:sistemas-MIMO}
+\section{MIMO System}\label{sec:sistemas-MIMO}
 % =====================================================================
 \input{chapters/FUNDAMENTACAO/modelo-de-sistema.tex}
-\input{chapters/FUNDAMENTACAO/modelo-de-canal.tex}
-\input{chapters/FUNDAMENTACAO/equalizacao.tex}
-
-% =====================================================================
-\section{Equalização descentralizada sob ruído colorido}\label{sec:dbp-ruido}
-% =====================================================================
-\input{chapters/FUNDAMENTACAO/dbp-ruido.tex}
 \input{chapters/FUNDAMENTACAO/dbp.tex}
-\input{chapters/FUNDAMENTACAO/bcd.tex}
+\input{chapters/FUNDAMENTACAO/simbolos.tex}
+
+\input{chapters/FUNDAMENTACAO/multipercurso.tex}
+\input{chapters/FUNDAMENTACAO/bloco-coerencia.tex}
+
+\input{chapters/FUNDAMENTACAO/interferencia.tex}
+\input{chapters/FUNDAMENTACAO/covariancia.tex}
+\input{chapters/FUNDAMENTACAO/ioth-snr.tex}
 
 % =====================================================================
-\section{Inversão de Matrizes}\label{sec:inversao}
+\section{Equalization}\label{subsec:equalization}
 % =====================================================================
+Equalization estimates the symbol vector $\mathbf s$ from the received signal $\mathbf y$ by combining the signals from all antennas. Subsequently, detection maps each estimated symbol to a point in the constellation.
+
+\input{chapters/FUNDAMENTACAO/equalizacao.tex}
+\input{chapters/FUNDAMENTACAO/bcd.tex}
+\input{chapters/FUNDAMENTACAO/deteccao.tex}
+
+% =====================================================================
+\section{BCD-MMSE Computation}\label{sec:calculo-bcd}\label{sec:dbp-ruido}
+% =====================================================================
+This section shows how each DU calculates its BCD-MMSE block $\mathbf W_c$ (Section~\ref{subsubsec:bcd-filtro}).
+
+\input{chapters/FUNDAMENTACAO/rcc-local.tex}
+\input{chapters/FUNDAMENTACAO/amostras-tc.tex}
+\input{chapters/FUNDAMENTACAO/condicionamento.tex}
+\input{chapters/FUNDAMENTACAO/bcd-calculo.tex}
 \input{chapters/FUNDAMENTACAO/inversao.tex}
+
+% =====================================================================
+\section{Simulators}\label{sec:simuladores}
+% =====================================================================
+\input{chapters/FUNDAMENTACAO/modelo-de-canal.tex}
+\input{chapters/FUNDAMENTACAO/simuladores.tex}
+
+% =====================================================================
+\section{FPGA Implementation}\label{sec:fpga}
+% =====================================================================
+\input{chapters/FUNDAMENTACAO/fpga.tex}

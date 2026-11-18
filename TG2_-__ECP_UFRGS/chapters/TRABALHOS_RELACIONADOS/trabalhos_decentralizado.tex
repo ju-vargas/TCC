@@ -1,3 +1,32 @@
 % ---------------------------------------------------------------------
-\subsection{MIMO descentralizado}\label{subsec:decentralized-trabs}
+\section{Decentralized MIMO}\label{subsec:decentralized-trabs}
 % ---------------------------------------------------------------------
+% FONTE: TG1 (sbc-template.tex), Decentralized MIMO Architectures.
+The fundamental architecture was established
+in~\cite{decentralized2017}, which introduced DBP with the Alternating Direction
+Method of Multipliers (ADMM) and Conjugate Gradient (CG) solvers, performing
+inversion implicitly within each consensus round. Subsequently, the \textcolor{red}{Partial and Full Decentralization (PD and FD)} architectures were formalized
+in~\cite{jeon2019}, demonstrating throughput exceeding 1~Gb/s for a
+$256 \times 16$ configuration under perfect channel state information.
+
+\textcolor{red}{Outros trabalhos buscaram reduzir o custo da inversão explícita.} A trade-off analysis between
+explicit and implicit Cholesky factorization was provided in~\cite{li-tradeofs},
+\textcolor{red}{mostrando que reutilizar a fatoração no bloco de coerência divide por cinco o coeficiente do termo cúbico dominante.} A recursive MMSE chain
+with an $M_c \times M_c$ inversion per cluster was proposed in~\cite{zheng2022},
+achieving centralized-MMSE equivalence. The Groupwise Recursive
+Least Squares (GRLS) algorithm was introduced in~\cite{chen2024grls}.
+
+A parallel line of work pursued inversion-avoidance strategies.
+A daisy-chain coordinate-descent algorithm was proposed in~\cite{rodriguezsanchez2020}, \textcolor{red}{e o algoritmo Bayesian Distributed Kaczmarz, em \cite{croisfelt2021}.}
+The Groupwise Expectation Propagation (GW-EP) algorithm for both star and
+daisy-chain topologies was developed in~\cite{li2023iotj}. \textcolor{red}{O detector BD-NS-EPA (\textit{Block-Diagonal Neumann-Series Expectation Propagation Approximation}) é centralizado, inverte submatrizes bloco-diagonais por Cholesky e tem uma implementação em ASIC (\textit{Application-Specific Integrated Circuit}) \cite{wang2023bdnsepa}.}
+% FONTE: wang2023bdnsepa (referencias/inversion avoidance/An_Efficient_Approximate_..._Neumann-Series.md):
+%   L610 (receptor centralizado; extensão descentralizada como trabalho futuro); Seç. "BD-Matrix
+%   Inversion Based on Cholesky" e Alg. 3, linha 7 (inversão por Cholesky); L48 (ASIC).
+Most recently, spatial correlation and imperfect CSI were addressed in~\cite{zhuang2025}.
+
+All the articles cited above assume a diagonal noise covariance matrix.
+
+\textcolor{red}{Até onde se sabe, só dois trabalhos} simultaneously address colored noise and
+decentralized LMMSE equalization ~\cite{zhao2021-globecom,zhao2025jsac}. The BCD-MMSE algorithm for daisy-architecture introduced in ~\cite{zhao2021-globecom} requires a local $M_c \times M_c$ Hermitian matrix inversion
+at each DU. The framework was extended in ~\cite{zhao2025jsac}, with the introduction of the sDR-MMSE and cDR-MMSE algorithms alongside BCD-MMSE. \textcolor{red}{Esse trabalho mostra que o BCD-MMSE chega perto da SER do LMMSE centralizado \cite{zhao2025jsac}.} 

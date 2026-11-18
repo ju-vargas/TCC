@@ -11,7 +11,7 @@
 The architectures were designed for the throughput limit, and meeting a delay limit was outside the scope (Section~\ref{subsec:restricao-vazao}). This section shows the resulting delay and why it does not meet the latency expected for 5G. The total delay goes from the first noise sample of the block, collected at the same time in all PRBs, to the inverse of the last PRB. It has two parts: the sample collection and the time to invert the block (Equation~\ref{eq:fim-tarefas}). Table~\ref{tab:atraso-bloco} shows the two parts, from the lowest to the highest value among the formats, and Table~\ref{tab:atraso-formatos} (Appendix~\ref{ap:recursos}) shows the total delay of each format.
 
 \begin{table}[!ht]
-\caption{Throughput and delay of a block of $N_{\text{PRB}} = 275$ inversions.}
+\caption[Throughput and delay of a block of $N_{\text{PRB}} = 275$ inversions.]{Throughput and delay of a block of $N_{\text{PRB}} = 275$ inversions. Block input: time to receive the 275 matrices. Block end: time until the last inversion of the block. TDLB100-400 without $\langle 30,14\rangle$, which does not fit in the FPGA.}
 \label{tab:atraso-bloco}
 \vspace{4pt}
 \centering
@@ -31,7 +31,7 @@ TDLB100-400 & 0.313  & 0.184          & 0.265--0.266   & 0.313 & 0.578--0.579 \\
 \bottomrule
 \end{tabular}
 \vspace{4pt}
-\legend{Source: the author, from the netlist simulation at 100~MHz. Block input: time to receive the 275 matrices. Block end: time until the last inversion of the block. TDLB100-400 without $\langle 30,14\rangle$, which does not fit in the FPGA.}
+\legend{Source: the author, from the netlist simulation at 100~MHz.}
 \end{table}
 
 The sample collection is set by the estimation method, not by the hardware (Section~\ref{subsec:pipeline}). With 48 DM-RS REs per PRB and per slot (Section~\ref{subsubsec:disponibilidade-amostras}), it takes $\lceil N/48 \rceil$ slots, limited to $T_c$. In TDLA30-5 and TDLA30-10, the collection alone takes 2~ms, before any inversion.
@@ -42,4 +42,4 @@ Since all architectures meet the cycle limit (Section~\ref{sec:resultados-hardwa
 
 The time to invert the block depends on the architecture. The format only changes this time in architectures without systolic arrays, where the interval between inversions grows with the format (Section~\ref{subsec:resultados-recursos}). The architectures of the low-mobility conditions have less parallelism and spread the 275 inversions over most of $T_c$. Thus, they use less area and power (Section~\ref{sec:resultados-hardware}), but the last PRB is ready later. More parallelism would reduce this time: the TDLB100-400 architecture, for example, finishes a block in 0.27~ms. The other PRBs get their inverses earlier, because their matrices enter the module first.
 
-The inversion of $\mathbf G_c$, however, is only one part of the equalization, and equalization is only one of the baseband tasks of the BS (Section~\ref{subsec:uplink}). A complete delay analysis would need to add the time of the other tasks, of the covariance estimation, of the other steps of BCD-MMSE, and of the data exchange between the DUs, which this work does not consider (Section~\ref{subsec:restricao-vazao}).
+The inversion of $\mathbf G_c$, however, is only one part of the equalization, and equalization is only one of the baseband tasks of the BS (Section~\ref{sec:sistemas-MIMO}). A complete delay analysis would need to add the time of the other tasks, of the covariance estimation, of the other steps of BCD-MMSE, and of the data exchange between the DUs, which this work does not consider (Section~\ref{subsec:restricao-vazao}).

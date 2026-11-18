@@ -7,7 +7,10 @@ Table~\ref{tab:param_canal} shows the parameters of the MATLAB script that gener
 
 The BS features a uniform linear array (ULA) of $M$ antennas, with a standard spacing of half a wavelength ($\lambda/2$) of the operating signal. The antennas at both the BS and the UEs are omnidirectional, meaning they provide the same gain in all directions.
 
-For each realization, the script randomly determines the positions of the $K$ target UEs and the $r$ interferers. The distance is sampled such that the UE density remains uniform across the entire area. The random seed used for this sampling is always the realization number. Based on these positions, QuaDRiGa generates the frequency-domain channel response between each BS antenna and each UE within the propagation scenario.
+\textcolor{red}{Como em \cite{zhao2025jsac}, o sistema tem uma única célula, e os $r$ UEs interferentes são sorteados na mesma área que os UEs alvo.} For each realization, the script randomly determines the positions of the $K$ target UEs and the $r$ interferers.
+% FONTE: zhao2025jsac paper.md:577 ("single-cell massive MIMO system"; interferentes "modeled
+%   similarly"); software/simulador/quadriga/export_quadriga_channels.m, linhas 60-62, 75 e 102-103
+%   (n_ue = K + r, mesmo setor de 120 graus e raio de 50 a 100 m). The distance is sampled such that the UE density remains uniform across the entire area. The random seed used for this sampling is always the realization number. Based on these positions, QuaDRiGa generates the frequency-domain channel response between each BS antenna and each UE within the propagation scenario.
 
 In this work, the \texttt{3GPP\_\allowbreak{}38.901\_\allowbreak{}UMa\_\allowbreak{}NLOS} propagation scenario was used, which represents an urban macrocell (UMa) with no line-of-sight (NLoS) between the base station (BS) and the user equipment (UEs). Table~\ref{tab:cenario_uma} presents the valid range for the UMa propagation scenario and the values selected. The system model assumes a flat-fading channel, in which all subcarriers within a physical resource block (PRB) experience the same channel conditions.
 

@@ -1,20 +1,106 @@
-% ---------------------------------------------------------------------
-\subsection{Equalização}\label{subsec:equalization}
-% ---------------------------------------------------------------------
+\subsection{Maximum Likelihood Detector}\label{subsubsec:ml}
+% FONTE: TG1 (sbc-template.tex), Equalization.
+The optimal method for recovering transmitted symbols in MIMO systems is the
+Maximum Likelihood (ML) detector \cite{wang2021tlbdinsa}. The algorithm estimates the transmitted
+symbols by finding
+the candidate that minimizes the Euclidean distance between the received
+signal $\mathbf{y}$ and $\mathbf{H}\mathbf{s}$:
 
+\begin{equation}
+\hat{\mathbf{s}} = \underset{\mathbf{s} \in \mathcal{S}^{K}}{\arg\min}
+\left\|\mathbf{y} - \mathbf{H}\mathbf{s}\right\|_2^2
+\label{eq:ml}
+\end{equation}
+where $\mathcal{S}^{K}$ is the set of all possible combinations of
+constellation symbols transmitted by the $K$ users, and
+$\left\|\cdot\right\|_2^2$ denotes the sum
+of the squared magnitudes of all entries of a vector (squared Euclidean norm).
 
-\subsubsection{Detector de máxima verossimilhança}
-\subsubsection{Zero-forcing}
-\subsubsection{Covariância}
-\subsubsection{Filtro de Wiener}
-\subsubsection{Equalizador LMMSE}
-\subsubsection{Detecção e taxa de erro de símbolo}\label{subsubsec:ser}
-\textcolor{red}{Depois da equalização, cada entrada do vetor estimado $\hat{\mathbf{s}}$ é levada ao ponto mais próximo da constelação \cite{zhao2025jsac}. Essa é a regra do vizinho mais próximo \cite[p.~503]{tse-viswanath}. A detecção erra quando o ponto escolhido é diferente do símbolo transmitido. A taxa de erro de símbolo (SER, \textit{Symbol Error Rate}) é a probabilidade desse erro \cite[p.~503]{tse-viswanath}. Ela cai quando a SNR aumenta, e o desempenho de um equalizador é mostrado pela curva de SER em função da SNR \cite{zhao2025jsac}. Para comparar dois esquemas, é comum usar a diferença de SNR necessária para atingir a mesma probabilidade de erro, que é a distância horizontal entre as duas curvas \cite[p.~55]{tse-viswanath}.}
-% FONTE (2026-11-05): zhao2025jsac, paper.md:79 ("the detector quantizes each entry of
-%   s_MMSE to the nearest [constellation point]") e Fig. 6 ("SER performance versus SNR");
-%   tse-viswanath (books/Fundamentals of Wireless Communication.pdf), Apêndice A.2, p. 503
-%   ("choosing the nearest neighboring transmit symbol. The probability of making an
-%   error ..."); Seção 3.1, p. 55, nota 4 ("compare schemes based on the difference in the
-%   required SNR to attain the same error probability ... horizontal gap between the error
-%   probability versus SNR curves"). Código: dbp_sim/m8_metric.py (vizinho mais próximo).
-%   A nota da p. 55 também sustenta a métrica de perda (METODOLOGIA/formato.tex).
+Without channel coding, this method yields the lowest possible bit error rate. However, MIMO detection is NP-hard \cite{zero-forcing}, and an exhaustive search over $\mathcal{S}^{K}$ has a complexity of $\mathcal{O}(|\mathcal{S}|^K)$, making the ML detector impractical for systems with a large number of
+users or high-order modulation schemes~\cite{bello2022algorithms}.
+% FONTE: wang2021tlbdinsa p. 2971.
+
+\subsection{Filters}\label{subsec:filtros}\label{subsubsec:wiener}
+
+A filter receives a measured signal and produces another signal at its output. In a linear filter, each output sample is a linear combination of the measurements, where the weights serve as the filter coefficients \cite{oppenheim2010wiener}.
+
+Linear equalizers are linear filters and suboptimal alternatives to the ML detector whose
+complexity is independent of the constellation scheme employed. These
+techniques estimate a continuous-valued approximation $\tilde{\mathbf{s}}$
+(soft-output) of $\mathbf{s}$ by applying a weight matrix $\mathbf{W}$ to
+the received signal vector $\mathbf{y}$~\cite{rodriguezsanchez2020}:
+\begin{equation}\label{eq:filtro}
+\tilde{\mathbf s}=\mathbf W\mathbf y.
+\end{equation}
+
+The $k$-th row of $\mathbf W$ contains the weights used to estimate the symbol for UE $k$. Linear equalizers differ in the criterion used to select these weights \cite{tse-viswanath}.
+% FONTE: oppenheim2010wiener p. 195, Eq. 11.1; tse-viswanath pp. 351 e 358.
+
+\subsubsection{Zero-Forcing Equalizer}\label{subsubsec:zf}
+The Zero-Forcing (ZF) equalizer aims to eliminate interference between the UEs, without considering noise \cite{tse-viswanath}. To do this, it inverts the channel: multiplying $\mathbf y$ by the inverse of $\mathbf H$ undoes the mixing of the UE signals and leaves only the corresponding UE symbol at each output. However, $\mathbf H$ is an $M \times K$ matrix, which is not square and has no inverse. Instead, ZF uses the pseudo-inverse of $\mathbf H$, which has the same effect of separating the symbols \cite{zero-forcing}:
+% FONTE: tse-viswanath pp. 351-352 e 358.
+\begin{equation}
+\mathbf{W}_\text{ZF}=
+\left(\mathbf{H}^H\mathbf{H}\right)^{-1}\mathbf{H}^H,
+\label{eq:zf_filter}
+\end{equation}
+where $\mathbf{H}^H$ denotes the conjugate transpose of $\mathbf{H}$. The product $\mathbf H^H\mathbf H$ is the Gram matrix of $\mathbf H$ \cite{jeon2019}. It is square, of size $K \times K$, and it is this matrix that ZF inverts. Since noise is not considered, it also passes through the filter. As a consequence, ZF amplifies the noise present at the receiver, particularly in poorly conditioned channels.
+% FONTE: jeon2019 L105 (Gram matrix).
+
+\subsubsection{LMMSE Equalizer}\label{subsubsec:lmmse}
+The Linear Minimum Mean Square Error (LMMSE) equalizer addresses the ZF
+limitation by explicitly accounting for the noise statistics during equalizer
+design \cite{tse-viswanath}. The estimate $\tilde{\mathbf{s}}_\text{LMMSE}$ is obtained by applying the
+equalization matrix to the received signal:
+
+\begin{equation}
+\tilde{\mathbf{s}}_\text{LMMSE}=
+\mathbf{W}_\text{LMMSE}\mathbf{y}
+\label{eq:lmmse_estimate}
+\end{equation}
+
+The weights of $\mathbf W$ are chosen according to the criterion:
+
+\begin{equation}
+\min_{\mathbf{W}}
+\mathbb{E}
+\left[
+\left\|\mathbf{W}\mathbf{y}-\mathbf{s}\right\|_2^2
+\right],
+\label{eq:lmmse_opt}
+\end{equation}
+% FONTE: zhao2025jsac paper.md:67 (Eq. 2); haykin p. 198, Eq. 5.36.
+which minimizes the mean squared error of the equalization \cite{zhao2025jsac}. This error is calculated using the expected value $\mathbb E[\cdot]$, the average value of a random variable, since the symbols and noise are random \cite{haykin}. Thus, the minimization considers the different realizations of these variables, and not just a specific observation.
+The squared error includes both interference and noise. Therefore, unlike ZF, LMMSE can retain some interference to reduce noise \cite{tse-viswanath}.
+
+% FONTE: tse-viswanath p. 358.
+Assuming that the channel matrix $\mathbf{H}$ is perfectly known, the
+corresponding solution for the LMMSE equalizer in a centralized MIMO system
+is given by~\cite{zhao2025jsac}:
+
+\begin{equation}
+\mathbf{W}_\text{LMMSE}=
+\left(
+\mathbf{H}^H\mathbf{R}_n^{-1}\mathbf{H}
++
+\frac{1}{E_s}\mathbf{I}
+\right)^{-1}
+\mathbf{H}^H\mathbf{R}_n^{-1}
+\label{eq:lmmse_solution}
+\end{equation}
+where $\mathbf{n}$ is modeled as a zero-mean random vector with covariance
+matrix $\mathbf{R}_n = \mathbb{E}[\mathbf{n}\mathbf{n}^H]$ (Section~\ref{subsubsec:interferencia}), and $E_s$
+denotes the average energy per transmitted symbol. With low noise, the LMMSE approaches the ZF \cite{tse-viswanath}.
+% FONTE: tse-viswanath p. 361.
+
+The LMMSE equalizer leads to a slight increase in computational complexity
+compared with ZF, as it additionally requires estimating the noise covariance matrix $\mathbf{R}_n$ to compute the filter. Both equalizers share the same asymptotic complexity
+$\mathcal{O}(K^3)$, dominated by the matrix inversion, but the LMMSE
+generally achieves a lower BER than ZF~\cite{li-tradeofs}.
+% FONTE: li-tradeofs Fig. 5(a).
+
+The equalization
+matrix $\mathbf{W}$ is computed only once per coherence block and reused for
+each received symbol, reducing the average computational cost per symbol by a
+factor of $1/N_\text{coh}$, where $N_\text{coh}$ is the number of symbols in the block \cite{zhao2025jsac}.
+% FONTE: zhao2025jsac paper.md:561.

@@ -862,14 +862,14 @@ As amostras de ruído são obtidas durante a etapa de símbolos piloto, sendo $\
 
 \textcolor{red}{Na frequência, a covariância do ruído permanece constante ao longo de um intervalo largo, e por isso pode ser estimada com uma média ao longo da frequência \cite{zhao2025jsac}. Assim, as amostras podem ser colhidas em REs de piloto de subportadoras diferentes. Para o canal, as respostas em frequências afastadas deixam de ser correlacionadas, e medir o canal em um conjunto suficiente de frequências permite estimar a sua covariância \cite{barriac-madhow}. Porém, é preciso haver subportadoras suficientes para que a estimativa se aproxime da covariância real \cite{barriac-madhow}.}
 % FONTE: artigo base, nota 4 (paper.md:821, chamada em :115), que cita [29].
-%        [29] Barriac e Madhow, pilot-estimation/Space*.md:96 e :109 (resultado para a
+%        [29] Barriac e Madhow, referencias/noise covariance estimation/Space*.md:96 e :109 (resultado para a
 %        covariância do CANAL; a transferência para o ruído é feita pelo artigo base).
 
 A média amostral é realizada uma vez por bloco de coerência e reutilizada ao longo dos $N_{\text{coh}}$ símbolos subsequentes, em que se assume que a covariância permanece estática.  
 
 \textcolor{red}{Nesse intervalo, o canal e a covariância do ruído são considerados estáticos, e ambos mudam a cada novo bloco de coerência \cite{zhao2025jsac}. A estimativa obtida com os pilotos é usada para processar os sinais de dados recebidos em seguida \cite{tomasin-interference}. Para isso, a covariância precisa variar devagar o suficiente para que a estimativa ainda seja válida quando for usada \cite{barriac-madhow}.}
-% FONTE: artigo base, paper.md:561; Tomasin et al. [22], pilot-estimation/Estimation*.md:68;
-%        Barriac e Madhow [29], pilot-estimation/Space*.md:109, item (i).
+% FONTE: artigo base, paper.md:561; Tomasin et al. [22], referencias/noise covariance estimation/Estimation*.md:68;
+%        Barriac e Madhow [29], referencias/noise covariance estimation/Space*.md:109, item (i).
 
 \textcolor{red}{Dessa forma, as $N$ amostras são colhidas em REs de piloto dentro de um mesmo bloco de coerência. A estimativa $\hat{\mathbf{R}}_n$ obtida com elas vale para os $N_{\text{coh}}$ símbolos desse bloco.}
 % FONTE: síntese de paper.md:123 (REs de piloto) e :561 (tempo).
@@ -1258,7 +1258,7 @@ em que $E_s$ é a energia média por símbolo \cite{zhao-lmmse}. Essa expressão
 %        matriz K x M. Não apresentar as duas como a mesma fórmula.
 
 Por isso, a matriz de covariância usada no equalizador precisa representar bem o ruído. A estimativa da correlação da interferência é usada para processar os sinais recebidos e diminuir o efeito da interferência \cite{tomasin-interference}. Além disso, erros nessa estimativa afetam a taxa de dados de forma não linear \cite{tomasin-interference}.
-% FONTE: Tomasin et al. [22], pilot-estimation/Estimation*.md:68 ("used to process the
+% FONTE: Tomasin et al. [22], referencias/noise covariance estimation/Estimation*.md:68 ("used to process the
 %        forthcoming received signals ... and mitigate the effects of interference");
 %        :624 ("the impact of correlation matrix estimation errors is not linear on the
 %        data rates").

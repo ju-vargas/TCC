@@ -1,30 +1,22 @@
 % ---------------------------------------------------------------------
-\subsection{Processamento descentralizado}\label{subsec:dbp}
+\subsection{Decentralized Uplink}\label{subsec:dbp}
 % ---------------------------------------------------------------------
 
-Na arquitetura descentralizada, as $M$ antenas da \sout{estação base} \textcolor{red}{BS} são particionadas em $C$ clusters, cada um associado a uma DU \textcolor{red}{(\textit{Distributed Unit}), uma unidade de processamento local \cite{zhao2025jsac}}. O vetor de ruído pode, então, ser organizado em componentes locais:
+% FONTE: TG1 (sbc-template.tex), Decentralized MIMO Architectures.
+The complexity of estimating the vector s grows with the number of antennas and poses a challenge for the MIMO system \cite{jeon2019}. To address this issue, the Decentralized Baseband Processing (DBP) architecture was introduced in~\cite{decentralized2017, bertilsson2018distributed}. In DBP, the $M$ base-station antennas are partitioned into $C$ clusters with $M_c$ antennas, each cluster with a Distributed Unit (DU) with local radio-frequency circuitry and baseband processing fabric such as custom ASICs, FPGAs, or DSPs \cite{decentralized2017}. 
 
-\[
-\mathbf n=
-\begin{bmatrix}
-\mathbf n_1\\
-\mathbf n_2\\
-\vdots\\
-\mathbf n_C
-\end{bmatrix}.
-\]
+The uplink system model for a $C$ cluster becomes:
 
-Essa partição induz uma estrutura em blocos na matriz de covariância $\mathbf R_n$. Os blocos diagonais $\mathbf R_{cc}$ descrevem a covariância do ruído observado pelas antenas do cluster $c$, enquanto os blocos fora da diagonal, $\mathbf R_{mn}$, representam as correlações entre antenas pertencentes a clusters distintos.
+\begin{equation}
+    \mathbf{y}_c = \mathbf{H}_c\mathbf{s} + \mathbf{n}_c,
+\end{equation}
+where $\mathbf{y}_c \in \mathbb{C}^{M_c \times 1}$,
+$\mathbf{H}_c \in \mathbb{C}^{M_c \times K}$, and $\mathbf{n}_c$ is the
+local noise vector, with ~\cite{jeon2019}:
 
-Cada DU dispõe localmente das amostras de ruído de suas próprias antenas. Assim, a DU $c$ pode estimar seu bloco diagonal sem trocar dados com as demais unidades:
+\begin{equation}
+M = \sum_{c=1}^{C} M_c    
+\end{equation}
 
-\[
-\hat{\mathbf R}_{cc}=
-\frac{1}{N}
-\sum_{i=1}^{N}
-\mathbf n_c^i(\mathbf n_c^i)^H.
-\]
-
-Os blocos fora da diagonal, por outro lado, dependem de amostras provenientes de duas ou mais DUs. Sua estimação direta exige a troca de informações entre as unidades, aumentando o tráfego de comunicação.
-
-Essa limitação estabelece uma relação entre as propriedades estatísticas do ruído e a estratégia de equalização descentralizada. 
+There are two main topologies for the DBP: star, in which all DUs are connected to a central unit (CU), and daisy-chain, in which the DUs are connected in series via unidirectional links and pass intermediate data along  \cite{rodriguezsanchez2020,zhao2025jsac}. This work employs a daisy-chain topology.
+% FONTE: zhao2025jsac paper.md:87-89 e :367; rodriguezsanchez2020 L167.
