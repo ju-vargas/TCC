@@ -1,12 +1,16 @@
+% #####################################################################
 \chapter{Introduction}\label{chap:introducao}
+% #####################################################################
+
 The evolution toward fifth-generation (5G) and sixth-generation (6G) wireless
 systems demands ever-increasing spectral efficiency and data throughput, driving
 the adoption of Massive Multi-User Multiple-Input Multiple-Output (MU-MIMO) as
 a key enabling technology. \textcolor{red}{No MIMO massivo, a BS tem centenas de antenas e atende dezenas de usuários ao mesmo tempo~\cite{decentralized2017}.}
 % FONTE: decentralized2017 (decentralized architecture/li2017_jetcas/*.md) L27 ("equip the BS with
-%   hundreds or thousands of antenna elements, which increases the spatial resolution"). Among the available uplink detection strategies, Linear Minimum
-Mean-Square Error (LMMSE) equalization is widely adopted for its near-optimal
-performance~\cite{zhao2025jsac}. \textcolor{red}{A sua solução exige uma inversão de matriz, cujo custo cresce com o cubo da dimensão da matriz \cite{li-tradeofs}.}
+%   hundreds or thousands of antenna elements, which increases the spatial resolution").
+\textcolor{blue}{Linear Minimum
+Mean-Square Error (LMMSE) equalization is widely adopted among the available uplink detection strategies for its near-optimal
+performance~\cite{zhao2025jsac}.} \textcolor{red}{A sua solução exige uma inversão de matriz, cujo custo cresce com o cubo da dimensão da matriz \cite{li-tradeofs}.}
 
 Decentralized Baseband Processing (DBP) architectures \textcolor{red}{reduce this cost}
 by partitioning the base-station antenna array into clusters of $M_c$ antennas, each served by a local
@@ -16,7 +20,8 @@ LMMSE methods, however, almost universally assume that receiver noise follows an
 Additive White Gaussian Noise (AWGN) model with a diagonal covariance matrix,
 an assumption that typically does not hold in practice\textcolor{red}{: a interferência de UEs não-alvo faz o ruído ser colorido, com matriz de covariância não diagonal~\cite{zhao2025jsac}.}
 % FONTE: zhao2025jsac paper.md:33 (interferência de UEs não-alvo como ruído colorido) e :108-113
-%   (Eq. 5: y = Hs + H barra s barra + n barra, r UEs não-alvo). Under colored noise, the standard
+%   (Eq. 5: y = Hs + H barra s barra + n barra, r UEs não-alvo).
+Under colored noise, the standard
 inversion-avoidance techniques used by AWGN-based methods lose their convergence
 guarantees~\cite{wang2023bdnsepa}, and all known decentralized LMMSE solutions
 for this regime require an explicit matrix inversion\textcolor{red}{~\cite{zhao2021-globecom,zhao2025jsac}.}
@@ -26,7 +31,8 @@ MMSE (BCD-MMSE) algorithm was recently proposed~\cite{zhao2025jsac} as the first
 under colored noise. \textcolor{red}{No BCD-MMSE, cada DU inverte a matriz Hermitiana $\mathbf G_c$, de dimensão $M_c \times M_c$, uma vez por PRB em cada bloco de coerência, e usa o resultado em todos os símbolos recebidos. Essa é uma das inversões do algoritmo. As outras ficam fora do escopo e são feitas em ponto flutuante (Seção~\ref{subsec:restricao-vazao}).}
 % FONTE: zhao2025jsac paper.md:561 (equalização reutilizada por N_coh símbolos); a citação da frase
 %   anterior cobre o parágrafo. Por PRB: amostras-tc.tex ("R_cc is unique per PRB within each
-%   coherence time"). Outras inversões: requisitos-tempo.tex:43 e simulacao.tex:62. \textcolor{red}{Essa inversão ainda não tem implementação em hardware (Capítulo~\ref{chap:relatedwork}).} Field-Programmable Gate Arrays (FPGAs) are
+%   coherence time"). Outras inversões: requisitos-tempo.tex:43 e simulacao.tex:62.
+\textcolor{red}{Essa inversão ainda não tem implementação em hardware (Capítulo~\ref{chap:relatedwork}).} Field-Programmable Gate Arrays (FPGAs) are
 a promising target for this operation, offering higher energy efficiency and
 lower latency than GPU-based solutions at the power budgets required by
 distributed base-station nodes~\cite{jeon2019,li2019cd}.

@@ -1,121 +1,24 @@
-% =====================================================================
+% #####################################################################
 \chapter{Related Work}\label{chap:relatedwork}
-% =====================================================================
-
-
-
-%\section{Related Work}
+% #####################################################################
 \textcolor{red}{Related works found in the literature can be divided into: (a) decentralized equalization algorithms, (b) works that implement Cholesky-based inversion in FPGA or ASIC in the context of MIMO technology, and (c) works that implement decentralized equalization in FPGA.}
 
+% =====================================================================
+\section{Decentralized MIMO}\label{subsec:decentralized-trabs}
+% =====================================================================
 \input{chapters/TRABALHOS_RELACIONADOS/trabalhos_decentralizado.tex}
 
+% =====================================================================
 \section{Cholesky-Based Inversion in MIMO Hardware}
-The TL-BD-INSA detector of ~\cite{wang2021tlbdinsa}  implements Cholesky-based inversion
-of Hermitian block-diagonal sub-matrices on a Virtex-7 XC7VX980T FPGA
-and a TSMC 45~nm ASIC. The FPGA implementation targets a $128 \times 8$ MIMO configuration with 64-QAM. The
-inversion module uses a triangular systolic array for the Cholesky
-factorization, followed by parallel forward and backward substitution
-units, one per user equipment. \textcolor{red}{É a referência em hardware mais próxima da inversão $M_c \times M_c$ do BCD-MMSE, mas considera AWGN e inverte submatrizes bloco-diagonais da matriz de Gram.}
+% =====================================================================
+\input{chapters/TRABALHOS_RELACIONADOS/cholesky.tex}
 
-Table~\ref{tab:hw_cholesky} reports the implementation metrics for the
-complete TL-BD-INSA detector pipeline, which includes matched filtering,
-Gram matrix computation, the Cholesky inversion module, and symbol
-estimation~\cite{wang2021tlbdinsa}. \textcolor{red}{Assim, esses números são um limite superior para os recursos da inversão.}
-
-\begin{table}[h]
-\centering
-\caption{Resultados em hardware do detector TL-BD-INSA completo.}
-\label{tab:hw_cholesky}
-\begin{tabular}{lcc}
-\hline
-\textbf{Metric} & \textbf{FPGA} & \textbf{ASIC} \\
-\hline
-Gate count / LUT slices     & 13,640 LUT  & 572 kGE       \\
-Flip-flop slices            & 19,460 FF   & ---           \\
-DSP48 units                 & 277         & ---           \\
-Clock frequency [MHz]       & 310         & 1,000         \\
-Throughput                  & 57.3 Mbps   & 185 Mbps      \\
-Power [W]                   & ---         & 0.144         \\
-Energy efficiency           & 1,731 bps/slice & 1.28 Gbps/W \\
-\hline
-\end{tabular}
-\vspace{4pt}
-\legend{Fonte: \citesp{wang2021tlbdinsa}.}
-\end{table}
-
+% =====================================================================
 \section{Decentralized Detection on FPGA}
-The FD-LAMA detector of~\cite{li2019fdlama}, implemented on a
-Virtex-7 XC7VX690T using HLS for a $128 \times 8$
-system with QPSK and i.i.d. Rayleigh fading, achieves 22.2~Mb/s
-throughput at 429~MHz with 11,673 LUTs and 213 DSP48 blocks for
-$C = 1$ cluster. Resource utilization scales roughly linearly with $C$,
-while throughput degrades only slightly, reaching 17.8~Mb/s at
-$C = 4$~\cite{li2019fdlama}. \textcolor{red}{O trabalho considera AWGN e não inverte matrizes.}
+% =====================================================================
+\input{chapters/TRABALHOS_RELACIONADOS/deteccao-fpga.tex}
 
-The decentralized Newton-method detector of~\cite{kulkarni2021newton},
-implemented on a Virtex-7 XC7VX690T for a $128 \times 8$ system with
-$C = 4$ clusters in a ring topology, achieves 253~Mbps throughput at 340~MHz, consuming 100,733 LUTs,
-1,280 DSP48 blocks, and 7.248~W on-chip power for 16-QAM with
-$T = 3$ iterations~\cite{kulkarni2021newton}. \textcolor{red}{O trabalho não define o modelo de ruído.}
+% =====================================================================
 \section{Gap Synthesis}
-
-\textcolor{red}{A Tabela~\ref{tab:comparativo-trabalhos} resume os trabalhos deste capítulo.}
-
-\begin{table}[htbp]
-\caption[Comparação dos trabalhos relacionados.]{Comparação dos trabalhos relacionados. Métricas: R, recursos ou área; P, potência; E, energia; V, vazão; A, atraso ou latência. --: sem implementação em hardware.}
-\label{tab:comparativo-trabalhos}
-\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{1.7cm}}
-\toprule
-\textbf{Trabalho} & \textbf{Ruído} & \textbf{Topologia} & \textbf{Método de detecção} & \textbf{Plataforma} & \textbf{Métricas} \\
-\midrule
-\multicolumn{6}{l}{\textit{Algoritmos descentralizados}} \\
-\cite{decentralized2017} & AWGN & Estrela & ADMM e CG & Cluster de GPUs & V, A \\
-\cite{jeon2019} & AWGN & Estrela (PD e FD) & ZF e LMMSE & Várias GPUs & V, A \\
-\cite{li-tradeofs} & AWGN & Estrela & Cholesky explícito e implícito & -- & -- \\
-\cite{zheng2022} & AWGN & Cadeia & MMSE recursivo & -- & -- \\
-\cite{chen2024grls} & AWGN & Daisy-chain & GRLS & -- & -- \\
-\cite{rodriguezsanchez2020} & AWGN & Daisy-chain & Descida por coordenadas, sem inversão & -- & -- \\
-\cite{croisfelt2021} & AWGN & Daisy-chain & Kaczmarz, sem inversão & -- & -- \\
-\cite{li2023iotj} & AWGN & Estrela e daisy-chain & EP por grupos, sem inversão & -- & -- \\
-\cite{zhuang2025} & AWGN & Estrela & LMMSE com CSI imperfeita & -- & -- \\
-\cite{zhao2021-globecom} & Colorido & Daisy-chain & BCD-MMSE & -- & -- \\
-\cite{zhao2025jsac} & Colorido & Estrela e daisy-chain & BCD-MMSE, sDR-MMSE e cDR-MMSE & -- & -- \\
-\midrule
-\multicolumn{6}{l}{\textit{Implementações em hardware}} \\
-\cite{wang2023bdnsepa} & AWGN & Centralizada & EP com série de Neumann por blocos & ASIC SMIC 65 nm & R, P, V \\
-\cite{wang2021tlbdinsa} & AWGN & Centralizada & Partição em blocos, inversão por Cholesky & FPGA Virtex-7 e ASIC TSMC 45 nm & R, P, V \\
-\cite{li2019fdlama} & AWGN & Estrela (FD) & LAMA, sem inversão & FPGA Virtex-7 & R, V \\
-\cite{kulkarni2021newton} & Não informado & Anel e estrela & Método de Newton & FPGA Virtex-7 & R, P, V, A \\
-\midrule
-Este trabalho & Colorido & Daisy-chain & BCD-MMSE, inversão de $\mathbf G_c$ por Cholesky & FPGA Alveo U50 (XCU50) & R, P, E, V, A \\
-\bottomrule
-\end{tabular}
-\vspace{4pt}
-\legend{Fonte: a autora.}
-\end{table}
-% FONTE (linhas dos .md em referencias/):
-%   Ruído: decentralized2017 L85; jeon2019 L75; li-tradeofs L45; zheng2022 L39; chen2024grls L31;
-%     rodriguezsanchez2020 L63; croisfelt2021 L36 (sigma^2 I_M); li2023iotj L76; zhuang2025 L64;
-%     zhao2021 e zhao2025 L8 (colored noise); wang2023bdnsepa L76; wang2021tlbdinsa L65;
-%     li2019fdlama L34; kulkarni2021newton L52 ("channel noise", sem modelo).
-%   Topologia: decentralized2017 L40 (central fusion node); jeon2019 L8 e L27 (PD e FD);
-%     li-tradeofs L28 (feedforward); zheng2022 L8 (chain); chen2024grls L8; rodriguezsanchez2020
-%     (título, daisy-chain); croisfelt2021 L20; li2023iotj L8 (star, extensão daisy-chain);
-%     zhuang2025 (Fig. 1, clusters ligados a uma CU); zhao2025 L8 (star e daisy chain);
-%     wang2023bdnsepa L610 (extensão descentralizada é trabalho futuro); kulkarni2021newton L40.
-%   Plataforma e métricas: decentralized2017 L509-L511 (Cray XC30, Tabela III, latência e vazão);
-%     jeon2019 L34 (multi-GPU, vazão e latência); wang2023bdnsepa L48 e resumo (SMIC 65 nm,
-%     Gbps/W e Mbps/kGE); wang2021tlbdinsa e li2019fdlama: Tabela tab:hw_cholesky e texto deste
-%     capítulo; kulkarni2021newton L217 e L278 (Virtex-7; latência, vazão e potência on-chip).
-%     Este trabalho: METODOLOGIA/setup-hardware.tex e RESULTADOS.
-
-None of the surveyed hardware works simultaneously addresses the three
-conditions that define the gap motivating this work: (1)~colored noise
-with a non-diagonal local covariance $\hat{\mathbf{R}}_{cc}$;
-(2)~decentralized LMMSE equalization under the BCD-MMSE framework; and
-(3)~FPGA implementation with measured resource metrics. \textcolor{red}{O algoritmo existe \cite{zhao2025jsac}, mas sem implementação em hardware. Este trabalho preenche essa lacuna com uma análise em hardware da inversão $M_c \times M_c$ por Cholesky do BCD-MMSE.}
+% =====================================================================
+\input{chapters/TRABALHOS_RELACIONADOS/lacuna.tex}

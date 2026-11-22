@@ -73,11 +73,11 @@ In a sequence of tasks, the first task ends after the latency $L$, and each of t
 \begin{equation}\label{eq:fim-tarefas}
 t_n = L + (n-1)\, I.
 \end{equation}
-In this work, a task is one matrix inversion, and the throughput is measured by the interval between inversions.
+\textcolor{blue}{A task in this work is one matrix inversion, and the throughput is measured by the interval between inversions.}
 % FONTE: Kastner et al. 2018, pp. 20-22 (Fig. 1.7) e p. 45.
 
 \subsection{Task Pipeline}\label{subsubsec:pipeline-tarefas}
-A task can have several steps. In a task pipeline, the steps work at the same time, each one on different data. So, the next task starts when the previous one finishes the first step. The interval of the whole pipeline is never smaller than the interval of the slowest step \cite{kastner-hls}. In HLS, the \texttt{dataflow} directive creates this pipeline and lets functions and loops overlap \cite{ug1399}.
+A task can have several steps. \textcolor{blue}{The steps of a task pipeline work at the same time, each one on different data.} So, the next task starts when the previous one finishes the first step. The interval of the whole pipeline is never smaller than the interval of the slowest step \cite{kastner-hls}. \textcolor{blue}{The \texttt{dataflow} directive in HLS creates this pipeline and lets functions and loops overlap \cite{ug1399}.}
 % FONTE: UG1399, pp. 787-788 (DATAFLOW) e 855-856 (UNROLL).
 % FONTE: Kastner et al. 2018, pp. 113-115.
 

@@ -16,7 +16,7 @@ constellation symbols transmitted by the $K$ users, and
 $\left\|\cdot\right\|_2^2$ denotes the sum
 of the squared magnitudes of all entries of a vector (squared Euclidean norm).
 
-Without channel coding, this method yields the lowest possible bit error rate. However, MIMO detection is NP-hard \cite{zero-forcing}, and an exhaustive search over $\mathcal{S}^{K}$ has a complexity of $\mathcal{O}(|\mathcal{S}|^K)$, making the ML detector impractical for systems with a large number of
+\textcolor{blue}{This method yields the lowest possible bit error rate without channel coding.} However, MIMO detection is NP-hard \cite{zero-forcing}, and an exhaustive search over $\mathcal{S}^{K}$ has a complexity of $\mathcal{O}(|\mathcal{S}|^K)$, making the ML detector impractical for systems with a large number of
 users or high-order modulation schemes~\cite{bello2022algorithms}.
 % FONTE: wang2021tlbdinsa p. 2971.
 
@@ -37,14 +37,14 @@ The $k$-th row of $\mathbf W$ contains the weights used to estimate the symbol f
 % FONTE: oppenheim2010wiener p. 195, Eq. 11.1; tse-viswanath pp. 351 e 358.
 
 \subsubsection{Zero-Forcing Equalizer}\label{subsubsec:zf}
-The Zero-Forcing (ZF) equalizer aims to eliminate interference between the UEs, without considering noise \cite{tse-viswanath}. To do this, it inverts the channel: multiplying $\mathbf y$ by the inverse of $\mathbf H$ undoes the mixing of the UE signals and leaves only the corresponding UE symbol at each output. However, $\mathbf H$ is an $M \times K$ matrix, which is not square and has no inverse. Instead, ZF uses the pseudo-inverse of $\mathbf H$, which has the same effect of separating the symbols \cite{zero-forcing}:
+The Zero-Forcing (ZF) equalizer aims to eliminate interference between the UEs, without considering noise \cite{tse-viswanath}. To do this, it inverts the channel: multiplying $\mathbf y$ by the inverse of $\mathbf H$ undoes the mixing of the UE signals and leaves only the corresponding UE symbol at each output. However, $\mathbf H$ is an $M \times K$ matrix, which is not square and has no inverse. \textcolor{blue}{ZF uses the pseudo-inverse of $\mathbf H$ instead, which has the same effect of separating the symbols \cite{zero-forcing}:}
 % FONTE: tse-viswanath pp. 351-352 e 358.
 \begin{equation}
 \mathbf{W}_\text{ZF}=
 \left(\mathbf{H}^H\mathbf{H}\right)^{-1}\mathbf{H}^H,
 \label{eq:zf_filter}
 \end{equation}
-where $\mathbf{H}^H$ denotes the conjugate transpose of $\mathbf{H}$. The product $\mathbf H^H\mathbf H$ is the Gram matrix of $\mathbf H$ \cite{jeon2019}. It is square, of size $K \times K$, and it is this matrix that ZF inverts. Since noise is not considered, it also passes through the filter. As a consequence, ZF amplifies the noise present at the receiver, particularly in poorly conditioned channels.
+where $\mathbf{H}^H$ denotes the conjugate transpose of $\mathbf{H}$. The product $\mathbf H^H\mathbf H$ is the Gram matrix of $\mathbf H$ \cite{jeon2019}. It is square, of size $K \times K$, and it is this matrix that ZF inverts. \textcolor{blue}{Noise also passes through the filter, since it is not considered.} As a consequence, ZF amplifies the noise present at the receiver, particularly in poorly conditioned channels.
 % FONTE: jeon2019 L105 (Gram matrix).
 
 \subsubsection{LMMSE Equalizer}\label{subsubsec:lmmse}
@@ -71,7 +71,7 @@ The weights of $\mathbf W$ are chosen according to the criterion:
 \end{equation}
 % FONTE: zhao2025jsac paper.md:67 (Eq. 2); haykin p. 198, Eq. 5.36.
 which minimizes the mean squared error of the equalization \cite{zhao2025jsac}. This error is calculated using the expected value $\mathbb E[\cdot]$, the average value of a random variable, since the symbols and noise are random \cite{haykin}. Thus, the minimization considers the different realizations of these variables, and not just a specific observation.
-The squared error includes both interference and noise. Therefore, unlike ZF, LMMSE can retain some interference to reduce noise \cite{tse-viswanath}.
+The squared error includes both interference and noise. \textcolor{blue}{Therefore, LMMSE can retain some interference to reduce noise, unlike ZF \cite{tse-viswanath}.}
 
 % FONTE: tse-viswanath p. 358.
 Assuming that the channel matrix $\mathbf{H}$ is perfectly known, the
@@ -90,7 +90,7 @@ is given by~\cite{zhao2025jsac}:
 \end{equation}
 where $\mathbf{n}$ is modeled as a zero-mean random vector with covariance
 matrix $\mathbf{R}_n = \mathbb{E}[\mathbf{n}\mathbf{n}^H]$ (Section~\ref{subsubsec:interferencia}), and $E_s$
-denotes the average energy per transmitted symbol. With low noise, the LMMSE approaches the ZF \cite{tse-viswanath}.
+denotes the average energy per transmitted symbol. \textcolor{blue}{The LMMSE approaches the ZF with low noise \cite{tse-viswanath}.}
 % FONTE: tse-viswanath p. 361.
 
 The LMMSE equalizer leads to a slight increase in computational complexity

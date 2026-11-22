@@ -16,7 +16,7 @@ where $\mathbf n^i\in\mathbb C^{M\times1}$ is the noise sample in the $i$-th pil
 % FONTE: Marzetta et al., Seção 3.1, p. 45.
 % FONTE: tomasin-interference p. 1773, Eq. 6; Figs. 5 e 6.
 
-In the decentralized uplink, each noise sample is also divided between the clusters, $\mathbf n^i = [(\mathbf n_1^i)^T, \ldots, (\mathbf n_C^i)^T]^T$, and the DU $c$ only keeps its part. Likewise, $\mathbf R_n$ becomes \textcolor{red}{a matrix} of $C \times C$ blocks\textcolor{red}{. The block $\mathbf R_{\mathrm{row},\mathrm{col}} = \mathbb E[\mathbf n_{\mathrm{row}}\mathbf n_{\mathrm{col}}^H]$ relates the noise of the antennas of cluster $\mathrm{row}$ to the noise of the antennas of cluster $\mathrm{col}$ (Figure~\ref{fig:rn-blocos})}. Each DU can only estimate its diagonal block with its own samples \textcolor{red}{\cite{zhao2021-globecom,zhao2025jsac}}:
+\textcolor{blue}{Each noise sample in the decentralized uplink is also divided between the clusters, $\mathbf n^i = [(\mathbf n_1^i)^T, \ldots, (\mathbf n_C^i)^T]^T$, and the DU $c$ only keeps its part.} Likewise, $\mathbf R_n$ becomes \textcolor{red}{a matrix} of $C \times C$ blocks\textcolor{red}{. The block $\mathbf R_{\mathrm{row},\mathrm{col}} = \mathbb E[\mathbf n_{\mathrm{row}}\mathbf n_{\mathrm{col}}^H]$ relates the noise of the antennas of cluster $\mathrm{row}$ to the noise of the antennas of cluster $\mathrm{col}$ (Figure~\ref{fig:rn-blocos})}. Each DU can only estimate its diagonal block with its own samples \textcolor{red}{\cite{zhao2021-globecom,zhao2025jsac}}:
 
 % FONTE: zhao2021-globecom L88 e L90.
 \begin{equation}
@@ -27,7 +27,7 @@ In the decentralized uplink, each noise sample is also divided between the clust
 \label{eq:Rcc_est}
 \end{equation}
 
-Off-diagonal blocks, \textcolor{red}{$\mathbf R_{\mathrm{row},\mathrm{col}}$ with $\mathrm{row} \neq \mathrm{col}$}, combine the noise from two clusters. To estimate them, the DUs would have to exchange $N$ samples for each of the $M$ antennas, which is not feasible in massive MIMO. Therefore, BCD-MMSE does not exchange samples. Each DU uses only the samples from its cluster and passes the results $\mathbf A_c$ and $\mathbf b_{c,i}$ to the next DU in the chain (\textcolor{red}{Figure~\ref{fig:bcd-etapas}(b)} and Section~\ref{subsec:bcd}). The size of these results depends on the number of UEs $K$, and not on the number of antennas $M$ \cite{zhao2025jsac}.
+Off-diagonal blocks, \textcolor{red}{$\mathbf R_{\mathrm{row},\mathrm{col}}$ with $\mathrm{row} \neq \mathrm{col}$}, combine the noise from two clusters. To estimate them, the DUs would have to exchange $N$ samples for each of the $M$ antennas, which is not feasible in massive MIMO. \textcolor{blue}{BCD-MMSE therefore does not exchange samples.} Each DU uses only the samples from its cluster and passes the results $\mathbf A_c$ and $\mathbf b_{c,i}$ to the next DU in the chain (\textcolor{red}{Figure~\ref{fig:bcd-etapas}(b)} and Section~\ref{subsec:bcd}). The size of these results depends on the number of UEs $K$, and not on the number of antennas $M$ \cite{zhao2025jsac}.
 
 % FONTE: zhao2025jsac paper.md:39-41, :125, :130 e :571.
 

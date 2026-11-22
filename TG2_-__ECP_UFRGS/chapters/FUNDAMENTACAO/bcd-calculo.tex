@@ -69,7 +69,7 @@ DU $c$ computes the updated interaction variables
 \end{align}
 and forwards them to DU $c+1$~\cite{zhao2025jsac}.
 
-By~\eqref{eq:b_update}, $\mathbf b_{c,i}$ is the sum of $\mathbf W_j\mathbf n_j^i$ over all DUs $j$, where $\mathbf n_j^i$ is the $i$-th noise sample of cluster $j$. In the average of~\eqref{eq:bcd_update}, each term $\mathbf W_j\mathbf n_j^i(\mathbf n_c^i)^H$ results in $\mathbf W_j\hat{\mathbf R}_{jc}$. Thus, DU $c$ uses the off-diagonal blocks without estimating them (Figure~\ref{fig:rn-blocos}) \cite{zhao2025jsac}.
+By~\eqref{eq:b_update}, $\mathbf b_{c,i}$ is the sum of $\mathbf W_j\mathbf n_j^i$ over all DUs $j$, where $\mathbf n_j^i$ is the $i$-th noise sample of cluster $j$. \textcolor{blue}{Each term $\mathbf W_j\mathbf n_j^i(\mathbf n_c^i)^H$ in the average of~\eqref{eq:bcd_update} results in $\mathbf W_j\hat{\mathbf R}_{jc}$.} Thus, DU $c$ uses the off-diagonal blocks without estimating them (Figure~\ref{fig:rn-blocos}) \cite{zhao2025jsac}.
 % FONTE: zhao2025jsac paper.md:447; Algoritmo 3 (b_0^0) e Eq. eq:b_update.
 % FONTE (conta): (1/N) sum_i W_j n_j^i (n_c^i)^H = W_j R_jc.
 
@@ -86,7 +86,7 @@ $\mathbf G_c$ does not depend on the iteration $\mathrm{iter}$ \cite{zhao2025jsa
 \subsection{Complexity}\label{subsubsec:bcd-complexidade}
 % ---------------------------------------------------------------------
 
-Preprocessing costs $\mathcal{O}(M_c^3 + N M_c^2)$ in each DU. Each iteration costs $\mathcal{O}(NMK + M M_c K)$ summed over all DUs \cite{zhao2025jsac}. The matrices of the algorithm have complex entries. Table~\ref{tab:bcd-complexidade} gives, for each part, the number of products between two complex numbers, called complex multiplications. Several parts depend on $N$, which changes with the test condition (Table~\ref{tab:n-maximo}).
+Preprocessing costs $\mathcal{O}(M_c^3 + N M_c^2)$ in each DU. Each iteration costs $\mathcal{O}(NMK + M M_c K)$ summed over all DUs \cite{zhao2025jsac}. The matrices of the algorithm have complex entries. \textcolor{blue}{Table~\ref{tab:bcd-complexidade} gives the number of products between two complex numbers, called complex multiplications, for each part.} Several parts depend on $N$, which changes with the test condition (Table~\ref{tab:n-maximo}).
 
 \begin{table}[htbp]
 \caption{Complex multiplications per PRB and per $T_c$ in each DU.}

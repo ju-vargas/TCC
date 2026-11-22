@@ -1,0 +1,32 @@
+The TL-BD-INSA detector of ~\cite{wang2021tlbdinsa}  implements Cholesky-based inversion
+of Hermitian block-diagonal sub-matrices on a Virtex-7 XC7VX980T FPGA
+and a TSMC 45~nm ASIC. The FPGA implementation targets a $128 \times 8$ MIMO configuration with 64-QAM. The
+inversion module uses a triangular systolic array for the Cholesky
+factorization, followed by parallel forward and backward substitution
+units, one per user equipment. \textcolor{red}{É a referência em hardware mais próxima da inversão $M_c \times M_c$ do BCD-MMSE, mas considera AWGN e inverte submatrizes bloco-diagonais da matriz de Gram.}
+
+Table~\ref{tab:hw_cholesky} reports the implementation metrics for the
+complete TL-BD-INSA detector pipeline, which includes matched filtering,
+Gram matrix computation, the Cholesky inversion module, and symbol
+estimation~\cite{wang2021tlbdinsa}. \textcolor{red}{Assim, esses números são um limite superior para os recursos da inversão.}
+
+\begin{table}[h]
+\centering
+\caption{Resultados em hardware do detector TL-BD-INSA completo.}
+\label{tab:hw_cholesky}
+\begin{tabular}{lcc}
+\hline
+\textbf{Metric} & \textbf{FPGA} & \textbf{ASIC} \\
+\hline
+Gate count / LUT slices     & 13,640 LUT  & 572 kGE       \\
+Flip-flop slices            & 19,460 FF   & ---           \\
+DSP48 units                 & 277         & ---           \\
+Clock frequency [MHz]       & 310         & 1,000         \\
+Throughput                  & 57.3 Mbps   & 185 Mbps      \\
+Power [W]                   & ---         & 0.144         \\
+Energy efficiency           & 1,731 bps/slice & 1.28 Gbps/W \\
+\hline
+\end{tabular}
+\vspace{4pt}
+\legend{Fonte: \citesp{wang2021tlbdinsa}.}
+\end{table}
