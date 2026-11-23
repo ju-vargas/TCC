@@ -1,29 +1,25 @@
 % FONTE: TG1 (sbc-template.tex), Decentralized MIMO Architectures.
-The fundamental architecture was established
-in~\cite{decentralized2017}, which introduced DBP with the Alternating Direction
-Method of Multipliers (ADMM) and Conjugate Gradient (CG) solvers, performing
-inversion implicitly within each consensus round. Subsequently, the \textcolor{red}{Partial and Full Decentralization (PD and FD)} architectures were formalized
-in~\cite{jeon2019}, demonstrating throughput exceeding 1~Gb/s for a
-$256 \times 16$ configuration under perfect channel state information.
+The fundamental DBP architecture was established with the Alternating Direction
+Method of Multipliers (ADMM) and Conjugate Gradient (CG) solvers~\cite{decentralized2017}. A central unit sums the local results and returns them to the clusters. ADMM uses an explicit local inversion, and CG avoids it~\cite{decentralized2017}.
+% FONTE: decentralized2017 (li2017_jetcas) L239 e L329 (consenso na unidade central); L421 e L485 ("ADMM methods also involve an explicit matrix inversion step").
+The Partial and Full Decentralization (PD and FD) architectures were formalized
+in~\cite{jeon2019}. In PD, a central unit sums the local vectors $\mathbf H_c^H\mathbf y_c$ and Gram matrices $\mathbf H_c^H\mathbf H_c$ (Section~\ref{subsec:equalization}) and equalizes. In FD, each cluster equalizes locally, and the central unit takes a weighted average of the estimates \cite{jeon2019}.
+% FONTE: jeon2019 L53, L105 (y_c^MRC = H_c^H y_c e G_c = H_c^H H_c) e L119.
 
-\textcolor{red}{Outros trabalhos buscaram reduzir o custo da inversão explícita.} A trade-off analysis between
-explicit and implicit Cholesky factorization was provided in~\cite{li-tradeofs},
-\textcolor{red}{mostrando que reutilizar a fatoração no bloco de coerência divide por cinco o coeficiente do termo cúbico dominante.} A recursive MMSE chain
-with an $M_c \times M_c$ inversion per cluster was proposed in~\cite{zheng2022},
-achieving centralized-MMSE equivalence. The Groupwise Recursive
-Least Squares (GRLS) algorithm was introduced in~\cite{chen2024grls}.
+Other works use the chain topology, in which the estimate passes from one cluster to the next. A recursive MMSE chain
+uses an $M_c \times M_c$ inversion per cluster, achieves
+centralized-MMSE equivalence, and supports early termination based on channel quality~\cite{zheng2022}. The Groupwise Recursive Least Squares (GRLS) algorithm extends RLS from one to several antennas per DU~\cite{chen2024grls}.
+% FONTE: zheng2022 L8 (resumo); chen2024grls L8 (resumo).
 
-A parallel line of work pursued inversion-avoidance strategies.
-A daisy-chain coordinate-descent algorithm was proposed in~\cite{rodriguezsanchez2020}, \textcolor{red}{e o algoritmo Bayesian Distributed Kaczmarz, em \cite{croisfelt2021}.}
-The Groupwise Expectation Propagation (GW-EP) algorithm for both star and
-daisy-chain topologies was developed in~\cite{li2023iotj}. \textcolor{red}{O detector BD-NS-EPA (\textit{Block-Diagonal Neumann-Series Expectation Propagation Approximation}) é centralizado, inverte submatrizes bloco-diagonais por Cholesky e tem uma implementação em ASIC (\textit{Application-Specific Integrated Circuit}) \cite{wang2023bdnsepa}.}
-% FONTE: wang2023bdnsepa (referencias/inversion avoidance/An_Efficient_Approximate_..._Neumann-Series.md):
-%   L610 (receptor centralizado; extensão descentralizada como trabalho futuro); Seç. "BD-Matrix
-%   Inversion Based on Cholesky" e Alg. 3, linha 7 (inversão por Cholesky); L48 (ASIC).
-Most recently, spatial correlation and imperfect CSI were addressed in~\cite{zhuang2025}.
+Some algorithms avoid the inversion.
+In the daisy-chain coordinate-descent algorithm, each node updates the estimate with its own data, without a central node~\cite{rodriguezsanchez2020}. The Kaczmarz method solves $\mathbf y = \mathbf H\mathbf s$ one equation at a time: each node corrects the estimate with its own equation and passes it on. The Bayesian Distributed Kaczmarz algorithm also estimates and removes the noise at each iteration \cite{croisfelt2021}.
+% FONTE: croisfelt2021 L8 (resumo, receptor bayesiano) e L78-L79 (cada nó conhece a m-ésima equação; atualização de Kaczmarz).
+The Groupwise Expectation Propagation (GW-EP) algorithm divides the users into groups and detects each group separately, in star and daisy-chain topologies~\cite{li2023iotj}.
+\textcolor{GREEN}{A more recent work addresses} spatial correlation and imperfect CSI with a star topology, in which a central unit fuses the outputs of the \textcolor{GREEN}{cluster LMMSE receivers}~\cite{zhuang2025}.
+% FONTE: rodriguezsanchez2020 L8 (sem nó central, recursivo); li2023iotj L8 (grupos, fusão na CPU); zhuang2025 L8 (resumos).
 
 All the articles cited above assume a diagonal noise covariance matrix.
-
-\textcolor{red}{Até onde se sabe, só dois trabalhos} simultaneously address colored noise and
-decentralized LMMSE equalization ~\cite{zhao2021-globecom,zhao2025jsac}. The BCD-MMSE algorithm for daisy-architecture introduced in ~\cite{zhao2021-globecom} requires a local $M_c \times M_c$ Hermitian matrix inversion
-at each DU. The framework was extended in ~\cite{zhao2025jsac}, with the introduction of the sDR-MMSE and cDR-MMSE algorithms alongside BCD-MMSE. \textcolor{red}{Esse trabalho mostra que o BCD-MMSE chega perto da SER do LMMSE centralizado \cite{zhao2025jsac}.} 
+To the best of the author's knowledge, only two works simultaneously address colored noise and
+decentralized LMMSE equalization~\cite{zhao2021-globecom,zhao2025jsac}. The BCD-MMSE algorithm was introduced for the daisy-chain architecture~\cite{zhao2021-globecom}. It requires a local $M_c \times M_c$ Hermitian matrix inversion
+at each DU. \textcolor{GREEN}{A later work extends the framework} with the sDR-MMSE and cDR-MMSE algorithms. In the star topology, these algorithms reduce the data each DU sends from the number of antennas to the number of users \cite{zhao2025jsac}. That work shows that BCD-MMSE comes close to the SER of centralized LMMSE.
+% FONTE: zhao2025jsac paper.md L38 (sDR e cDR: estrela; dados de M para K por DU).

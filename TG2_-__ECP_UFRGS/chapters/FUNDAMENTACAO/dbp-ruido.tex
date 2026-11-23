@@ -1,0 +1,94 @@
+% ---------------------------------------------------------------------
+\subsection{\textcolor{red}{Ruído colorido}}\label{subsec:ruido-colorido}
+% ---------------------------------------------------------------------
+\textcolor{red}{O equalizador LMMSE depende da matriz de covariância do ruído, $\mathbf R_n$ \eqref{eq:lmmse_solution}, que inclui a interferência dos UEs não-alvo (Seção~\ref{subsubsec:interferencia}). Como a BS não conhece $\mathbf R_n$, ela precisa estimá-la.}
+
+\subsubsection{Estimação da matriz de covariância}\label{subsubsec:estimacao-R}
+\textcolor{red}{O receptor não conhece $\overline{\mathbf H}$ nem $\beta$. Por isso, estima $\mathbf R_n$ pela média de $N$ amostras de ruído \cite{zhao2025jsac,tomasin-interference}:}
+\begin{equation}\label{eq:Rn_est}
+\widehat{\mathbf R}_n=
+\frac{1}{N}
+\sum_{i=1}^{N}
+\mathbf n^i(\mathbf n^i)^H,
+\end{equation}
+\textcolor{red}{em que $\mathbf n^i\in\mathbb C^{M\times1}$ é a amostra de ruído no $i$-ésimo RE de piloto. Nesses REs, o receptor conhece o sinal dos UEs alvo e pode removê-lo do sinal recebido. O que sobra é a interferência mais o ruído térmico \cite[p.~1773]{tomasin-interference}. Cada elemento de $\mathbf n^i(\mathbf n^i)^H$ é o produto $n_a^i(n_b^i)^*$ entre o ruído de duas antenas. Na diagonal ($a=b$), é a potência em uma antena. A média desses produtos estima cada elemento de $\mathbf R_n$. Para a estimativa ser precisa, o número de amostras $N$ precisa ser muito maior que $K$ \cite{zhao2025jsac}.}
+% FONTE: tomasin-interference (referencias/noise covariance estimation/Estimation_of_Interference_
+%   Correlation_in_mmWave_Cellular_Systems.pdf), p. 1773: Eq. (2) R = soma G R_J G^H + sigma^2 I, com
+%   interferência e AWGN independentes; Eq. (6) "LS estimate (or sample covariance matrix)" (1/T) soma
+%   N(t)N^H(t); "samples ... in correspondence of pilot signals transmitted by the UE canceling the
+%   received signals".
+% FONTE: zhao2025jsac, paper.md:115-123 (Eq. 6, "averaging the noise samples in N pilot resource
+%   elements", n^i é a amostra no i-ésimo RE de piloto, "N >> K holds to ensure the accuracy").
+
+\subsubsection{Availability of noise samples within the coherence time}\label{subsubsec:disponibilidade-amostras}
+All samples used in noise estimation must represent the same covariance matrix. Therefore, the sampling interval is limited by the variation in time and frequency of the channels that determine the interference. The variation in time is defined by the coherence time. The variation in frequency is defined by the PRB. It is considered that the channels of the interfering users remain constant within the PRB \cite{zhao2025jsac}. The estimate $R_{cc}$, therefore, is unique per PRB within each coherence time.
+
+
+In 5G NR, the Demodulation Reference Signal (DM-RS) is the reference signal transmitted by the UE to allow the receiver to estimate channel conditions. The DM-RS is transmitted alongside the PUSCH (Section~\ref{subsec:simbolos}) within the same PRBs \cite[Sec.~6.4.1.1.3]{3gpp-ts38211}. The double-symbol DM-RS occupies two consecutive OFDM symbols at each position within the slot and allows for the differentiation of up to 12 UEs \textcolor{red}{\cite[Tabs.~6.4.1.1.3-2 e 6.4.1.1.3-5]{3gpp-ts38211}}.
+
+Noise samples are obtained from the REs occupied by the DM-RS. \textcolor{red}{Como o DM-RS só é transmitido junto com o PUSCH, só há amostras nos slots em que os UEs alvo transmitem o PUSCH (Seção~\ref{subsec:simbolos}).} The number of samples therefore depends on how many DM-RS REs are present within the interval over which the covariance remains constant. With a maximum of two positions per slot, the double-symbol DM-RS occupies 4 OFDM symbols \cite[Tab.~6.4.1.1.3-4]{3gpp-ts38211}. Since each PRB contains 12 subcarriers (Section~\ref{subsec:simbolos}), a maximum of 4 $\times$ 12 = 48 DM-RS REs per slot are available within each PRB. Figure~\ref{fig:prb-dmrs} illustrates these REs within a PRB.
+
+\input{chapters/FUNDAMENTACAO/fig-prb-dmrs.tex}
+
+A sample represents the noise covariance for a given data symbol only if both fall within the same interval of duration $T_c$. As a result, the number of available samples may vary from one data symbol to another. For any given symbol, the number of samples corresponds to the maximum count of DM-RS REs found within an interval of duration $T_c$ that encompasses that symbol. The number of samples available for all symbols in the slot is the smallest of these values. Figure~\ref{fig:dmrs-n} shows an example with the DM-RS located at symbols 2, 3, 10, and 11 of each slot. Under the TDLB100-400 condition, symbols 5 through 8 represent the worst-case scenario, with 24 samples. Therefore, the number of samples available for all symbols is 24. Table~\ref{tab:n-maximo} presents this value for each test condition.
+
+\begin{table}[htbp]
+\caption{Number of DM-RS REs per PRB available to every data symbol of the slot, in each test condition.}
+\label{tab:n-maximo}
+\vspace{4pt} % a classe zera o espaço entre a caption e a tabela
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\begin{tabular}{|c|c|c|c|c|}
+\toprule
+\multirow{2}{*}{\textbf{Test condition}} & \textbf{Frequency} & \multirow{2}{*}{{\boldmath $T_c$} \textbf{(ms)}} & \textbf{OFDM symbols} & \textbf{DM-RS REs} \\
+ & \textbf{range} & & \textbf{in} {\boldmath $T_c$} & \textbf{available} \\
+\midrule
+TDLA30-5    & \multirow{2}{*}{FR1} & 25.0000 & 700 & 2400 \\
+TDLA30-10   &                      & 12.5000 & 350 & 1200 \\
+\cline{2-2}
+TDLA30-75   & \multirow{2}{*}{FR2} & 1.6667  & 186 & 648 \\
+TDLA30-300  &                      & 0.4167  & 46  & 168 \\
+\cline{2-2}
+TDLC300-100 & \multirow{4}{*}{FR1} & 1.2500  & 35  & 132 \\
+TDLB100-400 &                      & 0.3125  & 8   & 24 \\
+HST350      &                      & 0.0536  & \multirow{2}{*}{1} & \multirow{2}{*}{0} \\
+HST500      &                      & 0.0375  &     &  \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\legend{Source: the author, from \citesp{3gpp-ts38104}; \citesp{3gpp-ts38211}; \citesp{tse-viswanath}. \textcolor{red}{Double-symbol DM-RS} in symbols 2, 3, 10 and 11, with every slot carrying PUSCH.}
+\end{table}
+
+The best range of a data symbol may include DM-RS that arrive after that symbol. In Figure ~\ref{fig:dmrs-n}(b), the best range of symbol 13 goes up to symbol 3 of the next slot. To use these samples, the receiver needs to store symbol 13 for 4 more symbols.
+\input{chapters/FUNDAMENTACAO/fig-dmrs-n.tex}
+
+
+\subsubsection{Condicionamento da estimativa}\label{subsubsec:condicionamento-R}
+\textcolor{red}{O posto de uma matriz é o número máximo de linhas ou colunas linearmente independentes. Cada parcela $\mathbf{n}^i(\mathbf{n}^i)^H$ tem posto 1, porque todas as suas colunas são múltiplas de $\mathbf{n}^i$. Então, o posto da soma de $N$ parcelas é no máximo $N$:}
+
+\[
+\operatorname{rank}(\widehat{\mathbf R}_n) \leq \min(M,N)
+\]
+
+\textcolor{red}{Assim, quando $N<M$, $\widehat{\mathbf R}_n$ é singular e não tem inversa.}
+
+\textcolor{red}{O número de condição de uma matriz é a razão entre o maior e o menor dos seus valores singulares. A matriz é bem condicionada quando esse número é próximo de 1 \cite[p.~295]{tse-viswanath}. Para uma matriz hermitiana definida positiva, como $\mathbf G_c$ (Seção~\ref{subsec:bcd}), os valores singulares são os autovalores. Quando o menor autovalor se aproxima de zero, a matriz se aproxima de uma matriz singular, e o número de condição cresce. Na inversão por Cholesky com poucos bits, a precisão do resultado depende muito do número de condição \cite[p.~1603]{osinsky2023}. Na matriz do detector MIMO, esse número está ligado à razão entre a interferência e o ruído \cite[p.~1603]{osinsky2023}, que aqui é medida pela IoTh (Seção~\ref{subsec:ruido-colorido}).}
+% FONTE: Tse e Viswanath, Seção 7.1.2, p. 295 ("max_i lambda_i / min_i lambda_i is defined to be the
+%   condition number of the matrix H. The matrix is said to be well-conditioned if the condition
+%   number is close to 1"; lambda_i são os valores singulares). Osinsky et al. 2023
+%   (referencias/Cholesky/Regularization...md, L54, p. 1603: com aritmética de baixa precisão, "the
+%   accuracy of the detector significantly depends on the condition number of R_UU, which is closely
+%   related to the interference-to-noise ratio"). Valores singulares = autovalores para matriz
+%   hermitiana definida positiva: álgebra linear; é o que o simulador calcula (METODOLOGIA/formato.tex).
+
+\textcolor{red}{Os testes de Zhao et al. usam $N=192$ amostras por realização do canal \cite{zhao2025jsac}. O encolhimento (\textit{shrinkage}) de Ledoit e Wolf torna a estimativa inversível. Ele troca $\hat{\mathbf R}_n$ por uma média ponderada entre $\hat{\mathbf R}_n$ e um múltiplo da identidade, com o peso calculado a partir das próprias amostras \cite{ledoit-wolf}.}
+% FONTE: Ledoit e Wolf (2004), alvo mu I com mu = tr/M e peso estimado das amostras
+%   (TODO: conferir número da equação/página). Simulador: m5_noise.shrink.
+
+
+
+
+

@@ -1,0 +1,6 @@
+One work compares explicit and implicit Cholesky inversion in DBP.
+The implicit form only factors the matrix and solves the system by substitution. Its cubic term is five times smaller than that of the explicit inversion, but the substitutions are performed for each symbol~\cite{li-tradeofs}.
+% FONTE: li-tradeofs L123 (10/3 U^3, explícita) e L131 (2/3 U^3 e 4U^2 por símbolo, implícita).
+
+The LDL factorization writes \textcolor{GREEN}{an $N \times N$ matrix} as $\mathbf A = \mathbf L\mathbf D\mathbf L^H$, with $\mathbf D$ diagonal. It computes no square roots and uses only the $N$ values $1/D_i$, one for each diagonal element of $\mathbf D$ \cite{ingemarsson2016ldl}. The module of this work also obtains $\mathbf D$, but computes $\mathbf D^{1/2}$ to reach the Cholesky decomposition (Section~\ref{subsec:hw-modulo}). Like LDL, SDF-SGR avoids the square root and replaces the divisions with shifts \cite{yu2015inversion}.
+% FONTE: ingemarsson2016ldl L25 (sem raiz, N recíprocos) e L47 (1/D nas células da diagonal); yu2015inversion L8; setup-hardware.tex L33 (etapas D e D^{1/2}).

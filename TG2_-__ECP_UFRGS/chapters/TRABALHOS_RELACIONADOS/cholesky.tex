@@ -1,32 +1,87 @@
-The TL-BD-INSA detector of ~\cite{wang2021tlbdinsa}  implements Cholesky-based inversion
+The TL-BD-INSA detector of~\cite{wang2021tlbdinsa} implements Cholesky-based inversion
 of Hermitian block-diagonal sub-matrices on a Virtex-7 XC7VX980T FPGA
-and a TSMC 45~nm ASIC. The FPGA implementation targets a $128 \times 8$ MIMO configuration with 64-QAM. The
+and a TSMC 45~nm ASIC, with 15 bits for each of the real and imaginary parts. The
 inversion module uses a triangular systolic array for the Cholesky
-factorization, followed by parallel forward and backward substitution
-units, one per user equipment. \textcolor{red}{É a referência em hardware mais próxima da inversão $M_c \times M_c$ do BCD-MMSE, mas considera AWGN e inverte submatrizes bloco-diagonais da matriz de Gram.}
+factorization, followed by a forward substitution unit, which computes $\mathbf L^{-1}$, and a matrix multiplication unit, which computes $(\mathbf L^{H})^{-1}\mathbf L^{-1}$.
+It is the hardware reference closest to the $M_c \times M_c$ inversion of BCD-MMSE, but it considers AWGN and inverts blocks of the Gram matrix. The complete detector, with matched filter, Gram matrix, inversion and estimation, uses 13,640 LUTs, 19,460 FFs and 277 DSP48 at 310~MHz, with a latency of 260 cycles \cite{wang2021tlbdinsa}. These numbers do not \textcolor{GREEN}{report the inversion separately}.
+% FONTE: wang2021tlbdinsa L75 (canal com R e T), L485 (Cholesky, multiplicação m_UE x m_UE), L503, L556 (15 bits por dimensão complexa), L582 (m = 4, m_UE = 2), L530-L546.
 
-Table~\ref{tab:hw_cholesky} reports the implementation metrics for the
-complete TL-BD-INSA detector pipeline, which includes matched filtering,
-Gram matrix computation, the Cholesky inversion module, and symbol
-estimation~\cite{wang2021tlbdinsa}. \textcolor{red}{Assim, esses números são um limite superior para os recursos da inversão.}
+The BD-NS-EPA detector also inverts block-diagonal sub-matrices by Cholesky, in a 65~nm ASIC, with an average of 11 bits for each of the real and imaginary parts. Each inversion occupies 12.04~kGE of the 2,595~kGE of the detector \cite{wang2023bdnsepa}.
+% FONTE: wang2023bdnsepa (referencias/inversion avoidance/An_Efficient_Approximate_..._Neumann-Series.md):
+%   L610 (receptor centralizado); Seç. "BD-Matrix Inversion Based on Cholesky" e Alg. 3, linha 7; L48 (ASIC);
+%   L86 (canal com R e T), L425 (ordem 2 m_UE), L464 (128 x 32, m = 16, m_UE = 2, kappa = 0,05), L536 (11 bits em média nas partes real e imaginária), Tab. II e L603.
 
-\begin{table}[h]
+A ZF detector uses a 28~nm ASIC unit that only factors the matrix, and another unit performs the substitution. It uses 13 bits and was sized for 20 million factorizations per second \cite{gangarajaiah2017cholesky}.
+% FONTE: gangarajaiah2017cholesky (referencias/Cholesky/A_Cholesky_decomposition_based_..._adaptive_interpolation.md) L8, L17, L29 (AWGN), L170 (13 bits, 20 M CD/s, FBS à parte), Tab. II (L175-L190).
+
+The three detectors are centralized~\cite{wang2021tlbdinsa,wang2023bdnsepa,gangarajaiah2017cholesky}.
+% FONTE: wang2021tlbdinsa L593 (só uma BS; descentralizado como trabalho futuro); wang2023bdnsepa L610; gangarajaiah2017cholesky L8 (uma BS).
+Table~\ref{tab:hw_cholesky_cenario} shows the scenario of these detectors, and Table~\ref{tab:hw_cholesky} compares only the inversion or the factorization, including LDL (Section~\ref{sec:metodos-inversao}).
+
+\begin{table}[htbp]
 \centering
-\caption{Resultados em hardware do detector TL-BD-INSA completo.}
-\label{tab:hw_cholesky}
-\begin{tabular}{lcc}
+\caption[Scenario of the detectors with Cholesky inversion.]{Scenario of the detectors with Cholesky inversion. Users: number of users, or users $\times$ antennas per user. Block order: dimension of the inverted matrix.}
+\label{tab:hw_cholesky_cenario}
+\vspace{4pt}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lcccc}
 \hline
-\textbf{Metric} & \textbf{FPGA} & \textbf{ASIC} \\
+\multicolumn{1}{c}{\textbf{Work}} & \textbf{BS antennas} & \textbf{Users} & \textbf{Block order} & \textbf{Channel} \\
 \hline
-Gate count / LUT slices     & 13,640 LUT  & 572 kGE       \\
-Flip-flop slices            & 19,460 FF   & ---           \\
-DSP48 units                 & 277         & ---           \\
-Clock frequency [MHz]       & 310         & 1,000         \\
-Throughput                  & 57.3 Mbps   & 185 Mbps      \\
-Power [W]                   & ---         & 0.144         \\
-Energy efficiency           & 1,731 bps/slice & 1.28 Gbps/W \\
+TL-BD-INSA & 128 & $4 \times 2$ & 2 & Correlated \\
+\hline
+BD-NS-EPA & 128 & $16 \times 2$ & 4 & Correlated \\
+\hline
+\cite{gangarajaiah2017cholesky} & 128 & 16 & 8 & Measured \\
+\hline
+This work & 128/256 & 8/12 & 16/32 & TDL \\
 \hline
 \end{tabular}
 \vspace{4pt}
-\legend{Fonte: \citesp{wang2021tlbdinsa}.}
+\legend{Source: \citesp{wang2021tlbdinsa}, \citesp{wang2023bdnsepa}, \citesp{gangarajaiah2017cholesky} and the author.}
 \end{table}
+
+\begin{table}[htbp]
+\centering
+\caption[Hardware results of the Cholesky inversion or factorization.]{Hardware results of the Cholesky inversion or factorization, without the rest of the detector. LDL: \cite{ingemarsson2016ldl}. Gangarajaiah: \cite{gangarajaiah2017cholesky}. This work: range across the formats; energy is the dynamic power times the interval between inversions (Section~\ref{subsec:hw-potencia}). Block order: dimension of the inverted matrix. kGE: kilo gate-equivalent. $^{a}$Factorization only, without the substitution. $^{b}$Normalized by the authors to 28~nm and 0.8~V. $^{c}$Batch of 32 matrices. --: not reported.}
+\label{tab:hw_cholesky}
+\vspace{4pt}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{|l|l|c|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Work}} & \multicolumn{1}{c|}{\textbf{Platform}} & \textbf{\begin{tabular}[t]{@{}c@{}}Block\\order\end{tabular}} & \textbf{LUT/gates} & \textbf{FF} & \textbf{DSP} & \textbf{\begin{tabular}[t]{@{}c@{}}Clock\\(MHz)\end{tabular}} & \textbf{\begin{tabular}[t]{@{}c@{}}Latency\\(cycles)\end{tabular}} & \textbf{\begin{tabular}[t]{@{}c@{}}Power\\(W)\end{tabular}} & \textbf{\begin{tabular}[t]{@{}c@{}}Energy\\($\mu$J)\end{tabular}} \\
+\hline
+LDL & Virtex-7 & 4 & 4,231 & 4,454 & 34 & 160 & 40 & -- & -- \\
+\hline
+LDL & Virtex-7 & 8 & 22,383 & 18,138 & 131 & 134 & 88 & -- & -- \\
+\hline
+BD-NS-EPA & 65 nm & 4 & 12.04 kGE & -- & -- & 500 & -- & -- & -- \\
+\hline
+Gangarajaiah$^{a}$ & 28 nm & 8 & 141 kGE & -- & -- & 400 & -- & 0.028 & 0.0014$^{b}$ \\
+\hline
+TDLA30-5 & XCU50 & 16 & \begin{tabular}[t]{@{}c@{}}21,577 to\\57,285\end{tabular} & \begin{tabular}[t]{@{}c@{}}21,148 to\\56,508\end{tabular} & \begin{tabular}[t]{@{}c@{}}99 to\\220\end{tabular} & 100 & \begin{tabular}[t]{@{}c@{}}7,084 to\\8,630\end{tabular} & \begin{tabular}[t]{@{}c@{}}2.37 to\\2.60\end{tabular} & \begin{tabular}[t]{@{}c@{}}10.69 to\\32.52\end{tabular} \\
+\hline
+TDLB100-400 & XCU50 & 16 & \begin{tabular}[t]{@{}c@{}}240,836 to\\444,699\end{tabular} & \begin{tabular}[t]{@{}c@{}}140,110 to\\278,059\end{tabular} & \begin{tabular}[t]{@{}c@{}}3,400 to\\4,312\end{tabular} & 100 & \begin{tabular}[t]{@{}c@{}}10,104 to\\10,165$^{c}$\end{tabular} & \begin{tabular}[t]{@{}c@{}}5.17 to\\7.00\end{tabular} & \begin{tabular}[t]{@{}c@{}}1.86 to\\3.01\end{tabular} \\
+\hline
+No opt. & XCU50 & 16 & \begin{tabular}[t]{@{}c@{}}4,095 to\\9,086\end{tabular} & \begin{tabular}[t]{@{}c@{}}2,195 to\\4,297\end{tabular} & \begin{tabular}[t]{@{}c@{}}83 to\\184\end{tabular} & 100 & \begin{tabular}[t]{@{}c@{}}26,684 to\\38,570\end{tabular} & \begin{tabular}[t]{@{}c@{}}2.24 to\\2.27\end{tabular} & \begin{tabular}[t]{@{}c@{}}8.28 to\\22.76\end{tabular} \\
+\hline
+No opt. & XCU50 & 32 & \begin{tabular}[t]{@{}c@{}}4,162 to\\9,042\end{tabular} & \begin{tabular}[t]{@{}c@{}}2,268 to\\4,372\end{tabular} & \begin{tabular}[t]{@{}c@{}}83 to\\184\end{tabular} & 100 & \begin{tabular}[t]{@{}c@{}}138,897 to\\194,370\end{tabular} & \begin{tabular}[t]{@{}c@{}}2.25 to\\2.28\end{tabular} & \begin{tabular}[t]{@{}c@{}}48.61 to\\126.34\end{tabular} \\
+\hline
+\end{tabular}
+\vspace{4pt}
+\legend{Source: \citesp{ingemarsson2016ldl}, \citesp{wang2023bdnsepa}, \citesp{gangarajaiah2017cholesky} and the author.}
+\end{table}
+% FONTE: wang2021tlbdinsa L530-L546 (FPGA, m = 4 e m_UE = 2 em L582) e L564-L573 (ASIC);
+%   wang2023bdnsepa Tab. II (L552-L566, coluna kappa = 0,05). Este trabalho: configuracoes.tex L1 (M, C, K),
+%   condicoes-teste.tex (velocidades), arquiteturas-hardware.tex tab:hw-arquiteturas (ciclos), requisitos-tempo.tex L18 (100 MHz);
+%   recursos e potência: hardware/resultados_servidor/resultados_vivado_servidor.csv (9090 e 114_sistolico, 16 x 16);
+%   latência: latencia_por_bloco.csv (latencia_lote_ciclos); sem otimização: resultados_vivado_servidor.csv
+%   (sem_otimizacao, 16 x 16 e 32 x 32); latência sem otimização: xsim_TDLA30-5.log de cada versão
+%   (resultados_servidor/xsim/*/versoes/*_sem_otimizacao*), fim da 1a matriz menos o início, como em latencia_por_bloco.py.
+%   Potência: total (dinâmica + estática); dinâmica 0,15-0,38 (TDLA30-5), 2,91-4,70 (TDLB100-400), 0,031-0,065 (sem otimização).
+% FONTE (Tab. resultados): ingemarsson2016ldl Tab. I (L77-L93, 4x4) e Tab. II (L111-L125, 8x8); wang2023bdnsepa L603 (12,04 kGE) e Tab. II (500 MHz);
+%   gangarajaiah2017cholesky Tab. II; energia deste trabalho: resultados_vivado_servidor.csv (energia_por_inversao_uj).

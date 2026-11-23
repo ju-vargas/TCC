@@ -3,46 +3,49 @@
 % #####################################################################
 
 The evolution toward fifth-generation (5G) and sixth-generation (6G) wireless
-systems demands ever-increasing spectral efficiency and data throughput, driving
+systems demands ever-increasing spectral efficiency and data throughput. This demand drives
 the adoption of Massive Multi-User Multiple-Input Multiple-Output (MU-MIMO) as
-a key enabling technology. \textcolor{red}{No MIMO massivo, a BS tem centenas de antenas e atende dezenas de usuários ao mesmo tempo~\cite{decentralized2017}.}
+a key enabling technology. In massive MIMO, the Base Station (BS) has hundreds of antennas and serves \textcolor{GREEN}{multiple} users (User Equipments, UEs) at the same time~\cite{decentralized2017,jeon2019}.
 % FONTE: decentralized2017 (decentralized architecture/li2017_jetcas/*.md) L27 ("equip the BS with
-%   hundreds or thousands of antenna elements, which increases the spatial resolution").
-\textcolor{blue}{Linear Minimum
-Mean-Square Error (LMMSE) equalization is widely adopted among the available uplink detection strategies for its near-optimal
-performance~\cite{zhao2025jsac}.} \textcolor{red}{A sua solução exige uma inversão de matriz, cujo custo cresce com o cubo da dimensão da matriz \cite{li-tradeofs}.}
+%   hundreds or thousands of antenna elements, which increases the spatial resolution"); jeon2019 L16
+%   ("serving tens or hundreds of user equipments").
+Linear Minimum
+Mean-Square Error (LMMSE) equalization is widely adopted in uplink detection for its near-optimal
+performance~\cite{zhao2025jsac}. LMMSE requires a matrix inversion, whose cost grows with the cube of the matrix dimension~\cite{li-tradeofs}.
 
-Decentralized Baseband Processing (DBP) architectures \textcolor{red}{reduce this cost}
-by partitioning the base-station antenna array into clusters of $M_c$ antennas, each served by a local
-Distributed Unit (DU) that performs baseband processing independently. This
-reduces per-cluster matrix dimensions\textcolor{red}{~\cite{decentralized2017,jeon2019}}. Existing decentralized
+Decentralized Baseband Processing (DBP) architectures partition
+the BS antenna array into clusters of $M_c$ antennas, each served by a local
+Distributed Unit (DU) that performs baseband processing independently. Each DU then inverts smaller matrices, which reduces \textcolor{GREEN}{the inversion cost}~\cite{decentralized2017,jeon2019}. Existing decentralized
 LMMSE methods, however, almost universally assume that receiver noise follows an ideal
-Additive White Gaussian Noise (AWGN) model with a diagonal covariance matrix,
-an assumption that typically does not hold in practice\textcolor{red}{: a interferência de UEs não-alvo faz o ruído ser colorido, com matriz de covariância não diagonal~\cite{zhao2025jsac}.}
+Additive White Gaussian Noise (AWGN) model with a diagonal covariance matrix.
+This assumption typically does not hold in practice: interference from UEs in neighboring cells (non-target UEs) makes the noise colored, with a non-diagonal covariance matrix.
 % FONTE: zhao2025jsac paper.md:33 (interferência de UEs não-alvo como ruído colorido) e :108-113
 %   (Eq. 5: y = Hs + H barra s barra + n barra, r UEs não-alvo).
-Under colored noise, the standard
-inversion-avoidance techniques used by AWGN-based methods lose their convergence
-guarantees~\cite{wang2023bdnsepa}, and all known decentralized LMMSE solutions
-for this regime require an explicit matrix inversion\textcolor{red}{~\cite{zhao2021-globecom,zhao2025jsac}.}
+\textcolor{GREEN}{Computing this matrix} requires the noise samples of all clusters~\cite{zhao2021-globecom,zhao2025jsac}.
 
 The Block Coordinate Descent
-MMSE (BCD-MMSE) algorithm was recently proposed~\cite{zhao2025jsac} as the first decentralized LMMSE equalizer to operate
-under colored noise. \textcolor{red}{No BCD-MMSE, cada DU inverte a matriz Hermitiana $\mathbf G_c$, de dimensão $M_c \times M_c$, uma vez por PRB em cada bloco de coerência, e usa o resultado em todos os símbolos recebidos. Essa é uma das inversões do algoritmo. As outras ficam fora do escopo e são feitas em ponto flutuante (Seção~\ref{subsec:restricao-vazao}).}
-% FONTE: zhao2025jsac paper.md:561 (equalização reutilizada por N_coh símbolos); a citação da frase
-%   anterior cobre o parágrafo. Por PRB: amostras-tc.tex ("R_cc is unique per PRB within each
+MMSE (BCD-MMSE) algorithm was introduced in 2021 as the first decentralized LMMSE equalizer to operate
+under colored noise~\cite{zhao2021-globecom}.
+% FONTE: zhao2025jsac paper.md:11 (versão anterior no GLOBECOM, dez. 2021) e :37 ("for the first time
+%   consider the more practical colored noise case").
+In BCD-MMSE, each DU inverts the \textcolor{GREEN}{$M_c \times M_c$} complex matrix $\mathbf G_c$, formed by the channel and by the noise covariance estimated in its cluster. The inversion is performed once per Physical Resource Block (PRB) \textcolor{GREEN}{in each coherence block. A PRB is} a group of 12 consecutive subcarriers~\cite{3gpp-ts38211}\textcolor{GREEN}{, and a coherence block is} the time and frequency region in which the channel \textcolor{GREEN}{remains approximately constant}~\cite{marzetta2016fundamentals}. The result is used in all received symbols~\cite{zhao2025jsac}.
+% FONTE: zhao2025jsac paper.md:561 (equalização reutilizada por N_coh símbolos). PRB: simbolos.tex:24.
+%   G_c: bcd-calculo.tex eq:Gc (E_s H_c H_c^H + R_cc). Bloco de coerência: bloco-coerencia.tex:2.
+%   BS e UE: modelo-de-sistema.tex:1. UEs não-alvo em células vizinhas: covariancia.tex:31. Por PRB: amostras-tc.tex ("R_cc is unique per PRB within each
 %   coherence time"). Outras inversões: requisitos-tempo.tex:43 e simulacao.tex:62.
-\textcolor{red}{Essa inversão ainda não tem implementação em hardware (Capítulo~\ref{chap:relatedwork}).} Field-Programmable Gate Arrays (FPGAs) are
-a promising target for this operation, offering higher energy efficiency and
-lower latency than GPU-based solutions at the power budgets required by
-distributed base-station nodes~\cite{jeon2019,li2019cd}.
+Hardware implementations of matrix inversion already exist in MIMO detectors, \textcolor{GREEN}{some using} Cholesky decomposition, an exact inversion method\textcolor{GREEN}{. None of them is} in the context of BCD-MMSE (Chapter~\ref{chap:relatedwork}). Field-Programmable Gate Arrays (FPGAs) are
+a promising target for this operation. They offer higher computing efficiency and lower transfer latency than GPUs~\cite{jeon2019,li2019cd}.
+% FONTE: zhao2025jsac paper.md:33; jeon2019 L438 e L510; li2019cd L216.
 
-\textcolor{red}{Este trabalho propõe e avalia um acelerador em FPGA para a inversão da matriz Hermitiana $M_c \times M_c$ que cada DU faz no BCD-MMSE. O sistema considerado tem uma única célula (Seção~\ref{sec:sistemas-MIMO}). O acelerador usa a decomposição de Cholesky, um método de inversão exato que funciona com covariância de ruído não diagonal. Primeiro, um simulador em Python escolhe o formato de ponto fixo pelo aumento de SNR em relação ao ponto flutuante, medido nas curvas de taxa de erro de símbolo (SER). São usados dois limites para esse aumento: 3~dB e 0,1~dB. Depois, o módulo de inversão é implementado com uma arquitetura para cada condição de teste, de baixa e de alta mobilidade. São feitos dois tamanhos de $\mathbf G_c$, $16 \times 16$ e $32 \times 32$. No $32 \times 32$, só a versão sem otimizações foi implementada. As arquiteturas são dimensionadas pela vazão. O atraso é medido, mas atendê-lo fica fora do escopo. Cada arquitetura é avaliada pelo uso de recursos, pela potência, pela energia por inversão, pela vazão e pelo atraso. Por fim, os formatos e as arquiteturas são comparados pelo aumento de SNR, pela potência e pela energia.}
+This work proposes and evaluates a fixed-point FPGA accelerator for the inversion of $\mathbf G_c$. The system considered has a single cell, that is, the area served by one BS. \textcolor{GREEN}{For simplicity,} the non-target UEs \textcolor{GREEN}{are placed} in the same cell as the UEs served by the BS (target UEs). The accelerator uses Cholesky decomposition, which works with a non-diagonal noise covariance.
+
+First, a Python simulator selects the fixed-point format by the increase in Signal-to-Noise Ratio (SNR) relative to the 64-bit floating-point inversion, measured on the Symbol Error Rate (SER) curves\textcolor{GREEN}{. Two thresholds are used} for this increase: one in which the SER curve is almost identical to the floating-point one (0.1dB), and another with the largest acceptable increase (3dB). Then, the accelerator is implemented with architectures for UEs of different mobility, that is, different movement speeds. Each architecture is sized to invert the $\mathbf G_c$ matrices of one DU, one per PRB, within the duration of the coherence block, before the next set of noise samples arrives. The architectures are evaluated by resource usage, power, energy per inversion, throughput, and delay. Finally, the formats and the architectures are compared by SNR increase, power, and energy.
 % FONTE: limites: formato.tex:6. Tamanhos: setup-hardware.tex:20; 32x32 só sem otimização:
 %   conclusao.tex e hardware.tex. Vazão e atraso: requisitos-tempo.tex:43 (subsec:restricao-vazao).
+%   Célula: covariancia.tex:31. Ponto flutuante 64 bits e limites: formato.tex:3-6. Mobilidade:
+%   condicoes-teste.tex (perfis de mobilidade). 275 por T_c: requisitos-tempo.tex (eq:restriction-flow).
 %   Comparação: compromisso.tex (subsec:resultados-compromisso).
 % FONTE: zhao2025jsac paper.md:577 ("single-cell massive MIMO system"; UEs não-alvo "modeled
 %   similarly"); software/simulador/quadriga/export_quadriga_channels.m (n_ue = K + r, mesma área).
 
-\textcolor{red}{O texto está organizado da seguinte forma. O Capítulo~\ref{chap:fundamentacao} apresenta a fundamentação teórica, e o Capítulo~\ref{chap:relatedwork}, os trabalhos relacionados. O Capítulo~\ref{chap:metodologia} descreve o simulador, a escolha dos formatos e as arquiteturas de hardware. O Capítulo~\ref{chap:resultados} mostra os resultados, e o Capítulo~\ref{chap:conclusao} traz as conclusões e os trabalhos futuros.}
-
+This work is structured as follows: Chapter~\ref{chap:fundamentacao} presents the theoretical background, and Chapter~\ref{chap:relatedwork} the related work. Chapter~\ref{chap:metodologia} describes the simulator, the selection of the formats, and the hardware architectures. Chapter~\ref{chap:resultados} shows the results, and Chapter~\ref{chap:conclusao} presents the conclusions and future work.

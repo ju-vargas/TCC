@@ -1,13 +1,11 @@
-The FD-LAMA detector of~\cite{li2019fdlama}, implemented on a
-Virtex-7 XC7VX690T using HLS for a $128 \times 8$
-system with QPSK and i.i.d. Rayleigh fading, achieves 22.2~Mb/s
-throughput at 429~MHz with 11,673 LUTs and 213 DSP48 blocks for
-$C = 1$ cluster. Resource utilization scales roughly linearly with $C$,
-while throughput degrades only slightly, reaching 17.8~Mb/s at
-$C = 4$~\cite{li2019fdlama}. \textcolor{red}{O trabalho considera AWGN e não inverte matrizes.}
+The FD-LAMA detector of~\cite{li2019fdlama} was implemented in HLS on a
+Virtex-7 XC7VX690T for $U = 8$ users, 32 antennas per cluster, QPSK and i.i.d. Rayleigh fading. For $C = 1$ cluster, it uses 11,739 LUTs and 219 DSP48 blocks at 429~MHz, with a latency of 310 cycles. Resource utilization scales roughly linearly with $C$,
+while the latency rises to 384 cycles at
+$C = 4$ ($128 \times 8$)~\cite{li2019fdlama}. The work considers AWGN and does not invert matrices.
 
-The decentralized Newton-method detector of~\cite{kulkarni2021newton},
-implemented on a Virtex-7 XC7VX690T for a $128 \times 8$ system with
-$C = 4$ clusters in a ring topology, achieves 253~Mbps throughput at 340~MHz, consuming 100,733 LUTs,
-1,280 DSP48 blocks, and 7.248~W on-chip power for 16-QAM with
-$T = 3$ iterations~\cite{kulkarni2021newton}. \textcolor{red}{O trabalho não define o modelo de ruído.}
+The decentralized Newton-method detector of~\cite{kulkarni2021newton}
+was implemented on a Virtex-7 XC7VX690T for a $128 \times 8$ system with
+$C = 4$ clusters in a ring topology. Its error rate is close to that of centralized ZF. For 16-QAM with $T = 3$ iterations, it uses 111,277 LUTs,
+1,824 DSP48 blocks, and 7.177~W of on-chip power at 340~MHz, with a latency of 701 cycles~\cite{kulkarni2021newton}. The work does not define the noise model.
+% FONTE: li2019fdlama L72 (U = 8, QPSK, Rayleigh i.i.d.), Tab. I (L106-L117, C = 1 e C = 4); kulkarni2021newton L8
+%   (Newton, perto do ZF), Tab. III (anel, B = 128, U = 8, primeiro bloco = T = 3).

@@ -1,0 +1,1721 @@
+[
+  {
+    "threadId": "6afe0e8272078d1907000001",
+    "docId": "6af20645d64bdb249db79ec5",
+    "path": "chapters/METODOLOGIA/arquiteturas-hardware.tex",
+    "position": 53,
+    "line": 1,
+    "column": 54,
+    "selectedText": "\\textcolor{red}{Besides the formats chosen in Section~\\ref{sec:resultados-formato},",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0e82baa8572e9e2f615d",
+        "content": "mas tu não escolheu os formatos na seção anterior? (4.5?)",
+        "timestamp": 1795034754593,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 1,
+      "endLine": 6,
+      "before": [],
+      "line": "The chosen formats were synthesized using Vitis HLS. \\textcolor{red}{Besides the formats chosen in Section~\\ref{sec:resultados-formato}, $\\langle 20,8\\rangle$ in \\texttt{AP\\_RND\\_ZERO}/\\texttt{AP\\_WRAP} and $\\langle 18,8\\rangle$ in \\texttt{AP\\_TRN}/\\texttt{AP\\_SAT} were also synthesized, and they appear in the hardware results and in the trade-off (Section~\\ref{subsec:resultados-compromisso}).}",
+      "after": [
+        "% FONTE: hardware/pacote_servidor_formatos_18_20/LEIAME.md (pedido da autora, 2026-11-03).",
+        " In all versions, the automatic loop pipelining feature was disabled \\cite[p.~42]{ug1399}. The first version, without loop optimizations, was implemented for both $16 \\times 16$ and $32 \\times 32$ matrix sizes. In this version, the iterations of each loop execute sequentially, and the $N_{\\text{PRB}} = 275$ matrices within a block are inverted one by one. Consequently, the interval between inversions exceeds the limits defined for all test conditions (Table~\\ref{tab:limite-ciclos}), and the module does not track the arrival of the matrices at each $T_c$.",
+        "",
+        "To meet the cycle limits for each test condition, a specific architecture was developed for every case, only in $16 \\times 16$, with Vitis HLS directives that reduce the interval between inversions. All versions were implemented in Vivado, tested using $\\mathbf G_c$ matrices obtained from the simulator (Section~\\ref{subsec:hw-matrizes}), and evaluated for power consumption and energy per inversion (Section~\\ref{subsec:hw-potencia}). Each version produces the same inverse as the non-optimized implementation, a result verified bit-for-bit against the C-language code.",
+        "% FONTE: hardware/viabilidade_32x32/LEIAME.md (síntese C, HLS 2026.1 local, 2026-11-02, <24,12>)."
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0e8b83f11644ac000001",
+    "docId": "6af20645d64bdb249db79ec5",
+    "path": "chapters/METODOLOGIA/arquiteturas-hardware.tex",
+    "position": 137,
+    "line": 1,
+    "column": 138,
+    "selectedText": "$\\langle 20,8\\rangle$ in \\texttt{AP\\_RND\\_ZERO}/\\texttt{AP\\_WRAP} and $\\langle 18,8\\rangle$ in \\texttt{AP\\_TRN}/\\texttt{AP\\_SAT} were also synthesized, and they appear in the hardware results and in the trade-off (Section~\\ref{subsec:resultados-compromisso}).",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0e8cb73afc2b65fa6bee",
+        "content": "por quê?",
+        "timestamp": 1795034764032,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 1,
+      "endLine": 6,
+      "before": [],
+      "line": "The chosen formats were synthesized using Vitis HLS. \\textcolor{red}{Besides the formats chosen in Section~\\ref{sec:resultados-formato}, $\\langle 20,8\\rangle$ in \\texttt{AP\\_RND\\_ZERO}/\\texttt{AP\\_WRAP} and $\\langle 18,8\\rangle$ in \\texttt{AP\\_TRN}/\\texttt{AP\\_SAT} were also synthesized, and they appear in the hardware results and in the trade-off (Section~\\ref{subsec:resultados-compromisso}).}",
+      "after": [
+        "% FONTE: hardware/pacote_servidor_formatos_18_20/LEIAME.md (pedido da autora, 2026-11-03).",
+        " In all versions, the automatic loop pipelining feature was disabled \\cite[p.~42]{ug1399}. The first version, without loop optimizations, was implemented for both $16 \\times 16$ and $32 \\times 32$ matrix sizes. In this version, the iterations of each loop execute sequentially, and the $N_{\\text{PRB}} = 275$ matrices within a block are inverted one by one. Consequently, the interval between inversions exceeds the limits defined for all test conditions (Table~\\ref{tab:limite-ciclos}), and the module does not track the arrival of the matrices at each $T_c$.",
+        "",
+        "To meet the cycle limits for each test condition, a specific architecture was developed for every case, only in $16 \\times 16$, with Vitis HLS directives that reduce the interval between inversions. All versions were implemented in Vivado, tested using $\\mathbf G_c$ matrices obtained from the simulator (Section~\\ref{subsec:hw-matrizes}), and evaluated for power consumption and energy per inversion (Section~\\ref{subsec:hw-potencia}). Each version produces the same inverse as the non-optimized implementation, a result verified bit-for-bit against the C-language code.",
+        "% FONTE: hardware/viabilidade_32x32/LEIAME.md (síntese C, HLS 2026.1 local, 2026-11-02, <24,12>)."
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0fbd0bbd6f317b000001",
+    "docId": "6af20645d64bdb249db79ec5",
+    "path": "chapters/METODOLOGIA/arquiteturas-hardware.tex",
+    "position": 2880,
+    "line": 13,
+    "column": 298,
+    "selectedText": "When the number of matrices per cycle is less than $n$, groups of these matrices are processed in alternating cycles.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0fbeb73afc2b65fa6c2c",
+        "content": "não entendi",
+        "timestamp": 1795035070189,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      },
+      {
+        "id": "6afe1040369865f771e58b77",
+        "content": "tu tá usando cycle com dois significados aqui, eu acho, e um deles não está muito claro",
+        "timestamp": 1795035200759,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 8,
+      "endLine": 18,
+      "before": [
+        "",
+        "\\subsection{\\texorpdfstring{Hardware architectures}{Hardware architectures}}\\label{subsec:hw-arquiteturas}",
+        "% ---------------------------------------------------------------------",
+        "All optimized architectures employ pipelining (Section~\\ref{subsubsec:latencia-intervalo}). Every $T_c$, the DU inverts 275 matrices $\\mathbf G_c$, one for each PRB (Section~\\ref{sec:requisitos-tempo}). For the 9,090 and 4,545-cycle limits, the module inverts one matrix at a time. For tighter limits, it inverts the matrices in batches of $n$. In all cases, the module must receive the 275 matrices for a given block within the duration $T_c$.",
+        ""
+      ],
+      "line": "The matrices within a batch are independent of one another. Consequently, some of these matrices are computed in the same cycle using loop unrolling. The loop that iterates over these matrices is nested within a pipelined loop, and the HLS tool performs the unrolling automatically \\cite{ug1399}. When the number of matrices per cycle is less than $n$, groups of these matrices are processed in alternating cycles. Each copy has its own dedicated memory bank, though it may share operators with the others.",
+      "after": [
+        "% FONTE: UG1399 pp. 41, 372 e 428 (unroll automático de laço dentro de laço com pipeline).",
+        "",
+        "The values for $n$ and the number of matrices per cycle were determined through trial and error and are presented in Table~\\ref{tab:hw-arquiteturas}. The goal was to stay below the cycle limit, not to reach it exactly.",
+        " ",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe10665cf539407b000001",
+    "docId": "6af20645d64bdb249db79ec5",
+    "path": "chapters/METODOLOGIA/arquiteturas-hardware.tex",
+    "position": 4049,
+    "line": 30,
+    "column": 241,
+    "selectedText": "extbf{Matrices per}\\\\\\textbf{cycle",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe10664c0a0f4d03a4c650",
+        "content": "isso aqui seria \"Matrices in parallel\"? Ou isso é o n? Não entendi o que é essa coluna",
+        "timestamp": 1795035238760,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 25,
+      "endLine": 35,
+      "before": [
+        "",
+        "\\renewcommand{\\arraystretch}{1.2}",
+        "\\setlength{\\tabcolsep}{4pt}",
+        "\\begin{tabular}{lcccc}",
+        "\\toprule"
+      ],
+      "line": "\\textbf{Test condition} & \\begin{tabular}[c]{@{}c@{}}\\textbf{Limit per}\\\\\\textbf{matrix (cycles)}\\end{tabular} & \\begin{tabular}[c]{@{}c@{}}\\textbf{Matrices per}\\\\\\textbf{batch} ({\\boldmath $n$})\\end{tabular} & \\begin{tabular}[c]{@{}c@{}}\\textbf{Matrices per}\\\\\\textbf{cycle}\\end{tabular} & \\begin{tabular}[c]{@{}c@{}}\\textbf{Batches}\\\\\\textbf{per block}\\end{tabular} \\\\",
+      "after": [
+        "\\midrule",
+        "Without optimizations & --    & 1  & 1 & 275 \\\\",
+        "TDLA30-5    & 9090 & 1  & 1 & 275 \\\\",
+        "TDLA30-10   & 4545 & 1  & 1 & 275 \\\\",
+        "TDLA30-75   & 606   & 12 & 6 & 23 \\\\"
+      ]
+    }
+  },
+  {
+    "threadId": "6afe12898082015db6000001",
+    "docId": "6af20645d64bdb249db79ec5",
+    "path": "chapters/METODOLOGIA/arquiteturas-hardware.tex",
+    "position": 8811,
+    "line": 118,
+    "column": 1,
+    "selectedText": "\\centering\n\\includegraphics{Images/FLUXO/hw_c2.pdf}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe1289369865f771e58bee",
+        "content": "\"etapa\" em português fica meio estranho..",
+        "timestamp": 1795035785493,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 113,
+      "endLine": 123,
+      "before": [
+        "\\end{verbatim}",
+        "\\end{minipage}",
+        "",
+        "\\vspace{8pt}",
+        "\\begin{minipage}[c]{\\textwidth}"
+      ],
+      "line": "\\centering",
+      "after": [
+        "\\includegraphics{Images/FLUXO/hw_c2.pdf}",
+        "\\end{minipage}",
+        "\\vspace{4pt}",
+        "\\legend{Source: the author.}",
+        "\\end{figure}"
+      ]
+    }
+  },
+  {
+    "threadId": "6afe181ae1503f4357000001",
+    "docId": "6af20645d64bdb249db79ec5",
+    "path": "chapters/METODOLOGIA/arquiteturas-hardware.tex",
+    "position": 10964,
+    "line": 158,
+    "column": 1,
+    "selectedText": "\\includegraphics{Images/FLUXO/hw_c3.pdf}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe181a736cf275aa6774f1",
+        "content": "essa figura tá confusa, ela mistura algo que parece ser um diagrama estrutural com um diagrama temporal e não dá pra entender a relação dos dois e o que são aquelas copies ali",
+        "timestamp": 1795037210499,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 153,
+      "endLine": 163,
+      "before": [
+        "\\end{minipage}",
+        "",
+        "\\vspace{8pt}",
+        "\\begin{minipage}[c]{\\textwidth}",
+        "\\centering"
+      ],
+      "line": "\\includegraphics{Images/FLUXO/hw_c3.pdf}",
+      "after": [
+        "\\end{minipage}",
+        "\\vspace{4pt}",
+        "\\legend{Source: the author.}",
+        "\\end{figure}",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afda3aa2d63752092000001",
+    "docId": "6af2107595e09f03a50fb2e5",
+    "path": "chapters/METODOLOGIA/condicoes-teste.tex",
+    "position": 188,
+    "line": 1,
+    "column": 189,
+    "selectedText": " The simulation does not include a time axis",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afda3aa63086c379233da18",
+        "content": "meio estranho isso aqui.. como assim?",
+        "timestamp": 1795007402639,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 1,
+      "endLine": 6,
+      "before": [],
+      "line": "The simulated test conditions of Table~\\ref{tab:n-maximo} define the carrier frequency and the number of noise samples in the Python simulator, as shown in Table~\\ref{tab:condicoes_teste}. The simulation does not include a time axis, and the channel does not account for the Doppler effect, so only these two variables change between test conditions. A frequency of 3.5 GHz was used for FR1 conditions, within the n78 band (3300 to 3800 MHz, TDD), and 28 GHz was used for FR2 conditions, within the n257 band (26500 to 29500 MHz, TDD) \\cite[Tabs.~5.2-1 and 5.2-2]{3gpp-ts38104}. \\textcolor{red}{The 3.5~GHz band is one of the mid-band frequencies identified for 5G \\cite[p.~13]{lin-lee-5g}.} In each realization, the channels at both frequencies use the same UE positions.",
+      "after": [
+        "% FONTE (3,5 GHz): Lin e Lee, Cap. 1, p. 13 (\"the 3.5 GHz band in the mid-band spectrum\").",
+        "",
+        "",
+        "\\begin{table}[htbp]",
+        "\\caption[Carrier frequency and number of noise samples in each test condition.]{Carrier frequency and number of noise samples in each test condition. Speed from $v = f_D c/f_c$.}"
+      ]
+    }
+  },
+  {
+    "threadId": "6afd9d185c23dc5c9b000001",
+    "docId": "6af2064710697dfb692431d0",
+    "path": "chapters/METODOLOGIA/configuracoes.tex",
+    "position": 361,
+    "line": 1,
+    "column": 362,
+    "selectedText": "QPSK or 16-QAM modulation",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afd9d19baa8572e9e2f3f99",
+        "content": "uma pergunta que pode aparecer: 5G prevê modulações bem mais densas (256-QAM, por exemplo). Por que tu focou nessas duas?",
+        "timestamp": 1795005721098,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 1,
+      "endLine": 6,
+      "before": [],
+      "line": "The uplink of the massive MIMO system was investigated using two types of parameters. Hard constraints refer to the physical characteristics of the base station: $M = 128$ or 256 antennas, $C = 8$ or 16 clusters, and the size $M_c = M/C$ of the inversion module. Soft constraints depend on the UEs being served and the level of interference: $K = 8$ or 12 UEs, QPSK or 16-QAM modulation, and an IoTh ratio of 10 dB as a baseline case, or 20 dB representing an extreme, high-interference scenario. These configurations were adapted from \\cite{zhao2025jsac}. Table~\\ref{tab:paineis} presents these configurations.",
+      "after": [
+        "",
+        "",
+        "Each configuration is identified by a label consisting of a number and a letter. The number denotes the hard constraints: 1 for $M = 128$ and $C = 8$; 2 for $M = 256$ and $C = 8$; and 3 for $M = 256$ and $C = 16$. The letter indicates the soft constraints and remains consistent across all three groups.",
+        "",
+        "\\begin{table}[htbp]"
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0028fdbd2719c4000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 522,
+    "line": 4,
+    "column": 438,
+    "selectedText": "$\\mathrm{SER} = 10^{-2}$",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0028baa8572e9e2f5dca",
+        "content": "pq esse valor? justificar",
+        "timestamp": 1795031080586,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 1,
+      "endLine": 9,
+      "before": [
+        "",
+        "\\subsection{\\texorpdfstring{SNR increase}{SNR increase}}\\label{subsec:aumento-snr}",
+        ""
+      ],
+      "line": "To select the $\\langle W, I\\rangle$ format (Section~\\ref{subsubsec:ponto-fixo}), the BCD-MMSE algorithm was simulated using both fixed-point and 64-bit floating-point matrix inversion. Only the inversion of $\\mathbf G_c$ differs between the two simulations; however, the SNR and SER are measured for the entire uplink. Each format was evaluated based on the SNR increase, that is, the additional SNR required by the uplink to achieve an $\\mathrm{SER} = 10^{-2}$ compared to the floating-point case. This increase corresponds to the horizontal distance between the two SER curves, which is the standard method for comparing two schemes \\cite[p.~55]{tse-viswanath}. The increase is rounded to two decimal places.",
+      "after": [
+        "",
+        "Two thresholds were employed. A 0.1~dB threshold represents a near-ideal format, where the SER curve is virtually identical to that of the floating-point implementation. A 3~dB threshold serves as the maximum acceptable increase. An increase of 3~dB is equivalent to doubling the power \\cite[p.~73]{tse-viswanath}. Consequently, at this threshold, each UE would need to transmit with twice the energy per symbol to compensate for the error introduced by the matrix inversion (Section~\\ref{subsec:snr}).",
+        "",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe04f512c14d5752000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 2388,
+    "line": 34,
+    "column": 1,
+    "selectedText": "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe04f54c0a0f4d03a4c3c7",
+        "content": "faz sentido abrir essa subseção? considerando que é mesmo assunto da anterior e que ela ficou tão curta..",
+        "timestamp": 1795032309937,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 29,
+      "endLine": 39,
+      "before": [
+        "\\legend{Source: the author.}",
+        "\\end{table}",
+        "% FONTE: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas",
+        "%   varreduras: 17 tamanhos por varredura de configuração e condição.",
+        ""
+      ],
+      "line": "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}",
+      "after": [
+        "The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.",
+        "",
+        "",
+        "The selection process relied on the $\\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\\ref{tab:gc-ponto-operacao}).",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe05c5f004d361d7000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 2525,
+    "line": 35,
+    "column": 35,
+    "selectedText": "configurations",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe05c6baa8572e9e2f5f68",
+        "content": "aqui quando tu fala configuration, tu te refere àquelas listas na tabela 4.2? Pro leitor, isso não é óbvio.. tu poderia estar falando até das configurações de ponto fixo. Tu precisa dar um nome mais específico pra isso e usar esse nome consistentemente no texto. Algo tipo \"Link configurations\", não sei bem",
+        "timestamp": 1795032518306,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 30,
+      "endLine": 40,
+      "before": [
+        "\\end{table}",
+        "% FONTE: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas",
+        "%   varreduras: 17 tamanhos por varredura de configuração e condição.",
+        "",
+        "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}"
+      ],
+      "line": "The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.",
+      "after": [
+        "",
+        "",
+        "The selection process relied on the $\\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\\ref{tab:gc-ponto-operacao}).",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe061d66167c15c7000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 2730,
+    "line": 35,
+    "column": 240,
+    "selectedText": "17 sizes",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe061e736cf275aa67714e",
+        "content": "o que é isso? 17 bit widths? Melhor chamar de bit widths (mas eu contei 18 na tabela 4.5)",
+        "timestamp": 1795032606274,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 30,
+      "endLine": 40,
+      "before": [
+        "\\end{table}",
+        "% FONTE: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas",
+        "%   varreduras: 17 tamanhos por varredura de configuração e condição.",
+        "",
+        "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}"
+      ],
+      "line": "The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.",
+      "after": [
+        "",
+        "",
+        "The selection process relied on the $\\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\\ref{tab:gc-ponto-operacao}).",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe062cc47bbd2030000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 2743,
+    "line": 35,
+    "column": 253,
+    "selectedText": "35 mode combinations",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe062db73afc2b65fa6a0a",
+        "content": "isso eu sinceramente não sei o que é.. são os negócios de rounding e saturation? melhor ser mais específica",
+        "timestamp": 1795032621095,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "edited_at": 1795032643484,
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 30,
+      "endLine": 40,
+      "before": [
+        "\\end{table}",
+        "% FONTE: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas",
+        "%   varreduras: 17 tamanhos por varredura de configuração e condição.",
+        "",
+        "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}"
+      ],
+      "line": "The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.",
+      "after": [
+        "",
+        "",
+        "The selection process relied on the $\\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\\ref{tab:gc-ponto-operacao}).",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe065b60621960d0000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 2776,
+    "line": 35,
+    "column": 286,
+    "selectedText": "only 5 configurations were selected.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe065b4c0a0f4d03a4c42d",
+        "content": "não entendi: a initial sweep usou 16 ou 5?",
+        "timestamp": 1795032667813,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      },
+      {
+        "id": "6afe06d9369865f771e58951",
+        "content": "ou ela escolheu 5 das 16? poderia estar mais claro aqui",
+        "timestamp": 1795032793444,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 30,
+      "endLine": 40,
+      "before": [
+        "\\end{table}",
+        "% FONTE: 9 + 9 = 18 tamanhos, mas <46,14> (I = 14, F = 32) aparece nas duas",
+        "%   varreduras: 17 tamanhos por varredura de configuração e condição.",
+        "",
+        "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}"
+      ],
+      "line": "The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.",
+      "after": [
+        "",
+        "",
+        "The selection process relied on the $\\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\\ref{tab:gc-ponto-operacao}).",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0788213d025984000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 3059,
+    "line": 38,
+    "column": 245,
+    "selectedText": "imaginary parts",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0788b73afc2b65fa6a63",
+        "content": "isso aqui não faz muito sentido pra parte imaginária, né? ser maior não significa precisar de mais bits nesse caso",
+        "timestamp": 1795032968926,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      },
+      {
+        "id": "6afe0842b73afc2b65fa6a9b",
+        "content": "ok, abaixo tu explica melhor, mas nesse ponto aqui ficou estranho",
+        "timestamp": 1795033154804,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "edited_at": 1795033161159,
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 33,
+      "endLine": 43,
+      "before": [
+        "",
+        "\\subsection{\\texorpdfstring{Configurations of the initial sweep}{Configurations of the initial sweep}}",
+        "The initial sweep utilized the 16 configurations for which the floating-point SER curve reaches $10^{-2}$ within the $-10$ to $10$ dB range. Running all of these across the 5 test conditions would have resulted in 80 cases, each involving 17 sizes and 35 mode combinations; therefore, only 5 configurations were selected.",
+        "",
+        ""
+      ],
+      "line": "The selection process relied on the $\\mathbf{G}_c$ matrices at two SNR points surrounding the operating point (defined as $\\mathrm{SER} = 10^{-2}$ in floating-point arithmetic). From each matrix, the largest absolute value between the real and imaginary parts of the elements was taken, since the circuit stores the two parts separately. This value is referred to here as the ``maximum $|$part$|$''. In each case, the 99th percentile of these values was used to ensure that the overall ranking would not be disproportionately influenced by a few outlier matrices. Larger elements necessitate a greater number of integer bits. Configurations 1G, 1H, 2E, and 2F contain the largest elements and are the most demanding, while configuration 1A contains the smallest elements and was used as a baseline (Table~\\ref{tab:gc-ponto-operacao}).",
+      "after": [
+        "",
+        "",
+        "These configurations also span the extremes of precision requirements. With a limited number of bits, the rounding error in matrix inversion increases with the condition number \\cite[p.~1603]{osinsky2023}. When the smallest eigenvalue is very small, the matrix approaches a singular state, making the result more dependent on the fractional part (Section~\\ref{subsubsec:ponto-fixo}). Configurations 2E and 2F exhibit the highest condition numbers (at the 99th percentile), whereas configuration 1A features the smallest eigenvalues (at the 1st percentile).",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afe09aa69f8c93488000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 6173,
+    "line": 76,
+    "column": 1,
+    "selectedText": "\\caption[Configurations in which each format was chosen in the initial sweep.]{Configurations in which each format was chosen in the initial sweep. Columns: SNR increase. No mark: all 5 test conditions. $^{a}$Only TDLB100-400. $^{b}$The other 4 conditions.}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe09ab736cf275aa6771f5",
+        "content": "qual o modo utilizado para esses resultados?",
+        "timestamp": 1795033515313,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 71,
+      "endLine": 81,
+      "before": [
+        "",
+        "The sizes and modes of the initial sweep were also synthesized in Vitis HLS to measure resource occupancy (LUT, DSP, FF, and BRAM). The occupancy of each circuit is that of the most used resource in the FPGA. In each configuration and test condition, the integer and fractional parts with the lowest occupancy were chosen, with an SNR increase of up to 3 dB and of up to 0.1 dB, in 1 and in 4 iterations. Combining the two parts resulted in 10 formats (Table~\\ref{tab:formatos-origem}).",
+        "",
+        "",
+        "\\begin{table}[htbp]"
+      ],
+      "line": "\\caption[Configurations in which each format was chosen in the initial sweep.]{Configurations in which each format was chosen in the initial sweep. Columns: SNR increase. No mark: all 5 test conditions. $^{a}$Only TDLB100-400. $^{b}$The other 4 conditions.}",
+      "after": [
+        "\\label{tab:formatos-origem}",
+        "\\vspace{4pt} % a classe zera o espaço entre a caption e a tabela",
+        "\\centering",
+        "\\footnotesize",
+        "\\renewcommand{\\arraystretch}{1.2}"
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0e446b3f4c3966000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 6459,
+    "line": 78,
+    "column": 1,
+    "selectedText": "\\vspace{4pt} % a classe zera o espaço entre a caption e a tabela\n\\centering\n\\footnotesize",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0e4541901939fb539b12",
+        "content": "se a initial sweep fixou I=14 OU F=32, como temos configurações aqui com I != 14 E F != 32??",
+        "timestamp": 1795034693171,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 73,
+      "endLine": 83,
+      "before": [
+        "",
+        "",
+        "\\begin{table}[htbp]",
+        "\\caption[Configurations in which each format was chosen in the initial sweep.]{Configurations in which each format was chosen in the initial sweep. Columns: SNR increase. No mark: all 5 test conditions. $^{a}$Only TDLB100-400. $^{b}$The other 4 conditions.}",
+        "\\label{tab:formatos-origem}"
+      ],
+      "line": "\\vspace{4pt} % a classe zera o espaço entre a caption e a tabela",
+      "after": [
+        "\\centering",
+        "\\footnotesize",
+        "\\renewcommand{\\arraystretch}{1.2}",
+        "\\begin{tabular}{ccccc}",
+        "\\toprule"
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0c0d33828745b4000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 9035,
+    "line": 111,
+    "column": 85,
+    "selectedText": "group of configurations",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0c0e41901939fb539a8c",
+        "content": "como configurações são agrupadas? não entendi essa parte",
+        "timestamp": 1795034126133,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "edited_at": 1795034134223,
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 106,
+      "endLine": 116,
+      "before": [
+        "\\subsection{\\texorpdfstring{Validation}{Validation}}\\label{subsec:validacao}",
+        "The initial sweep fixed one part of the word while varying the other, and used only 5 configurations. This can change the most used resource and the best mode. Therefore, the 10 formats were simulated again, with the 35 mode combinations, in the 24 configurations and 5 test conditions.",
+        "",
+        "In this step, BCD-MMSE used only 1 iteration. The 4 iterations of the initial sweep had already helped to choose the formats of the most demanding cases: $\\langle 16,6\\rangle$, $\\langle 20,8\\rangle$, $\\langle 28,12\\rangle$ and $\\langle 30,14\\rangle$ only appeared with 4 iterations (Table~\\ref{tab:formatos-origem}). With 1 iteration, BCD-MMSE already has a good result in SER. Furthermore, the inverse of $\\mathbf G_c$ is calculated once and used in all iterations, so the number of inversions does not change (Section~\\ref{subsec:bcd}).",
+        ""
+      ],
+      "line": "The circuit has only one mode. Therefore, each format received a fixed mode in each group of configurations (Section~\\ref{sec:configuracoes}). All configurations in a group use the same circuit. The mode was chosen according to the following criteria, in this order:",
+      "after": [
+        "",
+        "\\begin{enumerate}",
+        "",
+        "\\item the mode that leaves more pairs (configuration, test condition) with an increase in SNR of up to 3~dB. A pair that does not reach $\\mathrm{SER} = 10^{-2}$ counts as out of bounds;",
+        "\\item the lowest resource occupancy, by the most used resource in the synthesis;"
+      ]
+    }
+  },
+  {
+    "threadId": "6afe0d625d23484933000001",
+    "docId": "6af2064439f8cb65add7e961",
+    "path": "chapters/METODOLOGIA/formato.tex",
+    "position": 10404,
+    "line": 127,
+    "column": 406,
+    "selectedText": "With these results, the smallest format with all pairs within 3~dB and the smallest with all within 0.1~dB were chosen in each group, also with only the configurations with an IoTh of 10~dB (Section~\\ref{sec:resultados-formato}).",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afe0d63369865f771e58ad3",
+        "content": "aqui não tá muito claro, a gente tinha conversado sobre como a gente não precisa satisfazer todas as hard constraints, porque justamente elas são fixas.. e a mesma coisa valeria para as test conditions, não?",
+        "timestamp": 1795034467422,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 122,
+      "endLine": 127,
+      "before": [
+        "\\end{enumerate}",
+        "",
+        "% FONTE: grade curta = varredura_formatos.grade_perto (--snr-perto, extra_direita 2), [4] v4 e",
+        "%   v5; grade inteira = rodadas [5] (modo_fixo_3dB, _iot10, _qpsk_128, _qpsk_256) e",
+        "%   rodada6_mapa_grade_inteira.sh (modo_fixo_mapa, 2026-11-08), semente 0 como a referência."
+      ],
+      "line": "When selecting the mode, the fixed-point simulation did not use the entire SNR grid, only the SNR values around the operating point, where the floating-point BCD-MMSE reaches $\\mathrm{SER} = 10^{-2}$: from the grid SNR just below this point up to 4--7~dB above it. Subsequently, each format was re-simulated using only its corresponding mode across the entire SNR grid (Section~\\ref{subsec:aumento-snr}). With these results, the smallest format with all pairs within 3~dB and the smallest with all within 0.1~dB were chosen in each group, also with only the configurations with an IoTh of 10~dB (Section~\\ref{sec:resultados-formato}).",
+      "after": []
+    }
+  },
+  {
+    "threadId": "6afdfdf45a45da7f7f000001",
+    "docId": "6af21081b4e42fbdeefc077f",
+    "path": "chapters/METODOLOGIA/requisitos-tempo.tex",
+    "position": 1820,
+    "line": 14,
+    "column": 1,
+    "selectedText": "\\begin{equation}\n{T_{\\text{inv}} \\leq \\frac{T_c}{N_{\\text{PRB}}}.}\n\\label{eq:restriction-flow}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afdfdf5369865f771e586ca",
+        "content": "aqui tu tá assumindo que não tem nenhum tipo de paralelismo, nem mesmo pipeline, certo? tu tá assumindo uma unidade inversora que opera em uma matriz e, quando termina, começa outra. Seria bom explicitar essa hipótese",
+        "timestamp": 1795030517301,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "edited_at": 1795030544271,
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 9,
+      "endLine": 19,
+      "before": [
+        "\\subsection{Throughput}\\label{subsec:restricao-vazao}",
+        "% ---------------------------------------------------------------------",
+        "The estimate $\\hat{\\mathbf R}_{cc}$ is unique per PRB within each interval $T_c$ (Section~\\ref{subsubsec:disponibilidade-amostras}). The matrix $\\mathbf G_c$ is inverted once and serves all iterations of the BCD-MMSE algorithm (Section~\\ref{subsec:bcd}). Thus, each DU performs one inversion of $\\mathbf G_c$ per PRB every $T_c$. With $N_{\\text{PRB}}$ PRBs, this results in $N_{\\text{PRB}}$ inversions per DU every $T_c$. This work uses $N_{\\text{PRB}} = 275$, which is the worst-case scenario for 5G NR (Section~\\ref{subsec:simbolos}).",
+        "",
+        "\\textcolor{red}{To keep up with the sample collection}, the module needs to complete the $N_{\\text{PRB}}$ inversions within $T_c$. Let $T_{\\text{inv}}$ be the interval between the start of two inversions (Section~\\ref{subsubsec:latencia-intervalo}). Then:"
+      ],
+      "line": "\\begin{equation}",
+      "after": [
+        "{T_{\\text{inv}} \\leq \\frac{T_c}{N_{\\text{PRB}}}.}",
+        "\\label{eq:restriction-flow}",
+        "\\end{equation}",
+        "With a clock speed of 100 MHz (Section~\\ref{subsec:hw-ferramentas}), this limit is given in cycles, rounded down. Table~\\ref{tab:limite-ciclos} shows the limit for each test condition.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afdfe6f52fd4e23ea000001",
+    "docId": "6af21081b4e42fbdeefc077f",
+    "path": "chapters/METODOLOGIA/requisitos-tempo.tex",
+    "position": 3420,
+    "line": 43,
+    "column": 421,
+    "selectedText": ".",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afdfe6f369865f771e586e4",
+        "content": "aqui seria bom dizer algo como \"We assume these operations can be done in parallel to the inversions performed by the developed unit, in a pipeline.\"",
+        "timestamp": 1795030639657,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "edited_at": 1795030651497,
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 38,
+      "endLine": 44,
+      "before": [
+        "\\end{tabular}",
+        "\\vspace{4pt}",
+        "\\legend{Source: the author.}",
+        "\\end{table}",
+        ""
+      ],
+      "line": "The hardware architectures in this work aim to meet this throughput limit under each test condition. The following are outside the scope: the delay between the arrival of a data symbol and its equalization; the throughput of the links between the DUs; and the other matrix inversions required by the BCD-MMSE algorithm, which the simulator performs using floating-point arithmetic (Section~\\ref{subsubsec:simul-inversa}). The delay encompasses both the time spent waiting for samples and the latency of each inversion (i.e., the time elapsed from the start to the completion of an inversion).",
+      "after": [
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afd9af0cb88f94da7000001",
+    "docId": "6af20649737291238b3d8a85",
+    "path": "chapters/METODOLOGIA/setup-hardware.tex",
+    "position": 655,
+    "line": 11,
+    "column": 26,
+    "selectedText": "described",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afd9af0baa8572e9e2f3ee5",
+        "content": "talvez colocar \"hand written by the author\" para enfatizar que essa parte não é AI-generated?",
+        "timestamp": 1795005168745,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 6,
+      "endLine": 16,
+      "before": [
+        "%   hardware/cholesky_hardware_diretivas*/LEIAME.md; acompanhamento_experimentos.csv",
+        "",
+        "% ---------------------------------------------------------------------",
+        "\\subsection{\\texorpdfstring{Tools and target device}{Tools and target device}}\\label{subsec:hw-ferramentas}",
+        "% ---------------------------------------------------------------------"
+      ],
+      "line": "The inversion module was described in C++ and synthesized in Vitis HLS 2026.1. Vitis HLS generates the module's RTL. Then, the RTL was synthesized, placed, and routed in Vivado 2023.2. The target device is the AMD Alveo U50 board, with the XCU50-FSVH2104-2-E FPGA. All circuits use a clock frequency of 100 MHz, or a period of 10 ns.",
+      "after": [
+        "",
+        "In Vivado, the inversion module is synthesized and implemented alone, as the top-level design, without any other surrounding board logic. The flow performs synthesis, optimization, placement, physical optimization, and routing. The only timing constraint is the clock period, and the paths entering and exiting the module's ports are not constrained. Thus, the resource, timing, and power figures for this work are only for the module and come from the routed design in Vivado 2023.2.",
+        "",
+        "Before the Vivado workflow, each version went through the Vitis HLS C synthesis. A version only went to Vivado if the HLS estimate fit within the FPGA: a maximum of 5,952 DSP blocks and a maximum of 90\\% of the LUTs.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6afd90c5f7d8ce398c000001",
+    "docId": "6af2108c7d7d5adceef442a3",
+    "path": "chapters/METODOLOGIA/simulacao.tex",
+    "position": 2016,
+    "line": 17,
+    "column": 1,
+    "selectedText": "\\begin{figure}[!ht]\n\\caption{Simulation flow: QuaDRiGa channels, Python simulator and fixed-point inverse.}\n\\label{fig:fluxo_simulacao}\n\\vspace{4pt} % a classe zera o espaço entre a caption e a figura\n\\centering\n\\includegraphics{Images/FLUXO/simulacao_a.pdf}\n\\vspace{4pt}\n\\legend{Source: the author.}\n\\end{figure}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afd90c633846f229dddd3ec",
+        "content": "não entendi muito bem aquele \"next realization\" ali.. aquilo está fechando for? se sim, não me parece muito intuitivo estar escrito \"next realization\" ali, aquilo meio que um \"continue\" do C.",
+        "timestamp": 1795002566307,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 12,
+      "endLine": 22,
+      "before": [
+        "%     (lmmse, zero_forcing, bdac_mmse, bcd_mmse_path); Ledoit-Wolf: dbp_sim/m5_noise.py:162-168",
+        "%   inversa em ponto fixo: dbp_sim/hls_inverse.py (usada nos resultados de SER,",
+        "%     varredura_formatos.py, bcd_inverse=\"hls\") e dbp_sim/hw_inverse.py (modelo em Python)",
+        "% Conteúdo vem de constraints/diagramas/fluxo_simulador.puml; estrutura em caixas do",
+        "% rascunho constraints/diagramas/metodologia.svg."
+      ],
+      "line": "\\begin{figure}[!ht]",
+      "after": [
+        "\\caption{Simulation flow: QuaDRiGa channels, Python simulator and fixed-point inverse.}",
+        "\\label{fig:fluxo_simulacao}",
+        "\\vspace{4pt} % a classe zera o espaço entre a caption e a figura",
+        "\\centering",
+        "\\includegraphics{Images/FLUXO/simulacao_a.pdf}"
+      ]
+    }
+  },
+  {
+    "threadId": "6afd945ff3043d11a3000001",
+    "docId": "6af2108c7d7d5adceef442a3",
+    "path": "chapters/METODOLOGIA/simulacao.tex",
+    "position": 5764,
+    "line": 43,
+    "column": 676,
+    "selectedText": "The ZF does not utilize the noise samples $\\mathbf{n}^i$",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6afd945f369865f771e56779",
+        "content": "não entendi isso: o ZF é uma simulação sem ruído?",
+        "timestamp": 1795003487982,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 38,
+      "endLine": 48,
+      "before": [
+        "%   curvas_qpsk_256 (grupos 2 e 3) e curvas_qpsk_128 (grupo 1), referencia_qpsk_256.py;",
+        "%   em -10 dB: quase todo LMMSE do grupo 1 e só 1E (TDLA30-5/10) do BCD-MMSE; grupos 2 e 3",
+        "%   todas as curvas de LMMSE e BCD-MMSE.",
+        "The Python simulator runs two nested loops (Figure~\\ref{fig:fluxo_python}). The outer loop iterates through the 100 realizations, while the inner loop iterates through the SNR points. The SNR points range from $-10$ to $10$~dB, with a step of $2$~dB. These points form the SNR grid. With QPSK, the grid starts at $-20$~dB, because at $-10$~dB several curves are already at $\\mathrm{SER} \\leq 10^{-2}$, the point used to compare the equalizers and the formats (Section~\\ref{subsec:aumento-snr}). For each realization, the simulator takes $\\mathbf{H}$ and $\\overline{\\mathbf{H}}$ corresponding to that realization and uses these channels across all SNR points. Each point on the SER curves represents the average over the 100 realizations. This is a Monte Carlo simulation, as in \\cite{zhuang2025}: the SER (Section~\\ref{subsubsec:ser}) is estimated by the fraction of erroneous symbols across many random draws of the channel, noise, and symbols.",
+        ""
+      ],
+      "line": "At each SNR point, the simulator constructs the noise covariance matrix based on $\\overline{\\mathbf{H}}$, the IoTh (interference-over-thermal), and the SNR. It then generates $N$ noise samples, $\\mathbf{n}^i$ (Section~\\ref{subsubsec:estimacao-R}). It also generates 480 data symbols for each UE, along with the noise associated with these symbols. Based on this, the equalizers are calculated. The channel remains constant within the coherence block (Section~\\ref{subsec:bloco-coerencia}); therefore, each equalizer is computed once and applied to all 480 symbols. The BCD-MMSE is compared against two centralized equalizers, the LMMSE and the ZF, which serve as benchmarks. The ZF does not utilize the noise samples $\\mathbf{n}^i$. In contrast, both the LMMSE and the BCD-MMSE employ these samples to estimate the noise covariance (Section~\\ref{subsubsec:condicionamento-R}). This estimate is always subjected to Ledoit-Wolf shrinkage (Section~\\ref{subsubsec:condicionamento-R}) before being used, even in cases where the estimate is already invertible.",
+      "after": [
+        "",
+        "In the LMMSE, this adjustment is applied to the estimate $\\hat{\\mathbf{R}}$ corresponding to all $M$ antennas. In the BCD-MMSE, each DU performs the adjustment on its own block, $\\hat{\\mathbf{R}}_{cc}$, using only the samples from its $M_c$ antennas. Consequently, no DU requires access to the samples from any other DU. The adjusted block forms the matrix $\\mathbf{G}_c$ (Section~\\ref{subsec:bcd}). In the reference version of the BCD-MMSE, this matrix is inverted using 64-bit floating-point arithmetic; alternatively, it can be inverted using fixed-point arithmetic (Section~\\ref{subsubsec:simul-inversa}).",
+        "",
+        "",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b0092334edd71635c000001",
+    "docId": "6afb3e28e513819da82c3ca1",
+    "path": "chapters/NOTA-SOBRE-IA.tex",
+    "position": 1465,
+    "line": 15,
+    "column": 78,
+    "selectedText": "rramentas, e não da resposta do assistente.}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b0092335b170c4a5c4f3926",
+        "content": "importante acrescentar ao fim algo na linha de: Em todos os casos, a autora revisou os artefatos e textos produzidos pelo assistente e se responsabiliza inteiramente por estes produtos.",
+        "timestamp": 1795199539635,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 10,
+      "endLine": 16,
+      "before": [
+        "\\textcolor{red}{A autora escolheu o tema, o escopo e o artigo base. Ela definiu os critérios de escolha dos formatos, a FPGA alvo e as arquiteturas testadas, fez as rodadas no servidor e decidiu o que cada figura conclui. A versão final do texto é dela.}",
+        "",
+        "\\textcolor{red}{O assistente errou em alguns pontos, como propor referências de memória e calcular um tempo com a média errada de ciclos. A autora corrigiu esses erros na revisão. Por isso, só entram citações de documentos que a autora tem.}",
+        "",
+        "% CONFERIR: a autora confirma se essa frase vale para todo o texto."
+      ],
+      "line": "\\textcolor{red}{Os números do texto vêm dos relatórios e dos registros das ferramentas, e não da resposta do assistente.}",
+      "after": [
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b008e8ef98e955003000001",
+    "docId": "6af2063134cd2d614271e860",
+    "path": "chapters/RESULTADOS/compromisso.tex",
+    "position": 632,
+    "line": 9,
+    "column": 61,
+    "selectedText": "the worst SNR increase",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b008e8e369865f771e61465",
+        "content": "não entendi isso aqui - ainda: em geral, vai ser mais importante (e justo) considerar os tradeoffs entre energia e SNR do que potência e SNR",
+        "timestamp": 1795198606927,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 4,
+      "endLine": 14,
+      "before": [
+        "% FONTE: analise_potencia_qualidade.py (quadrantes_cond_g1/_g3 e _data.csv,",
+        "%   tabela_escolha_condicao, escolha_cond). Qualidade: grade_inteira.py (mesmos dados das barras",
+        "%   e curvas). TDLA30-10 usa a simulação da TDLA30-5. Pior caso A-H = pior caso E-H em todos os",
+        "%   pontos dos grupos 1 e 3 (conferido no script). G1, <26,12>, TDLA30-5 e -10: 0,104 dB.",
+        "\\begin{table}[htbp]"
+      ],
+      "line": "\\caption[Best trade-off format in each test condition, with the worst SNR increase, in dB, and the dynamic power, in W.]{Best trade-off format in each test condition, with the worst SNR increase, in dB, and the dynamic power, in W. Mode \\texttt{AP\\_RND\\_ZERO}/\\texttt{AP\\_WRAP}. --: no format that fits in the FPGA stays within the limit.}",
+      "after": [
+        "\\label{tab:escolha-condicao}",
+        "\\vspace{4pt}",
+        "\\centering",
+        "\\scriptsize",
+        "\\renewcommand{\\arraystretch}{1.2}"
+      ]
+    }
+  },
+  {
+    "threadId": "6b008f83d5c3aa1442000001",
+    "docId": "6af2063134cd2d614271e860",
+    "path": "chapters/RESULTADOS/compromisso.tex",
+    "position": 5323,
+    "line": 69,
+    "column": 556,
+    "selectedText": "Therefore, in some conditions, a smaller format is sufficient.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b008f84baa8572e9e2fec1c",
+        "content": "não entendi isso aqui",
+        "timestamp": 1795198852059,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 64,
+      "endLine": 74,
+      "before": [
+        "\\includegraphics[width=\\textwidth]{Images/RESULTADOS/quadrantes_cond_g3.pdf}",
+        "\\vspace{4pt}",
+        "\\legend{Source: the author.}",
+        "\\end{figure}",
+        ""
+      ],
+      "line": "This section concludes the analysis of formats and hardware with the trade-off between the SNR increase, power, and energy. An SNR increase requires each UE to transmit more energy per symbol (Section~\\ref{subsec:aumento-snr}). To reduce this increase, the format needs more bits, and the FPGA consumes more power and energy per inversion. Section~\\ref{sec:resultados-formato} selected one format per group, which meets all test conditions. Here, the analysis is performed on each test condition within the group, with the architecture of that condition. Therefore, in some conditions, a smaller format is sufficient.",
+      "after": [
+        "",
+        "Figures~\\ref{fig:quadrantes-g1} and \\ref{fig:quadrantes-g3} show this relationship for groups 1 and 3. Group 2 is not included because the optimized architectures were not implemented in $32 \\times 32$ (Section~\\ref{sec:testes-hardware}). Each point represents a format in a test condition. The x-axis shows the worst-case SNR increase among the configurations with the IoTh of the column: 10~dB, or 20~dB, the extreme case. The y-axis represents dynamic power (top) and energy per inversion (bottom), both on a logarithmic scale. The horizontal line indicates the average static power, while the colored background regions mark the 0.1~dB and 3~dB limits.",
+        "",
+        "The circles mark the format with the lowest power within each limit (Table~\\ref{tab:escolha-condicao}). Since the x-axis represents the worst-case configuration, this format meets all configurations with that IoTh. In TDLB100-400 of group 3, with an IoTh of 20~dB, no format that fits in the FPGA stays within 0.1~dB.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6aff24e1aaef357eae000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 4135,
+    "line": 37,
+    "column": 98,
+    "selectedText": "dB.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6aff250a17aa70f0837ae959",
+        "content": "(configurations \"X\" and \"Y\")",
+        "timestamp": 1795106058698,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 32,
+      "endLine": 42,
+      "before": [
+        "\\legend{Source: the author.}",
+        "\\end{figure}",
+        "",
+        "Figure~\\ref{fig:descentralizacao-grupo1} \\textcolor{red}{shows where the SNR increase of BCD-MMSE over LMMSE comes from}, at an $\\mathrm{SER}$ of $10^{-2}$. The yellow bar represents the \\textcolor{red}{increase} resulting from decentralization, that is, the difference between LMMSE and floating-point BCD-MMSE. The blue bar represents the \\textcolor{red}{increase} attributed to the numerical format, that is, the difference between floating-point and fixed-point BCD-MMSE, with the specific value indicated at the end of the bar. Each plot corresponds to \\textcolor{red}{one of the formats chosen above}, and each bar represents a specific configuration. For each configuration, the test condition under which the format yields the greatest SNR increase was selected, and the name of this condition is labeled next to the bar.",
+        ""
+      ],
+      "line": "\\textcolor{red}{In group 1, decentralization causes the largest SNR increase when the IoTh is 20~dB. With 16-QAM, the increase due to the numerical format is negligible. In contrast, with QPSK, this increase is significantly larger, reaching 2.6~dB for the $\\langle 18,8\\rangle$ format, which exceeds the increase due to decentralization.} Thus, QPSK appears to be more sensitive to the approximations introduced by the numerical format than 16-QAM.",
+      "after": [
+        "",
+        "\\FloatBarrier",
+        "\\subsection{\\texorpdfstring{Group 2: $M = 256$, $C = 8$}{Group 2: M = 256, C = 8}}\\label{subsec:resultados-grupo2}\\label{subsubsec:mapa-grupo2}",
+        "",
+        "\\begin{figure}[!htb]"
+      ]
+    }
+  },
+  {
+    "threadId": "6aff299dec1c203ba6000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 4378,
+    "line": 37,
+    "column": 341,
+    "selectedText": "Thus, QPSK appears to be more sensitive to the approximations introduced by the numerical format than 16-QAM.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6aff29c6736cf275aa67ae20",
+        "content": "isso é *bem* contraintuitivo.. é importante explicar o porquê, ou pelo menos levantar uma hipótese",
+        "timestamp": 1795107270851,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 32,
+      "endLine": 42,
+      "before": [
+        "\\legend{Source: the author.}",
+        "\\end{figure}",
+        "",
+        "Figure~\\ref{fig:descentralizacao-grupo1} \\textcolor{red}{shows where the SNR increase of BCD-MMSE over LMMSE comes from}, at an $\\mathrm{SER}$ of $10^{-2}$. The yellow bar represents the \\textcolor{red}{increase} resulting from decentralization, that is, the difference between LMMSE and floating-point BCD-MMSE. The blue bar represents the \\textcolor{red}{increase} attributed to the numerical format, that is, the difference between floating-point and fixed-point BCD-MMSE, with the specific value indicated at the end of the bar. Each plot corresponds to \\textcolor{red}{one of the formats chosen above}, and each bar represents a specific configuration. For each configuration, the test condition under which the format yields the greatest SNR increase was selected, and the name of this condition is labeled next to the bar.",
+        ""
+      ],
+      "line": "\\textcolor{red}{In group 1, decentralization causes the largest SNR increase when the IoTh is 20~dB. With 16-QAM, the increase due to the numerical format is negligible. In contrast, with QPSK, this increase is significantly larger, reaching 2.6~dB for the $\\langle 18,8\\rangle$ format, which exceeds the increase due to decentralization.} Thus, QPSK appears to be more sensitive to the approximations introduced by the numerical format than 16-QAM.",
+      "after": [
+        "",
+        "\\FloatBarrier",
+        "\\subsection{\\texorpdfstring{Group 2: $M = 256$, $C = 8$}{Group 2: M = 256, C = 8}}\\label{subsec:resultados-grupo2}\\label{subsubsec:mapa-grupo2}",
+        "",
+        "\\begin{figure}[!htb]"
+      ]
+    }
+  },
+  {
+    "threadId": "6aff2fbeee8f633ab9000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 13384,
+    "line": 131,
+    "column": 1,
+    "selectedText": "\\FloatBarrier",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6aff2fe716d4f86dd413dbca",
+        "content": "pra que isso?",
+        "timestamp": 1795108839367,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 126,
+      "endLine": 136,
+      "before": [
+        "\\legend{Source: the author.}",
+        "\\end{table}",
+        "",
+        "Table~\\ref{tab:formatos-escolhidos} presents the formats selected across the three groups, both with all configurations and with only the 10~dB IoTh configurations (A through D). Excluding the 20~dB IoTh configurations results in formats that are 2 to 6 bits smaller, with the 0.1~dB format becoming $\\langle 24,12\\rangle$ in all three groups. Since some formats overlap, there are three distinct formats to synthesize for groups 1 and 3, and four for group 2 (Section~\\ref{sec:resultados-hardware}).",
+        ""
+      ],
+      "line": "\\FloatBarrier",
+      "after": [
+        "\\section{\\texorpdfstring{Mobility profiles}{Mobility profiles}}\\label{subsec:perfis-mobilidade}",
+        "Figure~\\ref{fig:perfis-formatos} shows the largest SNR increase of each of the 10 validated formats (Section~\\ref{subsec:validacao}) for each mobility profile (Section~\\ref{subsec:setup_condicoes}). Each row represents a group. The first column includes all configurations, while the second column is restricted to those with an IoTh of 10~dB. Each data point represents the largest increase among the configurations within that column under the conditions of the respective profile. The triangle on the right-hand side marks the first format, from top to bottom, that falls within each limit; this is the format selected for that profile.",
+        "",
+        "For most formats, the data points for both profiles are close to one another, with the high-mobility point appearing either to the right of or directly atop the low-mobility point. In other words, the mobility profile has little impact on the SNR increase. However, under low-mobility conditions alone, the selected format would be 2 bits smaller in two instances: $\\langle 26,12\\rangle$ instead of $\\langle 28,14\\rangle$ in group 2, with the 3~dB limit, and $\\langle 28,14\\rangle$ instead of $\\langle 30,14\\rangle$ in group 3, with the 0.1~dB limit. In all other cases, both profiles select the same format. Consequently, the high-mobility profile determines the format. Appendix~\\ref{ap:perfis-configuracao} presents the SNR increase of each configuration with the selected formats.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b007f2d47715b3481000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 13636,
+    "line": 133,
+    "column": 143,
+    "selectedText": "mobility profile",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b007f2d369865f771e61038",
+        "content": "mobility profile é um bom nome, só lembra que antes tu chamou isso de test condition, se não me engano",
+        "timestamp": 1795194669862,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 128,
+      "endLine": 138,
+      "before": [
+        "",
+        "Table~\\ref{tab:formatos-escolhidos} presents the formats selected across the three groups, both with all configurations and with only the 10~dB IoTh configurations (A through D). Excluding the 20~dB IoTh configurations results in formats that are 2 to 6 bits smaller, with the 0.1~dB format becoming $\\langle 24,12\\rangle$ in all three groups. Since some formats overlap, there are three distinct formats to synthesize for groups 1 and 3, and four for group 2 (Section~\\ref{sec:resultados-hardware}).",
+        "",
+        "\\FloatBarrier",
+        "\\section{\\texorpdfstring{Mobility profiles}{Mobility profiles}}\\label{subsec:perfis-mobilidade}"
+      ],
+      "line": "Figure~\\ref{fig:perfis-formatos} shows the largest SNR increase of each of the 10 validated formats (Section~\\ref{subsec:validacao}) for each mobility profile (Section~\\ref{subsec:setup_condicoes}). Each row represents a group. The first column includes all configurations, while the second column is restricted to those with an IoTh of 10~dB. Each data point represents the largest increase among the configurations within that column under the conditions of the respective profile. The triangle on the right-hand side marks the first format, from top to bottom, that falls within each limit; this is the format selected for that profile.",
+      "after": [
+        "",
+        "For most formats, the data points for both profiles are close to one another, with the high-mobility point appearing either to the right of or directly atop the low-mobility point. In other words, the mobility profile has little impact on the SNR increase. However, under low-mobility conditions alone, the selected format would be 2 bits smaller in two instances: $\\langle 26,12\\rangle$ instead of $\\langle 28,14\\rangle$ in group 2, with the 3~dB limit, and $\\langle 28,14\\rangle$ instead of $\\langle 30,14\\rangle$ in group 3, with the 0.1~dB limit. In all other cases, both profiles select the same format. Consequently, the high-mobility profile determines the format. Appendix~\\ref{ap:perfis-configuracao} presents the SNR increase of each configuration with the selected formats.",
+        "",
+        "\\begin{figure}[!htb]",
+        "\\caption[Largest SNR increase, in dB, of each format in each mobility profile, in the three groups.]{Largest SNR increase, in dB, of each format in each mobility profile, in the three groups. Each format uses the same mode as in the SNR increase maps (Figures~\\ref{fig:mapa-grupo1} to \\ref{fig:mapa-grupo3}): RND\\_ZERO/WRAP, except $\\langle 14,6\\rangle$ in RND\\_MIN\\_INF/SAT in group 1 and RND\\_MIN\\_INF/WRAP in groups 2 and 3; $\\langle 16,6\\rangle$ in TRN/SAT in group 1 and RND\\_MIN\\_INF/WRAP in groups 2 and 3; $\\langle 18,8\\rangle$ in TRN/SAT in group 3; and $\\langle 30,14\\rangle$ in TRN/SAT in all three groups.}"
+      ]
+    }
+  },
+  {
+    "threadId": "6b008125a9853d6062000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 16163,
+    "line": 150,
+    "column": 291,
+    "selectedText": "Each row of plots represents a group of configurations",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b008126369865f771e610a7",
+        "content": "por que o grupo 3 está antes do 2?",
+        "timestamp": 1795195174214,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 145,
+      "endLine": 155,
+      "before": [
+        "\\end{figure}",
+        "",
+        "\\FloatBarrier",
+        "\\section{\\texorpdfstring{SER curves}{SER curves}}\\label{sec:resultados-curvas}\\label{subsec:curvas-ser}",
+        ""
+      ],
+      "line": "Figure~\\ref{fig:curvas-ser-grupos} shows the SER curves for LMMSE and ZF (in floating-point) and BCD-MMSE (in fixed-point) for the TDLC300-100 channel model. The analysis here is not limited to the $\\mathrm{SER} = 10^{-2}$ point; the curves cover the entire SNR range, from $-20$ to 10~dB. Each row of plots represents a group of configurations, while each column corresponds to a criterion from Table~\\ref{tab:formatos-escolhidos}; the BCD-MMSE in each plot utilizes the format selected for that specific case. The first two columns include all configurations, the first with the 3~dB format and the second with the 0.1~dB format. The third column contains only the configurations with an IoTh of 10~dB, using the 3~dB format selected for them. The ZF performance remains unchanged by the format and is included in the plots as a worst-case reference; for the sake of clarity, it is omitted from the third column. The curves for the remaining test conditions can be found in Appendix~\\ref{ap:curvas-ser}.",
+      "after": [
+        "",
+        "\\begin{figure}[!htb]",
+        "\\caption{SER curves of the three groups in TDLC300-100, with the chosen formats.}",
+        "\\label{fig:curvas-ser-grupos}",
+        "\\vspace{4pt}"
+      ]
+    }
+  },
+  {
+    "threadId": "6b00838bc656d10dcd000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 19120,
+    "line": 168,
+    "column": 1,
+    "selectedText": "\\textcolor{red}{The LMMSE in the plots is in floating point. So the plots do not show how the IoTh changes the LMMSE compared with the BCD-MMSE. However, the groups with smaller clusters} (groups 1 and 3) exhibit the greatest gap between the BCD-MMSE curves for IoTh values of 10~dB and 20~dB, particularly when using 16-QAM (Figures~\\ref{fig:descentralizacao-grupo1} and \\ref{fig:descentralizacao-grupo3}).",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b00838cbaa8572e9e2fe8b8",
+        "content": "não entendi o que tu tá querendo dizer nesse parágrafo",
+        "timestamp": 1795195788087,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 163,
+      "endLine": 173,
+      "before": [
+        "",
+        "In floating-point arithmetic, QPSK operates at lower SNRs than 16-QAM (Section~\\ref{subsec:simbolos}). In fixed-point arithmetic, however, some QPSK curves begin with a plateau: a flat, horizontal segment at the top of the plot, corresponding to an SER of 0.75. An SER of 0.75 implies that 3 out of every 4 symbols are incorrect, equivalent to a random selection among the 4 constellation points. Within this plateau, increasing the SNR does not improve the SER; beyond it, the curve drops sharply.",
+        "",
+        "With a greater number of integer bits, the plateau ends at a lower SNR. In groups 1 and 2, the 0.1~dB format differs from the 3~dB format only by having more fractional bits, and the plateau ends at the same SNR. In group 3, the $\\langle 30,14\\rangle$ format has two more integer bits than the $\\langle 24,12\\rangle$ format, causing the plateau to end earlier. 16-QAM, on the other hand, operates at higher SNRs and shows almost no variation across the different formats. The exception is the $\\langle 18,8\\rangle$ format, where the 16-QAM curve begins above the floating-point curve, near $\\mathrm{SER} = 1$, and quickly converges with it.",
+        ""
+      ],
+      "line": "\\textcolor{red}{The LMMSE in the plots is in floating point. So the plots do not show how the IoTh changes the LMMSE compared with the BCD-MMSE. However, the groups with smaller clusters} (groups 1 and 3) exhibit the greatest gap between the BCD-MMSE curves for IoTh values of 10~dB and 20~dB, particularly when using 16-QAM (Figures~\\ref{fig:descentralizacao-grupo1} and \\ref{fig:descentralizacao-grupo3}).",
+      "after": [
+        "",
+        "Considering only the configurations with an IoTh of 10~dB, the 3~dB formats feature 2 to 6 fewer bits (Table~\\ref{tab:formatos-escolhidos}). As shown in the third column, these formats remain within the 3~dB increase threshold at an $\\mathrm{SER}$ of $10^{-2}$. \\textcolor{red}{No target was set for the SNR increase of BCD-MMSE over LMMSE. In the third column, this increase exceeds 3~dB only with QPSK in group 1, with $\\langle 18,8\\rangle$ (Figure~\\ref{fig:descentralizacao-grupo1}). With all configurations, it also exceeds 3~dB with QPSK in 3G and 3H with $\\langle 24,12\\rangle$, and, marginally, in 1H with $\\langle 26,12\\rangle$ (Figures~\\ref{fig:descentralizacao-grupo1} and \\ref{fig:descentralizacao-grupo3}).} ",
+        "",
+        "QPSK is the modulation scheme most sensitive to the number of bits because it operates at lower SNRs, where the elements of $\\mathbf G_c$ are larger (Section~\\ref{subsec:resultados-grupo2}). When these elements exceed the capacity of the chosen format, an integer overflow occurs, which results in a plateau (Section~\\ref{subsubsec:ponto-fixo}). For instance, the $\\langle 18,8\\rangle$ format can store values up to 128. In the 1C case, the median of the largest element in $\\mathbf G_c$ ranges from 70 at $-6$~dB to 164 at $-10$~dB. It exceeds the limit for nearly all matrices at $-10$~dB, while it does not exceed the limit for any matrix at $-6$~dB. It is within this range that the QPSK curve emerges from the plateau. Although the modulation scheme itself does not alter $\\mathbf G_c$ (Section~\\ref{subsec:hw-matrizes}), 16-QAM operates at higher SNRs, where such overflows occur less frequently.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b008474408fdb2024000001",
+    "docId": "6af20635c3208b074a94adb0",
+    "path": "chapters/RESULTADOS/formatos.tex",
+    "position": 19807,
+    "line": 170,
+    "column": 279,
+    "selectedText": "No target was set for the SNR increase of BCD-MMSE over LMMSE.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b0084741000f4b371d15f53",
+        "content": "como tu poderia colocar um alvo para isso, se tu não controla nada no BCD-MMSE float? Eu acho que essa comparação com o LMMSE nessas figuras (incluindo a discussão textual) só acrescentou ruído. Tu já mediu como essas perdas se acumulam nas figuras 5.2, 5.4 e 5.6. Como tu tá partindo do BCD-MMSE float, ele é a tua referência principal.",
+        "timestamp": 1795196020936,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 165,
+      "endLine": 173,
+      "before": [
+        "",
+        "With a greater number of integer bits, the plateau ends at a lower SNR. In groups 1 and 2, the 0.1~dB format differs from the 3~dB format only by having more fractional bits, and the plateau ends at the same SNR. In group 3, the $\\langle 30,14\\rangle$ format has two more integer bits than the $\\langle 24,12\\rangle$ format, causing the plateau to end earlier. 16-QAM, on the other hand, operates at higher SNRs and shows almost no variation across the different formats. The exception is the $\\langle 18,8\\rangle$ format, where the 16-QAM curve begins above the floating-point curve, near $\\mathrm{SER} = 1$, and quickly converges with it.",
+        "",
+        "\\textcolor{red}{The LMMSE in the plots is in floating point. So the plots do not show how the IoTh changes the LMMSE compared with the BCD-MMSE. However, the groups with smaller clusters} (groups 1 and 3) exhibit the greatest gap between the BCD-MMSE curves for IoTh values of 10~dB and 20~dB, particularly when using 16-QAM (Figures~\\ref{fig:descentralizacao-grupo1} and \\ref{fig:descentralizacao-grupo3}).",
+        ""
+      ],
+      "line": "Considering only the configurations with an IoTh of 10~dB, the 3~dB formats feature 2 to 6 fewer bits (Table~\\ref{tab:formatos-escolhidos}). As shown in the third column, these formats remain within the 3~dB increase threshold at an $\\mathrm{SER}$ of $10^{-2}$. \\textcolor{red}{No target was set for the SNR increase of BCD-MMSE over LMMSE. In the third column, this increase exceeds 3~dB only with QPSK in group 1, with $\\langle 18,8\\rangle$ (Figure~\\ref{fig:descentralizacao-grupo1}). With all configurations, it also exceeds 3~dB with QPSK in 3G and 3H with $\\langle 24,12\\rangle$, and, marginally, in 1H with $\\langle 26,12\\rangle$ (Figures~\\ref{fig:descentralizacao-grupo1} and \\ref{fig:descentralizacao-grupo3}).} ",
+      "after": [
+        "",
+        "QPSK is the modulation scheme most sensitive to the number of bits because it operates at lower SNRs, where the elements of $\\mathbf G_c$ are larger (Section~\\ref{subsec:resultados-grupo2}). When these elements exceed the capacity of the chosen format, an integer overflow occurs, which results in a plateau (Section~\\ref{subsubsec:ponto-fixo}). For instance, the $\\langle 18,8\\rangle$ format can store values up to 128. In the 1C case, the median of the largest element in $\\mathbf G_c$ ranges from 70 at $-6$~dB to 164 at $-10$~dB. It exceeds the limit for nearly all matrices at $-10$~dB, while it does not exceed the limit for any matrix at $-6$~dB. It is within this range that the QPSK curve emerges from the plateau. Although the modulation scheme itself does not alter $\\mathbf G_c$ (Section~\\ref{subsec:hw-matrizes}), 16-QAM operates at higher SNRs, where such overflows occur less frequently.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b0089093e42f234aa000001",
+    "docId": "6af20638820d792999ee16ef",
+    "path": "chapters/RESULTADOS/hardware.tex",
+    "position": 1027,
+    "line": 12,
+    "column": 1,
+    "selectedText": "\\subsection{\\texorpdfstring{Resources per architecture}{Resources per architecture}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b0089095b170c4a5c4f36b2",
+        "content": "tá estranha essa seção pq ela se chama resources per architecture mas tu discute também o througput. Eu chamaria ela de \"optimization impact on resource use and throughput\" - colocaria figuras. Essa discussão puramente textual fica difícil de acompanhar. Para throughput, teria que colocar uma figura em escala log, pq os valores são muito diferentes, e aí umas linhas horizontais marcando as constraints the throughput de cada mobility profile. A figura 5.9 está boa para essa seção também, não entendi por que tem a seção 5.5.2 separada da 5.5.1",
+        "timestamp": 1795197193869,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 7,
+      "endLine": 17,
+      "before": [
+        "",
+        "This section shows the implementation results of the architectures on the XCU50 at 100 MHz.",
+        "",
+        "Section~\\ref{subsec:resultados-recursos-arquitetura} analyzes the resources of each architecture, in the same order as Section~\\ref{subsec:hw-arquiteturas}. Section~\\ref{subsec:resultados-recursos} compares the architectures and formats and shows which resource each one uses most. Section~\\ref{subsec:resultados-etapas} shows which inversion steps dominate the resources and the dynamic power, and Section~\\ref{subsec:resultados-potencia} shows the power and energy per inversion.",
+        ""
+      ],
+      "line": "\\subsection{\\texorpdfstring{Resources per architecture}{Resources per architecture}}\\label{subsec:resultados-recursos-arquitetura}",
+      "after": [
+        "In the following sections, each architecture is compared with the version without optimization, in the same format. Since the growth of a given resource varies slightly from one format to another, the text provides the minimum and maximum growth observed across the formats. The specific values for each format can be found in Appendix~\\ref{ap:recursos}: Table~\\ref{tab:recursos-sem-otimizacao} presents the data for the version without optimizations, while Table~\\ref{tab:recursos} covers the optimized architectures.",
+        "",
+        "\\subsubsection{\\texorpdfstring{Loop pipelining}{Loop pipelining}}\\label{subsubsec:resultados-pipeline-lacos}",
+        "% FONTE: hardware/relatorios_hls/<fmt>_{sem_otimizacao,9090}; 4 divisores nas duas versões",
+        "%   em todos os formatos; 60 (<18,8>) a 96 (<30,14>) estágios. Divisores (Vivado, util_hierarquica.rpt"
+      ]
+    }
+  },
+  {
+    "threadId": "6b0089c87dfbb0315d000001",
+    "docId": "6af20638820d792999ee16ef",
+    "path": "chapters/RESULTADOS/hardware.tex",
+    "position": 10699,
+    "line": 82,
+    "column": 1,
+    "selectedText": "Resource usage follows the architecture, not the cycle limit.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b0089c95b170c4a5c4f3700",
+        "content": "frase de claude... e não é inteiramente verdade, existe uma relação entre recurso e cycle limit, só não é linear",
+        "timestamp": 1795197385044,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 77,
+      "endLine": 87,
+      "before": [
+        "\\legend{Source: the author.}",
+        "\\end{figure}",
+        "",
+        "% FONTE: tab:recurso-mais-usado (Apêndice). Ocupação formato a formato: TDLA30-5 -> TDLA30-10",
+        "%   igual (até 0,1 ponto); TDLA30-10 -> TDLA30-75, 1,4 a 2,5 vezes; TDLA30-300 -> TDLB100-400, 1,7 a 2,0 vezes."
+      ],
+      "line": "Resource usage follows the architecture, not the cycle limit. Moving from TDLA30-5 to TDLA30-10, the limit is halved, while usage remains nearly the same. From TDLA30-10 to TDLA30-75, the limit decreases by a factor of 7.5, whereas usage increases by only 1.4 to 2.5 times. From TDLA30-300 to TDLB100-400, the limit is only 1.3 times smaller, while usage increases by 1.7 to 2.0 times.",
+      "after": [
+        "",
+        "In Table~\\ref{tab:recursos-faixa}, the interval between inversions remains below the cycle limit across all test conditions and \\textcolor{red}{all formats that fit in the FPGA}. In systolic arrays, this interval is the same in all formats, while in other architectures, it increases with the format. All designs meet the 100~MHz clock constraint, with the longest critical path measuring 9.74~ns in TDLB100-400. For the $32 \\times 32$ case, the unoptimized version uses roughly the same amount of resources as the $16 \\times 16$ version (Table~\\ref{tab:recursos-sem-otimizacao}, Appendix~\\ref{ap:recursos}); however, the interval is approximately 5 times longer.",
+        "",
+        "\\begin{table}[htbp]",
+        "\\caption[Shortest and longest critical path and interval between inversions of each architecture, across the formats.]{Shortest and longest critical path and interval between inversions of each architecture, across the formats. The test conditions use only the $16 \\times 16$ circuit (Section~\\ref{sec:testes-hardware}). The values of each format are in Appendix~\\ref{ap:recursos}.}"
+      ]
+    }
+  },
+  {
+    "threadId": "6b008a86741f890332000001",
+    "docId": "6af20638820d792999ee16ef",
+    "path": "chapters/RESULTADOS/hardware.tex",
+    "position": 11214,
+    "line": 84,
+    "column": 129,
+    "selectedText": "\\textcolor{red}{all formats that fit in the FPGA}. ",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b008a86369865f771e61332",
+        "content": "como se DSP estoura o limite na fig. 5.9 pro TDLB100-400?",
+        "timestamp": 1795197574698,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 79,
+      "endLine": 89,
+      "before": [
+        "",
+        "% FONTE: tab:recurso-mais-usado (Apêndice). Ocupação formato a formato: TDLA30-5 -> TDLA30-10",
+        "%   igual (até 0,1 ponto); TDLA30-10 -> TDLA30-75, 1,4 a 2,5 vezes; TDLA30-300 -> TDLB100-400, 1,7 a 2,0 vezes.",
+        "Resource usage follows the architecture, not the cycle limit. Moving from TDLA30-5 to TDLA30-10, the limit is halved, while usage remains nearly the same. From TDLA30-10 to TDLA30-75, the limit decreases by a factor of 7.5, whereas usage increases by only 1.4 to 2.5 times. From TDLA30-300 to TDLB100-400, the limit is only 1.3 times smaller, while usage increases by 1.7 to 2.0 times.",
+        ""
+      ],
+      "line": "In Table~\\ref{tab:recursos-faixa}, the interval between inversions remains below the cycle limit across all test conditions and \\textcolor{red}{all formats that fit in the FPGA}. In systolic arrays, this interval is the same in all formats, while in other architectures, it increases with the format. All designs meet the 100~MHz clock constraint, with the longest critical path measuring 9.74~ns in TDLB100-400. For the $32 \\times 32$ case, the unoptimized version uses roughly the same amount of resources as the $16 \\times 16$ version (Table~\\ref{tab:recursos-sem-otimizacao}, Appendix~\\ref{ap:recursos}); however, the interval is approximately 5 times longer.",
+      "after": [
+        "",
+        "\\begin{table}[htbp]",
+        "\\caption[Shortest and longest critical path and interval between inversions of each architecture, across the formats.]{Shortest and longest critical path and interval between inversions of each architecture, across the formats. The test conditions use only the $16 \\times 16$ circuit (Section~\\ref{sec:testes-hardware}). The values of each format are in Appendix~\\ref{ap:recursos}.}",
+        "\\label{tab:recursos-faixa}",
+        "\\vspace{4pt}"
+      ]
+    }
+  },
+  {
+    "threadId": "6b008c8022b38e7fa2000001",
+    "docId": "6af20638820d792999ee16ef",
+    "path": "chapters/RESULTADOS/hardware.tex",
+    "position": 21137,
+    "line": 191,
+    "column": 903,
+    "selectedText": "the energy to drop by half. When using batches and systolic arrays, the time per inversion decreases at roughly the same rate that power increases, \\textcolor{red}{so the four conditions have energies of the same order}",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b008c801000f4b371d161a6",
+        "content": "é muito interessante que as versões mais rápidas também consomem menos energia. Isso não é muito usual. Basicamente isso mostra que essas otimizações basicamente levaram a soluções mais eficientes: mais rápidas e gastando menos energia. Acho importante dar um certo destaque a isso nessa discussão",
+        "timestamp": 1795198080927,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 186,
+      "endLine": 196,
+      "before": [
+        "% FONTE: resultados_vivado_servidor.csv, formato a formato. Energia com lote 1,75 a 4,59 uJ;",
+        "%   TDLA30-5 / maior e menor com lote no mesmo formato: 5,7 a 8,8. TDLA30-5 / sem otimização:",
+        "%   potência 4,7-6,4, intervalo 3,6-4,5, energia 1,27-1,45 (10,69 x 8,28 uJ no <18,8>; 32,52 x",
+        "%   22,75 no <30,14>). TDLA30-10 / TDLA30-5: potência 1,28-1,38, intervalo 2,55-2,66, energia",
+        "%   0,50-0,54. Sem otimização 32x32 / 16x16: potência 1,08-1,13, energia 5,55-5,87."
+      ],
+      "line": "Figure~\\ref{fig:energia-inversao} shows the energy per inversion, and Table~\\ref{tab:energia-inversao} (Appendix~\\ref{ap:recursos}) provides the corresponding values. Energy is defined as the dynamic power multiplied by the time required for an inversion (Section~\\ref{subsec:hw-potencia}). Consequently, a technique that increases power will only reduce energy if the time per inversion decreases even more significantly. In TDLA30-5, compared to the version without optimizations, the pipelined dividers increase dynamic power by approximately a factor of 5, while the time per inversion decreases by only about a factor of 4. As a result, it consumes more energy than the unoptimized version across all formats. In TDLA30-10, resource utilization remains nearly unchanged relative to TDLA30-5 (Section~\\ref{subsec:resultados-recursos}); however, the dataflow reduces the time per inversion, causing the energy to drop by half. When using batches and systolic arrays, the time per inversion decreases at roughly the same rate that power increases, \\textcolor{red}{so the four conditions have energies of the same order}. For the $32 \\times 32$ case, the unoptimized version utilizes approximately the same amount of resources as the $16 \\times 16$ version; however, the time per inversion is longer, leading to an energy consumption approximately 6 times greater than that of the $16 \\times 16$ version.",
+      "after": [
+        "",
+        "% FONTE: potencia_recursos_lado_data.csv (dinamica_sobre_estatica_pct, ocupacao_pct).",
+        "%   Potência dinâmica: baixa mobilidade 0,151-0,868 W; alta 0,452-4,703 W; sistólicas >= 1,368 W,",
+        "%   outras <= 1,037 W. Dinâmica/estática: TDLA30-5 a TDLC300-100 7-46%; TDLA30-300 61-135%;",
+        "%   TDLB100-400 128-204%."
+      ]
+    }
+  },
+  {
+    "threadId": "6b00909a5dfd07629f000001",
+    "docId": "6af20633820d792999ee1194",
+    "path": "chapters/RESULTADOS/latencia-vazao.tex",
+    "position": 3084,
+    "line": 37,
+    "column": 1,
+    "selectedText": "The sample collection is set by the estimation method, not by the hardware (Section~\\ref{subsec:pipeline})",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b00909b1000f4b371d162a9",
+        "content": "não entendi (frase de claude, também)",
+        "timestamp": 1795199131309,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 32,
+      "endLine": 42,
+      "before": [
+        "\\end{tabular}",
+        "\\vspace{4pt}",
+        "\\legend{Source: the author, from the netlist simulation at 100~MHz.}",
+        "\\end{table}",
+        ""
+      ],
+      "line": "The sample collection is set by the estimation method, not by the hardware (Section~\\ref{subsec:pipeline}). With 48 DM-RS REs per PRB and per slot (Section~\\ref{subsubsec:disponibilidade-amostras}), it takes $\\lceil N/48 \\rceil$ slots, limited to $T_c$. In TDLA30-5 and TDLA30-10, the collection alone takes 2~ms, before any inversion.",
+      "after": [
+        "",
+        "The ITU-R expects that IMT-2020 can offer a latency of 1~ms over the air interface, which is the radio network's contribution to the time between sending and receiving a packet \\cite[pp.~13--14]{itu-m2083}. Processing at the BS is one part of this latency \\cite[Sec.~7.2.6 and Tab.~3]{itu-m2412}. Only in TDLA30-300 and TDLB100-400 is the delay below 1~ms. This delay also assumes that every slot carries the PUSCH, since the DM-RS is only transmitted together with it (Section~\\ref{subsec:simbolos}). In the n78 and n257 bands, which use TDD \\cite[Tabs.~5.2-1 and 5.2-2]{3gpp-ts38104}, only the uplink slots carry the PUSCH, and the collection takes longer or gathers fewer samples.",
+        "",
+        "Since all architectures meet the cycle limit (Section~\\ref{sec:resultados-hardware}), the whole block enters the module before $T_c$, and no queue forms. In TDLC300-100 and TDLA30-300, the last inversion of the block ends after $T_c$. This excess is a fixed delay, of about one batch latency, and it does not accumulate, because the next block enters the module on time. This holds for all formats.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b0093e5b17de87691000001",
+    "docId": "6af20633820d792999ee1194",
+    "path": "chapters/RESULTADOS/latencia-vazao.tex",
+    "position": 3718,
+    "line": 39,
+    "column": 298,
+    "selectedText": "Only in TDLA30-300 and TDLB100-400 is the delay below 1~ms. ",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b0093e6baa8572e9e2fecf8",
+        "content": "aqui tem uma coisa que causa certa confusão: tu te refere às arquiteturas de hardware pela constraint de velocidade que elas objetivam. Mas, se eu entendi bem, nada nos impediria de usar as arquiteturas mais rápidas (as que objetivam TDBLB100-400, por exemplo) para todas os outros perfis de mobilidade, certo? E ela inclusive gasta menos energia que as inversões do TDLA30-5 e do 30-10. Então, no fim, tu tem sim uma solução implementável e que atende restrições precisão, vazão e latência de qualquer um dos cenários considerados, não? talvez seja uma discussão para colocar aqui e/ou na conclusão do trabalho",
+        "timestamp": 1795199974104,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "edited_at": 1795200023624,
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 34,
+      "endLine": 44,
+      "before": [
+        "\\legend{Source: the author, from the netlist simulation at 100~MHz.}",
+        "\\end{table}",
+        "",
+        "The sample collection is set by the estimation method, not by the hardware (Section~\\ref{subsec:pipeline}). With 48 DM-RS REs per PRB and per slot (Section~\\ref{subsubsec:disponibilidade-amostras}), it takes $\\lceil N/48 \\rceil$ slots, limited to $T_c$. In TDLA30-5 and TDLA30-10, the collection alone takes 2~ms, before any inversion.",
+        ""
+      ],
+      "line": "The ITU-R expects that IMT-2020 can offer a latency of 1~ms over the air interface, which is the radio network's contribution to the time between sending and receiving a packet \\cite[pp.~13--14]{itu-m2083}. Processing at the BS is one part of this latency \\cite[Sec.~7.2.6 and Tab.~3]{itu-m2412}. Only in TDLA30-300 and TDLB100-400 is the delay below 1~ms. This delay also assumes that every slot carries the PUSCH, since the DM-RS is only transmitted together with it (Section~\\ref{subsec:simbolos}). In the n78 and n257 bands, which use TDD \\cite[Tabs.~5.2-1 and 5.2-2]{3gpp-ts38104}, only the uplink slots carry the PUSCH, and the collection takes longer or gathers fewer samples.",
+      "after": [
+        "",
+        "Since all architectures meet the cycle limit (Section~\\ref{sec:resultados-hardware}), the whole block enters the module before $T_c$, and no queue forms. In TDLC300-100 and TDLA30-300, the last inversion of the block ends after $T_c$. This excess is a fixed delay, of about one batch latency, and it does not accumulate, because the next block enters the module on time. This holds for all formats.",
+        "",
+        "The time to invert the block depends on the architecture. The format only changes this time in architectures without systolic arrays, where the interval between inversions grows with the format (Section~\\ref{subsec:resultados-recursos}). The architectures of the low-mobility conditions have less parallelism and spread the 275 inversions over most of $T_c$. Thus, they use less area and power (Section~\\ref{sec:resultados-hardware}), but the last PRB is ready later. More parallelism would reduce this time: the TDLB100-400 architecture, for example, finishes a block in 0.27~ms. The other PRBs get their inverses earlier, because their matrices enter the module first.",
+        ""
+      ]
+    }
+  },
+  {
+    "threadId": "6b00912c08663c5286000001",
+    "docId": "6af20633820d792999ee1194",
+    "path": "chapters/RESULTADOS/latencia-vazao.tex",
+    "position": 4106,
+    "line": 41,
+    "column": 1,
+    "selectedText": "Since all architectures meet the cycle limit (Section~\\ref{sec:resultados-hardware}), the whole block enters the module before $T_c$, and no queue forms. In TDLC300-100 and TDLA30-300, the last inversion of the block ends after $T_c$. This excess is a fixed delay, of about one batch latency, and it does not accumulate, because the next block enters the module on time. This holds for all formats.",
+    "resolved": false,
+    "messages": [
+      {
+        "id": "6b00912dbaa8572e9e2fec68",
+        "content": "não sei se entendi isso.. tu tá basicamente dizendo que a vazão é suficiente para atender a demanda? parece um jeito complicado demais de dizer algo",
+        "timestamp": 1795199277274,
+        "user_id": "5b0440a6abb72139e3c9bca4",
+        "user": {
+          "id": "5b0440a6abb72139e3c9bca4",
+          "first_name": "gabriel.nazar",
+          "email": "gabriel.nazar@gmail.com"
+        }
+      }
+    ],
+    "context": {
+      "startLine": 36,
+      "endLine": 46,
+      "before": [
+        "",
+        "The sample collection is set by the estimation method, not by the hardware (Section~\\ref{subsec:pipeline}). With 48 DM-RS REs per PRB and per slot (Section~\\ref{subsubsec:disponibilidade-amostras}), it takes $\\lceil N/48 \\rceil$ slots, limited to $T_c$. In TDLA30-5 and TDLA30-10, the collection alone takes 2~ms, before any inversion.",
+        "",
+        "The ITU-R expects that IMT-2020 can offer a latency of 1~ms over the air interface, which is the radio network's contribution to the time between sending and receiving a packet \\cite[pp.~13--14]{itu-m2083}. Processing at the BS is one part of this latency \\cite[Sec.~7.2.6 and Tab.~3]{itu-m2412}. Only in TDLA30-300 and TDLB100-400 is the delay below 1~ms. This delay also assumes that every slot carries the PUSCH, since the DM-RS is only transmitted together with it (Section~\\ref{subsec:simbolos}). In the n78 and n257 bands, which use TDD \\cite[Tabs.~5.2-1 and 5.2-2]{3gpp-ts38104}, only the uplink slots carry the PUSCH, and the collection takes longer or gathers fewer samples.",
+        ""
+      ],
+      "line": "Since all architectures meet the cycle limit (Section~\\ref{sec:resultados-hardware}), the whole block enters the module before $T_c$, and no queue forms. In TDLC300-100 and TDLA30-300, the last inversion of the block ends after $T_c$. This excess is a fixed delay, of about one batch latency, and it does not accumulate, because the next block enters the module on time. This holds for all formats.",
+      "after": [
+        "",
+        "The time to invert the block depends on the architecture. The format only changes this time in architectures without systolic arrays, where the interval between inversions grows with the format (Section~\\ref{subsec:resultados-recursos}). The architectures of the low-mobility conditions have less parallelism and spread the 275 inversions over most of $T_c$. Thus, they use less area and power (Section~\\ref{sec:resultados-hardware}), but the last PRB is ready later. More parallelism would reduce this time: the TDLB100-400 architecture, for example, finishes a block in 0.27~ms. The other PRBs get their inverses earlier, because their matrices enter the module first.",
+        "",
+        "The inversion of $\\mathbf G_c$, however, is only one part of the equalization, and equalization is only one of the baseband tasks of the BS (Section~\\ref{sec:sistemas-MIMO}). A complete delay analysis would need to add the time of the other tasks, of the covariance estimation, of the other steps of BCD-MMSE, and of the data exchange between the DUs, which this work does not consider (Section~\\ref{subsec:restricao-vazao}).",
+        ""
+      ]
+    }
+  }
+]
